@@ -1,46 +1,18 @@
 {
-  "name": "enricovianello-storm",
+  "name": "storm-storm",
   "version": "0.1.0",
-  "author": "enricovianello",
-  "summary": "",
+  "author": "storm",
+  "summary": "StoRM puppet module",
   "license": "Apache-2.0",
   "source": "",
+  "project_page": null,
+  "issues_url": null,
   "dependencies": [
-
-  ],
-  "operatingsystem_support": [
     {
-      "operatingsystem": "CentOS",
-      "operatingsystemrelease": [
-        "7"
-      ]
-    },
-    {
-      "operatingsystem": "OracleLinux",
-      "operatingsystemrelease": [
-        "7"
-      ]
-    },
-    {
-      "operatingsystem": "RedHat",
-      "operatingsystemrelease": [
-        "7"
-      ]
-    },
-    {
-      "operatingsystem": "Scientific",
-      "operatingsystemrelease": [
-        "7"
-      ]
+      "name": "puppetlabs-stdlib",
+      "version_requirement": ">= 1.0.0"
     }
   ],
-  "requirements": [
-    {
-      "name": "puppet",
-      "version_requirement": ">= 4.10.0 < 7.0.0"
-    }
-  ],
-  "pdk-version": "1.9.1",
-  "template-url": "file:///opt/puppetlabs/pdk/share/cache/pdk-templates.git",
-  "template-ref": "1.9.1-0-g6945d31"
+  "data_provider": null
 }
+

@@ -1,88 +1,89 @@
-
 # storm
-
-Welcome to your new module. A short overview of the generated parts can be found in the PDK documentation at https://puppet.com/pdk/latest/pdk_generating_modules.html .
-
-The README template below provides a starting point with details about what information to include in your README.
 
 #### Table of Contents
 
 1. [Description](#description)
-2. [Setup - The basics of getting started with storm](#setup)
+1. [Setup - The basics of getting started with storm](#setup)
     * [What storm affects](#what-storm-affects)
     * [Setup requirements](#setup-requirements)
     * [Beginning with storm](#beginning-with-storm)
-3. [Usage - Configuration options and additional functionality](#usage)
-4. [Limitations - OS compatibility, etc.](#limitations)
-5. [Development - Guide for contributing to the module](#development)
+1. [Usage - Configuration options and additional functionality](#usage)
+1. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
+1. [Limitations - OS compatibility, etc.](#limitations)
+1. [Development - Guide for contributing to the module](#development)
 
 ## Description
 
-Briefly tell users why they might want to use your module. Explain what your module does and what kind of problems users can solve with it.
+Start with a one- or two-sentence summary of what the module does and/or what
+problem it solves. This is your 30-second elevator pitch for your module.
+Consider including OS/Puppet version it works with.
 
-This should be a fairly short description helps the user decide if your module is what they want.
+You can give more descriptive information in a second paragraph. This paragraph
+should answer the questions: "What does this module *do*?" and "Why would I use
+it?" If your module has a range of functionality (installation, configuration,
+management, etc.), this is the time to mention it.
 
 ## Setup
 
 ### What storm affects **OPTIONAL**
 
-If it's obvious what your module touches, you can skip this section. For example, folks can probably figure out that your mysql_instance module affects their MySQL instances.
+If it's obvious what your module touches, you can skip this section. For
+example, folks can probably figure out that your mysql_instance module affects
+their MySQL instances.
 
 If there's more that they should know about, though, this is the place to mention:
 
-* Files, packages, services, or operations that the module will alter, impact, or execute.
+* A list of files, packages, services, or operations that the module will alter,
+  impact, or execute.
 * Dependencies that your module automatically installs.
 * Warnings or other important notices.
 
 ### Setup Requirements **OPTIONAL**
 
-If your module requires anything extra before setting up (pluginsync enabled, another module, etc.), mention it here.
+If your module requires anything extra before setting up (pluginsync enabled,
+etc.), mention it here.
 
-If your most recent release breaks compatibility or requires particular steps for upgrading, you might want to include an additional "Upgrading" section here.
+If your most recent release breaks compatibility or requires particular steps
+for upgrading, you might want to include an additional "Upgrading" section
+here.
 
 ### Beginning with storm
 
-The very basic steps needed for a user to get the module up and running. This can include setup steps, if necessary, or it can be an example of the most basic use of the module.
+The very basic steps needed for a user to get the module up and running. This
+can include setup steps, if necessary, or it can be an example of the most
+basic use of the module.
 
 ## Usage
 
-Include usage examples for common use cases in the **Usage** section. Show your users how to use your module to solve problems, and be sure to include code examples. Include three to five examples of the most important or common tasks a user can accomplish with your module. Show users how to accomplish more complex tasks that involve different types, classes, and functions working in tandem.
+This section is where you describe how to customize, configure, and do the
+fancy stuff with your module here. It's especially helpful if you include usage
+examples and code samples for doing things with your module.
 
 ## Reference
 
-This section is deprecated. Instead, add reference information to your code as Puppet Strings comments, and then use Strings to generate a REFERENCE.md in your module. For details on how to add code comments and generate documentation with Strings, see the Puppet Strings [documentation](https://puppet.com/docs/puppet/latest/puppet_strings.html) and [style guide](https://puppet.com/docs/puppet/latest/puppet_strings_style.html)
+Users need a complete list of your module's classes, types, defined types providers, facts, and functions, along with the parameters for each. You can provide this list either via Puppet Strings code comments or as a complete list in this Reference section.
 
-If you aren't ready to use Strings yet, manually create a REFERENCE.md in the root of your module directory and list out each of your module's classes, defined types, facts, functions, Puppet tasks, task plans, and resource types and providers, along with the parameters for each.
+* If you are using Puppet Strings code comments, this Reference section should include Strings information so that your users know how to access your documentation.
 
-For each element (class, defined type, function, and so on), list:
+* If you are not using Puppet Strings, include a list of all of your classes, defined types, and so on, along with their parameters. Each element in this listing should include:
 
   * The data type, if applicable.
   * A description of what the element does.
   * Valid values, if the data type doesn't make it obvious.
   * Default value, if any.
 
-For example:
-
-```
-### `pet::cat`
-
-#### Parameters
-
-##### `meow`
-
-Enables vocalization in your cat. Valid options: 'string'.
-
-Default: 'medium-loud'.
-```
-
 ## Limitations
 
-In the Limitations section, list any incompatibilities, known issues, or other warnings.
+This is where you list OS compatibility, version compatibility, etc. If there
+are Known Issues, you might want to include them under their own heading here.
 
 ## Development
 
-In the Development section, tell other users the ground rules for contributing to your project and how they should submit their work.
+Since your module is awesome, other users will want to play with it. Let them
+know what the ground rules for contributing are.
 
 ## Release Notes/Contributors/Etc. **Optional**
 
-If you aren't using changelog, put your release notes here (though you should consider using changelog). You can also add any additional sections you feel are necessary or important to include here. Please use the `## ` header.
+If you aren't using changelog, put your release notes here (though you should
+consider using changelog). You can also add any additional sections you feel
+are necessary or important to include here. Please use the `## ` header.
