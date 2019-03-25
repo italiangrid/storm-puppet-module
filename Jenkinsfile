@@ -25,7 +25,7 @@ pipeline {
 		    script {
                         sh 'cd storm'
                         sh 'docker run -ti --name tests -v $(pwd):/module:z italiangrid/docker-rspec-puppet:latest'
-                        sh 'docker cp tests:/module/rspec_report.* .''
+                        sh 'docker cp tests:/module/rspec_report.* .'
                         sh 'docker rm tests'
                         archiveArtifacts 'rspec_report.*'
                     }
