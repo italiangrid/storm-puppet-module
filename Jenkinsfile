@@ -1,10 +1,12 @@
 #!/usr/bin/env groovy
 
+def label = "storm-puppet-module-tests-${env.BUILD_NUMBER}"
+
 pipeline {
 
     agent {
         kubernetes {
-            label "storm-puppet-module-tests-${env.BUILD_NUMBER}"
+            label "${label}"
             cloud 'Kube mwdevel'
             defaultContainer 'jnlp'
             yamlFile 'jenkins/pod.yaml'
@@ -24,9 +26,7 @@ pipeline {
                 container('docker-rspec-puppet') {
                     script {
                         dir('storm') {
-                            sh 'docker run --name tests -v $(pwd):/module:z italiangrid/docker-rspec-puppet:latest'
-                            sh 'docker cp tests:/module/rspec_report.* .'
-                            sh 'docker rm tests'
+                            sh 'docker run -rm --name ${label} -v $(pwd):/module:z italiangrid/docker-rspec-puppet:latest'
                             archiveArtifacts 'rspec_report.*'
                         }
                     }
