@@ -1,5 +1,8 @@
 FROM ruby:2.6
 
+ENV GIT_REPO https://github.com/enricovianello/storm-pm.git
+ENV GIT_BRANCH master
+
 # Add Gemfile
 ADD Gemfile /
 
@@ -17,9 +20,10 @@ RUN bundler install --clean --system --gemfile /Gemfile
 #Don't like that is sets clean in global config
 RUN bundle config --delete clean
 
-VOLUME /module
-
-WORKDIR /module
-
 # Our default command
-CMD rm -rf Gemfile.lock && bundle exec rake
+CMD rm -rf Gemfile.lock && \
+    git clone $GIT_REPO --branch $GIT_BRANCH storm-pm && \
+    cd storm-pm/storm && \
+    bundle exec rake && \
+    rspec spec/classes/*.rb --format html --out rspec_report.html && \
+    rspec spec/classes/*.rb --format RspecJunitFormatter --out rspec_report.xml
