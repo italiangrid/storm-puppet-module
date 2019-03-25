@@ -23,5 +23,5 @@ WORKDIR /module
 
 # Our default command
 CMD rm -rf Gemfile.lock && \
-    rspec spec/classes/*.rb --format html --out rspec_report.html && \
-    rspec spec/classes/*.rb --format RspecJunitFormatter --out rspec_report.xml
+    rspec spec/classes/init_spec.rb --format html --out rspec_report.html && \
+    rspec spec/classes/init_spec.rb --format RspecJunitFormatter --out rspec_report.xml
