@@ -24,6 +24,7 @@ pipeline {
                 container('docker-rspec-puppet') {
                     script {
                         dir('storm') {
+                            sh 'docker pull italiangrid/docker-rspec-puppet:latest'
                             sh 'docker run --rm -v $(pwd):/module:z italiangrid/docker-rspec-puppet:latest'
                             archiveArtifacts 'rspec_report.*'
                         }
