@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Pod
+metadata:
+    abels:
+        ci-job: storm-puppet-module-tests
+spec:
+    nodeSelector:
+        zone: ci
+    volumes:
+      - name: ssh
+        secret:
+            secretName: jenkins-ssh-keys
+    containers:
+      - name: docker-rspec-puppet
+        image: italiangrid/docker-rspec-puppet:latest
+        imagePullPolicy: Always
+        command:
+          - cat
+        tty: true
+        volumeMounts:
+          - name: ssh
+            mountPath: /home/jenkins/.ssh
+        resources:
+            limits:
+                memory: 700Mi
+                cpu: 1
+      - name: jnlp
+        resources:
+            limits:
+                memory: 700Mi
+                cpu: 1
+    restartPolicy: Never

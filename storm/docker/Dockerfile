@@ -17,7 +17,11 @@ RUN bundler install --clean --system --gemfile /Gemfile
 #Don't like that is sets clean in global config
 RUN bundle config --delete clean
 
+VOLUME /module
+
+WORKDIR /module
+
 # Our default command
 CMD rm -rf Gemfile.lock && \
-    bundle exec rake spec_clean && \
-    bundle exec rake spec
+    rspec spec/classes/*.rb --format html --out rspec_report.html && \
+    rspec spec/classes/*.rb --format RspecJunitFormatter --out rspec_report.xml
