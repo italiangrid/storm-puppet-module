@@ -15,7 +15,7 @@ spec:
             secretName: registry-auth-basic
     containers:
       - name: docker-rspec-puppet
-        image: italiangrid/docker-rspec-puppet:latest
+        image: cloud-vm114.cloud.cnaf.infn.it/italiangrid/kube-docker-runner:latest
         imagePullPolicy: Always
         command:
           - cat
