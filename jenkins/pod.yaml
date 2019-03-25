@@ -7,9 +7,12 @@ spec:
     nodeSelector:
         zone: ci
     volumes:
-      - name: ssh
+      - name: docker
+        hostPath:
+            path: /var/run/docker.sock
+      - name: registry
         secret:
-            secretName: jenkins-ssh-keys
+            secretName: registry-auth-basic
     containers:
       - name: docker-rspec-puppet
         image: italiangrid/docker-rspec-puppet:latest
@@ -18,8 +21,10 @@ spec:
           - cat
         tty: true
         volumeMounts:
-          - name: ssh
-            mountPath: /home/jenkins/.ssh
+          - name: docker
+            mountPath: /var/run/docker.sock
+          - name: registry
+            mountPath: /home/jenkins/.docker
         resources:
             limits:
                 memory: 700Mi
