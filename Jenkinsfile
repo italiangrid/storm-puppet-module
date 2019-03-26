@@ -1,6 +1,5 @@
 #!/usr/bin/env groovy
 
-
 pipeline {
 
     agent {
@@ -25,9 +24,10 @@ pipeline {
                 container('docker-rspec-puppet') {
                     script {
                         dir('storm') {
-                            sh 'docker pull italiangrid/docker-rspec-puppet:latest'
+                            sh 'docker pull italiangrid/docker-rspec-puppet:ci'
                             sh "docker run --name storm-puppet-module-tests-${env.BUILD_NUMBER} italiangrid/docker-rspec-puppet:latest"
-                            sh "docker cp storm-puppet-module-tests-${env.BUILD_NUMBER}:/storm-pm/storm/rspec_report.* ."
+                            sh "docker cp storm-puppet-module-tests-${env.BUILD_NUMBER}:/storm-pm/storm/rspec_report.html ."
+                            sh "docker cp storm-puppet-module-tests-${env.BUILD_NUMBER}:/storm-pm/storm/rspec_report.xml ."
                             sh "docker rm storm-puppet-module-tests-${env.BUILD_NUMBER}"
                             archiveArtifacts 'rspec_report.*'
                         }
@@ -60,3 +60,4 @@ pipeline {
         }
     }
 }
+
