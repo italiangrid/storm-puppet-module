@@ -20,6 +20,10 @@ pipeline {
 
     environment {
         SONAR_TOKEN = credentials('sonarcloud-storm-puppet-module')
+        SONAR_HOST_URL = 'https://sonarcloud.io'
+        SONAR_PROJECT_KEY = 'enricovianello_storm-pm'
+        SONAR_ORGANIZATION = 'enricovianello-github'
+        SONAR_OPTS = "-Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_TOKEN -Dsonar.projectKey=$SONAR_PROJECT_KEY -Dsonar.organization=$SONAR_ORGANIZATION"
     }
 
     stages {
@@ -29,8 +33,11 @@ pipeline {
                     script {
                         checkout scm
                         dir('storm') {
-                            sh 'bundle exec rake test'
-                            archiveArtifacts 'coverage/**'
+                            sh 'bundle exec rake test | tee rake.log'
+                            sh 'rspec --format html --out rspec_report.html'
+                            sh 'rspec --format RspecJunitFormatter --out rspec_report.xml'
+                            sh "sonar-runner $SONAR_OPTS"
+                            archiveArtifacts 'rspec_report.html,rspec_report.xml,rake.log'
                         }
                     }
                 }
@@ -61,3 +68,4 @@ pipeline {
         }
     }
 }
+
