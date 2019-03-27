@@ -38,6 +38,7 @@ pipeline {
                             sh 'rspec --format RspecJunitFormatter --out rspec_report.xml'
                             sh "sonar-runner $SONAR_OPTS"
                             archiveArtifacts 'rspec_report.html,rspec_report.xml,rake.log'
+                            junit 'rspec_report.xml'
                         }
                     }
                 }
@@ -68,4 +69,3 @@ pipeline {
         }
     }
 }
-
