@@ -18,18 +18,19 @@ pipeline {
 
     triggers { cron('@daily') }
 
+    environment {
+        SONAR_TOKEN = credentials('sonarcloud-storm-puppet-module')
+    }
+
     stages {
         stage('Run') {
             steps {
                 container('docker-rspec-puppet') {
                     script {
+                        checkout scm
                         dir('storm') {
-                            sh 'docker pull italiangrid/docker-rspec-puppet:ci'
-                            sh "docker run --name storm-puppet-module-tests-${env.BUILD_NUMBER} italiangrid/docker-rspec-puppet:latest"
-                            sh "docker cp storm-puppet-module-tests-${env.BUILD_NUMBER}:/storm-pm/storm/rspec_report.html ."
-                            sh "docker cp storm-puppet-module-tests-${env.BUILD_NUMBER}:/storm-pm/storm/rspec_report.xml ."
-                            sh "docker rm storm-puppet-module-tests-${env.BUILD_NUMBER}"
-                            archiveArtifacts 'rspec_report.*'
+                            sh 'bundle exec rake test'
+                            archiveArtifacts 'coverage/**'
                         }
                     }
                 }
@@ -60,4 +61,3 @@ pipeline {
         }
     }
 }
-

@@ -6,25 +6,13 @@ metadata:
 spec:
     nodeSelector:
         zone: ci
-    volumes:
-      - name: docker
-        hostPath:
-            path: /var/run/docker.sock
-      - name: registry
-        secret:
-            secretName: registry-auth-basic
     containers:
       - name: docker-rspec-puppet
-        image: cloud-vm114.cloud.cnaf.infn.it/italiangrid/kube-docker-runner:latest
+        image: italiangrid/docker-rspec-puppet:ci
         imagePullPolicy: Always
         command:
           - cat
         tty: true
-        volumeMounts:
-          - name: docker
-            mountPath: /var/run/docker.sock
-          - name: registry
-            mountPath: /home/jenkins/.docker
         resources:
             limits:
                 memory: 700Mi

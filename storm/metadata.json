@@ -5,8 +5,8 @@
   "summary": "StoRM puppet module",
   "license": "Apache-2.0",
   "source": "",
-  "project_page": null,
-  "issues_url": null,
+  "project_page": "https://github.com/enricovianello/storm-pm",
+  "issues_url": "https://github.com/enricovianello/storm-pm",
   "dependencies": [
     {
       "name": "puppetlabs-stdlib",
@@ -15,4 +15,3 @@
   ],
   "data_provider": null
 }
-

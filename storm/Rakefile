@@ -1,12 +1,46 @@
-require 'rspec-puppet/rake_task'
+#require 'rspec-puppet/rake_task'
+#
+#begin
+#  if Gem::Specification::find_by_name('puppet-lint')
+#    require 'puppet-lint/tasks/puppet-lint'
+#    PuppetLint.configuration.send('disable_autoloader_layout')
+#    PuppetLint.configuration.ignore_paths = ["spec/**/*.pp", "vendor/**/*.pp"]
+#    task :default => [:rspec, :lint]
+#  end
+#rescue Gem::LoadError
+#  task :default => :rspec
+#end
 
-begin
-  if Gem::Specification::find_by_name('puppet-lint')
-    require 'puppet-lint/tasks/puppet-lint'
-    PuppetLint.configuration.send('disable_autoloader_layout')
-    PuppetLint.configuration.ignore_paths = ["spec/**/*.pp", "vendor/**/*.pp"]
-    task :default => [:rspec, :lint]
+require 'puppetlabs_spec_helper/rake_tasks'
+require 'puppet-lint/tasks/puppet-lint'
+require 'metadata-json-lint/rake_task'
+
+PuppetLint.configuration.fail_on_warnings
+PuppetLint.configuration.send('relative')
+PuppetLint.configuration.send('disable_80chars')
+PuppetLint.configuration.send('disable_class_inherits_from_params_class')
+PuppetLint.configuration.send('disable_class_parameter_defaults')
+PuppetLint.configuration.send('disable_documentation')
+PuppetLint.configuration.send('disable_single_quote_string_with_variables')
+PuppetLint.configuration.ignore_paths = ["vendor/**/*.pp", "spec/**/*.pp"]
+
+desc "Validate manifests, templates, and ruby files"
+task :validate do
+  Dir['manifests/**/*.pp'].each do |manifest|
+    sh "puppet parser validate --noop #{manifest}"
   end
-rescue Gem::LoadError
-  task :default => :rspec
+  Dir['spec/**/*.rb','lib/**/*.rb'].each do |ruby_file|
+    sh "ruby -c #{ruby_file}" unless ruby_file =~ /spec\/fixtures/
+  end
+  Dir['templates/**/*.erb'].each do |template|
+    sh "erb -P -x -T '-' #{template} | ruby -c"
+  end
+end
+
+desc "Validate, lint and test running"
+task :test do
+  Rake::Task[:validate].invoke
+  Rake::Task[:metadata_lint].invoke
+  Rake::Task[:lint].invoke
+  Rake::Task[:spec].invoke
 end

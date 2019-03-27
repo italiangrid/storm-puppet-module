@@ -1,8 +1,5 @@
 FROM ruby:2.6
 
-ENV GIT_REPO https://github.com/enricovianello/storm-pm.git
-ENV GIT_BRANCH master
-
 # Add Gemfile
 ADD Gemfile /
 
@@ -20,11 +17,18 @@ RUN bundler install --clean --system --gemfile /Gemfile
 #Don't like that is sets clean in global config
 RUN bundle config --delete clean
 
-# Our default command
-CMD rm -rf Gemfile.lock && \
-    git clone $GIT_REPO --branch $GIT_BRANCH storm-pm && \
-    cd storm-pm/storm && \
-    bundle exec rake && \
-    rspec spec/classes/*.rb --format html --out rspec_report.html && \
-    rspec spec/classes/*.rb --format RspecJunitFormatter --out rspec_report.xml && \
-    pwd && ls -latr
+RUN apt-get update
+RUN apt-get install default-jre default-jdk -y
+
+RUN wget http://repo1.maven.org/maven2/org/codehaus/sonar/runner/sonar-runner-dist/2.4/sonar-runner-dist-2.4.zip && \
+    unzip sonar-runner-dist-2.4.zip -d /opt/sonar-runner && \
+    chmod +x /opt/sonar-runner/sonar-runner-2.4/bin/sonar-runner && \
+    rm -rf sonar-runner-dist-2.4.zip
+
+ENV PATH $PATH:/opt/sonar-runner/sonar-runner-2.4/bin
+ENV SONAR_RUNNER_HOME /opt/sonar-runner/sonar-runner-2.4
+
+RUN env
+
+RUN java -version
+RUN sonar-runner -v
