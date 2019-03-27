@@ -34,8 +34,8 @@ pipeline {
                         checkout scm
                         dir('storm') {
                             sh 'bundle exec rake test | tee rake.log'
-                            sh 'rspec --format html --out rspec_report.html'
-                            sh 'rspec --format RspecJunitFormatter --out rspec_report.xml'
+                            sh 'rspec spec/classes/*.rb --format html --out rspec_report.html'
+                            sh 'rspec spec/classes/*.rb --format RspecJunitFormatter --out rspec_report.xml'
                             sh "sonar-runner $SONAR_OPTS"
                             archiveArtifacts 'rspec_report.html,rspec_report.xml,rake.log'
                             junit 'rspec_report.xml'
