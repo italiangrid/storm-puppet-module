@@ -16,6 +16,10 @@ pipeline {
         timeout(time: 1, unit: 'HOURS')
     }
 
+    parameters {
+        string(name: 'SONAR_PROJECT_VERSION', defaultValue: '0.1.0', description: 'Module version')
+    }
+
     triggers { cron('@daily') }
 
     environment {
@@ -38,7 +42,7 @@ pipeline {
                         }
                         withSonarQubeEnv{
                             def sonar_opts="-Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.login=${SONAR_AUTH_TOKEN}"
-                            def project_opts="-Dsonar.projectKey=${env.SONAR_PROJECT_KEY} -Dsonar.projectName='${env.SONAR_PROJECT_NAME}' -Dsonar.sources=storm"
+                            def project_opts="-Dsonar.projectKey=${env.SONAR_PROJECT_KEY} -Dsonar.projectName='${env.SONAR_PROJECT_NAME}' -Dsonar.projectVersion=${params.SONAR_PROJECT_VERSION} -Dsonar.sources=storm"
                             sh "sonar-runner ${sonar_opts} ${project_opts}"
                         }
                     }
