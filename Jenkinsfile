@@ -42,7 +42,7 @@ pipeline {
                         }
                         withSonarQubeEnv{
                             def sonar_opts="-Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.login=${SONAR_AUTH_TOKEN}"
-                            def project_opts="-Dsonar.projectKey=${env.SONAR_PROJECT_KEY} -Dsonar.projectName='${env.SONAR_PROJECT_NAME}' -Dsonar.projectVersion=${params.SONAR_PROJECT_VERSION} -Dsonar.sources=storm"
+                            def project_opts="-Dsonar.projectKey=${env.SONAR_PROJECT_KEY} -Dsonar.projectName='${env.SONAR_PROJECT_NAME}' -Dsonar.projectVersion=${params.SONAR_PROJECT_VERSION} -Dsonar.exclusions=spec/fixtures -Dsonar.sources=storm"
                             sh "sonar-runner ${sonar_opts} ${project_opts}"
                         }
                     }
