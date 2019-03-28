@@ -19,11 +19,8 @@ pipeline {
     triggers { cron('@daily') }
 
     environment {
-        SONAR_TOKEN = credentials('sonarcloud-storm-puppet-module')
-        SONAR_HOST_URL = 'https://sonarcloud.io'
         SONAR_PROJECT_KEY = 'enricovianello_storm-pm'
-        SONAR_ORGANIZATION = 'enricovianello-github'
-        SONAR_OPTS = "-Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_TOKEN -Dsonar.projectKey=$SONAR_PROJECT_KEY -Dsonar.organization=$SONAR_ORGANIZATION"
+        SONAR_PROJECT_NAME = 'storm-puppet-module'
     }
 
     stages {
@@ -36,9 +33,13 @@ pipeline {
                             sh 'bundle exec rake test | tee rake.log'
                             sh 'rspec spec/classes/*.rb --format html --out rspec_report.html'
                             sh 'rspec spec/classes/*.rb --format RspecJunitFormatter --out rspec_report.xml'
-                            sh "sonar-runner $SONAR_OPTS"
                             archiveArtifacts 'rspec_report.html,rspec_report.xml,rake.log'
                             junit 'rspec_report.xml'
+                        }
+                        withSonarQubeEnv{
+                            def sonar_opts="-Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.login=${SONAR_AUTH_TOKEN}"
+                            def project_opts="-Dsonar.projectKey=${env.SONAR_PROJECT_KEY} -Dsonar.projectName='${env.SONAR_PROJECT_NAME}' -Dsonar.sources=storm"
+                            sh "sonar-runner ${sonar_opts} ${project_opts}"
                         }
                     }
                 }

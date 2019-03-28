@@ -47,7 +47,7 @@ class storm (
   $storm_storage_root_directory = storm::params::storm_storage_root_directory,
 ) {
 
-  user { $storm_user_name:
+  user { $storm_user_name:
     ensure => present,
   }
 
