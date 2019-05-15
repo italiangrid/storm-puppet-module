@@ -4,10 +4,14 @@ pipeline {
 
     agent {
         kubernetes {
-            label "storm-puppet-module-tests-${env.BUILD_NUMBER}"
             cloud 'Kube mwdevel'
-            defaultContainer 'jnlp'
-            yamlFile 'jenkins/pod.yaml'
+            label "storm-puppet-pod-${env.BUILD_NUMBER}"
+            containerTemplate {
+                name 'storm-puppet-runner'
+                image "italiangrid/docker-rspec-puppet:ci"
+                ttyEnabled true
+                command 'cat'
+            }
         }
     }
 
@@ -30,7 +34,7 @@ pipeline {
     stages {
         stage('Run') {
             steps {
-                container('docker-rspec-puppet') {
+                container('storm-puppet-runner') {
                     script {
                         checkout scm
                         dir('storm') {
