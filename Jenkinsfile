@@ -27,7 +27,7 @@ pipeline {
     triggers { cron('@daily') }
 
     environment {
-        SONAR_PROJECT_KEY = 'enricovianello_storm-pm'
+        SONAR_PROJECT_KEY = 'storm-webdav-puppet-module'
         SONAR_PROJECT_NAME = 'storm-puppet-module'
     }
 

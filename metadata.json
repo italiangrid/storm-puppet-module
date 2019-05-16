@@ -4,9 +4,9 @@
   "author": "storm",
   "summary": "StoRM WebDAV puppet module",
   "license": "Apache-2.0",
-  "source": "https://github.com/enricovianello/storm-pm",
-  "project_page": "https://github.com/enricovianello/storm-pm",
-  "issues_url": "https://github.com/enricovianello/storm-pm",
+  "source": "https://github.com/enricovianello/storm-webdav-puppet-module",
+  "project_page": "https://github.com/enricovianello/storm-webdav-puppet-module",
+  "issues_url": "https://github.com/enricovianello/storm-webdav-puppet-module",
   "dependencies": [
     {
       "name": "puppetlabs-stdlib",
