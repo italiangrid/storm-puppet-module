@@ -42,8 +42,8 @@
 #
 class storm_webdav (
 
-  String $storm_user_name = $storm_webdav::params::storm_user_name,
-  String $storm_storage_root_directory = $storm_webdav::params::storm_storage_root_directory,
+  $storm_user_name = $storm_webdav::params::storm_user_name,
+  $storm_storage_root_directory = $storm_webdav::params::storm_storage_root_directory,
 
 ) inherits storm_webdav::params {
 
