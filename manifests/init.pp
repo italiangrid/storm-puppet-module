@@ -40,10 +40,14 @@
 # or implied. See the License for the specific language governing permissions and limitations under
 # the License.
 #
-class storm (
-  $storm_user_name              = storm::params::storm_user_name,
-  $storm_storage_root_directory = storm::params::storm_storage_root_directory,
-) {
+class storm_webdav (
+
+  String $storm_user_name = $storm_webdav::params::storm_user_name,
+  String $storm_storage_root_directory = $storm_webdav::params::storm_storage_root_directory
+
+) inherits storm_webdav::params {
+
+  contain storm_webdav::install
 
   user { $storm_user_name:
     ensure => present,
