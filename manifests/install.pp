@@ -1,6 +1,5 @@
-class storm_webdav::install {
-
-  package { 'storm-webdav':
-    ensure => present,
-  }
+# Class: storm::install
+# ===========================
+#
+class storm::install {
 }

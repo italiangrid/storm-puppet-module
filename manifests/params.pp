@@ -3,16 +3,17 @@
 #
 # storm class default parameters
 #
-class storm_webdav::params {
+class storm::params {
 
   # set OS specific values
   case $::osfamily {
     'RedHat': {
-      $storm_user_name = 'storm'
-      $storm_storage_root_directory = '/storage'
+      $user_name = 'storm'
+      $storage_root_directory = '/storage'
+      $storage_area = []
     }
     default: {
-      fail("The ${module_name} module is not supported on an ${::osfamily} based system.")
+      fail('StoRM module is supported only on RedHat based system.')
     }
   }
 }

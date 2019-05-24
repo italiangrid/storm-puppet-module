@@ -1,12 +1,12 @@
 {
-  "name": "storm-storm_webdav",
+  "name": "italiangrid-storm",
   "version": "0.1.0",
   "author": "storm",
-  "summary": "StoRM WebDAV puppet module",
+  "summary": "StoRM puppet module",
   "license": "Apache-2.0",
-  "source": "https://github.com/enricovianello/storm-webdav-puppet-module",
-  "project_page": "https://github.com/enricovianello/storm-webdav-puppet-module",
-  "issues_url": "https://github.com/enricovianello/storm-webdav-puppet-module",
+  "source": "https://github.com/enricovianello/storm-puppet-module",
+  "project_page": "https://github.com/enricovianello/storm-puppet-module",
+  "issues_url": "https://github.com/enricovianello/storm-puppet-module",
   "dependencies": [
     {
       "name": "puppetlabs-stdlib",

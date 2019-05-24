@@ -1,4 +1,4 @@
-# StoRM WebDAV puppet module
+# StoRM puppet module
 
 #### Table of Contents
 

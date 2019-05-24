@@ -1,13 +1,12 @@
 require 'spec_helper'
 
-describe 'storm_webdav' do
+describe 'storm::config' do
 
   let(:facts) { { :osfamily => 'RedHat' } }
 
   context 'with default values for all parameters' do
 
     it { is_expected.to compile.with_all_deps }
-    it { is_expected.to contain_class('storm_webdav::install') }
 
     it { is_expected.to contain_file('/storage').with( 
       :owner => 'storm',
@@ -24,13 +23,12 @@ describe 'storm_webdav' do
 
     let(:params) do 
       {
-        'storm_user_name' => 'test',
-        'storm_storage_root_directory' => '/another_storage'
+        :user_name => 'test',
+        :storage_root_directory => '/another_storage'
       }
     end
 
     it { is_expected.to compile.with_all_deps }
-    it { is_expected.to contain_class('storm_webdav::install') }
 
     it { is_expected.to contain_file('/another_storage').with( 
       :owner => 'test',

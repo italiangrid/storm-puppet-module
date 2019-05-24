@@ -1,12 +1,13 @@
 require 'spec_helper'
 
-describe 'storm_webdav::params' do
+describe 'storm::params' do
 
     context 'no RedHat os family' do
     
         let(:facts) { { :osfamily => 'Debian' } }
-        it { is_expected.to raise_error }
-      end
+        it { is_expected.to compile.and_raise_error(/StoRM module is supported only on RedHat based system./) }
+    
+    end
     
     context 'RedHat os family' do
 

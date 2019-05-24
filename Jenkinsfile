@@ -5,9 +5,9 @@ pipeline {
     agent {
         kubernetes {
             cloud 'Kube mwdevel'
-            label "storm-webdav-puppet-pod-${env.BUILD_NUMBER}"
+            label "storm-puppet-pod-${env.BUILD_NUMBER}"
             containerTemplate {
-                name 'storm-webdav-puppet-runner'
+                name 'storm-puppet-runner'
                 image "italiangrid/docker-rspec-puppet:ci"
                 ttyEnabled true
                 command 'cat'
@@ -27,14 +27,14 @@ pipeline {
     triggers { cron('@daily') }
 
     environment {
-        SONAR_PROJECT_KEY = 'storm-webdav-puppet-module'
+        SONAR_PROJECT_KEY = 'storm-puppet-module-key'
         SONAR_PROJECT_NAME = 'storm-puppet-module'
     }
 
     stages {
         stage('Run') {
             steps {
-                container('storm-webdav-puppet-runner') {
+                container('storm-puppet-runner') {
                     script {
                         checkout scm
                         sh 'bundle exec rake test | tee rake.log'
