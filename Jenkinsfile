@@ -38,8 +38,8 @@ pipeline {
                     script {
                         checkout scm
                         sh 'bundle exec rake test | tee rake.log'
-                        sh 'rspec spec/classes/*.rb --format html --out rspec_report.html'
-                        sh 'rspec spec/classes/*.rb --format RspecJunitFormatter --out rspec_report.xml'
+                        sh 'rspec --format html --out rspec_report.html'
+                        sh 'rspec --format RspecJunitFormatter --out rspec_report.xml'
                         archiveArtifacts 'rspec_report.html,rspec_report.xml,rake.log'
                         junit 'rspec_report.xml'
                         sh 'rm -rf spec/fixtures'
