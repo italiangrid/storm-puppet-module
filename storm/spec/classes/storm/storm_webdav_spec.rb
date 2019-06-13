@@ -40,8 +40,9 @@ describe 'storm::webdav' do
           }
         end
 
-        #it { is_expected.to compile.with_all_deps }
+        it { is_expected.to compile.with_all_deps }
         it { is_expected.to contain_package('storm-webdav').with(ensure: 'present') }
+        it { is_expected.to contain_service('storm-webdav').with(ensure: 'running') }
   
         it "check storm webdav configuration directory" do
           is_expected.to contain_file('/etc/storm/webdav').with( 
@@ -80,7 +81,7 @@ describe 'storm::webdav' do
           }
         end
 
-        #it { is_expected.to compile.with_all_deps }
+        it { is_expected.to compile.with_all_deps }
 
         it "check host certificate directory" do
           is_expected.to contain_file('/etc/grid-security/storm-webdav').with( 

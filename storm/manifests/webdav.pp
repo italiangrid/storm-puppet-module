@@ -75,11 +75,18 @@ class storm::webdav (
           }
         ),
         owner   => $user_name,
+        require => File['/etc/storm/webdav/sa.d'],
       }
     }
   }
 
   package { 'storm-webdav':
     ensure => present,
+  }
+
+  service { 'storm-webdav':
+    ensure  => running,
+    enable  => true,
+    require => Package['storm-webdav'],
   }
 }

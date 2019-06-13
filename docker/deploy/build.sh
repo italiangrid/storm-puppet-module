@@ -29,6 +29,5 @@ puppet module build
 puppet module install ./pkg/mwdevel-mwdevel_test_vos-0.1.0.tar.gz
 cd ..
 
-
 cd /
 puppet apply /manifest.pp

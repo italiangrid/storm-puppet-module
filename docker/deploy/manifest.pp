@@ -4,6 +4,10 @@ class { 'storm::repo':
 
 include mwdevel_test_vos
 
+package { 'ca-policy-egi-core':
+  ensure => latest,
+}
+
 class { 'storm':
   user_name    => 'storm',
   storage_area => [
