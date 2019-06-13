@@ -37,16 +37,18 @@ pipeline {
                 container('storm-puppet-runner') {
                     script {
                         checkout scm
-                        sh 'bundle exec rake test | tee rake.log'
-                        sh 'rspec --format html --out rspec_report.html'
-                        sh 'rspec --format RspecJunitFormatter --out rspec_report.xml'
-                        archiveArtifacts 'rspec_report.html,rspec_report.xml,rake.log'
-                        junit 'rspec_report.xml'
-                        sh 'rm -rf spec/fixtures'
-                        withSonarQubeEnv{
-                            def sonar_opts="-Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.login=${SONAR_AUTH_TOKEN}"
-                            def project_opts="-Dsonar.projectKey=${env.SONAR_PROJECT_KEY} -Dsonar.projectName='${env.SONAR_PROJECT_NAME}' -Dsonar.projectVersion=${params.SONAR_PROJECT_VERSION} -Dsonar.exclusions=spec/fixtures -Dsonar.sources=."
-                            sh "sonar-runner ${sonar_opts} ${project_opts}"
+                        dir ('storm') {
+                            sh 'bundle exec rake test | tee rake.log'
+                            sh 'rspec --format html --out rspec_report.html'
+                            sh 'rspec --format RspecJunitFormatter --out rspec_report.xml'
+                            archiveArtifacts 'rspec_report.html,rspec_report.xml,rake.log'
+                            junit 'rspec_report.xml'
+                            sh 'rm -rf spec/fixtures'
+                            withSonarQubeEnv{
+                                def sonar_opts="-Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.login=${SONAR_AUTH_TOKEN}"
+                                def project_opts="-Dsonar.projectKey=${env.SONAR_PROJECT_KEY} -Dsonar.projectName='${env.SONAR_PROJECT_NAME}' -Dsonar.projectVersion=${params.SONAR_PROJECT_VERSION} -Dsonar.exclusions=spec/fixtures -Dsonar.sources=."
+                                sh "sonar-runner ${sonar_opts} ${project_opts}"
+                            }
                         }
                     }
                 }

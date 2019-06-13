@@ -40,7 +40,28 @@
 # or implied. See the License for the specific language governing permissions and limitations under
 # the License.
 #
-class storm {
+class storm (
+
+  String $user_name = $storm::params::user_name,
+  String $storage_root_directory = $storm::params::storage_root_directory,
+  Array[Struct[{
+    name                       => String,
+    root_path                  => String,
+    filesystem_type            => Enum['posixfs', 'gpfs'],
+    access_points              => Array[String],
+    vos                        => Array[String],
+    orgs                       => String,
+    authenticated_read_enabled => Boolean,
+    anonymous_read_enabled     => Boolean,
+  }]] $storage_area = $storm::params::storage_area,
+  String $config_dirpath = $storm::params::config_dirpath,
+
+  Array[Enum['backend', 'frontend', 'webdav', 'gridftp']] $components = $storm::params::components,
+
+  String $webdav_config_dirpath = $storm::params::webdav_config_dirpath,
+  String $webdav_hostcert_dirpath = $storm::params::webdav_hostcert_dirpath,
+
+) inherits storm::params {
 
   contain storm::install
   contain storm::config

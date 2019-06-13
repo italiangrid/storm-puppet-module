@@ -1,3 +1,7 @@
+require 'rspec-puppet'
+require 'rspec-puppet-facts'
+include RspecPuppetFacts
+
 if ENV['COVERAGE'] == 'yes'
   require 'simplecov'
   require 'coveralls'
@@ -8,8 +12,6 @@ if ENV['COVERAGE'] == 'yes'
   end
 end
 
-require 'rspec-puppet'
-
 # rspec 2.x doesn't have RSpec::Support, so fall back to File::ALT_SEPARATOR to
 # detect if running on windows
 def windows?
@@ -18,6 +20,13 @@ def windows?
 end
 
 RSpec.configure do |c|
+
+  default_facts = {
+    puppetversion: Puppet.version,
+    facterversion: Facter.version
+  }
+  c.default_facts = default_facts
+
   c.module_path     = File.join(File.dirname(File.expand_path(__FILE__)), 'fixtures', 'modules')
   c.manifest_dir    = File.join(File.dirname(File.expand_path(__FILE__)), 'fixtures', 'manifests')
   c.manifest        = File.join(File.dirname(File.expand_path(__FILE__)), 'fixtures', 'manifests', 'site.pp')

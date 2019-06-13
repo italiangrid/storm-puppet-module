@@ -1,5 +1,5 @@
 {
-  "name": "italiangrid-storm",
+  "name": "mwdevel-storm",
   "version": "0.1.0",
   "author": "storm",
   "summary": "StoRM puppet module",
@@ -8,9 +8,20 @@
   "project_page": "https://github.com/enricovianello/storm-puppet-module",
   "issues_url": "https://github.com/enricovianello/storm-puppet-module",
   "dependencies": [
+  ],
+  "requirements": [
     {
-      "name": "puppetlabs-stdlib",
-      "version_requirement": ">= 1.0.0"
+      "name": "puppet",
+      "version_requirement": ">= 5.3.0 < 6.0.0"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
     }
   ]
 }
