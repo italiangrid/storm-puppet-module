@@ -10,6 +10,7 @@ pipeline {
                 name 'storm-puppet-runner'
                 image "italiangrid/docker-rspec-puppet:ci"
                 ttyEnabled true
+                alwaysPullImage true
                 command 'cat'
             }
         }
