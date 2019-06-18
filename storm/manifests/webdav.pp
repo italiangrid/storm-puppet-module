@@ -81,7 +81,7 @@ class storm::webdav (
   }
 
   package { 'storm-webdav':
-    ensure => present,
+    ensure => installed,
   }
 
   service { 'storm-webdav':
