@@ -7,24 +7,29 @@ class storm::repo (
   Array[Struct[{ name => String, url => String }]] $customs = [],
 ) {
 
+  $yum_config_manager = '/bin/yum-config-manager'
+
   if ($installed.length > 0) {
 
-    $repodir = '/etc/yum.repos.d'
     $el = $::operatingsystemmajrelease
+    $repo_dir = '/etc/yum.repos.d'
 
-    $installed.each | $reponame | {
+    $installed.each | $name | {
 
-      exec {"download-${reponame}-repo-el${el}":
-        command => "/bin/yum-config-manager --add-repo=https://repo.cloud.cnaf.infn.it/repository/storm/${reponame}/storm-${reponame}-centos${el}.repo",
-        creates => "${repodir}/storm-${reponame}-centos${el}.repo",
+      $repo_url = "https://repo.cloud.cnaf.infn.it/repository/storm/${name}/storm-${name}-centos${el}.repo"
+      $repo_name = "storm-${name}-centos${el}"
+
+      exec {"download-${name}-repo-el${el}":
+        command => "${yum_config_manager} --add-repo=${repo_url}",
+        creates => "${repo_dir}/${repo_name}.repo",
       }
-      if $reponame in $enabled {
-        exec {"enable-${reponame}-repo-el${el}":
-          command => "/bin/yum-config-manager --enable storm-${reponame}-centos${el}",
+      if $name in $enabled {
+        exec {"enable-${name}-repo-el${el}":
+          command => "${yum_config_manager} --enable ${repo_name}",
         }
       } else {
-        exec {"disable-${reponame}-repo-el${el}":
-          command => "/bin/yum-config-manager --disable storm-${reponame}-centos${el}",
+        exec {"disable-${name}-repo-el${el}":
+          command => "${yum_config_manager} --disable ${repo_name}",
         }
       }
     }
@@ -34,7 +39,7 @@ class storm::repo (
     $name = $repo[name]
     $url = $repo[url]
     exec {"download-custom-${name}-repo":
-      command => "/bin/yum-config-manager --add-repo=${url}",
+      command => "${yum_config_manager} --add-repo=${url}",
     }
   }
 }
