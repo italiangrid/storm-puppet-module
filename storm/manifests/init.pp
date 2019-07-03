@@ -76,17 +76,34 @@ class storm (
   String $webdav_config_dir = $storm::params::webdav_config_dir,
 
   String $webdav_hostcert_dir = $storm::params::webdav_hostcert_dir,
+
   Array[Struct[{
     name   => String,
     issuer => String,
   }]] $webdav_oauth_issuers = $storm::params::webdav_oauth_issuers,
+
   Array[String] $webdav_hostnames = $storm::params::webdav_hostnames,
+
   Integer $webdav_http_port = $storm::params::webdav_http_port,
   Integer $webdav_https_port = $storm::params::webdav_https_port,
+
+  String $webdav_trust_anchors_dir = $storm::params::webdav_trust_anchors_dir,
+  Integer $webdav_trust_anchors_refresh_interval = $storm::params::webdav_trust_anchors_refresh_interval,
+
   Integer $webdav_max_concurrent_connections = $storm::params::webdav_max_concurrent_connections,
   Integer $webdav_max_queue_size = $storm::params::webdav_max_queue_size,
+  Integer $webdav_connector_max_idle_time = $storm::params::webdav_connector_max_idle_time,
+
   Boolean $webdav_vo_map_files_enable = $storm::params::webdav_vo_map_files_enable,
   String $webdav_vo_map_files_config_dir = $storm::params::webdav_vo_map_files_config_dir,
+  Integer $webdav_vo_map_files_refresh_interval = $storm::params::webdav_vo_map_files_refresh_interval,
+
+  String $webdav_log = $storm::params::webdav_log,
+  String $webdav_log_configuration = $storm::params::webdav_log_configuration,
+  String $webdav_access_log_configuration = $storm::params::webdav_access_log_configuration,
+
+  Integer $webdav_tpc_max_connections = $storm::params::webdav_tpc_max_connections,
+  Boolean $webdav_tpc_verify_checksum = $storm::params::webdav_tpc_verify_checksum,
 
 ) inherits storm::params {
 

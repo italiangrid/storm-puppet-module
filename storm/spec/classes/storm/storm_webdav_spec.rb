@@ -50,7 +50,13 @@ describe 'storm', :type => :class do
             'webdav_https_port' => 9443,
             'webdav_max_concurrent_connections' => 200,
             'webdav_max_queue_size' => 700,
+            'webdav_connector_max_idle_time' => 15000,
             'webdav_vo_map_files_enable' => true,
+            'webdav_vo_map_files_refresh_interval' => 22000,
+            'webdav_trust_anchors_refresh_interval' => 80000,
+
+            'webdav_tpc_max_connections' => 100,
+            'webdav_tpc_verify_checksum' => true,
           }
         end
 
@@ -197,8 +203,29 @@ describe 'storm', :type => :class do
           is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_SA_CONFIG_DIR="\/etc\/storm\/webdav\/sa.d"/ )
           is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_VO_MAP_FILES_ENABLE="true"/ )
           is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_VO_MAP_FILES_CONFIG_DIR="\/etc\/storm\/webdav\/vo-mapfiles.d"/ )
+          is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_VO_MAP_FILES_REFRESH_INTERVAL="22000"/)
+          is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_LOG="\/var\/log\/storm\/webdav\/storm-webdav-server.log"/ )
+          is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_LOG_CONFIGURATION="\/etc\/storm\/webdav\/logback.xml"/ )
+          is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_ACCESS_LOG_CONFIGURATION="\/etc\/storm\/webdav\/logback-access.xml"/ )
+          is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_CONNECTOR_MAX_IDLE_TIME=15000/)
+          is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_TRUST_ANCHORS_DIR="\/etc\/grid-security\/certificates"/ )
+          is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_TRUST_ANCHORS_REFRESH_INTERVAL=80000/ )
+          is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_TPC_MAX_CONNECTIONS="100"/ )
+          is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_TPC_VERIFY_CHECKSUM="true"/ )
         end
 
+        it "check systemd unit file" do
+          unit_file='/etc/systemd/system/storm-webdav.service'
+          case facts[:operatingsystemmajrelease]
+          when '7'
+            is_expected.to contain_file(unit_file).with( :ensure => 'present' )
+            is_expected.to contain_file(unit_file).with( :content => /User=test/ )
+            is_expected.to contain_file(unit_file).with( :content => /EnvironmentFile=-\/etc\/sysconfig\/storm-webdav/ )
+            is_expected.to contain_file(unit_file).with( :content => /WorkingDirectory=\/etc\/storm\/webdav/ )
+          else
+            is_expected.not_to contain_file(unit_file)
+          end
+        end
       end
     end
   end

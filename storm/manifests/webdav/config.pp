@@ -84,9 +84,35 @@ class storm::webdav::config {
     require => [File["${storm::webdav_config_dir}/config"], Package['storm-webdav']],
   }
 
+  $sysconfig_file='/etc/sysconfig/storm-webdav'
   $sysconfig_template_file='storm/etc/sysconfig/storm-webdav.erb'
-  file { '/etc/sysconfig/storm-webdav':
+  file { $sysconfig_file:
     ensure  => present,
     content => template($sysconfig_template_file),
+  }
+
+  case $::osfamily {
+
+    'RedHat': {
+
+      case $::operatingsystemmajrelease {
+        '7': {
+          $unit_file='/etc/systemd/system/storm-webdav.service'
+          $unit_template_file='storm/etc/systemd/system/storm-webdav.service.erb'
+          file { $unit_file:
+            ensure  => present,
+            content => template($unit_template_file),
+          }
+        }
+        default: {
+          # nothing to do
+        }
+      }
+    }
+
+    # In any other case raise error:
+    default: {
+      fail("StoRM module not supported on ${::osfamily}/${::operatingsystem}.")
+    }
   }
 }

@@ -34,11 +34,11 @@ STORM_WEBDAV_PRIVATE_KEY_PATH="<%=@webdav_hostkey_filepath%>"
 
 # Trust anchors directory
 # Default: /etc/grid-security/certificates
-STORM_WEBDAV_TRUST_ANCHORS_DIR="/etc/grid-security/certificates"
+STORM_WEBDAV_TRUST_ANCHORS_DIR="<%=scope['storm::webdav_trust_anchors_dir']%>"
 
 # How often (seconds) trust anchors are refreshed from the trust anchors directory
 # Default: 86400 (24 hours)
-STORM_WEBDAV_TRUST_ANCHORS_REFRESH_INTERVAL=86400
+STORM_WEBDAV_TRUST_ANCHORS_REFRESH_INTERVAL=<%=scope['storm::webdav_trust_anchors_refresh_interval']%>
 
 # Max concurrent connections
 # Default: 300
@@ -50,7 +50,7 @@ STORM_WEBDAV_MAX_QUEUE_SIZE=<%=scope['storm::webdav_max_queue_size']%>
 
 # Connector Maximum idle time (in milliseconds)
 # Default: 30000 (30 seconds)
-STORM_WEBDAV_CONNECTOR_MAX_IDLE_TIME=30000
+STORM_WEBDAV_CONNECTOR_MAX_IDLE_TIME=<%=scope['storm::webdav_connector_max_idle_time']%>
 
 # Storage area configuration directory
 # Default: /etc/storm/webdav/sa.d
@@ -60,13 +60,13 @@ STORM_WEBDAV_SA_CONFIG_DIR="<%=@webdav_sa_dir%>"
 STORM_WEBDAV_JAR="/usr/share/java/storm-webdav/storm-webdav-server.jar"
 
 # The StoRM webdav logfile. Do not change this unless you know what you are doing.
-STORM_WEBDAV_LOG="/var/log/storm/webdav/storm-webdav-server.log"
+STORM_WEBDAV_LOG="<%=scope['storm::webdav_log']%>"
 
 # The StoRM webdav logging configuration. Do not change this unless you know what you are doing.
-STORM_WEBDAV_LOG_CONFIGURATION="/etc/storm/webdav/logback.xml"
+STORM_WEBDAV_LOG_CONFIGURATION="<%=scope['storm::webdav_log_configuration']%>"
 
 # The StoRM webdav access log configuration. Do not change this unless you know what you are doing.
-STORM_WEBDAV_ACCESS_LOG_CONFIGURATION="/etc/storm/webdav/logback-access.xml"
+STORM_WEBDAV_ACCESS_LOG_CONFIGURATION="<%=scope['storm::webdav_access_log_configuration']%>"
 
 # Enables/disables  support for VO map files
 STORM_WEBDAV_VO_MAP_FILES_ENABLE="<%=scope['storm::webdav_vo_map_files_enable']%>"
@@ -75,7 +75,7 @@ STORM_WEBDAV_VO_MAP_FILES_ENABLE="<%=scope['storm::webdav_vo_map_files_enable']%
 STORM_WEBDAV_VO_MAP_FILES_CONFIG_DIR="<%=scope['storm::webdav_vo_map_files_config_dir']%>"
 
 # VOMS map files refresh period (in seconds)
-STORM_WEBDAV_VO_MAP_FILES_REFRESH_INTERVAL="21600"
+STORM_WEBDAV_VO_MAP_FILES_REFRESH_INTERVAL="<%=scope['storm::webdav_vo_map_files_refresh_interval']%>"
 
 # StoRM WebDAV server debug option. Uncomment this (and restart the service)
 # if you want to attach a java debugger to the running server process
@@ -91,10 +91,10 @@ STORM_WEBDAV_VO_MAP_FILES_REFRESH_INTERVAL="21600"
 # STORM_WEBDAV_DEBUG_SUSPEND="y"
 
 # Max number of active third party copy connections
-STORM_WEBDAV_TPC_MAX_CONNECTIONS="50"
+STORM_WEBDAV_TPC_MAX_CONNECTIONS="<%=scope['storm::webdav_tpc_max_connections']%>"
 
 # Proactively verify checksums in third party copy
-STORM_WEBDAV_TPC_VERIFY_CHECKSUM="false"
+STORM_WEBDAV_TPC_VERIFY_CHECKSUM="<%=scope['storm::webdav_tpc_verify_checksum']%>"
 
 # Enables the OAuth authorization server, used to issue bearer tokens
 # to clients presenting a VOMS credential
