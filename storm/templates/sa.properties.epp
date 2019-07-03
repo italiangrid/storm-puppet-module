@@ -1,8 +1,0 @@
-name=<%= $name %>
-rootPath=<%= $root_path %>
-filesystemType=<%= $filesystem_type %>
-accessPoints=<%= $access_points.join(' ') %>
-vos=<%= $vos.join(' ') %>
-orgs=<%= $orgs %>
-authenticatedReadEnabled=<%= $authenticated_read_enabled %>
-anonymousReadEnabled=<%= $anonymous_read_enabled %>

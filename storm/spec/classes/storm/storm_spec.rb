@@ -33,6 +33,13 @@ describe 'storm', :type => :class do
           :ensure => 'directory',
           :mode => '0750',
         )}
+
+        it { is_expected.to contain_file('/var/log/storm').with( 
+          :owner => 'storm',
+          :group => 'storm',
+          :ensure => 'directory',
+          :mode => '0755',
+        )}
       end
     
       context 'with custom values for parameters' do
@@ -40,8 +47,8 @@ describe 'storm', :type => :class do
         let(:params) do 
           {
             :user_name => 'test',
-            :storage_root_directory => '/another_storage',
-            :config_dirpath => '/etc/storm_alternative'
+            :storage_root_dir => '/another_storage',
+            :config_dir => '/etc/storm_alternative'
           }
         end
     

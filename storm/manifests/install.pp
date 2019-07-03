@@ -3,4 +3,5 @@
 #
 class storm::install {
 
+  # Empty class
 }

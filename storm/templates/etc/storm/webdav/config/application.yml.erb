@@ -1,0 +1,7 @@
+# This file is managed by Puppet
+oauth:
+  issuers:
+<% @oauth_issuers.each do | iss | -%>
+    - name: <%= iss['name'] %>
+      issuer: <%= iss['issuer'] %>
+<% end -%>

@@ -1,0 +1,19 @@
+name=<%=@name%>
+rootPath=<%=@root_path%>
+accessPoints=<%=@access_points.join(',')%>
+vos=<%=@vos.join(',')%>
+<% if defined?(@orgs) -%>
+orgs=<%=@orgs.join(',')%>
+<% end -%>
+<% if defined?(@authenticated_read_enabled) -%>
+authenticatedReadEnabled=<%=@authenticated_read_enabled%>
+<% end -%>
+<% if defined?(@anonymous_read_enabled)-%>
+anonymousReadEnabled=<%= @anonymous_read_enabled%>
+<% end -%>
+<% if defined?(@vo_map_enabled) -%>
+voMapEnabled=<%= @vo_map_enabled %>
+<% end -%>
+<% if defined?(@vo_map_grants_write_access) -%>
+voMapGrantsWriteAccess=<%= @vo_map_grants_write_access %>
+<% end -%>

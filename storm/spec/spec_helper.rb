@@ -1,5 +1,8 @@
 require 'rspec-puppet'
 require 'rspec-puppet-facts'
+require 'rspec-puppet-utils'
+require 'rspec-puppet-augeas'
+
 include RspecPuppetFacts
 
 if ENV['COVERAGE'] == 'yes'
@@ -20,6 +23,9 @@ def windows?
 end
 
 RSpec.configure do |c|
+
+  # Configure augeas fixture test directory
+  c.augeas_fixtures = File.join(File.dirname(File.expand_path(__FILE__)), 'fixtures', 'augeas')
 
   default_facts = {
     puppetversion: Puppet.version,

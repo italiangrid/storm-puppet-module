@@ -1,23 +1,27 @@
 # Class: storm
 # ===========================
 #
-# StoRM official puppet module
+# StoRM puppet module
 #
 # Parameters
 # ----------
 #
-# * `storm_user_name`
-# Specify StoRM Unix user as a string.
+# * `user_name`
+# Unix user used to run StoRM services
 # * `storm_storage_root_directory`
-# Specify Storage Areas root directory path as a string.
+# Storage areas root directory path
+# * `storage_areas`
+# List of storage area's configuration.
+#
+# TO-DO add complete list of params
 #
 # Examples
 # --------
 #
 # @example
 #    class { 'storm':
-#      storm_user_name => 'storm',
-#      storm_storage_root_directory => '/storage',
+#      user_name => 'storm',
+#      storage_root_directory => '/storage',
 #    }
 #
 # Authors
@@ -42,24 +46,47 @@
 #
 class storm (
 
+  #####
+  # StoRM common configuration parameters
+  #####
+
+  # StoRM services run with this local Unix user. Default: 'storm'
   String $user_name = $storm::params::user_name,
-  String $storage_root_directory = $storm::params::storage_root_directory,
+
+  # The storage areas' root directory. Default: '/storage'
+  String $storage_root_dir = $storm::params::storage_root_dir,
+
+  # The list of defined storage areas. Default: []
+  Array[Storm::StorageArea] $storage_areas = $storm::params::storage_areas,
+
+  # StoRM configuration directory. Default: '/etc/storm'
+  String $config_dir = $storm::params::config_dir,
+
+  # StoRM log files directory. Default: '/var/log/storm'
+  String $log_dir = $storm::params::log_dir,
+
+  # List of components to configure on node. Default: []
+  Array[Enum['webdav','backend','frontend','gridftp']] $components = $storm::params::components,
+
+  #####
+  # WebDAV component configuration parameters
+  #####
+
+  # StoRM WebDAV configuration directory. Default: '/etc/storm/webdav'
+  String $webdav_config_dir = $storm::params::webdav_config_dir,
+
+  String $webdav_hostcert_dir = $storm::params::webdav_hostcert_dir,
   Array[Struct[{
-    name                       => String,
-    root_path                  => String,
-    filesystem_type            => Enum['posixfs', 'gpfs'],
-    access_points              => Array[String],
-    vos                        => Array[String],
-    orgs                       => String,
-    authenticated_read_enabled => Boolean,
-    anonymous_read_enabled     => Boolean,
-  }]] $storage_area = $storm::params::storage_area,
-  String $config_dirpath = $storm::params::config_dirpath,
-
-  Array[Enum['backend', 'frontend', 'webdav', 'gridftp']] $components = $storm::params::components,
-
-  String $webdav_config_dirpath = $storm::params::webdav_config_dirpath,
-  String $webdav_hostcert_dirpath = $storm::params::webdav_hostcert_dirpath,
+    name   => String,
+    issuer => String,
+  }]] $webdav_oauth_issuers = $storm::params::webdav_oauth_issuers,
+  Array[String] $webdav_hostnames = $storm::params::webdav_hostnames,
+  Integer $webdav_http_port = $storm::params::webdav_http_port,
+  Integer $webdav_https_port = $storm::params::webdav_https_port,
+  Integer $webdav_max_concurrent_connections = $storm::params::webdav_max_concurrent_connections,
+  Integer $webdav_max_queue_size = $storm::params::webdav_max_queue_size,
+  Boolean $webdav_vo_map_files_enable = $storm::params::webdav_vo_map_files_enable,
+  String $webdav_vo_map_files_config_dir = $storm::params::webdav_vo_map_files_config_dir,
 
 ) inherits storm::params {
 
@@ -68,4 +95,8 @@ class storm (
 
   Class['::storm::install']
   -> Class['::storm::config']
+
+  if 'webdav' in $components {
+    class { 'storm::webdav': }
+  }
 }
