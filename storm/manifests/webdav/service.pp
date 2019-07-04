@@ -6,6 +6,6 @@ class storm::webdav::service {
   service { 'storm-webdav':
     ensure    => running,
     enable    => true,
-    subscribe => File["${storm::webdav_config_dir}/config/application.yml"],
+    subscribe => File["${storm::webdav::config_dir}/config/application.yml"],
   }
 }

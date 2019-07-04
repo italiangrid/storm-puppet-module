@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'storm', :type => :class do
+describe 'storm::webdav', :type => :class do
 
   on_supported_os.each do |os, facts|
 
@@ -32,10 +32,12 @@ describe 'storm', :type => :class do
                 'access_points' => ['/atlas', '/atlasdisk'],
                 'vos' => ['atlas'],
                 'orgs' => ['atlas'],
+                'authenticated_read_enabled' => false,
+                'anonymous_read_enabled' => true,
+                'vo_map_enabled' => false,
               },
             ],
-            'components' => ['webdav'],
-            'webdav_oauth_issuers' => [
+            'oauth_issuers' => [
               {
                 'name' => 'iam-virgo',
                 'issuer' => 'https://iam-virgo.cloud.cnaf.infn.it/',
@@ -45,18 +47,26 @@ describe 'storm', :type => :class do
                 'issuer' => 'https://iam-test.indigo-datacloud.eu/',
               },
             ],
-            'webdav_hostnames' => ['storm-w1.example', 'storm-w2.example'],
-            'webdav_http_port' => 8080,
-            'webdav_https_port' => 9443,
-            'webdav_max_concurrent_connections' => 200,
-            'webdav_max_queue_size' => 700,
-            'webdav_connector_max_idle_time' => 15000,
-            'webdav_vo_map_files_enable' => true,
-            'webdav_vo_map_files_refresh_interval' => 22000,
-            'webdav_trust_anchors_refresh_interval' => 80000,
+            'hostnames' => ['storm-w1.example', 'storm-w2.example'],
+            'http_port' => 8080,
+            'https_port' => 9443,
+            'max_concurrent_connections' => 200,
+            'max_queue_size' => 700,
+            'connector_max_idle_time' => 15000,
+            'vo_map_files_enable' => true,
+            'vo_map_files_refresh_interval' => 22000,
+            'trust_anchors_refresh_interval' => 80000,
 
-            'webdav_tpc_max_connections' => 100,
-            'webdav_tpc_verify_checksum' => true,
+            'tpc_max_connections' => 100,
+            'tpc_verify_checksum' => true,
+
+            'jvm_opts' => '-Xms512m -Xmx1024m',
+
+            'authz_server_enable' => true,
+            'authz_server_issuer' => 'https://storm-w1.example:9443',
+            'authz_server_max_token_lifetime_sec' => 43400,
+            'authz_server_secret' => 'secret',
+            'require_client_cert' => true,
           }
         end
 
@@ -139,36 +149,10 @@ describe 'storm', :type => :class do
           is_expected.to contain_file(atlas_props).with( :content => /accessPoints=\/atlas,\/atlasdisk/ )
           is_expected.to contain_file(atlas_props).with( :content => /vos=atlas/ )
           is_expected.to contain_file(atlas_props).with( :content => /orgs=atlas/ )
-          is_expected.not_to contain_file(atlas_props).with( :content => /authenticatedReadEnabled=/ )
-          is_expected.not_to contain_file(atlas_props).with( :content => /anonymousReadEnabled=/ )
-          is_expected.not_to contain_file(atlas_props).with( :content => /voMapEnabled=/ )
+          is_expected.to contain_file(atlas_props).with( :content => /authenticatedReadEnabled=false/ )
+          is_expected.to contain_file(atlas_props).with( :content => /anonymousReadEnabled=true/ )
+          is_expected.to contain_file(atlas_props).with( :content => /voMapEnabled=false/ )
           is_expected.not_to contain_file(atlas_props).with( :content => /voMapGrantsWriteAccess=/ )
-        end
-
-        it "check storage area root path if not exists" do
-
-          is_expected.to contain_exec('creates_test.vo_root_directory')
-          is_expected.to contain_exec('set_ownership_on_test.vo_root_directory')
-          is_expected.to contain_exec('set_permissions_on_test.vo_root_directory')
-
-          is_expected.to contain_exec('creates_atlas_root_directory')
-          is_expected.to contain_exec('set_ownership_on_atlas_root_directory')
-          is_expected.to contain_exec('set_permissions_on_atlas_root_directory')
-
-        end
-
-        it "check storage area root path if exists" do
-
-          # we should fake filesystem
-
-          #is_expected.to contain_exec('creates_test.vo_root_directory')
-          #is_expected.to_not contain_exec('set_ownership_on_test.vo_root_directory')
-          #is_expected.to_not contain_exec('set_permissions_on_test.vo_root_directory')
-
-          #is_expected.to contain_exec('creates_atlas_root_directory')
-          #is_expected.to_not contain_exec('set_ownership_on_atlas_root_directory')
-          #is_expected.to_not contain_exec('set_permissions_on_atlas_root_directory')
-
         end
 
         it "check application.yml" do
@@ -212,6 +196,13 @@ describe 'storm', :type => :class do
           is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_TRUST_ANCHORS_REFRESH_INTERVAL=80000/ )
           is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_TPC_MAX_CONNECTIONS="100"/ )
           is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_TPC_VERIFY_CHECKSUM="true"/ )
+          is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_JVM_OPTS="-Xms512m -Xmx1024m"/ )
+          is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_AUTHZ_SERVER_ENABLE="true"/ )
+          is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_AUTHZ_SERVER_ISSUER="https:\/\/storm-w1.example:9443"/ )
+          is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_AUTHZ_SERVER_MAX_TOKEN_LIFETIME_SEC="43400"/ )
+          is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_AUTHZ_SERVER_SECRET="secret"/ )
+          is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_REQUIRE_CLIENT_CERT="true"/ )
+
         end
 
         it "check systemd unit file" do

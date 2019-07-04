@@ -1,57 +1,96 @@
 # Class: storm::webdav::config
 # ===========================
 #
-class storm::webdav::config {
+class storm::webdav::config (
 
-  file { $storm::webdav_hostcert_dir:
+  $user_name = $storm::webdav::user_name,
+  $storage_areas = $storm::webdav::storage_areas,
+
+  $config_dir = $storm::webdav::config_dir,
+  $hostcert_dir = $storm::webdav::hostcert_dir,
+  $oauth_issuers = $storm::webdav::oauth_issuers,
+  $hostnames = $storm::webdav::hostnames,
+
+  $http_port = $storm::webdav::http_port,
+  $https_port = $storm::webdav::https_port,
+
+  $trust_anchors_dir = $storm::webdav::trust_anchors_dir,
+  $trust_anchors_refresh_interval = $storm::webdav::trust_anchors_refresh_interval,
+
+  $max_concurrent_connections = $storm::webdav::max_concurrent_connections,
+  $max_queue_size = $storm::webdav::max_queue_size,
+  $connector_max_idle_time = $storm::webdav::connector_max_idle_time,
+
+  $vo_map_files_enable = $storm::webdav::vo_map_files_enable,
+  $vo_map_files_config_dir = $storm::webdav::vo_map_files_config_dir,
+  $vo_map_files_refresh_interval = $storm::webdav::vo_map_files_refresh_interval,
+
+  $tpc_max_connections = $storm::webdav::tpc_max_connections,
+  $tpc_verify_checksum = $storm::webdav::tpc_verify_checksum,
+
+  $log = $storm::webdav::log,
+  $log_configuration = $storm::webdav::log_configuration,
+  $access_log_configuration = $storm::webdav::access_log_configuration,
+
+  $jvm_opts = $storm::webdav::jvm_opts,
+
+  $authz_server_enable = $storm::webdav::authz_server_enable,
+  $authz_server_issuer = $storm::webdav::authz_server_issuer,
+  $authz_server_max_token_lifetime_sec = $storm::webdav::authz_server_max_token_lifetime_sec,
+  $authz_server_secret = $storm::webdav::authz_server_secret,
+  $require_client_cert = $storm::webdav::require_client_cert,
+
+) {
+
+  file { $hostcert_dir:
     ensure  => directory,
-    owner   => $storm::user_name,
-    group   => $storm::user_name,
+    owner   => $user_name,
+    group   => $user_name,
     mode    => '0755',
     recurse => true,
   }
 
-  $webdav_hostcert_filepath="${storm::webdav_hostcert_dir}/hostcert.pem"
-  $webdav_hostkey_filepath="${storm::webdav_hostcert_dir}/hostkey.pem"
+  $hostcert="${hostcert_dir}/hostcert.pem"
+  $hostkey="${hostcert_dir}/hostkey.pem"
 
   class { 'storm::service_hostcert':
-    hostcert => $webdav_hostcert_filepath,
-    hostkey  => $webdav_hostkey_filepath,
-    owner    => $storm::user_name,
-    group    => $storm::user_name,
-    require  => File[$storm::webdav_hostcert_dir],
+    hostcert => $hostcert,
+    hostkey  => $hostkey,
+    owner    => $user_name,
+    group    => $user_name,
+    require  => File[$hostcert_dir],
   }
 
-  file { $storm::webdav_config_dir:
+  file { $config_dir:
     ensure  => directory,
     owner   => 'root',
-    group   => $storm::user_name,
+    group   => $user_name,
     mode    => '0750',
     recurse => true,
   }
 
-  file { "${storm::webdav_config_dir}/config":
+  file { "${config_dir}/config":
     ensure  => directory,
     owner   => 'root',
-    group   => $storm::user_name,
+    group   => $user_name,
     mode    => '0750',
     recurse => true,
-    require => File[$storm::webdav_config_dir],
+    require => File[$config_dir],
   }
 
-  $webdav_sa_dir="${storm::webdav_config_dir}/sa.d"
+  $webdav_sa_dir="${config_dir}/sa.d"
 
   file { $webdav_sa_dir:
     ensure  => directory,
     owner   => 'root',
-    group   => $storm::user_name,
+    group   => $user_name,
     mode    => '0750',
     recurse => true,
   }
 
-  if $storm::storage_areas {
+  if $storage_areas {
     $sa_properties_template_file='storm/etc/storm/webdav/sa.d/sa.properties.erb'
-    $storm::storage_areas.each | $sa | {
+    $storage_areas.each | $sa | {
       # define template variables
       $name = $sa[name]
       $root_path = $sa[root_path]
@@ -66,22 +105,21 @@ class storm::webdav::config {
       file { "${webdav_sa_dir}/${name}.properties":
         ensure  => present,
         content => template($sa_properties_template_file),
-        owner   => $storm::user_name,
+        owner   => $user_name,
         require => File[$webdav_sa_dir],
       }
     }
   }
 
-  $oauth_issuers = $storm::webdav_oauth_issuers
   $application_template_file='storm/etc/storm/webdav/config/application.yml.erb'
   # configuration of application.yml
-  file { "${storm::webdav_config_dir}/config/application.yml":
+  file { "${config_dir}/config/application.yml":
     ensure  => present,
     content => template($application_template_file),
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    require => [File["${storm::webdav_config_dir}/config"], Package['storm-webdav']],
+    require => [File["${config_dir}/config"], Package['storm-webdav']],
   }
 
   $sysconfig_file='/etc/sysconfig/storm-webdav'

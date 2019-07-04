@@ -2,9 +2,9 @@
 Description=StoRM WebDAV service
 
 [Service]
-WorkingDirectory=<%=scope['storm::webdav_config_dir']%>
+WorkingDirectory=<%=scope['storm::webdav::config_dir']%>
 EnvironmentFile=-<%=scope['sysconfig_file']%>
-User=<%=scope['storm::user_name']%>
+User=<%=scope['storm::webdav::user_name']%>
 Type=simple
 ExecStart=/bin/bash -ac "/usr/bin/java $STORM_WEBDAV_JVM_OPTS -Dlogging.config=$STORM_WEBDAV_LOG_CONFIGURATION -jar $STORM_WEBDAV_JAR"
 KillMode=process

@@ -46,9 +46,19 @@ describe 'storm', :type => :class do
     
         let(:params) do 
           {
-            :user_name => 'test',
-            :storage_root_dir => '/another_storage',
-            :config_dir => '/etc/storm_alternative'
+            'user_name' => 'test',
+            'storage_root_dir' => '/another_storage',
+            'config_dir' => '/etc/storm_alternative',
+            'storage_areas' => [
+              {
+                'name' => 'test.vo',
+                'root_path' => '/storage/test.vo',
+              },
+              {
+                'name' => 'atlas',
+                'root_path' => '/storage/atlas',
+              }
+            ]
           }
         end
     
@@ -68,6 +78,32 @@ describe 'storm', :type => :class do
           :ensure => 'directory',
           :mode => '0750',
         )}
+
+        it "check storage area root path if not exists" do
+
+          is_expected.to contain_exec('creates_test.vo_root_directory')
+          is_expected.to contain_exec('set_ownership_on_test.vo_root_directory')
+          is_expected.to contain_exec('set_permissions_on_test.vo_root_directory')
+
+          is_expected.to contain_exec('creates_atlas_root_directory')
+          is_expected.to contain_exec('set_ownership_on_atlas_root_directory')
+          is_expected.to contain_exec('set_permissions_on_atlas_root_directory')
+
+        end
+
+        it "check storage area root path if exists" do
+
+          # we should fake filesystem
+
+          #is_expected.to contain_exec('creates_test.vo_root_directory')
+          #is_expected.to_not contain_exec('set_ownership_on_test.vo_root_directory')
+          #is_expected.to_not contain_exec('set_permissions_on_test.vo_root_directory')
+
+          #is_expected.to contain_exec('creates_atlas_root_directory')
+          #is_expected.to_not contain_exec('set_ownership_on_atlas_root_directory')
+          #is_expected.to_not contain_exec('set_permissions_on_atlas_root_directory')
+
+        end
       end
     end
   end
