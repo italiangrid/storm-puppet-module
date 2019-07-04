@@ -6,7 +6,10 @@ group :test do
   gem "rspec"
   gem "rspec-puppet"
   gem "rspec-puppet-facts"
+  gem "rspec-puppet-utils"
+  gem "rspec-puppet-augeas"
   gem "puppetlabs_spec_helper"
+  gem "jimdo-rspec-puppet-helpers"
   gem "metadata-json-lint"
   gem 'simplecov', '>= 0.11.0', require: false, group: :test
   gem 'simplecov-console'
@@ -30,7 +33,7 @@ group :test do
     gem "rubocop", "< 0.60.0"
   else
     # rubocop:disable Bundler/DuplicatedGem
-    gem "rubocop"
+    gem "rubocop-rails"
     # rubocop:enable Bundler/DuplicatedGem
   end
 end

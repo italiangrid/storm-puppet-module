@@ -11,31 +11,42 @@ package { 'ca-policy-egi-core':
 }
 
 class { 'storm':
-  user_name            => 'storm',
-  storage_area         => [
+  storage_areas => [
+    {
+      'name'      => 'test.vo',
+      'root_path' => '/storage/test.vo',
+    },
+    {
+      'name'      => 'test.vo.2',
+      'root_path' => '/storage/test.vo.2',
+    },
+  ],
+}
+
+class { 'storm::webdav':
+  storage_areas => [
     {
       'name'                       => 'test.vo',
       'root_path'                  => '/storage/test.vo',
-      'filesystem_type'            => 'posixfs',
       'access_points'              => ['/test.vo'],
       'vos'                        => ['test.vo', 'test.vo.2'],
       'orgs'                       => [],
       'authenticated_read_enabled' => false,
       'anonymous_read_enabled'     => false,
+      'vo_map_enabled'             => false,
     },
     {
       'name'                       => 'test.vo.2',
       'root_path'                  => '/storage/test.vo.2',
-      'filesystem_type'            => 'posixfs',
       'access_points'              => ['/test.vo.2'],
       'vos'                        => ['test.vo.2'],
       'orgs'                       => [],
       'authenticated_read_enabled' => false,
       'anonymous_read_enabled'     => false,
+      'vo_map_enabled'             => false,
     },
   ],
-  components           => ['webdav'],
-  webdav_oauth_issuers => [
+  oauth_issuers => [
     {
       name   => 'iam-virgo',
       issuer => 'https://iam-virgo.cloud.cnaf.infn.it/',
@@ -46,5 +57,3 @@ class { 'storm':
     },
   ],
 }
-
-include storm::webdav

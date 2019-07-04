@@ -1,9 +1,10 @@
 FROM ruby:2.6
 
-RUN apt-get install -y ruby-full libaugeas-dev
-
 # Add Gemfile
 ADD Gemfile /
+
+RUN apt-get update
+RUN apt-get install -y ruby-full libaugeas-dev
 
 # Configure to ever install a ruby gem docs then
 # Install the relevant gems and cleanup after

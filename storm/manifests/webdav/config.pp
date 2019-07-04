@@ -40,6 +40,10 @@ class storm::webdav::config (
   $authz_server_secret = $storm::webdav::authz_server_secret,
   $require_client_cert = $storm::webdav::require_client_cert,
 
+  $debug = $storm::webdav::debug,
+  $debug_port = $storm::webdav::debug_port,
+  $debug_suspend = $storm::webdav::debug_suspend,
+
 ) {
 
   file { $hostcert_dir:

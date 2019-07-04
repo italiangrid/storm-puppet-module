@@ -70,16 +70,28 @@ STORM_WEBDAV_VO_MAP_FILES_REFRESH_INTERVAL="<%=scope['storm::webdav::vo_map_file
 
 # StoRM WebDAV server debug option. Uncomment this (and restart the service)
 # if you want to attach a java debugger to the running server process
+<% if scope['storm::webdav::debug'] %>
+STORM_WEBDAV_DEBUG="y"
+<% else %>
 # STORM_WEBDAV_DEBUG="y"
+<% end %>
 
 # JVM debug port. Used together with STORM_WEBDAV_DEBUG to specify on which
 # port the JVM should listen for incoming debugger.
+<% if scope['storm::webdav::debug'] %>
+STORM_WEBDAV_DEBUG_PORT=<%=scope['storm::webdav::debug_port']%>
+<% else %>
 # STORM_WEBDAV_DEBUG_PORT=1044
+<% end %>
 
 # JVM debug suspend option. Uncomment this to block the process JVM until a remote
 # debugger connects to the debugging port specified with the STORM_WEBDAV_DEBUG_PORT
 # option
+<% if scope['storm::webdav::debug'] && scope['storm::webdav::debug_suspend']%>
+STORM_WEBDAV_DEBUG_SUSPEND="y"
+<% else %>
 # STORM_WEBDAV_DEBUG_SUSPEND="y"
+<% end %>
 
 # Max number of active third party copy connections
 STORM_WEBDAV_TPC_MAX_CONNECTIONS="<%=scope['storm::webdav::tpc_max_connections']%>"

@@ -40,6 +40,10 @@ class storm::webdav (
   String $authz_server_secret = $storm::webdav::params::authz_server_secret,
   Boolean $require_client_cert = $storm::webdav::params::require_client_cert,
 
+  Boolean $debug = $storm::webdav::params::debug,
+  Integer $debug_port = $storm::webdav::params::debug_port,
+  Boolean $debug_suspend = $storm::webdav::params::debug_suspend,
+
 ) inherits storm::webdav::params {
 
   contain storm::webdav::install
