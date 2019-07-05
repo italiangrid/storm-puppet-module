@@ -1,52 +1,44 @@
 # Class: storm::config
 # ===========================
 #
-class storm::config {
+class storm::config (
 
-  user { $storm::user_name:
-    ensure => present,
+  $user_name = $storm::user_name,
+  $user_uid = $storm::user_uid,
+  $user_gid = $storm::user_gid,
+
+  $storage_root_dir = $storm::storage_root_dir,
+  $config_dir = $storm::config_dir,
+  $log_dir = $storm::log_dir,
+
+) {
+
+  # check storm user
+  storm::user { 'storm user':
+    user_name => $user_name,
+    user_uid  => $user_uid,
+    user_gid  => $user_gid,
   }
 
-  file { $storm::storage_root_dir:
-    ensure  => directory,
-    owner   => $storm::user_name,
-    group   => $storm::user_name,
-    mode    => '0755',
-    recurse => false,
+  # check root path
+  storm::storage_root_dir { 'check_storage_root_dir':
+    path  => $storage_root_dir,
+    owner => $user_name,
+    group => $user_name,
   }
 
-  if $storm::storage_areas {
-    $storm::storage_areas.each | $sa | {
-      $name = $sa[name]
-      $root_path = $sa[root_path]
-      exec { "creates_${name}_root_directory":
-        command => "/bin/mkdir -p ${root_path}",
-        unless  => "/bin/test -d ${root_path}",
-        creates => $root_path,
-      }
-      exec { "set_ownership_on_${name}_root_directory":
-        command => "/bin/chown ${storm::user_name}:${storm::user_name} ${root_path}",
-        require => Exec["creates_${name}_root_directory"],
-      }
-      exec { "set_permissions_on_${name}_root_directory":
-        command => "/bin/chmod 755 ${root_path}",
-        require => Exec["set_ownership_on_${name}_root_directory"],
-      }
-    }
-  }
-
-  file { $storm::config_dir:
+  file { $config_dir:
     ensure  => directory,
     owner   => 'root',
-    group   => $storm::user_name,
+    group   => $user_name,
     mode    => '0750',
     recurse => true,
   }
 
-  file { $storm::log_dir:
+  file { $log_dir:
     ensure  => directory,
-    owner   => $storm::user_name,
-    group   => $storm::user_name,
+    owner   => $user_name,
+    group   => $user_name,
     mode    => '0755',
     recurse => true,
   }

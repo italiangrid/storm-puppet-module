@@ -5,6 +5,9 @@ class storm::webdav::params (
 ) inherits storm::params {
 
   $user_name = $storm::params::user_name
+  $user_uid = $storm::params::user_uid
+  $user_gid = $storm::params::user_gid
+
   $storage_areas = lookup('storm::webdav::params::storage_areas', Array[Storm::Webdav::StorageArea], undef, [])
 
   $config_dir = lookup('storm::webdav::params::config_dir', String, undef, '/etc/storm/webdav')

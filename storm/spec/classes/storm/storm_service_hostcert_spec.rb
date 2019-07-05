@@ -1,9 +1,10 @@
 require 'spec_helper'
 
-describe 'storm::service_hostcert' do
+describe 'storm::service_hostcert', :type => 'define' do
   
     context 'sanity check' do
 
+        let(:title) { 'storm::service_hostcert' }
         let(:params) do 
             {
                 :hostcert => '/path/to/hostcert.pem',
@@ -12,8 +13,6 @@ describe 'storm::service_hostcert' do
                 :group => 'test_group',
             }
         end
-
-        it { is_expected.to compile.with_all_deps }
 
         it "check hostcert.pem" do
             is_expected.to contain_file('/path/to/hostcert.pem').with( 

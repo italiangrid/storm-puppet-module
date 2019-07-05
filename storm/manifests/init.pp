@@ -7,7 +7,7 @@
 # ----------
 #
 # * `user_name`
-# Unix user used to run StoRM services
+# Unix user name used to run StoRM services
 # * `storm_storage_root_directory`
 # Storage areas root directory path
 # * `storage_areas`
@@ -48,12 +48,11 @@ class storm (
 
   # StoRM services run with this local Unix user. Default: 'storm'
   String $user_name = $storm::params::user_name,
+  Integer $user_uid = $storm::params::user_uid,
+  Integer $user_gid = $storm::params::user_gid,
 
   # The storage areas' root directory. Default: '/storage'
   String $storage_root_dir = $storm::params::storage_root_dir,
-
-  # The list of defined storage areas. Default: []
-  Array[Storm::StorageArea] $storage_areas = $storm::params::storage_areas,
 
   # StoRM configuration directory. Default: '/etc/storm'
   String $config_dir = $storm::params::config_dir,

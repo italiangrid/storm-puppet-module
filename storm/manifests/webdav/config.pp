@@ -4,6 +4,9 @@
 class storm::webdav::config (
 
   $user_name = $storm::webdav::user_name,
+  $user_uid = $storm::webdav::user_uid,
+  $user_gid = $storm::webdav::user_gid,
+
   $storage_areas = $storm::webdav::storage_areas,
 
   $config_dir = $storm::webdav::config_dir,
@@ -46,6 +49,12 @@ class storm::webdav::config (
 
 ) {
 
+  storm::user { 'storm-webdav user':
+    user_name => $user_name,
+    user_uid  => $user_uid,
+    user_gid  => $user_gid,
+  }
+
   file { $hostcert_dir:
     ensure  => directory,
     owner   => $user_name,
@@ -57,7 +66,7 @@ class storm::webdav::config (
   $hostcert="${hostcert_dir}/hostcert.pem"
   $hostkey="${hostcert_dir}/hostkey.pem"
 
-  class { 'storm::service_hostcert':
+  storm::service_hostcert { 'set_dav_hostcert_hostkey':
     hostcert => $hostcert,
     hostkey  => $hostkey,
     owner    => $user_name,
@@ -111,6 +120,12 @@ class storm::webdav::config (
         content => template($sa_properties_template_file),
         owner   => $user_name,
         require => File[$webdav_sa_dir],
+      }
+      # check root path
+      storm::storage_root_dir { "check_${name}":
+        path  => $root_path,
+        owner => $user_name,
+        group => $user_name,
       }
     }
   }

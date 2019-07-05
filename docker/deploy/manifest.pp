@@ -10,19 +10,6 @@ package { 'ca-policy-egi-core':
   require => File['egi-trust-anchors.repo'],
 }
 
-class { 'storm':
-  storage_areas => [
-    {
-      'name'      => 'test.vo',
-      'root_path' => '/storage/test.vo',
-    },
-    {
-      'name'      => 'test.vo.2',
-      'root_path' => '/storage/test.vo.2',
-    },
-  ],
-}
-
 class { 'storm::webdav':
   storage_areas => [
     {
@@ -30,7 +17,6 @@ class { 'storm::webdav':
       'root_path'                  => '/storage/test.vo',
       'access_points'              => ['/test.vo'],
       'vos'                        => ['test.vo', 'test.vo.2'],
-      'orgs'                       => [],
       'authenticated_read_enabled' => false,
       'anonymous_read_enabled'     => false,
       'vo_map_enabled'             => false,
@@ -40,7 +26,6 @@ class { 'storm::webdav':
       'root_path'                  => '/storage/test.vo.2',
       'access_points'              => ['/test.vo.2'],
       'vos'                        => ['test.vo.2'],
-      'orgs'                       => [],
       'authenticated_read_enabled' => false,
       'anonymous_read_enabled'     => false,
       'vo_map_enabled'             => false,

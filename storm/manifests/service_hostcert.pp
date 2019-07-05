@@ -1,7 +1,7 @@
-# Class: storm::service_hostcert
+# storm::service_hostcert
 # ===========================
 #
-class storm::service_hostcert (
+define storm::service_hostcert (
   String $hostcert,
   String $hostkey,
   String $owner,

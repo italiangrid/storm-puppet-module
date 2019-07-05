@@ -6,8 +6,10 @@
 class storm::params {
 
   $user_name = 'storm'
+  $user_uid = 1000
+  $user_gid = 1000
+
   $storage_root_dir = '/storage'
-  $storage_areas = []
   $config_dir = '/etc/storm'
   $log_dir = '/var/log/storm'
 
