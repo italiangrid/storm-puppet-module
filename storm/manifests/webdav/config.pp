@@ -7,6 +7,8 @@ class storm::webdav::config (
   $user_uid = $storm::webdav::user_uid,
   $user_gid = $storm::webdav::user_gid,
 
+  $storage_root_dir = $storm::webdav::storage_root_dir,
+
   $storage_areas = $storm::webdav::storage_areas,
 
   $config_dir = $storm::webdav::config_dir,
@@ -53,6 +55,13 @@ class storm::webdav::config (
     user_name => $user_name,
     user_uid  => $user_uid,
     user_gid  => $user_gid,
+  }
+
+  # storage area root path
+  storm::storage_root_dir { 'check_storage_root_dir':
+    path  => $storage_root_dir,
+    owner => $user_name,
+    group => $user_name,
   }
 
   file { $hostcert_dir:

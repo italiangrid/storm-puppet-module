@@ -7,9 +7,13 @@ define storm::user (
   Integer $user_gid = 1000,
 ) {
 
+  group { $user_name:
+    gid => $user_gid,
+  }
+
   user { $user_name:
     ensure => present,
     uid    => $user_uid,
-    gid    => $user_gid,
+    gid    => $user_name,
   }
 }

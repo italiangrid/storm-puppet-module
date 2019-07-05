@@ -7,6 +7,8 @@ class storm::webdav (
   Integer $user_uid = $storm::webdav::params::user_uid,
   Integer $user_gid = $storm::webdav::params::user_gid,
 
+  String $storage_root_dir = $storm::webdav::params::storage_root_dir,
+
   Array[Storm::Webdav::StorageArea] $storage_areas = $storm::webdav::params::storage_areas,
 
   String $config_dir = $storm::webdav::params::config_dir,
