@@ -46,20 +46,6 @@
 #
 class storm (
 
-  # StoRM services run with this local Unix user. Default: 'storm'
-  String $user_name = $storm::params::user_name,
-  Integer $user_uid = $storm::params::user_uid,
-  Integer $user_gid = $storm::params::user_gid,
-
-  # The storage areas' root directory. Default: '/storage'
-  String $storage_root_dir = $storm::params::storage_root_dir,
-
-  # StoRM configuration directory. Default: '/etc/storm'
-  String $config_dir = $storm::params::config_dir,
-
-  # StoRM log files directory. Default: '/var/log/storm'
-  String $log_dir = $storm::params::log_dir,
-
 ) inherits storm::params {
 
   contain storm::install

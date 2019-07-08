@@ -3,8 +3,8 @@
 #
 define storm::user (
   String $user_name,
-  Integer $user_uid = 1000,
-  Integer $user_gid = 1000,
+  Integer $user_uid = 1100,
+  Integer $user_gid = 1100,
 ) {
 
   group { $user_name:

@@ -9,6 +9,7 @@ class storm::webdav::params (
   $user_gid = $storm::params::user_gid
 
   $storage_root_dir = $storm::params::storage_root_dir
+  $log_dir = $storm::params::log_dir
 
   $storage_areas = lookup('storm::webdav::params::storage_areas', Array[Storm::Webdav::StorageArea], undef, [])
 

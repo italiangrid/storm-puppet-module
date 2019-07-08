@@ -8,6 +8,7 @@ class storm::webdav::config (
   $user_gid = $storm::webdav::user_gid,
 
   $storage_root_dir = $storm::webdav::storage_root_dir,
+  $log_dir = $storm::webdav::log_dir,
 
   $storage_areas = $storm::webdav::storage_areas,
 
@@ -51,63 +52,75 @@ class storm::webdav::config (
 
 ) {
 
-  storm::user { 'storm-webdav user':
+  $ns = 'dav'
+
+  storm::user { "${ns}::storm-user":
     user_name => $user_name,
     user_uid  => $user_uid,
     user_gid  => $user_gid,
   }
 
   # storage area root path
-  storm::storage_root_dir { 'check_storage_root_dir':
+  storm::storage_root_dir { "${ns}::storage-root-dir":
     path  => $storage_root_dir,
     owner => $user_name,
     group => $user_name,
   }
 
-  file { $hostcert_dir:
+  # log directory
+  file { "${ns}::storm-log-dir":
     ensure  => directory,
+    path    => $log_dir,
     owner   => $user_name,
     group   => $user_name,
     mode    => '0755',
     recurse => true,
   }
 
-  $hostcert="${hostcert_dir}/hostcert.pem"
-  $hostkey="${hostcert_dir}/hostkey.pem"
+  file { "${ns}::hostcert-dir":
+    ensure  => directory,
+    path    => $hostcert_dir,
+    owner   => $user_name,
+    group   => $user_name,
+    mode    => '0755',
+    recurse => true,
+  }
 
-  storm::service_hostcert { 'set_dav_hostcert_hostkey':
-    hostcert => $hostcert,
-    hostkey  => $hostkey,
+  storm::service_hostcert { "${ns}::host-credentials":
+    hostcert => "${hostcert_dir}/hostcert.pem",
+    hostkey  => "${hostcert_dir}/hostkey.pem",
     owner    => $user_name,
     group    => $user_name,
-    require  => File[$hostcert_dir],
+    require  => File["${ns}::hostcert-dir"],
   }
 
-  file { $config_dir:
+  file { "${ns}::storm-webdav-config-dir":
     ensure  => directory,
+    path    => $config_dir,
     owner   => 'root',
     group   => $user_name,
     mode    => '0750',
     recurse => true,
   }
 
-  file { "${config_dir}/config":
+  file { "${ns}::storm-webdav-app-config-dir":
     ensure  => directory,
+    path    => "${config_dir}/config",
     owner   => 'root',
     group   => $user_name,
     mode    => '0750',
     recurse => true,
-    require => File[$config_dir],
+    require => File["${ns}::storm-webdav-config-dir"],
   }
 
-  $webdav_sa_dir="${config_dir}/sa.d"
-
-  file { $webdav_sa_dir:
+  file { "${ns}::storm-webdav-sa-config-dir":
     ensure  => directory,
+    path    => "${config_dir}/sa.d",
     owner   => 'root',
     group   => $user_name,
     mode    => '0750',
     recurse => true,
+    require => File["${ns}::storm-webdav-config-dir"]
   }
 
   if $storage_areas {
@@ -124,14 +137,15 @@ class storm::webdav::config (
       $vo_map_enabled = $sa[vo_map_enabled]
       $vo_map_grants_write_access = $sa[vo_map_grants_write_access]
       # use template
-      file { "${webdav_sa_dir}/${name}.properties":
+      file { "${ns}::create-${name}-sa-properties-file":
         ensure  => present,
+        path    => "${config_dir}/sa.d/${name}.properties",
         content => template($sa_properties_template_file),
         owner   => $user_name,
-        require => File[$webdav_sa_dir],
+        require => File["${ns}::storm-webdav-sa-config-dir"],
       }
       # check root path
-      storm::storage_root_dir { "check_${name}":
+      storm::storage_root_dir { "${ns}::check-${name}-sa-root-dir":
         path  => $root_path,
         owner => $user_name,
         group => $user_name,
@@ -141,19 +155,21 @@ class storm::webdav::config (
 
   $application_template_file='storm/etc/storm/webdav/config/application.yml.erb'
   # configuration of application.yml
-  file { "${config_dir}/config/application.yml":
+  file { "${ns}::configure-application-yml":
     ensure  => present,
+    path    => "${config_dir}/config/application.yml",
     content => template($application_template_file),
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    require => [File["${config_dir}/config"], Package['storm-webdav']],
+    require => File["${ns}::storm-webdav-app-config-dir"],
   }
 
   $sysconfig_file='/etc/sysconfig/storm-webdav'
   $sysconfig_template_file='storm/etc/sysconfig/storm-webdav.erb'
-  file { $sysconfig_file:
+  file { "${ns}::configure-sysconfig-file":
     ensure  => present,
+    path    => $sysconfig_file,
     content => template($sysconfig_template_file),
   }
 
@@ -165,8 +181,9 @@ class storm::webdav::config (
         '7': {
           $unit_file='/etc/systemd/system/storm-webdav.service'
           $unit_template_file='storm/etc/systemd/system/storm-webdav.service.erb'
-          file { $unit_file:
+          file { "${ns}::configure-unit-file":
             ensure  => present,
+            path    => $unit_file,
             content => template($unit_template_file),
           }
         }

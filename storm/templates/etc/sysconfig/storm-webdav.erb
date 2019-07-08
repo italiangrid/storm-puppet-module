@@ -24,10 +24,10 @@ STORM_WEBDAV_HTTPS_PORT=<%=scope['storm::webdav::https_port']%>
 STORM_WEBDAV_HTTP_PORT=<%=scope['storm::webdav::http_port']%>
 
 # Path to the service certificate.
-STORM_WEBDAV_CERTIFICATE_PATH="<%=@hostcert%>"
+STORM_WEBDAV_CERTIFICATE_PATH="<%=scope['storm::webdav::hostcert_dir']%>/hostcert.pem"
 
 # Path to the service certificate private key.
-STORM_WEBDAV_PRIVATE_KEY_PATH="<%=@hostkey%>"
+STORM_WEBDAV_PRIVATE_KEY_PATH="<%=scope['storm::webdav::hostcert_dir']%>/hostkey.pem"
 
 # Trust anchors directory
 STORM_WEBDAV_TRUST_ANCHORS_DIR="<%=scope['storm::webdav::trust_anchors_dir']%>"
@@ -45,7 +45,7 @@ STORM_WEBDAV_MAX_QUEUE_SIZE=<%=scope['storm::webdav::max_queue_size']%>
 STORM_WEBDAV_CONNECTOR_MAX_IDLE_TIME=<%=scope['storm::webdav::connector_max_idle_time']%>
 
 # Storage area configuration directory
-STORM_WEBDAV_SA_CONFIG_DIR="<%=@webdav_sa_dir%>"
+STORM_WEBDAV_SA_CONFIG_DIR="<%=scope['storm::webdav::config_dir']%>/sa.d"
 
 # The webdav server jar. Do not change this unless you know what you are doing.
 STORM_WEBDAV_JAR="/usr/share/java/storm-webdav/storm-webdav-server.jar"
