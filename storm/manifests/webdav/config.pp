@@ -62,9 +62,10 @@ class storm::webdav::config (
 
   # storage area root path
   storm::storage_root_dir { "${ns}::storage-root-dir":
-    path  => $storage_root_dir,
-    owner => $user_name,
-    group => $user_name,
+    path    => $storage_root_dir,
+    owner   => $user_name,
+    group   => $user_name,
+    require => Storm::User["${ns}::storm-user"],
   }
 
   # log directory
@@ -75,6 +76,7 @@ class storm::webdav::config (
     group   => $user_name,
     mode    => '0755',
     recurse => true,
+    require => Storm::User["${ns}::storm-user"],
   }
 
   file { "${ns}::hostcert-dir":
@@ -84,6 +86,7 @@ class storm::webdav::config (
     group   => $user_name,
     mode    => '0755',
     recurse => true,
+    require => Storm::User["${ns}::storm-user"],
   }
 
   storm::service_hostcert { "${ns}::host-credentials":
@@ -101,6 +104,7 @@ class storm::webdav::config (
     group   => $user_name,
     mode    => '0750',
     recurse => true,
+    require => Storm::User["${ns}::storm-user"],
   }
 
   file { "${ns}::storm-webdav-app-config-dir":
@@ -146,9 +150,10 @@ class storm::webdav::config (
       }
       # check root path
       storm::storage_root_dir { "${ns}::check-${name}-sa-root-dir":
-        path  => $root_path,
-        owner => $user_name,
-        group => $user_name,
+        path    => $root_path,
+        owner   => $user_name,
+        group   => $user_name,
+        require => Storm::User["${ns}::storm-user"],
       }
     }
   }
