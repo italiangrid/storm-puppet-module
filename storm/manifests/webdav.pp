@@ -3,6 +3,8 @@
 #
 class storm::webdav (
 
+  String $ns = 'dav',
+
   String $user_name = $storm::webdav::params::user_name,
   Integer $user_uid = $storm::webdav::params::user_uid,
   Integer $user_gid = $storm::webdav::params::user_gid,

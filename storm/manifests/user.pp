@@ -8,7 +8,8 @@ define storm::user (
 ) {
 
   group { $user_name:
-    gid => $user_gid,
+    ensure => present,
+    gid    => $user_gid,
   }
 
   user { $user_name:

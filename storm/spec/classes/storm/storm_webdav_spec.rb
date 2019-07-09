@@ -81,6 +81,10 @@ describe 'storm::webdav', :type => :class do
             :uid => 1200,
             :gid => 'test',
           )
+          is_expected.to contain_group('test').with( 
+            :ensure => 'present',
+            :gid => 1200,
+          )
         end
 
         it "check storm log directory" do
@@ -289,6 +293,19 @@ describe 'storm::webdav', :type => :class do
             'debug_port' => 1234,
             'debug_suspend' => false,
           }
+        end
+
+        it "check storm-webdav service is default user" do
+          is_expected.to contain_storm__user('dav::storm-user')
+          is_expected.to contain_user('storm').with( 
+            :ensure => 'present',
+            :uid => 1100,
+            :gid => 'storm',
+          )
+          is_expected.to contain_group('storm').with( 
+            :ensure => 'present',
+            :gid => 1100,
+          )
         end
 
         it "check sysconfig file" do
