@@ -1,5 +1,82 @@
-# Class: storm::webdav
-# ===========================
+# @!puppet.type.param
+# @summary StoRM WebDAV puppet module
+#
+# Parameters
+# ----------
+# 
+# The main StoRM WebDAV configuration parameters are:
+#
+# * `user_name`: the Unix user that runs storm-webdav service;
+# * `storage_areas`: the list of Storm::Webdav::StorageArea elements (more info below);
+# * `oauth_issuers`: the list of Storm::Webdav::OAuthIssuer elements that means the supported OAuth providers;
+# * `hostnames`: the list of hostname and aliases supported for Third-Party-Copy;
+# * `http_port` and `https_port`: the service ports;
+#
+# The Storm::Webdav::StorageArea type
+# --------------------
+#
+# * `name`: The name of the storage area. Required.
+# * `root_path`: The path of the storage area root directory. Required.
+# * `access_points`: A list of logic path used to access storage area's root. Required.
+# * `vos`: A list of one or more Virtual Organization names of the users allowed to read/write into the storage area. Required.
+# * `orgs`: A list of one or more Organizations. Optional.
+# * `authenticated_read_enabled`: A boolean value used to enable the read of the storage area content to authenticated users. Required.
+# * `anonymous_read_enabled`:  A boolean value used to enable anonymous read access to storage area content. Required.
+# * `vo_map_enabled`: A boolean value used to enable the use of the VO gridmap files. Required.
+# * `vo_map_grants_write_access`: A boolean value used to grant write access to the VO users read from grifmap file. Optional,
+#
+# The Storm::Webdav::OAuthIssuer type
+# --------------------
+#
+# * `name`: the organization name. Rerquired.
+# * `issuer`: the issuer URL. Required.
+#
+# @example Example of usage
+#    class { 'storm::webdav':
+#      storage_root_dir => '/storage',
+#      storage_areas => [
+#        {
+#          name                       => 'test.vo',
+#          root_path                  => '/storage/test.vo',
+#          access_points              => ['/test.vo'],
+#          vos                        => ['test.vo', 'test.vo.2'],
+#          authenticated_read_enabled => false,
+#          anonymous_read_enabled     => false,
+#          vo_map_enabled             => false,
+#        },
+#        {
+#          name                       => 'test.vo.2',
+#          root_path                  => '/storage/test.vo.2',
+#          access_points              => ['/test.vo.2'],
+#          vos                        => ['test.vo.2'],
+#          authenticated_read_enabled => false,
+#          anonymous_read_enabled     => false,
+#          vo_map_enabled             => false,
+#        },  
+#      ],
+#      oauth_issuers => [
+#        {
+#          name   => 'indigo-dc',
+#          issuer => 'https://iam-test.indigo-datacloud.eu/',
+#        },
+#      ],
+#      hostnames => ['localhost', 'alias.for.localhost'],
+#    }
+#
+# @param user_name
+#   Unix user and group name used to run StoRM services.
+#
+# @param user_uid
+#   A custom user id for `user_name`
+#
+# @param user_gid
+#   A custom group id for `user_name`
+#
+# @param storage_root_dir
+#   Storage areas root directory path.
+#
+# @param storage_areas
+#   List of storage area's configuration.
 #
 class storm::webdav (
 

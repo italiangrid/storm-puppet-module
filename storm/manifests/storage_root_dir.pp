@@ -1,6 +1,20 @@
-# storm::storage_root_dir
-# ===========================
+# @summary Check if a storage root directory path exists. If not, a new directory is created with 755 as permissions and the defined owner and group.
 #
+# @param path
+#   The storage root directory path. Required.
+#
+# @param owner
+#   Directory's owner. Required.
+#
+# @param group
+#   Directory's group. Required.
+#
+# @example Basic usage
+#   storm::storage_root_dir { 'check test storage area root dir':
+#     path => '/storage/test',
+#     owner => 'storm',
+#     group => 'storm',
+#   }
 define storm::storage_root_dir (
   String $path,
   String $owner,

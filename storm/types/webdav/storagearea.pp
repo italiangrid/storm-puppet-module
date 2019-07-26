@@ -1,3 +1,4 @@
+# @summary The storage area type for storm-webdav
 type Storm::Webdav::StorageArea = Struct[{
   name                       => String,
   root_path                  => String,

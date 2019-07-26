@@ -1,6 +1,18 @@
-# Class: storm::repo
-# ===========================
+# @summary Choose which StoRM repository you want to intall and enable. Also a custom list of repository URL can be specified.
 #
+# @param installed
+#   The list of repositories that have to be installed. Allowed values are `stable`, `beta` and `nightly`. Optional.
+#
+# @param enabled
+#   The list of repositories that have to be enabled. Allowed values are `stable`, `beta` and `nightly`. Optional.
+#
+# @param customs
+#   A list of repository URLs that have to be installed and enabled. Optional.
+#
+# @example Install all the repositories and enable only nightly repo as follow:
+#   class { 'storm::repo':
+#     enabled => ['nightly'],
+#   }
 class storm::repo (
   Array[Enum['stable', 'beta', 'nightly']] $installed = ['stable', 'beta', 'nightly'],
   Array[Enum['stable', 'beta', 'nightly']] $enabled = ['stable'],

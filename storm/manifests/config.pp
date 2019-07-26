@@ -3,4 +3,5 @@
 #
 class storm::config (
 ) {
+  # Empty class
 }
