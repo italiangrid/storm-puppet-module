@@ -4,7 +4,7 @@
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>
-  Puppet Class: storm::webdav::service
+  Puppet Class: storm::gridftp::params
   
     &mdash; Documentation by YARD 0.9.20
   
@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
 
 <script type="text/javascript" charset="utf-8">
-  pathId = "puppet_classes::storm::webdav::service";
+  pathId = "puppet_classes::storm::gridftp::params";
   relpath = '../';
 </script>
 
@@ -39,7 +39,7 @@
     <a href="../_index.html">Index (s)</a> &raquo;
     <span class='title'><span class='object_link'>Puppet Classes</span></span>
      &raquo; 
-    <span class="title">storm::webdav::service</span>
+    <span class="title">storm::gridftp::params</span>
   
 </div>
 
@@ -59,20 +59,25 @@
         <div class="clear"></div>
       </div>
 
-      <div id="content"><h1>Puppet Class: storm::webdav::service</h1>
+      <div id="content"><h1>Puppet Class: storm::gridftp::params</h1>
 <div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd><span class='object_link'><a href="storm_3A_3Aparams.html" title="puppet_classes::storm::params (puppet_class)">storm::params</a></span></dd>
+  </dl>
   
   
   <dl>
     <dt>Defined in:</dt>
     <dd>
-      manifests/webdav/service.pp
+      manifests/gridftp/params.pp
     </dd>
   </dl>
 </div>
 
   <h2>Summary</h2>
-  StoRM WebDAV service class
+  StoRM GridFTP params class
 
 <h2>Overview</h2>
 <div class="docstring">
@@ -98,17 +103,23 @@
 6
 7
 8
-9</pre>
+9
+10
+11
+12</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/webdav/service.pp', line 3</span>
+        <pre class="code"><span class="info file"># File 'manifests/gridftp/params.pp', line 3</span>
 
-class storm::webdav::service {
+class storm::gridftp::params (
+) inherits storm::params {
 
-  service { &#39;storm-webdav&#39;:
-    ensure =&gt; running,
-    enable =&gt; true,
-  }
+  $gridftp_with_dsi = lookup(&#39;storm::grdiftp::params::gridftp_with_dsi&#39;, Enum[&#39;yes&#39;, &#39;no&#39;], undef, &#39;yes&#39;)
+
+  $tcp_port_range_min = lookup(&#39;storm::gridftp::params::tcp_port_range_min&#39;, Integer, undef, 20000)
+  $tcp_port_range_max = lookup(&#39;storm::gridftp::params::tcp_port_range_max&#39;, Integer, undef, 25000)
+
+  $connections_max = lookup(&#39;storm::gridftp::params::connections_max&#39;, Integer, undef, 2000)
 }</pre>
       </td>
     </tr>

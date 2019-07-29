@@ -85,12 +85,13 @@
   </dl>
 </div>
 
+  <h2>Summary</h2>
+  StoRM WebDAV params class
+
 <h2>Overview</h2>
 <div class="docstring">
   <div class="discussion">
     
-<h1 id="label-Class-3A+storm-3A-3Awebdav-3A-3Aparams">Class: storm::webdav::params</h1>
-
   </div>
 </div>
 
@@ -105,6 +106,7 @@
         <pre class="lines">
 
 
+3
 4
 5
 6
@@ -149,15 +151,10 @@
 45
 46
 47
-48
-49
-50
-51
-52
-53</pre>
+48</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/webdav/params.pp', line 4</span>
+        <pre class="code"><span class="info file"># File 'manifests/webdav/params.pp', line 3</span>
 
 class storm::webdav::params (
 ) inherits storm::params {
@@ -192,10 +189,6 @@ class storm::webdav::params (
 
   $tpc_max_connections = lookup(&#39;storm::webdav::params::tpc_max_connections&#39;, Integer, undef, 50)
   $tpc_verify_checksum = lookup(&#39;storm::webdav::params::tpc_verify_checksum&#39;, Boolean, undef, false)
-
-  $log = lookup(&#39;storm::webdav::params::log&#39;, String, undef, &#39;/var/log/storm/webdav/storm-webdav-server.log&#39;)
-  $log_configuration = lookup(&#39;storm::webdav::params::log_configuration&#39;, String, undef, &#39;/etc/storm/webdav/logback.xml&#39;)
-  $access_log_configuration = lookup(&#39;storm::webdav::params::access_log_configuration&#39;, String, undef, &#39;/etc/storm/webdav/logback-access.xml&#39;)
 
   $jvm_opts = lookup(&#39;storm::webdav::params::jvm_opts&#39;, String, undef, &#39;-Xms256m -Xmx512m -Djava.io.tmpdir=/var/lib/storm-webdav/work&#39;)
 

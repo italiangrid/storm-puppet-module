@@ -10,9 +10,9 @@
 # https://puppet.com/docs/puppet/latest/bgtm.html#testing-your-module
 #
 class { 'storm::webdav':
-  user_name => 'storm',
+  user_name        => 'storm',
   storage_root_dir => '/storage',
-  storage_areas => [
+  storage_areas    => [
     {
       'name'                       => 'test.vo',
       'root_path'                  => '/storage/test.vo',
@@ -32,7 +32,7 @@ class { 'storm::webdav':
       'vo_map_enabled'             => false,
     },
   ],
-  oauth_issuers => [
+  oauth_issuers    => [
     {
       name   => 'iam-virgo',
       issuer => 'https://iam-virgo.cloud.cnaf.infn.it/',
@@ -42,5 +42,5 @@ class { 'storm::webdav':
       issuer => 'https://iam-test.indigo-datacloud.eu/',
     },
   ],
-  hostnames => ['omii006-vm03.cnaf.infn.it'],
+  hostnames        => ['omii006-vm03.cnaf.infn.it'],
 }

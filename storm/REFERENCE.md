@@ -7,7 +7,11 @@
 
 * [`storm`](#storm): StoRM puppet module parent class
 * [`storm::config`](#stormconfig): StoRM config class
-* [`storm::gridftp`](#stormgridftp): 
+* [`storm::gridftp`](#stormgridftp): StoRM GridFTP puppet module
+* [`storm::gridftp::config`](#stormgridftpconfig): StoRM GridFTP config class
+* [`storm::gridftp::install`](#stormgridftpinstall): StoRM GridFTP install class
+* [`storm::gridftp::params`](#stormgridftpparams): StoRM GridFTP params class
+* [`storm::gridftp::service`](#stormgridftpservice): StoRM GridFTP service class
 * [`storm::install`](#storminstall): StoRM install class
 * [`storm::params`](#stormparams): StoRM params class
 * [`storm::repo`](#stormrepo): Choose which StoRM repository you want to intall and enable. Also a custom list of repository URL can be specified.
@@ -25,8 +29,7 @@
 
 **Data types**
 
-* [`Storm::StorageArea`](#stormstoragearea): 
-* [`Storm::Webdav::OAuthIssuer`](#stormwebdavoauthissuer): 
+* [`Storm::Webdav::OAuthIssuer`](#stormwebdavoauthissuer): The OAuthIssuer type for storm-webdav
 * [`Storm::Webdav::StorageArea`](#stormwebdavstoragearea): The storage area type for storm-webdav
 
 ## Classes
@@ -41,19 +44,95 @@ StoRM config class
 
 ### storm::gridftp
 
-The storm::gridftp class.
+StoRM GridFTP puppet module
 
 #### Parameters
 
 The following parameters are available in the `storm::gridftp` class.
 
-##### `ns`
+##### `gridftp_with_dsi`
 
-Data type: `String`
+Data type: `Enum['yes', 'no']`
 
 
 
-Default value: 'gftp'
+Default value: $storm::gridftp::params::gridftp_with_dsi
+
+##### `tcp_port_range_min`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::gridftp::params::tcp_port_range_min
+
+##### `tcp_port_range_max`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::gridftp::params::tcp_port_range_max
+
+##### `connections_max`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::gridftp::params::connections_max
+
+### storm::gridftp::config
+
+StoRM GridFTP config class
+
+#### Parameters
+
+The following parameters are available in the `storm::gridftp::config` class.
+
+##### `gridftp_with_dsi`
+
+Data type: `Any`
+
+
+
+Default value: $storm::gridftp::gridftp_with_dsi
+
+##### `tcp_port_range_min`
+
+Data type: `Any`
+
+
+
+Default value: $storm::gridftp::tcp_port_range_min
+
+##### `tcp_port_range_max`
+
+Data type: `Any`
+
+
+
+Default value: $storm::gridftp::tcp_port_range_max
+
+##### `connections_max`
+
+Data type: `Any`
+
+
+
+Default value: $storm::gridftp::connections_max
+
+### storm::gridftp::install
+
+StoRM GridFTP install class
+
+### storm::gridftp::params
+
+StoRM GridFTP params class
+
+### storm::gridftp::service
+
+StoRM GridFTP service class
 
 ### storm::install
 
@@ -210,22 +289,6 @@ Storage areas root directory path.
 
 Default value: $storm::webdav::params::storage_root_dir
 
-##### `storage_areas`
-
-Data type: `Array[Storm::Webdav::StorageArea]`
-
-List of storage area's configuration.
-
-Default value: $storm::webdav::params::storage_areas
-
-##### `ns`
-
-Data type: `String`
-
-
-
-Default value: 'dav'
-
 ##### `log_dir`
 
 Data type: `String`
@@ -234,11 +297,19 @@ Data type: `String`
 
 Default value: $storm::webdav::params::log_dir
 
+##### `storage_areas`
+
+Data type: `Array[Storm::Webdav::StorageArea]`
+
+List of storage area's configuration.
+
+Default value: $storm::webdav::params::storage_areas
+
 ##### `config_dir`
 
 Data type: `String`
 
-
+StoRM WebDAV service configuration directory
 
 Default value: $storm::webdav::params::config_dir
 
@@ -362,30 +433,6 @@ Data type: `Boolean`
 
 Default value: $storm::webdav::params::tpc_verify_checksum
 
-##### `log`
-
-Data type: `String`
-
-
-
-Default value: $storm::webdav::params::log
-
-##### `log_configuration`
-
-Data type: `String`
-
-
-
-Default value: $storm::webdav::params::log_configuration
-
-##### `access_log_configuration`
-
-Data type: `String`
-
-
-
-Default value: $storm::webdav::params::access_log_configuration
-
 ##### `jvm_opts`
 
 Data type: `String`
@@ -465,14 +512,6 @@ StoRM WebDAV config class
 #### Parameters
 
 The following parameters are available in the `storm::webdav::config` class.
-
-##### `ns`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::ns
 
 ##### `user_name`
 
@@ -634,30 +673,6 @@ Data type: `Any`
 
 Default value: $storm::webdav::tpc_verify_checksum
 
-##### `log`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::log
-
-##### `log_configuration`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::log_configuration
-
-##### `access_log_configuration`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::access_log_configuration
-
 ##### `jvm_opts`
 
 Data type: `Any`
@@ -737,14 +752,6 @@ StoRM WebDAV install class
 #### Parameters
 
 The following parameters are available in the `storm::webdav::install` class.
-
-##### `ns`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::ns
 
 ##### `user_name`
 
@@ -905,18 +912,9 @@ Default value: 1100
 
 ## Data types
 
-### Storm::StorageArea
-
-The Storm::StorageArea data type.
-
-Alias of `Struct[{
-  name                       => String,
-  root_path                  => String,
-}]`
-
 ### Storm::Webdav::OAuthIssuer
 
-The Storm::Webdav::OAuthIssuer data type.
+The OAuthIssuer type for storm-webdav
 
 Alias of `Struct[{
   name   => String,
