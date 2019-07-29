@@ -1,5 +1,4 @@
-# Class: storm::webdav::install
-# ===========================
+# @summary StoRM WebDAV install class
 #
 class storm::webdav::install (
 

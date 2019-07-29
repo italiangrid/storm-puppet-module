@@ -1,5 +1,4 @@
-# Class: storm::webdav::config
-# ===========================
+# @summary StoRM WebDAV config class
 #
 class storm::webdav::config (
 

@@ -1,5 +1,4 @@
-# Class: storm::webdav::params
-# ===========================
+# @summary StoRM WebDAV params class
 #
 class storm::webdav::params (
 ) inherits storm::params {

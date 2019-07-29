@@ -1,5 +1,4 @@
-# Class: storm::config
-# ===========================
+# @summary StoRM config class
 #
 class storm::config (
 ) {

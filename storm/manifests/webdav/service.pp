@@ -1,5 +1,4 @@
-# Class: storm::webdav::service
-# ===========================
+# @summary StoRM WebDAV service class
 #
 class storm::webdav::service {
 

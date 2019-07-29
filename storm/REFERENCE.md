@@ -6,15 +6,16 @@
 **Classes**
 
 * [`storm`](#storm): StoRM puppet module parent class
-* [`storm::config`](#stormconfig): Class: storm::config ===========================
-* [`storm::install`](#storminstall): Class: storm::install ===========================
-* [`storm::params`](#stormparams): Class: storm::params ===========================  storm class default parameters
+* [`storm::config`](#stormconfig): StoRM config class
+* [`storm::gridftp`](#stormgridftp): 
+* [`storm::install`](#storminstall): StoRM install class
+* [`storm::params`](#stormparams): StoRM params class
 * [`storm::repo`](#stormrepo): Choose which StoRM repository you want to intall and enable. Also a custom list of repository URL can be specified.
 * [`storm::webdav`](#stormwebdav): StoRM WebDAV puppet module
-* [`storm::webdav::config`](#stormwebdavconfig): Class: storm::webdav::config ===========================
-* [`storm::webdav::install`](#stormwebdavinstall): Class: storm::webdav::install ===========================
-* [`storm::webdav::params`](#stormwebdavparams): Class: storm::webdav::params ===========================
-* [`storm::webdav::service`](#stormwebdavservice): Class: storm::webdav::service ===========================
+* [`storm::webdav::config`](#stormwebdavconfig): StoRM WebDAV config class
+* [`storm::webdav::install`](#stormwebdavinstall): StoRM WebDAV install class
+* [`storm::webdav::params`](#stormwebdavparams): StoRM WebDAV params class
+* [`storm::webdav::service`](#stormwebdavservice): StoRM WebDAV service class
 
 **Defined types**
 
@@ -36,18 +37,29 @@ StoRM puppet module parent class
 
 ### storm::config
 
-Class: storm::config
-===========================
+StoRM config class
+
+### storm::gridftp
+
+The storm::gridftp class.
+
+#### Parameters
+
+The following parameters are available in the `storm::gridftp` class.
+
+##### `ns`
+
+Data type: `String`
+
+
+
+Default value: 'gftp'
 
 ### storm::install
 
-Class: storm::install
-===========================
+StoRM install class
 
 ### storm::params
-
-Class: storm::params
-===========================
 
 storm class default parameters
 
@@ -448,8 +460,7 @@ Default value: $storm::webdav::params::debug_suspend
 
 ### storm::webdav::config
 
-Class: storm::webdav::config
-===========================
+StoRM WebDAV config class
 
 #### Parameters
 
@@ -721,8 +732,7 @@ Default value: $storm::webdav::debug_suspend
 
 ### storm::webdav::install
 
-Class: storm::webdav::install
-===========================
+StoRM WebDAV install class
 
 #### Parameters
 
@@ -762,13 +772,11 @@ Default value: $storm::webdav::user_gid
 
 ### storm::webdav::params
 
-Class: storm::webdav::params
-===========================
+StoRM WebDAV params class
 
 ### storm::webdav::service
 
-Class: storm::webdav::service
-===========================
+StoRM WebDAV service class
 
 ## Defined types
 

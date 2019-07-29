@@ -1,5 +1,4 @@
-# Class: storm::install
-# ===========================
+# @summary StoRM install class
 #
 class storm::install {
 

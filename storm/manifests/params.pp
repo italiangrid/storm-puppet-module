@@ -1,5 +1,4 @@
-# Class: storm::params
-# ===========================
+# @summary StoRM params class
 #
 # storm class default parameters
 #
