@@ -51,13 +51,13 @@ STORM_WEBDAV_SA_CONFIG_DIR="<%=scope['storm::webdav::config_dir']%>/sa.d"
 STORM_WEBDAV_JAR="/usr/share/java/storm-webdav/storm-webdav-server.jar"
 
 # The StoRM webdav logfile. Do not change this unless you know what you are doing.
-STORM_WEBDAV_LOG="<%=scope['storm::webdav::log']%>"
+STORM_WEBDAV_LOG="/var/log/storm/webdav/storm-webdav-server.log"
 
 # The StoRM webdav logging configuration. Do not change this unless you know what you are doing.
-STORM_WEBDAV_LOG_CONFIGURATION="<%=scope['storm::webdav::log_configuration']%>"
+STORM_WEBDAV_LOG_CONFIGURATION="/etc/storm/webdav/logback.xml"
 
 # The StoRM webdav access log configuration. Do not change this unless you know what you are doing.
-STORM_WEBDAV_ACCESS_LOG_CONFIGURATION="<%=scope['storm::webdav::access_log_configuration']%>"
+STORM_WEBDAV_ACCESS_LOG_CONFIGURATION="/etc/storm/webdav/logback-access.xml"
 
 # Enables/disables  support for VO map files
 STORM_WEBDAV_VO_MAP_FILES_ENABLE="<%=scope['storm::webdav::vo_map_files_enable']%>"

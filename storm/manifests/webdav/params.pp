@@ -34,10 +34,6 @@ class storm::webdav::params (
   $tpc_max_connections = lookup('storm::webdav::params::tpc_max_connections', Integer, undef, 50)
   $tpc_verify_checksum = lookup('storm::webdav::params::tpc_verify_checksum', Boolean, undef, false)
 
-  $log = lookup('storm::webdav::params::log', String, undef, '/var/log/storm/webdav/storm-webdav-server.log')
-  $log_configuration = lookup('storm::webdav::params::log_configuration', String, undef, '/etc/storm/webdav/logback.xml')
-  $access_log_configuration = lookup('storm::webdav::params::access_log_configuration', String, undef, '/etc/storm/webdav/logback-access.xml')
-
   $jvm_opts = lookup('storm::webdav::params::jvm_opts', String, undef, '-Xms256m -Xmx512m -Djava.io.tmpdir=/var/lib/storm-webdav/work')
 
   $authz_server_enable = lookup('storm::webdav::params::authz_server_enable', Boolean, undef, false)

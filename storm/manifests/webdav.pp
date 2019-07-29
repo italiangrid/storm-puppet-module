@@ -75,12 +75,63 @@
 # @param storage_root_dir
 #   Storage areas root directory path.
 #
+# @param log_dir
+#
 # @param storage_areas
 #   List of storage area's configuration.
 #
+# @param config_dir
+#   StoRM WebDAV service configuration directory
+#
+# @param hostcert_dir
+#
+# @param oauth_issuers
+#
+# @param hostnames
+#
+# @param http_port
+#
+# @param https_port
+#
+# @param trust_anchors_dir
+#
+# @param trust_anchors_refresh_interval
+#
+# @param max_concurrent_connections
+#
+# @param max_queue_size
+#
+# @param connector_max_idle_time
+#
+# @param vo_map_files_enable
+#
+# @param vo_map_files_config_dir
+#
+# @param vo_map_files_refresh_interval
+#
+# @param tpc_max_connections
+#
+# @param tpc_verify_checksum
+#
+# @param jvm_opts
+#
+# @param authz_server_enable
+#
+# @param authz_server_issuer
+#
+# @param authz_server_max_token_lifetime_sec
+#
+# @param authz_server_secret
+#
+# @param require_client_cert
+#
+# @param debug
+#
+# @param debug_port
+#
+# @param debug_suspend
+#
 class storm::webdav (
-
-  String $ns = 'dav',
 
   String $user_name = $storm::webdav::params::user_name,
   Integer $user_uid = $storm::webdav::params::user_uid,
@@ -112,10 +163,6 @@ class storm::webdav (
 
   Integer $tpc_max_connections = $storm::webdav::params::tpc_max_connections,
   Boolean $tpc_verify_checksum = $storm::webdav::params::tpc_verify_checksum,
-
-  String $log = $storm::webdav::params::log,
-  String $log_configuration = $storm::webdav::params::log_configuration,
-  String $access_log_configuration = $storm::webdav::params::access_log_configuration,
 
   String $jvm_opts = $storm::webdav::params::jvm_opts,
 

@@ -14,7 +14,6 @@ describe 'storm::webdav::install' do
 
         let(:params) do 
           {
-            'ns' => 'dav',
             'user_name' => 'test',
           }
         end
@@ -40,7 +39,6 @@ describe 'storm::webdav::install' do
 
         let(:params) do 
           {
-            'ns' => 'dav',
             'user_name' => 'test',
             'user_uid' => 1300,
           }
@@ -67,7 +65,6 @@ describe 'storm::webdav::install' do
 
         let(:params) do 
           {
-            'ns' => 'dav',
             'user_name' => 'test',
             'user_uid' => 1300,
             'user_gid' => 1400,
