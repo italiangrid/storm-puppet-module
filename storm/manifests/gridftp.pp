@@ -7,7 +7,7 @@ class storm::gridftp (
 
   Integer $connections_max = $storm::gridftp::params::connections_max,
 
-) {
+) inherits storm::gridftp::params {
 
   contain storm::gridftp::install
   contain storm::gridftp::config
