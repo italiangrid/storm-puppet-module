@@ -125,6 +125,12 @@
 #
 # @param require_client_cert
 #
+# @param use_conscrypt
+#
+# @param tpc_use_conscrypt
+#
+# @param enable_http2
+#
 # @param debug
 #
 # @param debug_port
@@ -171,6 +177,10 @@ class storm::webdav (
   Integer $authz_server_max_token_lifetime_sec = $storm::webdav::params::authz_server_max_token_lifetime_sec,
   String $authz_server_secret = $storm::webdav::params::authz_server_secret,
   Boolean $require_client_cert = $storm::webdav::params::require_client_cert,
+
+  Boolean $use_conscrypt = $storm::webdav::params::use_conscrypt,
+  Boolean $tpc_use_conscrypt = $storm::webdav::params::tpc_use_conscrypt,
+  Boolean $enable_http2 = $storm::webdav::params::enable_http2,
 
   Boolean $debug = $storm::webdav::params::debug,
   Integer $debug_port = $storm::webdav::params::debug_port,

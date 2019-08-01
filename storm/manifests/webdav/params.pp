@@ -42,6 +42,10 @@ class storm::webdav::params (
   $authz_server_secret = lookup('storm::webdav::params::authz_server_secret', String, undef, 'areasonablesecretlongerthan256bits')
   $require_client_cert = lookup('storm::webdav::params::require_client_cert', Boolean, undef, false)
 
+  $use_conscrypt = lookup('storm::webdav::params::use_conscrypt', Boolean, undef, true)
+  $tpc_use_conscrypt = lookup('storm::webdav::params::tpc_use_conscrypt', Boolean, undef, true)
+  $enable_http2 = lookup('storm::webdav::params::enable_http2', Boolean, undef, true)
+
   $debug = lookup('storm::webdav::params::debug', Boolean, undef, false)
   $debug_port = lookup('storm::webdav::params::debug_port', Integer, undef, 1044)
   $debug_suspend = lookup('storm::webdav::params::debug_suspend', Boolean, undef, false)

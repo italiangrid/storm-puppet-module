@@ -122,3 +122,20 @@ STORM_WEBDAV_AUTHZ_SERVER_SECRET="<%=scope['storm::webdav::authz_server_secret']
 # Should StoRM WebDAV always require a valid client certificate on the HTTPS endpoint?
 # Set to 'false' if you want token-based authentication to work (and thus third-party copy)
 STORM_WEBDAV_REQUIRE_CLIENT_CERT="<%=scope['storm::webdav::require_client_cert']%>"
+
+# Use Conscrypt JSSE provider?
+# Default: false
+# Set to 'true' if you want to use a faster TLS implementation which can improve dramatically
+# the performance on data transfers. This flag must also set to "true" when HTTP/2 is enabled
+STORM_WEBDAV_USE_CONSCRYPT="<%=scope['storm::webdav::use_conscrypt']%>"
+
+# Use Conscrypt JSSE provider for TPC client connections?
+# Default: false
+# Set to 'true' if you want to use a faster TLS implementation which can improve dramatically
+# the performance on data transfers. This flag controls the use of Conscrypt for TPC client connections.
+STORM_WEBDAV_TPC_USE_CONSCRYPT="<%=scope['storm::webdav::tpc_use_conscrypt']%>"
+
+# Enable HTTP/2 support?
+# Default: false
+# Set to 'true' if you want to enable HTTP/2 (and remember to enable conscrypt too!)
+STORM_WEBDAV_ENABLE_HTTP2="<%=scope['storm::webdav::enable_http2']%>"
