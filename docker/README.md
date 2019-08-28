@@ -1,21 +1,18 @@
-## Usage
+## Puppet module images
 
-### Images
+## How to build images
 
-- dev: mounts local directory as a volume and runs tests
-- ci: clones remote github repo and launches tests
+The build relies on the CNAF SD helper scripts:
 
-### Build images
+https://baltig.infn.it/mw-devel/helper-scripts
 
-```
-sh build-images.sh
-```
+1. Enter image directory 
+2. type `build-docker-image.sh`
 
-### Run dev image
+### CI image
 
-Move inside storm puppet module directory and run:
+TBD
 
-```
-docker run -ti --rm -v $(pwd):/module:z italiangrid/docker-rspec-puppet:dev
-```
+### Deploy image
 
+TBD

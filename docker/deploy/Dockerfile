@@ -23,7 +23,7 @@ RUN \
 VOLUME /module
 
 COPY manifest.pp .
-COPY build.sh .
-RUN chmod +x build.sh
+COPY build-modules.sh .
+RUN chmod +x build-modules.sh
 
-CMD sh build.sh
+ENTRYPOINT /usr/sbin/init
