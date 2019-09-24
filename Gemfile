@@ -9,7 +9,7 @@ gem 'rspec-puppet'
 gem 'rspec-puppet-facts'
 gem 'jimdo-rspec-puppet-helpers'
 gem 'rspec-puppet-utils'
-gem 'rspec-puppet-augeas'
+gem 'puppet-strings'
 
 # rspec must be v2 for ruby 1.8.7
 if RUBY_VERSION >= '1.8.7' && RUBY_VERSION < '1.9'
@@ -17,5 +17,5 @@ if RUBY_VERSION >= '1.8.7' && RUBY_VERSION < '1.9'
   gem 'rake', '~> 10.0'
 else
   # rubocop requires ruby >= 1.9
-  gem 'rubocop'
+  gem 'rubocop-rails'
 end

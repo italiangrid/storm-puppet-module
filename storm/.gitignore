@@ -1,5 +1,0 @@
-.pkg/
-.yardoc/
-Gemfile.lock
-.bundle/
-spec/fixtures/modules/storm
