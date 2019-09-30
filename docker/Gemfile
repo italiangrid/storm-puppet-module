@@ -29,6 +29,8 @@ group :test do
   gem 'rspec_junit_formatter'
   gem 'git'
 
+  gem 'puppet-strings'
+
   if RUBY_VERSION < '2.2.0'
     gem "rubocop", "< 0.60.0"
   else

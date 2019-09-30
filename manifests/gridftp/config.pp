@@ -2,26 +2,14 @@
 #
 class storm::gridftp::config (
 
-  $gridftp_with_dsi = $storm::gridftp::gridftp_with_dsi,
-
-  $tcp_port_range_min = $storm::gridftp::tcp_port_range_min,
-  $tcp_port_range_max = $storm::gridftp::tcp_port_range_max,
-
+  $port = $storm::gridftp::port,
+  $port_range = $storm::gridftp::port_range,
   $connections_max = $storm::gridftp::connections_max,
 
 ) {
 
-  $profiled_script='/etc/profile.d/storm-globus-gridftp.sh'
-  $profiled_script_template_file='storm/etc/profile.d/storm-globus-gridftp.sh.erb'
-
-  file { 'gftp::configure-profiled-file':
-    ensure  => present,
-    path    => $profiled_script,
-    content => template($profiled_script_template_file),
-  }
-
-  $conf_file='/etc/grid-security/gridftp.conf'
-  $conf_template_file='storm/etc/grid-security/gridftp.conf.erb'
+  $conf_file='/etc/gridftp.conf'
+  $conf_template_file='storm/etc/gridftp.conf.erb'
 
   file { 'gftp::configure-gridftp-conf-file':
     ensure  => present,
