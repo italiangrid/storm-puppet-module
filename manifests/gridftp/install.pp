@@ -4,8 +4,8 @@ class storm::gridftp::install (
 
 ) {
 
-  package { 'gftp::install-storm-globus-gridftp-mp':
+  package { 'gftp::install-storm-globus-gridftp-server':
     ensure => installed,
-    name   => 'storm-globus-gridftp-mp',
+    name   => 'storm-globus-gridftp-server',
   }
 }
