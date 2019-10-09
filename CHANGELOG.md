@@ -2,10 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
-## Release 0.1.0
+## [Unreleased]
 
-**Features**
+## [0.1.0] - 2019-10-09
 
-**Bugfixes**
-
-**Known Issues**
+### Added
+- Support for StoRM WebDAV service configuration
+- Support for StoRM GridFTP server configuration
+- Documentation at REFERENCE.md
+- Documentation at https://italiangrid.github.io/storm-puppet-module

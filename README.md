@@ -26,14 +26,14 @@ puppet module install ./pkg/mwdevel-storm-0.1.0.tar.gz
 
 ## Usage
 
-Check [this](https://github.com/enricovianello/storm-puppet-module/blob/master/examples/init.pp) example of `manifest.pp` or Documentation section.
+Check [this](https://github.com/italiangrid/storm-puppet-module/blob/master/examples/init.pp) example of `manifest.pp` or [Documentation](#documentation) section.
 
 ## Documentation
 
 You can find all the info about module classes and parameters at:
 
-- [REFERENCE.md](https://github.com/enricovianello/storm-puppet-module/blob/master/REFERENCE.md)
-- [StoRM Puppet module gh-pages site doc](https://enricovianello.github.io/storm-puppet-module)
+- [REFERENCE.md](https://github.com/italiangrid/storm-puppet-module/blob/master/REFERENCE.md)
+- [StoRM Puppet module gh-pages site doc](https://italiangrid.github.io/storm-puppet-module)
 
 ### How to update doc
 
