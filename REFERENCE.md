@@ -44,7 +44,26 @@ StoRM config class
 
 ### storm::gridftp
 
-StoRM GridFTP puppet module
+Parameters
+----------
+
+The StoRM GridFTP configuration parameters are:
+
+* `port`: the port used by GridFTP server service;
+* `port_range`: the range of ports used by transfer sockets; format is 'MIN,MAX';
+* `connections_max`: the number of max allowed connections to server;
+
+#### Examples
+
+##### Example of usage
+
+```puppet
+class { 'storm::gridftp':
+  port            => 2811,
+  port_range      => '20000,25000',
+  connections_max => 2000,
+}
+```
 
 #### Parameters
 
@@ -54,7 +73,7 @@ The following parameters are available in the `storm::gridftp` class.
 
 Data type: `Integer`
 
-
+The port used by GridFTP server service.
 
 Default value: $storm::gridftp::params::port
 
@@ -62,7 +81,7 @@ Default value: $storm::gridftp::params::port
 
 Data type: `String`
 
-
+The range of ports used by transfer sockets; format is 'MIN,MAX'.
 
 Default value: $storm::gridftp::params::port_range
 
@@ -70,7 +89,7 @@ Default value: $storm::gridftp::params::port_range
 
 Data type: `Integer`
 
-
+The number of max allowed connections to server.
 
 Default value: $storm::gridftp::params::connections_max
 
