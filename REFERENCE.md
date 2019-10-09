@@ -50,29 +50,21 @@ StoRM GridFTP puppet module
 
 The following parameters are available in the `storm::gridftp` class.
 
-##### `gridftp_with_dsi`
-
-Data type: `Enum['yes', 'no']`
-
-
-
-Default value: $storm::gridftp::params::gridftp_with_dsi
-
-##### `tcp_port_range_min`
+##### `port`
 
 Data type: `Integer`
 
 
 
-Default value: $storm::gridftp::params::tcp_port_range_min
+Default value: $storm::gridftp::params::port
 
-##### `tcp_port_range_max`
+##### `port_range`
 
-Data type: `Integer`
+Data type: `String`
 
 
 
-Default value: $storm::gridftp::params::tcp_port_range_max
+Default value: $storm::gridftp::params::port_range
 
 ##### `connections_max`
 
@@ -90,29 +82,21 @@ StoRM GridFTP config class
 
 The following parameters are available in the `storm::gridftp::config` class.
 
-##### `gridftp_with_dsi`
+##### `port`
 
 Data type: `Any`
 
 
 
-Default value: $storm::gridftp::gridftp_with_dsi
+Default value: $storm::gridftp::port
 
-##### `tcp_port_range_min`
-
-Data type: `Any`
-
-
-
-Default value: $storm::gridftp::tcp_port_range_min
-
-##### `tcp_port_range_max`
+##### `port_range`
 
 Data type: `Any`
 
 
 
-Default value: $storm::gridftp::tcp_port_range_max
+Default value: $storm::gridftp::port_range
 
 ##### `connections_max`
 
@@ -481,6 +465,30 @@ Data type: `Boolean`
 
 Default value: $storm::webdav::params::require_client_cert
 
+##### `use_conscrypt`
+
+Data type: `Boolean`
+
+
+
+Default value: $storm::webdav::params::use_conscrypt
+
+##### `tpc_use_conscrypt`
+
+Data type: `Boolean`
+
+
+
+Default value: $storm::webdav::params::tpc_use_conscrypt
+
+##### `enable_http2`
+
+Data type: `Boolean`
+
+
+
+Default value: $storm::webdav::params::enable_http2
+
 ##### `debug`
 
 Data type: `Boolean`
@@ -720,6 +728,30 @@ Data type: `Any`
 
 
 Default value: $storm::webdav::require_client_cert
+
+##### `use_conscrypt`
+
+Data type: `Any`
+
+
+
+Default value: $storm::webdav::params::use_conscrypt
+
+##### `tpc_use_conscrypt`
+
+Data type: `Any`
+
+
+
+Default value: $storm::webdav::params::tpc_use_conscrypt
+
+##### `enable_http2`
+
+Data type: `Any`
+
+
+
+Default value: $storm::webdav::params::enable_http2
 
 ##### `debug`
 
