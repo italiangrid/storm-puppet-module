@@ -12,8 +12,8 @@
 StoRM Puppet module can be used to configure StoRM services.
 At the moment, the supported services are:
 
-- storm-webdav
-- storm-globus-gridftp
+- StoRM WebDAV
+- StoRM Globus GridFTP server
 
 ## Setup
 
@@ -32,10 +32,10 @@ puppet module install ./pkg/mwdevel-storm-0.1.0.tar.gz
 
 ## Usage
 
-Check [this](storm/examples/init.pp) example and refer to
-[REFERENCE](storm/REFERENCE.md) or [documentation](storm/doc/) folder 
+Check [this](examples/init.pp) example and refer to
+[REFERENCE](REFERENCE.md) or [documentation](http://enricovianello.github.io/storm-puppet-module) folder 
 to get all the class parameters.
 
 ## Limitations
 
-It works only on RedHat distributions.
+It works only on RedHat CentOS 7 distribution.
