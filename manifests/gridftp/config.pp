@@ -15,5 +15,6 @@ class storm::gridftp::config (
     ensure  => present,
     path    => $conf_file,
     content => template($conf_template_file),
+    notify  => Service['storm-globus-gridftp'],
   }
 }

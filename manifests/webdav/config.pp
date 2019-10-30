@@ -132,6 +132,7 @@ class storm::webdav::config (
         content => template($sa_properties_template_file),
         owner   => $user_name,
         require => File['dav::storm-webdav-sa-config-dir'],
+        notify  => Service['storm-webdav'],
       }
       # check root path
       storm::storage_root_dir { "dav::check-${name}-sa-root-dir":
@@ -152,6 +153,7 @@ class storm::webdav::config (
     group   => 'root',
     mode    => '0644',
     require => File['dav::storm-webdav-app-config-dir'],
+    notify  => Service['storm-webdav'],
   }
 
   $sysconfig_file='/etc/sysconfig/storm-webdav'
@@ -160,6 +162,7 @@ class storm::webdav::config (
     ensure  => present,
     path    => $sysconfig_file,
     content => template($sysconfig_template_file),
+    notify  => Service['storm-webdav'],
   }
 
   case $::osfamily {
@@ -174,6 +177,7 @@ class storm::webdav::config (
             ensure  => present,
             path    => $unit_file,
             content => template($unit_template_file),
+            notify  => Service['storm-webdav'],
           }
         }
         default: {
