@@ -3,6 +3,8 @@
 class storm::webdav::config (
 
   $user_name = $storm::webdav::user_name,
+  $user_uid = $storm::webdav::user_uid,
+  $user_gid = $storm::webdav::user_gid,
 
   $storage_root_dir = $storm::webdav::storage_root_dir,
   $log_dir = $storm::webdav::log_dir,
@@ -48,6 +50,19 @@ class storm::webdav::config (
   $debug_suspend = $storm::webdav::debug_suspend,
 
 ) {
+
+  # storm user's group
+  group { $user_name:
+    ensure => present,
+    gid    => $user_gid,
+  }
+
+  # storm user
+  user { $user_name:
+    ensure => present,
+    uid    => $user_uid,
+    gid    => $user_name,
+  }
 
   # storage area root path
   storm::storage_root_dir { 'dav::storage-root-dir':
@@ -131,7 +146,7 @@ class storm::webdav::config (
         path    => "${config_dir}/sa.d/${name}.properties",
         content => template($sa_properties_template_file),
         owner   => $user_name,
-        require => File['dav::storm-webdav-sa-config-dir'],
+        require => [File['dav::storm-webdav-sa-config-dir'], Package['storm-webdav']],
         notify  => Service['storm-webdav'],
       }
       # check root path
@@ -152,7 +167,7 @@ class storm::webdav::config (
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    require => File['dav::storm-webdav-app-config-dir'],
+    require => [File['dav::storm-webdav-app-config-dir'], Package['storm-webdav']],
     notify  => Service['storm-webdav'],
   }
 
@@ -163,6 +178,7 @@ class storm::webdav::config (
     path    => $sysconfig_file,
     content => template($sysconfig_template_file),
     notify  => Service['storm-webdav'],
+    require => Package['storm-webdav'],
   }
 
   case $::osfamily {
@@ -178,6 +194,7 @@ class storm::webdav::config (
             path    => $unit_file,
             content => template($unit_template_file),
             notify  => Service['storm-webdav'],
+            require => Package['storm-webdav'],
           }
         }
         default: {

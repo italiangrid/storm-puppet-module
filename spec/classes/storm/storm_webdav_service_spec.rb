@@ -6,6 +6,10 @@ describe 'storm::webdav::service' do
 
     context "on #{os}" do
 
+      let(:pre_condition) { [
+        'include storm::webdav::install',
+      ] }
+      
       let(:facts) do
         facts
       end

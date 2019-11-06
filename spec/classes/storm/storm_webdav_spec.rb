@@ -75,7 +75,6 @@ describe 'storm::webdav', :type => :class do
         it { is_expected.to compile.with_all_deps }
 
         it "check storm-webdav service user" do
-          is_expected.to contain_storm__user('dav::storm-user')
           is_expected.to contain_user('test').with( 
             :ensure => 'present',
             :uid => 1200,
@@ -174,6 +173,7 @@ describe 'storm::webdav', :type => :class do
           is_expected.to contain_file(testvo_props).with( :content => /anonymousReadEnabled=false/ )
           is_expected.to contain_file(testvo_props).with( :content => /voMapEnabled=true/ )
           is_expected.to contain_file(testvo_props).with( :content => /voMapGrantsWriteAccess=false/ )
+          is_expected.to contain_file(testvo_props).that_notifies(['Service[storm-webdav]'])
           # check test.vo root dir
           is_expected.to contain_storm__storage_root_dir('dav::check-test.vo-sa-root-dir')
           is_expected.to contain_exec('dav::check-test.vo-sa-root-dir_create_root_directory')
@@ -194,6 +194,7 @@ describe 'storm::webdav', :type => :class do
           is_expected.to contain_file(atlas_props).with( :content => /anonymousReadEnabled=true/ )
           is_expected.to contain_file(atlas_props).with( :content => /voMapEnabled=false/ )
           is_expected.not_to contain_file(atlas_props).with( :content => /voMapGrantsWriteAccess=/ )
+          is_expected.to contain_file(atlas_props).that_notifies(['Service[storm-webdav]'])
           # check atlas root dir
           is_expected.to contain_storm__storage_root_dir('dav::check-atlas-sa-root-dir')
           is_expected.to contain_exec('dav::check-atlas-sa-root-dir_create_root_directory')
@@ -221,6 +222,7 @@ describe 'storm::webdav', :type => :class do
           is_expected.to contain_file(app_title).with({
             :content => /https:\/\/iam-test.indigo-datacloud.eu\//,
           })
+          is_expected.to contain_file(app_title).that_notifies(['Service[storm-webdav]'])
           
         end
 
@@ -230,6 +232,7 @@ describe 'storm::webdav', :type => :class do
             :ensure => 'present',
             :path   => '/etc/sysconfig/storm-webdav',  
           )
+          is_expected.to contain_file(sysconfig_file).that_notifies(['Service[storm-webdav]'])
           is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_USER=test/ )
           is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_HOSTNAME_0=storm-w1.example/ )
           is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_HOSTNAME_1=storm-w2.example/ )
@@ -274,6 +277,7 @@ describe 'storm::webdav', :type => :class do
               :ensure => 'present',
               :path   => '/etc/systemd/system/storm-webdav.service',
             )
+            is_expected.to contain_file(unit_file).that_notifies(['Service[storm-webdav]'])
             is_expected.to contain_file(unit_file).with( :content => /User=test/ )
             is_expected.to contain_file(unit_file).with( :content => /EnvironmentFile=-\/etc\/sysconfig\/storm-webdav/ )
             is_expected.to contain_file(unit_file).with( :content => /WorkingDirectory=\/etc\/storm\/webdav/ )
@@ -299,7 +303,6 @@ describe 'storm::webdav', :type => :class do
         end
 
         it "check storm-webdav service is default user" do
-          is_expected.to contain_storm__user('dav::storm-user')
           is_expected.to contain_user('storm').with( 
             :ensure => 'present',
             :uid => 1100,

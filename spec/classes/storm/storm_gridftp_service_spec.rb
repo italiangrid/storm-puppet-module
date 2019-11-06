@@ -6,6 +6,8 @@ describe 'storm::gridftp::service' do
 
     context "on #{os}" do
 
+      let(:pre_condition) { 'include storm::gridftp::install' }
+
       let(:facts) do
         facts
       end

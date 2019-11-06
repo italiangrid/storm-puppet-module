@@ -11,7 +11,7 @@ describe 'storm::gridftp::install' do
       end
 
       it 'check storm globus gridftp metapackage is installed' do
-        is_expected.to contain_package('gftp::install-storm-globus-gridftp-mp').with(ensure: 'installed')
+        is_expected.to contain_package('storm-globus-gridftp-mp').with(ensure: 'installed')
       end
 
     end
