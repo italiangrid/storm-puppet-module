@@ -5,8 +5,8 @@ type Storm::Webdav::StorageArea = Struct[{
   access_points              => Array[String],
   vos                        => Array[String],
   orgs                       => Optional[Array[String]],
-  authenticated_read_enabled => Boolean,
-  anonymous_read_enabled     => Boolean,
-  vo_map_enabled             => Boolean,
+  authenticated_read_enabled => Optional[Boolean],
+  anonymous_read_enabled     => Optional[Boolean],
+  vo_map_enabled             => Optional[Boolean],
   vo_map_grants_write_access => Optional[Boolean],
 }]
