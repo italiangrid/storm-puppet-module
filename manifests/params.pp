@@ -4,9 +4,13 @@
 #
 class storm::params {
 
-  $user_name = 'storm'
-  $user_uid = 1100
-  $user_gid = 1100
+  $user_name = lookup('storm::user::name', String, undef, 'storm')
+  $user_uid = lookup('storm::user::uid', Integer, undef, 1100)
+  $user_gid = lookup('storm::user::gid', Integer, undef, 1100)
+
+  $db_host = lookup('storm::db::host', String, undef, 'localhost')
+  $db_user = lookup('storm::db::user', String, undef, 'storm')
+  $db_passwd = lookup('storm::db::passwd', String, undef, 'secret')
 
   $storage_root_dir = '/storage'
   $config_dir = '/etc/storm'
