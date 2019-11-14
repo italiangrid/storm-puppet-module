@@ -29,11 +29,15 @@ connections_max <%=scope['storm::gridftp::connections_max']%>
 port_range <%=scope['storm::gridftp::port_range']%>
 <% end %>
 
+# Base path to use when config and log path options are not full paths.
+# By default this is the current directory when the process is started.
+config_base_path /
+
 # A comma separated list of levels from: ERROR, WARN, INFO, TRANSFER, DUMP, ALL. 
 # TRANSFER includes the same statistics that are sent to the separate transfer 
 # log when -log-transfer is used. Example: error,warn,info. 
 # You may also specify a numeric level of 1-255. The default level is ERROR.
-log_level error,warn,info
+log_level ERROR,WARN,INFO
 
 # Path of a single file to log all activity to. If neither this option or 
 # log_unique is set, logs will be written to stderr unless the execution mode 
