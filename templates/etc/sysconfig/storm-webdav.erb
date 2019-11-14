@@ -101,14 +101,26 @@ STORM_WEBDAV_TPC_VERIFY_CHECKSUM="<%=scope['storm::webdav::tpc_verify_checksum']
 
 # Enables the OAuth authorization server, used to issue bearer tokens
 # to clients presenting a VOMS credential
+<% if scope['storm::webdav::authz_server_enable'] %>
 STORM_WEBDAV_AUTHZ_SERVER_ENABLE="<%=scope['storm::webdav::authz_server_enable']%>"
+<% else %>
+# STORM_WEBDAV_AUTHZ_SERVER_ENABLE="false"
+<% end %>
 
 # The issuer setting for the token
 # Default: https://${STORM_WEBDAV_HOSTNAME_0}:${STORM_WEBDAV_HTTPS_PORT}
+<% if scope['storm::webdav::authz_server_enable'] %>
 STORM_WEBDAV_AUTHZ_SERVER_ISSUER="<%=scope['storm::webdav::authz_server_issuer']%>"
+<% else %>
+# STORM_WEBDAV_AUTHZ_SERVER_ISSUER="https://storm.example:8443"
+<% end %>
 
 # Maximum token lifetime in seconds
+<% if scope['storm::webdav::authz_server_enable'] %>
 STORM_WEBDAV_AUTHZ_SERVER_MAX_TOKEN_LIFETIME_SEC="<%=scope['storm::webdav::authz_server_max_token_lifetime_sec']%>"
+<% else %>
+# STORM_WEBDAV_AUTHZ_SERVER_MAX_TOKEN_LIFETIME_SEC="43200"
+<% end %>
 
 # The WebDAV authz server secret
 # This secret is used to sign bearer tokens, so if you have multiple
@@ -117,7 +129,11 @@ STORM_WEBDAV_AUTHZ_SERVER_MAX_TOKEN_LIFETIME_SEC="<%=scope['storm::webdav::authz
 # IMPORTANT: set this in production, do not rely on the default random
 # value as that will cause problems across service restarts
 #
+<% if scope['storm::webdav::authz_server_enable'] %>
 STORM_WEBDAV_AUTHZ_SERVER_SECRET="<%=scope['storm::webdav::authz_server_secret']%>"
+<% else %>
+# STORM_WEBDAV_AUTHZ_SERVER_SECRET="areasonablesecretlongerthan256bits"
+<% end %>
 
 # Should StoRM WebDAV always require a valid client certificate on the HTTPS endpoint?
 # Set to 'false' if you want token-based authentication to work (and thus third-party copy)
