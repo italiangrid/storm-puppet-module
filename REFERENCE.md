@@ -6,7 +6,17 @@
 **Classes**
 
 * [`storm`](#storm): StoRM puppet module parent class
+* [`storm::backend`](#stormbackend): StoRM Backend puppet module
+* [`storm::backend::config`](#stormbackendconfig): StoRM Backend config class
+* [`storm::backend::install`](#stormbackendinstall): StoRM Backend install class
+* [`storm::backend::params`](#stormbackendparams): StoRM Frontend params class
+* [`storm::backend::service`](#stormbackendservice): StoRM Backend service class
 * [`storm::config`](#stormconfig): StoRM config class
+* [`storm::frontend`](#stormfrontend): StoRM Frontend puppet module
+* [`storm::frontend::config`](#stormfrontendconfig): StoRM Frontend config class
+* [`storm::frontend::install`](#stormfrontendinstall): StoRM Frontend install class
+* [`storm::frontend::params`](#stormfrontendparams): StoRM Frontend params class
+* [`storm::frontend::service`](#stormfrontendservice): StoRM Frontend service class
 * [`storm::gridftp`](#stormgridftp): StoRM GridFTP puppet module
 * [`storm::gridftp::config`](#stormgridftpconfig): StoRM GridFTP config class
 * [`storm::gridftp::install`](#stormgridftpinstall): StoRM GridFTP install class
@@ -29,6 +39,17 @@
 
 **Data types**
 
+* [`Storm::Backend::Acl`](#stormbackendacl): The ACL type for storm-backend-server
+* [`Storm::Backend::Endpoint`](#stormbackendendpoint): The Endpoint type for storm-backend-server
+* [`Storm::Backend::FileSystem`](#stormbackendfilesystem): The FileSystem type for storm-backend-server
+* [`Storm::Backend::Gsiftp`](#stormbackendgsiftp): The Gsiftp type for storm-backend-server
+* [`Storm::Backend::Pool`](#stormbackendpool): The Pool type for storm-backend-server
+* [`Storm::Backend::Quota`](#stormbackendquota): The Quota type for storm-backend-server
+* [`Storm::Backend::Rfio`](#stormbackendrfio): The Rfio type for storm-backend-server
+* [`Storm::Backend::StorageArea`](#stormbackendstoragearea): The storage area type for storm-backend-server
+* [`Storm::Backend::TransferProtocol`](#stormbackendtransferprotocol): The TransferProtocol type for storm-backend-server
+* [`Storm::Backend::Webdav`](#stormbackendwebdav): The WebDAV type for storm-backend-server
+* [`Storm::Backend::Xroot`](#stormbackendxroot): The Xroot type for storm-backend-server
 * [`Storm::Webdav::OAuthIssuer`](#stormwebdavoauthissuer): The OAuthIssuer type for storm-webdav
 * [`Storm::Webdav::StorageArea`](#stormwebdavstoragearea): The storage area type for storm-webdav
 
@@ -38,9 +59,361 @@
 
 StoRM puppet module parent class
 
+### storm::backend
+
+Parameters
+----------
+
+The StoRM Backend configuration parameters are:
+
+* `name`: description
+
+#### Examples
+
+##### Example of usage
+
+```puppet
+class { 'storm::backend':
+}
+```
+
+#### Parameters
+
+The following parameters are available in the `storm::backend` class.
+
+##### `name`
+
+Description
+
+##### `user_name`
+
+Data type: `String`
+
+
+
+Default value: $storm::backend::params::user_name
+
+##### `db_host`
+
+Data type: `String`
+
+
+
+Default value: $storm::backend::params::db_host
+
+##### `db_user`
+
+Data type: `String`
+
+
+
+Default value: $storm::backend::params::db_user
+
+##### `db_passwd`
+
+Data type: `String`
+
+
+
+Default value: $storm::backend::params::db_passwd
+
+##### `config_dir`
+
+Data type: `String`
+
+
+
+Default value: $storm::backend::params::config_dir
+
+##### `gsiftp`
+
+Data type: `Storm::Backend::Gsiftp`
+
+
+
+Default value: $storm::backend::params::gsiftp
+
+##### `storage_areas`
+
+Data type: `Array[Storm::Backend::StorageArea]`
+
+
+
+Default value: $storm::backend::params::storage_areas
+
+### storm::backend::config
+
+StoRM Backend config class
+
+#### Parameters
+
+The following parameters are available in the `storm::backend::config` class.
+
+##### `user_name`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::user_name
+
+##### `config_dir`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::config_dir
+
+### storm::backend::install
+
+StoRM Backend install class
+
+### storm::backend::params
+
+StoRM Frontend params class
+
+### storm::backend::service
+
+StoRM Backend service class
+
 ### storm::config
 
 StoRM config class
+
+### storm::frontend
+
+Parameters
+----------
+
+The StoRM Frontend configuration parameters are:
+
+* `name`: description
+
+#### Examples
+
+##### Example of usage
+
+```puppet
+class { 'storm::frontend':
+}
+```
+
+#### Parameters
+
+The following parameters are available in the `storm::frontend` class.
+
+##### `user_name`
+
+Data type: `String`
+
+Service user. Default value: storm.
+
+Default value: $storm::frontend::params::user_name
+
+##### `db_host`
+
+Data type: `String`
+
+Host for database connection. Default is localhost.
+
+Default value: $storm::frontend::params::db_host
+
+##### `db_user`
+
+Data type: `String`
+
+User for database connection. Default is storm.
+
+Default value: $storm::frontend::params::db_user
+
+##### `db_passwd`
+
+Data type: `String`
+
+Password for database connection. Default is password.
+
+Default value: $storm::frontend::params::db_passwd
+
+##### `config_dir`
+
+Data type: `String`
+
+Configuration directory where storm-frontend-server.conf is stored. Default is /etc/storm/frontend-server.
+
+Default value: $storm::frontend::params::config_dir
+
+##### `port`
+
+Data type: `Integer`
+
+Frontend service port. Default is 8444.
+
+Default value: $storm::frontend::params::port
+
+##### `threadpool_maxpending`
+
+Data type: `Integer`
+
+Size of the internal queue used to maintain SRM tasks in case there are no free worker threads. Default is 200
+
+Default value: $storm::frontend::params::threadpool_maxpending
+
+##### `threadpool_threads_number`
+
+Data type: `Integer`
+
+Size of the worker thread pool. Default is 50.
+
+Default value: $storm::frontend::params::threadpool_threads_number
+
+##### `gsoap_maxpending`
+
+Data type: `Integer`
+
+Size of the GSOAP queue used to maintain pending SRM requests. Default is 1000.
+
+Default value: $storm::frontend::params::gsoap_maxpending
+
+##### `be_xmlrpc_host`
+
+Data type: `String`
+
+Backend hostname. Default is localhost.
+
+Default value: $storm::frontend::params::be_xmlrpc_host
+
+##### `be_xmlrpc_port`
+
+Data type: `Integer`
+
+Backend XML-RPC server port. Default is 8080.
+
+Default value: $storm::frontend::params::be_xmlrpc_port
+
+##### `be_xmlrpc_token`
+
+Data type: `String`
+
+Token used for communicating with Backend service. Mandatory, has no default.
+
+Default value: $storm::frontend::params::be_xmlrpc_token
+
+##### `be_xmlrpc_path`
+
+Data type: `String`
+
+XML-RPC server path. Default is /RPC2.
+
+Default value: $storm::frontend::params::be_xmlrpc_path
+
+##### `be_recalltable_port`
+
+Data type: `Integer`
+
+REST server port running on the Backend machine. Default is 9998.
+
+Default value: $storm::frontend::params::be_recalltable_port
+
+##### `check_user_blacklisting`
+
+Data type: `Boolean`
+
+Enable/disable user blacklisting. Default is false.
+
+Default value: $storm::frontend::params::check_user_blacklisting
+
+##### `argus_pepd_endpoint`
+
+Data type: `String`
+
+The complete service endpoint of Argus PEP server. Mandatory if check_user_blacklisting is true.
+
+Default value: $storm::frontend::params::argus_pepd_endpoint
+
+##### `monitoring_enabled`
+
+Data type: `Boolean`
+
+Enable/disable monitoring. Default is true.
+
+Default value: $storm::frontend::params::monitoring_enabled
+
+##### `monitoring_time_interval`
+
+Data type: `Integer`
+
+Time interval in seconds between each monitoring round. Default is 60.
+
+Default value: $storm::frontend::params::monitoring_time_interval
+
+##### `monitoring_detailed`
+
+Data type: `Boolean`
+
+Enable/disable detailed monitoring. Default is false.
+
+Default value: $storm::frontend::params::monitoring_detailed
+
+##### `security_enable_mapping`
+
+Data type: `Boolean`
+
+Flag to enable/disable DN-to-userid mapping via gridmap-file. Default is false.
+
+Default value: $storm::frontend::params::security_enable_mapping
+
+##### `security_enable_vomscheck`
+
+Data type: `Boolean`
+
+Flag to enable/disable checking proxy VOMS credentials. Default is true.
+
+Default value: $storm::frontend::params::security_enable_vomscheck
+
+##### `log_debuglevel`
+
+Data type: `String`
+
+Logging level. Possible values are: ERROR, WARN, INFO, DEBUG, DEBUG2. Default is INFO
+
+Default value: $storm::frontend::params::log_debuglevel
+
+### storm::frontend::config
+
+StoRM Frontend config class
+
+#### Parameters
+
+The following parameters are available in the `storm::frontend::config` class.
+
+##### `user_name`
+
+Data type: `Any`
+
+
+
+Default value: $storm::frontend::user_name
+
+##### `config_dir`
+
+Data type: `Any`
+
+
+
+Default value: $storm::frontend::config_dir
+
+### storm::frontend::install
+
+StoRM Frontend install class
+
+### storm::frontend::params
+
+StoRM Frontend params class
+
+### storm::frontend::service
+
+StoRM Frontend service class
 
 ### storm::gridftp
 
@@ -548,6 +921,22 @@ Data type: `Any`
 
 Default value: $storm::webdav::user_name
 
+##### `user_uid`
+
+Data type: `Any`
+
+
+
+Default value: $storm::webdav::user_uid
+
+##### `user_gid`
+
+Data type: `Any`
+
+
+
+Default value: $storm::webdav::user_gid
+
 ##### `storage_root_dir`
 
 Data type: `Any`
@@ -800,34 +1189,6 @@ Default value: $storm::webdav::debug_suspend
 
 StoRM WebDAV install class
 
-#### Parameters
-
-The following parameters are available in the `storm::webdav::install` class.
-
-##### `user_name`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::user_name
-
-##### `user_uid`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::user_uid
-
-##### `user_gid`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::user_gid
-
 ### storm::webdav::params
 
 StoRM WebDAV params class
@@ -963,6 +1324,134 @@ Default value: 1100
 
 ## Data types
 
+### Storm::Backend::Acl
+
+The ACL type for storm-backend-server
+
+Alias of `Struct[{
+  group => String,
+  permission => String,
+}]`
+
+### Storm::Backend::Endpoint
+
+The Endpoint type for storm-backend-server
+
+Alias of `Struct[{
+  schema   => Enum['rfio','xroot','gsiftp','srm','http','https'],
+  hostname => String,
+  port     => Integer,
+  path     => String,
+}]`
+
+### Storm::Backend::FileSystem
+
+The FileSystem type for storm-backend-server
+
+Alias of `Struct[{
+  type => Enum['ext3', 'gpfs'],
+  driver => Enum['posixfs', 'gpfs', 'test'],
+  space_system => Optional[Enum['MockSpaceSystem', 'GPFSSpaceSystem']],
+}]`
+
+### Storm::Backend::Gsiftp
+
+The Gsiftp type for storm-backend-server
+
+Alias of `Struct[{
+  pool => Storm::Backend::Pool,
+}]`
+
+### Storm::Backend::Pool
+
+The Pool type for storm-backend-server
+
+Alias of `Struct[{
+  balance_strategy => Optional[Enum['round-robin', 'smart-rr', 'random', 'weight']],
+  members          => Array[Struct[{
+    hostname => String,
+    port     => Optional[Integer],
+    weigth   => Optional[Integer],
+  }]],
+}]`
+
+### Storm::Backend::Quota
+
+The Quota type for storm-backend-server
+
+Alias of `Struct[{
+  device => String,
+  type   => Enum['username', 'group', 'fileset'],
+  value  => String,
+}]`
+
+### Storm::Backend::Rfio
+
+The Rfio type for storm-backend-server
+
+Alias of `Struct[{
+  hostname => String,
+  port => Optional[Integer],
+}]`
+
+### Storm::Backend::StorageArea
+
+The storage area type for storm-backend-server
+
+Alias of `Struct[{
+  name                => String,
+  root_path           => String,
+  access_points       => Array[String],
+  vos                 => Array[String],
+  fs                  => Storm::Backend::FileSystem,
+  space_token         => Optional[String],
+  authz               => Optional[String],
+  storage_class       => Optional[Enum['T0D1', 'T1D0', 'T1D1']],
+  online_size         => Integer,
+  nearline_size       => Optional[Integer],
+  acl_mode            => Optional[Enum['AoT', 'JiT']],
+  default_acl_list    => Optional[Array[Storm::Backend::Acl]],
+  quota               => Optional[Storm::Backend::Quota],
+  dn_regex            => Optional[String],
+  anonymous_http_read => Optional[Boolean],
+  transfer_protocols  => Array[Enum['file','gsiftp','rfio','root','http','https']],
+  rfio                => Optional[Storm::Backend::Rfio],
+  xroot               => Optional[Storm::Backend::Xroot],
+  gsiftp              => Optional[Storm::Backend::GsiFtp],
+  webdav              => Optional[Storm::Backend::Webdav],
+}]`
+
+### Storm::Backend::TransferProtocol
+
+The TransferProtocol type for storm-backend-server
+
+Alias of `Struct[{
+  schema => Enum['file', 'gsiftp', 'root', 'xroot', 'http', 'https'],
+  id     => Optional[Integer],
+  host   => Optional[String],
+  port   => Optional[Integer],
+}]`
+
+### Storm::Backend::Webdav
+
+The WebDAV type for storm-backend-server
+
+Alias of `Struct[{
+  pool => Array[Struct[{
+    hostname => String,
+    port     => Optional[Integer],
+  }]],
+}]`
+
+### Storm::Backend::Xroot
+
+The Xroot type for storm-backend-server
+
+Alias of `Struct[{
+  hostname => String,
+  port => Optional[Integer],
+}]`
+
 ### Storm::Webdav::OAuthIssuer
 
 The OAuthIssuer type for storm-webdav
@@ -982,9 +1471,9 @@ Alias of `Struct[{
   access_points              => Array[String],
   vos                        => Array[String],
   orgs                       => Optional[Array[String]],
-  authenticated_read_enabled => Boolean,
-  anonymous_read_enabled     => Boolean,
-  vo_map_enabled             => Boolean,
+  authenticated_read_enabled => Optional[Boolean],
+  anonymous_read_enabled     => Optional[Boolean],
+  vo_map_enabled             => Optional[Boolean],
   vo_map_grants_write_access => Optional[Boolean],
 }]`
 

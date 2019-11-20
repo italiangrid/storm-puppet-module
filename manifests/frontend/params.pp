@@ -13,6 +13,7 @@ class storm::frontend::params (
 
   $port = lookup('storm::frontend::port', Integer, undef, 8444)
   $threadpool_threads_number = lookup('storm::frontend::threadpool_threads_number', Integer, undef, 50)
+  $threadpool_maxpending = lookup('storm::frontend::threadpool.maxpending', Integer, undef, 200)
   $gsoap_maxpending = lookup('storm::frontend::gsoap_maxpending', Integer, undef, 1000)
 
   $be_xmlrpc_host = lookup('storm::frontend::be_xmlrpc_host', String, undef, 'localhost')
@@ -29,6 +30,7 @@ class storm::frontend::params (
   $monitoring_time_interval = lookup('storm::frontend::monitoring_time_interval', Integer, undef, 60)
   $monitoring_detailed = lookup('storm::frontend::monitoring_detailed', Boolean, undef, false)
 
+  $security_enable_mapping = lookup('storm::frontend::security_enable_mapping', Boolean, undef, false)
   $security_enable_vomscheck = lookup('storm::frontend::security_enable_vomscheck', Boolean, undef, true)
 
   $log_debuglevel = lookup('storm::frontend::log_debuglevel', String, undef, 'INFO')

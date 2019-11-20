@@ -4,16 +4,19 @@
 # WARNING: To change it, edit the file in [templates/etc/storm/frontend-server/storm-frontend-server.conf.erb]
 #
 
+# Service settings
 fe.port=<%=scope['storm::frontend::port']%>
 fe.threadpool.threads.number=<%=scope['storm::frontend::threadpool_threads_number']%>
+fe.threadpool.maxpending=<%=scope['storm::frontend::threadpool_maxpending']%>
 fe.gsoap.maxpending=<%=scope['storm::frontend::gsoap_maxpending']%>
 
-# Log options
-log.filename = @localstatedir@/log/storm/storm-frontend-server.log
+# Log settings
+log.filename = /var/log/storm/storm-frontend-server.log
 # Allowed values: ERROR, WARN, INFO, DEBUG, DEBUG2.
 log.debuglevel=<%=scope['storm::frontend::log_debuglevel']%>
 
 # Security settings
+security.enable.mapping=<%=scope['storm::frontend::security_enable_mapping']%>
 security.enable.vomscheck=<%=scope['storm::frontend::security_enable_vomscheck']%>
 
 # Backend information

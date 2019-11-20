@@ -18,11 +18,13 @@ describe 'storm::frontend', :type => :class do
         let(:params) do 
           {
             'port'                      => 8445,
+            'threadpool_maxpending'     => 300,
             'threadpool_threads_number' => 60,
             'gsoap_maxpending'          => 2000,
             'config_dir'                => '/etc/storm/fe/config',
             'user_name'                 => 'test',
             'log_debuglevel'            => 'DEBUG',
+            'security_enable_mapping'   => true,
             'security_enable_vomscheck' => false,
             'be_xmlrpc_host'            => 'example.com',
             'be_xmlrpc_token'           => 'secret',
@@ -57,9 +59,11 @@ describe 'storm::frontend', :type => :class do
             :path   => '/etc/storm/fe/config/storm-frontend-server.conf',
           )
           is_expected.to contain_file(title).with( :content => /fe.port=8445/ )
+          is_expected.to contain_file(title).with( :content => /fe.threadpool.maxpending=300/ )
           is_expected.to contain_file(title).with( :content => /fe.threadpool.threads.number=60/ )
           is_expected.to contain_file(title).with( :content => /fe.gsoap.maxpending=2000/ )
           is_expected.to contain_file(title).with( :content => /log.debuglevel=DEBUG/ )
+          is_expected.to contain_file(title).with( :content => /security.enable.mapping=true/ )
           is_expected.to contain_file(title).with( :content => /security.enable.vomscheck=false/ )
           is_expected.to contain_file(title).with( :content => /be.xmlrpc.host=example.com/ )
           is_expected.to contain_file(title).with( :content => /be.xmlrpc.token=secret/ )
@@ -106,9 +110,11 @@ describe 'storm::frontend', :type => :class do
             :path   => '/etc/storm/storm-frontend/storm-frontend-server.conf',
           )
           is_expected.to contain_file(title).with( :content => /fe.port=8444/ )
+          is_expected.to contain_file(title).with( :content => /fe.threadpool.maxpending=200/ )
           is_expected.to contain_file(title).with( :content => /fe.threadpool.threads.number=50/ )
           is_expected.to contain_file(title).with( :content => /fe.gsoap.maxpending=1000/ )
           is_expected.to contain_file(title).with( :content => /log.debuglevel=INFO/ )
+          is_expected.to contain_file(title).with( :content => /security.enable.mapping=false/ )
           is_expected.to contain_file(title).with( :content => /security.enable.vomscheck=true/ )
           is_expected.to contain_file(title).with( :content => /be.xmlrpc.host=localhost/ )
           is_expected.to contain_file(title).with( :content => /be.xmlrpc.token=token/ )
