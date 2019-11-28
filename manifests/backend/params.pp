@@ -1,0 +1,24 @@
+# @summary StoRM Frontend params class
+#
+class storm::backend::params (
+) inherits storm::params {
+
+  $user_name = $storm::params::user_name
+
+  $db_host = $storm::params::db_host
+  $db_user = $storm::params::db_user
+  $db_passwd = $storm::params::db_passwd
+
+  $config_dir = lookup('storm::backend::config_dir', String, undef, '/etc/storm/backend-server')
+
+  $rfio_port = lookup('storm::backend::rfio_port', Integer, undef, 5001)
+  $xroot_port = lookup('storm::backend::xroot_port', Integer, undef, 1094)
+  $gsiftp_pool_balance_strategy = lookup('storm::backend::gsiftp_pool_balance_strategy',
+    Storm::Backend::BalanceStrategy, undef, 'round-robin')
+  $gsiftp_pool_members = lookup('storm::backend::gsiftp_pool_members',
+    Array[Storm::Backend::GsiftpPoolMember], undef, [])
+  $webdav_pool_members = lookup('storm::backend::webdav_pool_members',
+    Array[Storm::Backend::WebdavPoolMember], undef, [])
+
+  $storage_areas = lookup('storm::backend::storage_areas', Array[Storm::Backend::StorageArea], undef, [])
+}

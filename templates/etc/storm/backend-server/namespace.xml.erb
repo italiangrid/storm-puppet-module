@@ -1,0 +1,250 @@
+<namespace xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="namespace-1.5.0.xsd" version="1.5.0">
+  <filesystems>
+  <%- scope['storm::backend::storage_areas'].each do | sa | -%>
+    <%- @sa_upp=sa['name'].upcase.gsub("-", "").gsub(".","") -%>
+    <%- @sa_low=sa['name'].downcase -%>
+    <%- @sa_root=sa['root_path'] -%>
+    <%- @sa_fs_type=sa['fs_type'] ? sa['fs_type'] : 'ext3' -%>
+    <%- @sa_fs_driver=sa['fs_driver'] ? sa['fs_driver'] : sa['fs_type'] == 'gpfs' ? 'gpfs' : 'posixfs' -%>
+    <%- @sa_fs_space_system= @sa_fs_driver == 'gpfs' ? 'GPFSSpaceSystem' : 'MockSpaceSystem' -%>
+    <%- @sa_fs_space_token=sa['space_token'] ? sa['space_token'] : "#{@sa_upp}-TOKEN" -%>
+    <%- @sa_authz=sa['authz'] ? sa['authz'] : "permit-all" -%>
+    <%- @sa_storage_class=sa['storage_class'] ? sa['storage_class'] : "T0D1" -%>
+    <%- if @sa_storage_class == "T0D1" -%>
+      <%- @sa_retention_policy="replica" -%>
+      <%- @sa_access_latency="online" -%>
+    <%- else -%>
+      <%- @sa_retention_policy="custodial" -%>
+      <%- if @sa_storage_class == "T1D1" -%>
+        <%- @sa_access_latency="nearline" -%>
+      <%- else -%>
+        <%- @sa_access_latency="online" -%>
+      <%- end -%>
+    <%- end -%>
+    <%- @sa_online_size=sa['online_size'] -%>
+    <%- @sa_nearline_size=sa['nearline_size'] -%>
+    <%- if @sa_nearline_size == nil && @sa_fs_driver == "gpfs" -%>
+      <%= fail("missing nearline size for #{@sa_low}") %>
+    <%- else -%>
+      <%- @sa_nearline_size=0 -%>
+    <%- end -%>
+    <%- @sa_acl_mode=sa['acl_mode'] ? sa['acl_mode'] : "AoT" -%>
+    <%- @sa_default_acl_list=sa['default_acl_list'] -%>
+    <%- @sa_quota=sa['quota'] -%>
+    <%- @sa_transfer_protocols=sa['transfer_protocols'] ? sa['transfer_protocols'] : ['file', 'gsiftp'] -%>
+    <filesystem name="<%= @sa_upp %>-FS" fs_type="<%= @sa_fs_type %>">
+      <space-token-description><%= @sa_fs_space_token %></space-token-description>
+      <root><%= @sa_root %></root>
+      <filesystem-driver>it.grid.storm.filesystem.swig.<%= @sa_fs_driver %></filesystem-driver>
+      <spacesystem-driver>it.grid.storm.filesystem.<%= @sa_fs_space_system %></spacesystem-driver>
+      <storage-area-authz>
+        <%- if @sa_authz == "permit-all" ||  @sa_authz == "deny-all" -%>
+        <fixed><%= @sa_authz %></fixed>
+        <%- else -%>
+        <authz-db><%= @sa_authz %></authz-db>
+        <%- end -%>
+      </storage-area-authz>
+      <properties>
+        <RetentionPolicy><%= @sa_retention_policy %></RetentionPolicy>
+        <AccessLatency><%= @sa_access_latency %></AccessLatency>
+        <ExpirationMode>neverExpire</ExpirationMode>
+        <TotalOnlineSize unit="Byte" limited-size="true"><%= @sa_online_size*1000*1000*1000 %></TotalOnlineSize>
+        <TotalNearlineSize unit="Byte"><%= @sa_nearline_size*1000*1000*1000 %></TotalNearlineSize>
+      </properties>
+      <capabilities>
+        <aclMode><%= @sa_acl_mode %></aclMode>
+        <%- if @sa_default_acl_list != nil -%>
+        <default-acl>
+          <%- @sa_default_acl_list.each do | acl | -%>
+            <acl-entry>
+              <groupName><%= acl['group'] %></groupName>
+              <permissions><%= acl['permission'] %></permissions>
+            </acl-entry>
+          <%- end -%>
+        </default-acl>
+        <%- end -%>
+        <%- if @sa_fs_driver == 'gpfs' && @sa_quota != nil -%>
+        <quota enabled="true">
+          <%- @sa_quota_device=sa['quota']['device'] -%>
+          <%- if @sa_quota_device == nil -%>
+            <%= fail("missing quota device value for #{@sa_low}") %>
+          <%- end -%>
+          <device><%= @sa_quota_device %></device>
+          <quotaElement>
+            <%- @sa_quota_type=sa['quota']['type'] -%>
+            <%- @sa_quota_value=sa['quota']['value'] -%>
+            <%- if @sa_quota_type == "username" -%>
+            <userName><%= @sa_quota_value %></userName>
+            <%- elsif @sa_quota_type == "group" -%>
+            <groupName><%= @sa_quota_value %></groupName>
+            <%- else -%>
+            <filesetName><%= @sa_quota_value %></filesetName>
+            <%- end -%>
+          </quotaElement>
+        </quota>
+        <%- end -%>
+        <trans-prot>
+          <%- @protocol_id=0 -%>
+          <%- if @sa_transfer_protocols.include?('file') -%>
+          <prot name="file">
+            <schema>file</schema>
+          </prot>
+          <%- end -%>
+          <%- if @sa_transfer_protocols.include?('gsiftp') -%>
+            <%- @gsiftp_pool_members=sa['gsiftp_pool_members'] -%>
+            <%- if @gsiftp_pool_members == nil -%>
+              <%- @gsiftp_pool_members=scope['storm::backend::gsiftp_pool_members'] -%>
+            <%- end -%>
+            <%- @ids_gftp=[] -%>
+            <%- @gsiftp_pool_members.each do | g | -%>
+          <prot name="gsiftp">
+            <id><%= @protocol_id %></id>
+            <schema>gsiftp</schema>
+            <hostname><%= g['hostname'] %></hostname>
+            <%- if g['port'] != nil -%>
+            <port><%= g['port'] %></port>
+            <%- else -%>
+            <port>2811</port>
+            <%- end -%>
+          </prot>
+              <%- @ids_gftp.push(@protocol_id) -%>
+              <%- @protocol_id+=1 -%>
+            <%- end -%>
+          <%- end -%>
+          <%- if @sa_transfer_protocols.include?('rfio') -%>
+            <%- @rfio_hostname=sa['rfio_hostname'] -%>
+            <%- if @rfio_hostname == nil -%>
+              <%- @rfio_hostname=scope['storm::backend::rfio_hostname'] -%>
+            <%- end -%>
+            <%- @rfio_port=sa['rfio_port'] -%>
+            <%- if @rfio_port == nil -%>
+              <%- @rfio_port=scope['storm::backend::rfio_port'] -%>
+            <%- end -%>
+          <prot name="rfio">
+            <id><%= @protocol_id %></id>
+            <schema>rfio</schema>
+            <hostname><%= @rfio_hostname %></hostname>
+            <port><%= @rfio_port %></port>
+          </prot>
+            <%- @protocol_id+=1 -%>
+          <%- end -%>
+          <%- if @sa_transfer_protocols.include?('xroot') -%>
+            <%- @xroot_hostname=sa['xroot_hostname'] -%>
+            <%- if @xroot_hostname == nil -%>
+              <%- @xroot_hostname=scope['storm::backend::xroot_hostname'] -%>
+            <%- end -%>
+            <%- @xroot_port=sa['xroot_port'] -%>
+            <%- if @xroot_port == nil -%>
+              <%- @xroot_port=scope['storm::backend::xroot_port'] -%>
+            <%- end -%>
+          <prot name="root">
+            <schema>root</schema>
+            <hostname><%= @xroot_hostname %></hostname>
+            <port><%= @xroot_port %></port>
+          </prot>
+          <prot name="xroot">
+            <id><%= @protocol_id %></id>
+            <schema>xroot</schema>
+            <hostname><%= @xroot_hostname %></hostname>
+            <port><%= @xroot_port %></port>
+          </prot>
+            <%- @protocol_id+=1 -%>
+          <%- end -%>
+          <%- if @sa_transfer_protocols.include?('https') -%>
+            <%- @webdav_pool_members=sa['webdav_pool_members'] -%>
+            <%- if @webdav_pool_members == nil -%>
+              <%- @webdav_pool_members=scope['storm::backend::webdav_pool_members'] -%>
+            <%- end -%>
+            <%- @webdav_pool_members.each do | member | -%>
+          <prot name="https">
+            <id><%= @protocol_id %></id>
+            <schema>https</schema>
+            <hostname><%= @member['hostname'] %></hostname>
+            <%- if @member['port'] != nil -%>
+            <port><%= @member['port'] %></port>
+            <%- else -%>
+            <port>8443</port>
+            <%- end -%>
+          </prot>
+              <%- @protocol_id+=1 -%>
+          <prot name="http">
+            <id><%= @protocol_id %></id>
+            <schema>http</schema>
+            <hostname><%= @member['hostname'] %></hostname>
+            <%- if @member['port'] != nil -%>
+            <port><%= @member['port'] %></port>
+            <%- else -%>
+            <port>8085</port>
+            <%- end -%>
+          </prot>
+              <%- @protocol_id+=1 -%>
+            <%- end -%>
+          <%- end -%>
+        </trans-prot>
+        <pool>
+          <%- @gsiftp_pool_balance_strategy=sa['gsiftp_pool_balance_strategy'] -%>
+          <%- if @gsiftp_pool_balance_strategy == nil -%>
+            <%- @gsiftp_pool_balance_strategy=scope['storm::backend::gsiftp_pool_balance_strategy'] -%>
+            <%- if @gsiftp_pool_balance_strategy == nil -%>
+              <%- @gsiftp_pool_balance_strategy='round-robin' -%>
+            <%- end -%>
+          <%- end -%>
+          <balance-strategy><%= @gsiftp_pool_balance_strategy %></balance-strategy>
+          <members>
+            <%- @gsiftp_pool_members.each_with_index do | member, i | -%>
+            <%- @id=@ids_gftp[i] -%>
+            <member member-id="<%= @id %>">
+              <%- if @gsiftp_pool_balance_strategy == "weight" -%>
+                <%- @weight=member['weight'].nil? ? 100 : member['weight'] -%>
+                <weight><%= @weight %></weight>
+              <%- end -%>
+            </member>
+            <%- end -%>
+          </members>
+        </pool>
+      </capabilities>
+    </filesystem>
+  <%- end -%>
+  </filesystems>
+  <mapping-rules>
+    <%- scope['storm::backend::storage_areas'].each do | sa | -%>
+      <%- @sa_upp=sa['name'].upcase.gsub("-", "").gsub(".","") -%>
+      <%- @sa_low=sa['name'].downcase -%>
+      <%- @sa_accesspoints=sa['access_points'] -%>
+      <%- @counter=0 -%>
+      <%- @sa_accesspoints.each do | ap | -%>
+        <%- @maprule_name="#{@sa_low}-maprule-#{@counter}" -%>
+      <map-rule name="<%= @maprule_name %>">
+        <stfn-root><%= ap %></stfn-root>
+        <mapped-fs><%= @sa_upp %>-FS</mapped-fs>
+      </map-rule>
+        <%- @counter+=1 -%>
+      <%- end -%>
+    <%- end -%>
+  </mapping-rules>
+  <approachable-rules>
+    <%- scope['storm::backend::storage_areas'].each do | sa | -%>
+      <%- @sa_upp=sa['name'].upcase.gsub("-", "").gsub(".","") -%>
+      <%- @sa_low=sa['name'].downcase -%>
+      <%- @sa_vos=sa['vos'] -%>
+      <%- @sa_dn_regex=sa['dn_regex'] -%>
+      <%- if @sa_dn_regex == nil -%>
+        <%- @sa_dn_regex="*" -%>
+      <%- end -%>
+      <%- @sa_anonymous_http_read=sa['anonymous_http_read'].nil? ? false : sa['anonymous_http_read'] -%>
+      <%- @counter=0 -%>
+      <%- @sa_vos.each do | vo | -%>
+        <%- @apprule_name="#{@sa_low}-rule-#{@counter}" -%>
+    <app-rule name="<%= @apprule_name %>">
+      <subjects>
+        <dn><%= @sa_dn_regex %></dn>
+        <vo-name><%= vo %></vo-name>
+      </subjects>
+      <approachable-fs><%= @sa_upp %>-FS</approachable-fs>
+      <anonymous-http-read><%= @sa_anonymous_http_read %></anonymous-http-read>
+    </app-rule>
+        <%- @counter+=1 -%>
+      <%- end -%>
+    <%- end -%>
+  </approachable-rules>
+</namespace>

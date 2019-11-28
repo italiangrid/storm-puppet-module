@@ -19,3 +19,8 @@ else
   # rubocop requires ruby >= 1.9
   gem 'rubocop-rails'
 end
+
+group :development do
+  gem "better_errors"
+  gem "binding_of_caller"
+end

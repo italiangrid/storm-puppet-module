@@ -1,15 +1,11 @@
 # @!puppet.type.param
 # @summary StoRM Frontend puppet module
 #
-# Parameters
-# ----------
-# 
-# The StoRM Frontend configuration parameters are:
-#
-# * `name`: description
-# 
 # @example Example of usage
 #    class { 'storm::frontend':
+#      db_host => 'storm-be.example',
+#      db_passwd => 'secret',
+#      be_xmlrpc_token => 'secret',
 #    }
 #
 # @param user_name

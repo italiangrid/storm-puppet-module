@@ -40,15 +40,22 @@
 **Data types**
 
 * [`Storm::Backend::Acl`](#stormbackendacl): The ACL type for storm-backend-server
+* [`Storm::Backend::AclMode`](#stormbackendaclmode): 
+* [`Storm::Backend::BalanceStrategy`](#stormbackendbalancestrategy): 
 * [`Storm::Backend::Endpoint`](#stormbackendendpoint): The Endpoint type for storm-backend-server
 * [`Storm::Backend::FileSystem`](#stormbackendfilesystem): The FileSystem type for storm-backend-server
+* [`Storm::Backend::FsDriver`](#stormbackendfsdriver): 
+* [`Storm::Backend::FsType`](#stormbackendfstype): 
 * [`Storm::Backend::Gsiftp`](#stormbackendgsiftp): The Gsiftp type for storm-backend-server
+* [`Storm::Backend::GsiftpPoolMember`](#stormbackendgsiftppoolmember): 
 * [`Storm::Backend::Pool`](#stormbackendpool): The Pool type for storm-backend-server
 * [`Storm::Backend::Quota`](#stormbackendquota): The Quota type for storm-backend-server
 * [`Storm::Backend::Rfio`](#stormbackendrfio): The Rfio type for storm-backend-server
 * [`Storm::Backend::StorageArea`](#stormbackendstoragearea): The storage area type for storm-backend-server
+* [`Storm::Backend::StorageClass`](#stormbackendstorageclass): 
 * [`Storm::Backend::TransferProtocol`](#stormbackendtransferprotocol): The TransferProtocol type for storm-backend-server
 * [`Storm::Backend::Webdav`](#stormbackendwebdav): The WebDAV type for storm-backend-server
+* [`Storm::Backend::WebdavPoolMember`](#stormbackendwebdavpoolmember): 
 * [`Storm::Backend::Xroot`](#stormbackendxroot): The Xroot type for storm-backend-server
 * [`Storm::Webdav::OAuthIssuer`](#stormwebdavoauthissuer): The OAuthIssuer type for storm-webdav
 * [`Storm::Webdav::StorageArea`](#stormwebdavstoragearea): The storage area type for storm-webdav
@@ -84,6 +91,12 @@ The following parameters are available in the `storm::backend` class.
 ##### `name`
 
 Description
+
+##### `hostname`
+
+Data type: `String`
+
+
 
 ##### `user_name`
 
@@ -125,13 +138,61 @@ Data type: `String`
 
 Default value: $storm::backend::params::config_dir
 
-##### `gsiftp`
+##### `rfio_hostname`
 
-Data type: `Storm::Backend::Gsiftp`
+Data type: `String`
 
 
 
-Default value: $storm::backend::params::gsiftp
+Default value: lookup('storm::backend::rfio_hostname', String, undef, $hostname)
+
+##### `rfio_port`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::rfio_port
+
+##### `xroot_hostname`
+
+Data type: `String`
+
+
+
+Default value: lookup('storm::backend::xroot_hostname', String, undef, $hostname)
+
+##### `xroot_port`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::xroot_port
+
+##### `gsiftp_pool_balance_strategy`
+
+Data type: `Storm::Backend::BalanceStrategy`
+
+
+
+Default value: $storm::backend::params::gsiftp_pool_balance_strategy
+
+##### `gsiftp_pool_members`
+
+Data type: `Array[Storm::Backend::GsiftpPoolMember]`
+
+
+
+Default value: $storm::backend::params::gsiftp_pool_members
+
+##### `webdav_pool_members`
+
+Data type: `Array[Storm::Backend::WebdavPoolMember]`
+
+
+
+Default value: $storm::backend::params::webdav_pool_members
 
 ##### `storage_areas`
 
@@ -165,6 +226,14 @@ Data type: `Any`
 
 Default value: $storm::backend::config_dir
 
+##### `storage_areas`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::storage_areas
+
 ### storm::backend::install
 
 StoRM Backend install class
@@ -183,12 +252,7 @@ StoRM config class
 
 ### storm::frontend
 
-Parameters
-----------
-
-The StoRM Frontend configuration parameters are:
-
-* `name`: description
+StoRM Frontend puppet module
 
 #### Examples
 
@@ -196,6 +260,9 @@ The StoRM Frontend configuration parameters are:
 
 ```puppet
 class { 'storm::frontend':
+  db_host => 'storm-be.example',
+  db_passwd => 'secret',
+  be_xmlrpc_token => 'secret',
 }
 ```
 
@@ -1333,6 +1400,18 @@ Alias of `Struct[{
   permission => String,
 }]`
 
+### Storm::Backend::AclMode
+
+The Storm::Backend::AclMode data type.
+
+Alias of `Enum['AoT', 'JiT']`
+
+### Storm::Backend::BalanceStrategy
+
+The Storm::Backend::BalanceStrategy data type.
+
+Alias of `Enum['round-robin', 'smart-rr', 'random', 'weight']`
+
 ### Storm::Backend::Endpoint
 
 The Endpoint type for storm-backend-server
@@ -1354,12 +1433,34 @@ Alias of `Struct[{
   space_system => Optional[Enum['MockSpaceSystem', 'GPFSSpaceSystem']],
 }]`
 
+### Storm::Backend::FsDriver
+
+The Storm::Backend::FsDriver data type.
+
+Alias of `Enum['posixfs', 'gpfs', 'test']`
+
+### Storm::Backend::FsType
+
+The Storm::Backend::FsType data type.
+
+Alias of `Enum['ext3', 'gpfs']`
+
 ### Storm::Backend::Gsiftp
 
 The Gsiftp type for storm-backend-server
 
 Alias of `Struct[{
   pool => Storm::Backend::Pool,
+}]`
+
+### Storm::Backend::GsiftpPoolMember
+
+The Storm::Backend::GsiftpPoolMember data type.
+
+Alias of `Struct[{
+  hostname => String,
+  port     => Optional[Integer],
+  weight   => Optional[Integer],
 }]`
 
 ### Storm::Backend::Pool
@@ -1399,38 +1500,43 @@ Alias of `Struct[{
 The storage area type for storm-backend-server
 
 Alias of `Struct[{
-  name                => String,
-  root_path           => String,
-  access_points       => Array[String],
-  vos                 => Array[String],
-  fs                  => Storm::Backend::FileSystem,
-  space_token         => Optional[String],
-  authz               => Optional[String],
-  storage_class       => Optional[Enum['T0D1', 'T1D0', 'T1D1']],
-  online_size         => Integer,
-  nearline_size       => Optional[Integer],
-  acl_mode            => Optional[Enum['AoT', 'JiT']],
-  default_acl_list    => Optional[Array[Storm::Backend::Acl]],
-  quota               => Optional[Storm::Backend::Quota],
-  dn_regex            => Optional[String],
-  anonymous_http_read => Optional[Boolean],
-  transfer_protocols  => Array[Enum['file','gsiftp','rfio','root','http','https']],
-  rfio                => Optional[Storm::Backend::Rfio],
-  xroot               => Optional[Storm::Backend::Xroot],
-  gsiftp              => Optional[Storm::Backend::GsiFtp],
-  webdav              => Optional[Storm::Backend::Webdav],
+  name                         => String,
+  root_path                    => String,
+  access_points                => Array[String],
+  vos                          => Array[String],
+  fs_type                      => Optional[Storm::Backend::FsType],
+  fs_driver                    => Optional[Storm::Backend::FsDriver],
+  space_token                  => Optional[String],
+  authz                        => Optional[String],
+  storage_class                => Optional[Storm::Backend::StorageClass],
+  online_size                  => Integer,
+  nearline_size                => Optional[Integer],
+  acl_mode                     => Optional[Storm::Backend::AclMode],
+  default_acl_list             => Optional[Array[Storm::Backend::Acl]],
+  quota                        => Optional[Storm::Backend::Quota],
+  dn_regex                     => Optional[String],
+  anonymous_http_read          => Optional[Boolean],
+  transfer_protocols           => Optional[Array[Storm::Backend::TransferProtocol]],
+  rfio_hostname                => Optional[String],
+  rfio_port                    => Optional[Integer],
+  xroot_hostname               => Optional[String],
+  xroot_port                   => Optional[Integer],
+  gsiftp_pool_balance_strategy => Optional[Storm::Backend::BalanceStrategy],
+  gsiftp_pool_members          => Optional[Array[Storm::Backend::GsiftpPoolMember]],
+  webdav_pool_members          => Optional[Array[Storm::Backend::WebdavPoolMember]],
 }]`
+
+### Storm::Backend::StorageClass
+
+The Storm::Backend::StorageClass data type.
+
+Alias of `Enum['T0D1', 'T1D0', 'T1D1']`
 
 ### Storm::Backend::TransferProtocol
 
 The TransferProtocol type for storm-backend-server
 
-Alias of `Struct[{
-  schema => Enum['file', 'gsiftp', 'root', 'xroot', 'http', 'https'],
-  id     => Optional[Integer],
-  host   => Optional[String],
-  port   => Optional[Integer],
-}]`
+Alias of `Enum['file', 'gsiftp', 'rfio', 'root', 'http', 'https']`
 
 ### Storm::Backend::Webdav
 
@@ -1441,6 +1547,15 @@ Alias of `Struct[{
     hostname => String,
     port     => Optional[Integer],
   }]],
+}]`
+
+### Storm::Backend::WebdavPoolMember
+
+The Storm::Backend::WebdavPoolMember data type.
+
+Alias of `Struct[{
+  hostname => String,
+  port     => Optional[Integer],
 }]`
 
 ### Storm::Backend::Xroot
