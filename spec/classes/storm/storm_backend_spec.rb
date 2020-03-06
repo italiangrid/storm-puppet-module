@@ -79,23 +79,10 @@ describe 'storm::backend', :type => :class do
         it "check backend namespace file content" do
           title='be::configure-be-namespace-file'
           is_expected.to contain_file(title).with( 
-            :ensure => 'present',
-            :path   => '/etc/storm/be/config/namespace.xml',
+            :ensure  => 'present',
+            :path    => '/etc/storm/be/config/namespace.xml',
+            :content => my_fixture_read("namespace-0.xml"),
           )
-          is_expected.to contain_file(title).with( :content => /<filesystem name="TESTVO-FS" fs_type="ext3">/ )
-          is_expected.to contain_file(title).with( :content => /<space-token-description>TESTVO-TOKEN<\/space-token-description>/ )
-          is_expected.to contain_file(title).with( :content => /<root>\/storage\/test.vo<\/root>/ )
-          is_expected.to contain_file(title).with( :content => /<filesystem-driver>it.grid.storm.filesystem.swig.posixfs<\/filesystem-driver>/ )
-          is_expected.to contain_file(title).with( :content => /<spacesystem-driver>it.grid.storm.filesystem.MockSpaceSystem<\/spacesystem-driver>/ )
-          is_expected.to contain_file(title).with( :content => /<fixed>permit-all<\/fixed>/ )
-          is_expected.to contain_file(title).with( :content => /<RetentionPolicy>custodial<\/RetentionPolicy>/ )
-          is_expected.to contain_file(title).with( :content => /<AccessLatency>nearline<\/AccessLatency>/ )
-          is_expected.to contain_file(title).with( :content => /<TotalOnlineSize unit="Byte" limited-size="true">4000000000<\/TotalOnlineSize>/ )
-          is_expected.to contain_file(title).with( :content => /<TotalNearlineSize unit="Byte">0<\/TotalNearlineSize>/ )
-          is_expected.to contain_file(title).with( :content => /<aclMode>AoT<\/aclMode>/ )
-          is_expected.to contain_file(title).with( :content => /<prot name="file">/ )
-          is_expected.to contain_file(title).with( :content => /<prot name="gsiftp">/ )
-
         end
 
       end

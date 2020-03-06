@@ -6,6 +6,14 @@ class storm::backend::config (
   $config_dir = $storm::backend::config_dir,
 
   $storage_areas = $storm::backend::storage_areas,
+  $gsiftp_pool_members = $storm::backend::gsiftp_pool_members,
+  $gsiftp_pool_balance_strategy = $storm::backend::gsiftp_pool_balance_strategy,
+  $webdav_pool_members = $storm::backend::webdav_pool_members,
+  $rfio_hostname = $storm::backend::rfio_hostname,
+  $rfio_port = $storm::backend::rfio_port,
+  $xroot_hostname = $storm::backend::xroot_hostname,
+  $xroot_port = $storm::backend::xroot_port,
+  $srm_hostname = $storm::backend::frontend_public_host,
 
 ) {
 
@@ -26,6 +34,17 @@ class storm::backend::config (
     ensure  => present,
     path    => $namespace_file,
     content => template($namespace_template_file),
+    notify  => Service['storm-backend-server'],
+    require => Package['storm-backend-server-mp'],
+  }
+
+  $properties_file="${config_dir}/storm.properties"
+  $properties_template_file='storm/etc/storm/backend-server/storm.properties.erb'
+
+  file { 'be::configure-be-properties-file':
+    ensure  => present,
+    path    => $properties_file,
+    content => template($properties_template_file),
     notify  => Service['storm-backend-server'],
     require => Package['storm-backend-server-mp'],
   }

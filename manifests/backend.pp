@@ -39,6 +39,8 @@ class storm::backend (
 
   Array[Storm::Backend::StorageArea] $storage_areas = $storm::backend::params::storage_areas,
 
+  String $frontend_public_host = lookup('storm::backend::srm_hostname', String, undef, $hostname)
+
 ) inherits storm::backend::params {
 
   contain storm::backend::install

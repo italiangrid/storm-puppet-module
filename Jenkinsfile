@@ -35,10 +35,11 @@ pipeline {
   environment {
     SONAR_PROJECT_KEY = 'storm-puppet-module-key'
     SONAR_PROJECT_NAME = 'storm-puppet-module'
+    GIT_CREDENTIAL_ID = 'enrico-github'
   }
 
   stages {
-    stage('Run') {
+    stage('rspec-tests') {
       steps {
         script {
           checkout scm
@@ -47,6 +48,12 @@ pipeline {
           sh 'rspec --format RspecJunitFormatter --out rspec_report.xml'
           archiveArtifacts 'rspec_report.html,rspec_report.xml,rake.log'
           junit 'rspec_report.xml'
+        }
+      }
+    }
+    stage('sonar-analysis') {
+      steps {
+        script {
           sh 'rm -rf spec/fixtures'
           withSonarQubeEnv{
             def sonar_opts="-Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.login=${SONAR_AUTH_TOKEN}"

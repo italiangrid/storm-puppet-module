@@ -1,6 +1,6 @@
 <namespace xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="namespace-1.5.0.xsd" version="1.5.0">
   <filesystems>
-  <%- scope['storm::backend::storage_areas'].each do | sa | -%>
+  <%- @storage_areas.each do | sa | -%>
     <%- @sa_upp=sa['name'].upcase.gsub("-", "").gsub(".","") -%>
     <%- @sa_low=sa['name'].downcase -%>
     <%- @sa_root=sa['root_path'] -%>
@@ -91,12 +91,12 @@
           </prot>
           <%- end -%>
           <%- if @sa_transfer_protocols.include?('gsiftp') -%>
-            <%- @gsiftp_pool_members=sa['gsiftp_pool_members'] -%>
-            <%- if @gsiftp_pool_members == nil -%>
-              <%- @gsiftp_pool_members=scope['storm::backend::gsiftp_pool_members'] -%>
+            <%- @gsiftp_members=sa['gsiftp_pool_members'] -%>
+            <%- if @gsiftp_members == nil -%>
+              <%- @gsiftp_members=@gsiftp_pool_members -%>
             <%- end -%>
             <%- @ids_gftp=[] -%>
-            <%- @gsiftp_pool_members.each do | g | -%>
+            <%- @gsiftp_members.each do | g | -%>
           <prot name="gsiftp">
             <id><%= @protocol_id %></id>
             <schema>gsiftp</schema>
@@ -112,50 +112,50 @@
             <%- end -%>
           <%- end -%>
           <%- if @sa_transfer_protocols.include?('rfio') -%>
-            <%- @rfio_hostname=sa['rfio_hostname'] -%>
-            <%- if @rfio_hostname == nil -%>
-              <%- @rfio_hostname=scope['storm::backend::rfio_hostname'] -%>
+            <%- @hostname=sa['rfio_hostname'] -%>
+            <%- if @hostname == nil -%>
+              <%- @hostname=@rfio_hostname -%>
             <%- end -%>
-            <%- @rfio_port=sa['rfio_port'] -%>
-            <%- if @rfio_port == nil -%>
-              <%- @rfio_port=scope['storm::backend::rfio_port'] -%>
+            <%- @port=sa['rfio_port'] -%>
+            <%- if @port == nil -%>
+              <%- @port=@rfio_port -%>
             <%- end -%>
           <prot name="rfio">
             <id><%= @protocol_id %></id>
             <schema>rfio</schema>
-            <hostname><%= @rfio_hostname %></hostname>
-            <port><%= @rfio_port %></port>
+            <hostname><%= @hostname %></hostname>
+            <port><%= @port %></port>
           </prot>
             <%- @protocol_id+=1 -%>
           <%- end -%>
           <%- if @sa_transfer_protocols.include?('xroot') -%>
-            <%- @xroot_hostname=sa['xroot_hostname'] -%>
-            <%- if @xroot_hostname == nil -%>
-              <%- @xroot_hostname=scope['storm::backend::xroot_hostname'] -%>
+            <%- @hostname=sa['xroot_hostname'] -%>
+            <%- if @hostname == nil -%>
+              <%- @hostname=@xroot_hostname -%>
             <%- end -%>
-            <%- @xroot_port=sa['xroot_port'] -%>
-            <%- if @xroot_port == nil -%>
-              <%- @xroot_port=scope['storm::backend::xroot_port'] -%>
+            <%- @port=sa['xroot_port'] -%>
+            <%- if @port == nil -%>
+              <%- @port=@xroot_port -%>
             <%- end -%>
           <prot name="root">
             <schema>root</schema>
-            <hostname><%= @xroot_hostname %></hostname>
-            <port><%= @xroot_port %></port>
+            <hostname><%= @hostname %></hostname>
+            <port><%= @port %></port>
           </prot>
           <prot name="xroot">
             <id><%= @protocol_id %></id>
             <schema>xroot</schema>
-            <hostname><%= @xroot_hostname %></hostname>
-            <port><%= @xroot_port %></port>
+            <hostname><%= @hostname %></hostname>
+            <port><%= @port %></port>
           </prot>
             <%- @protocol_id+=1 -%>
           <%- end -%>
           <%- if @sa_transfer_protocols.include?('https') -%>
-            <%- @webdav_pool_members=sa['webdav_pool_members'] -%>
-            <%- if @webdav_pool_members == nil -%>
-              <%- @webdav_pool_members=scope['storm::backend::webdav_pool_members'] -%>
+            <%- @webdav_members=sa['webdav_pool_members'] -%>
+            <%- if @webdav_members == nil -%>
+              <%- @webdav_members=@webdav_pool_members -%>
             <%- end -%>
-            <%- @webdav_pool_members.each do | member | -%>
+            <%- @webdav_members.each do | member | -%>
           <prot name="https">
             <id><%= @protocol_id %></id>
             <schema>https</schema>
@@ -182,19 +182,19 @@
           <%- end -%>
         </trans-prot>
         <pool>
-          <%- @gsiftp_pool_balance_strategy=sa['gsiftp_pool_balance_strategy'] -%>
-          <%- if @gsiftp_pool_balance_strategy == nil -%>
-            <%- @gsiftp_pool_balance_strategy=scope['storm::backend::gsiftp_pool_balance_strategy'] -%>
-            <%- if @gsiftp_pool_balance_strategy == nil -%>
-              <%- @gsiftp_pool_balance_strategy='round-robin' -%>
+          <%- @gsiftp_balance_strategy=sa['gsiftp_pool_balance_strategy'] -%>
+          <%- if @gsiftp_balance_strategy == nil -%>
+            <%- @gsiftp_balance_strategy=@gsiftp_pool_balance_strategy -%>
+            <%- if @gsiftp_balance_strategy == nil -%>
+              <%- @gsiftp_balance_strategy='round-robin' -%>
             <%- end -%>
           <%- end -%>
-          <balance-strategy><%= @gsiftp_pool_balance_strategy %></balance-strategy>
+          <balance-strategy><%= @gsiftp_balance_strategy %></balance-strategy>
           <members>
-            <%- @gsiftp_pool_members.each_with_index do | member, i | -%>
+            <%- @gsiftp_members.each_with_index do | member, i | -%>
             <%- @id=@ids_gftp[i] -%>
             <member member-id="<%= @id %>">
-              <%- if @gsiftp_pool_balance_strategy == "weight" -%>
+              <%- if @gsiftp_balance_strategy == "weight" -%>
                 <%- @weight=member['weight'].nil? ? 100 : member['weight'] -%>
                 <weight><%= @weight %></weight>
               <%- end -%>
@@ -207,7 +207,7 @@
   <%- end -%>
   </filesystems>
   <mapping-rules>
-    <%- scope['storm::backend::storage_areas'].each do | sa | -%>
+    <%- @storage_areas.each do | sa | -%>
       <%- @sa_upp=sa['name'].upcase.gsub("-", "").gsub(".","") -%>
       <%- @sa_low=sa['name'].downcase -%>
       <%- @sa_accesspoints=sa['access_points'] -%>
@@ -223,7 +223,7 @@
     <%- end -%>
   </mapping-rules>
   <approachable-rules>
-    <%- scope['storm::backend::storage_areas'].each do | sa | -%>
+    <%- @storage_areas.each do | sa | -%>
       <%- @sa_upp=sa['name'].upcase.gsub("-", "").gsub(".","") -%>
       <%- @sa_low=sa['name'].downcase -%>
       <%- @sa_vos=sa['vos'] -%>

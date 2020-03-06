@@ -78,7 +78,7 @@ class storm::webdav::config (
     owner   => $user_name,
     group   => $user_name,
     mode    => '0755',
-    recurse => true,
+    recurse => false,
   }
 
   file { 'dav::hostcert-dir':

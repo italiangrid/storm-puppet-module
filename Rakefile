@@ -1,20 +1,8 @@
-#require 'rspec-puppet/rake_task'
-#
-#begin
-#  if Gem::Specification::find_by_name('puppet-lint')
-#    require 'puppet-lint/tasks/puppet-lint'
-#    PuppetLint.configuration.send('disable_autoloader_layout')
-#    PuppetLint.configuration.ignore_paths = ["spec/**/*.pp", "vendor/**/*.pp"]
-#    task :default => [:rspec, :lint]
-#  end
-#rescue Gem::LoadError
-#  task :default => :rspec
-#end
-
 require 'puppetlabs_spec_helper/rake_tasks'
 require 'puppet-lint/tasks/puppet-lint'
 require 'metadata-json-lint/rake_task'
 require 'puppet-strings/tasks'
+require 'rspec/core/rake_task'
 
 PuppetLint.configuration.fail_on_warnings
 PuppetLint.configuration.send('relative')
@@ -39,10 +27,20 @@ task :validate do
   end
 end
 
+RSpec::Core::RakeTask.new(:spec_verbose) do |t|
+  t.pattern = 'spec/{classes,defines,unit,functions,templates}/**/*_spec.rb'
+  t.rspec_opts = [
+    '--format documentation',
+    '--color',
+    '--profile'
+  ]
+end
+
 desc "Validate, lint and test running"
 task :test do
   Rake::Task[:validate].invoke
   Rake::Task[:metadata_lint].invoke
   Rake::Task[:lint].invoke
-  Rake::Task[:spec].invoke
+  Rake::Task[:spec_verbose].invoke
 end
+

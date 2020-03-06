@@ -202,6 +202,14 @@ Data type: `Array[Storm::Backend::StorageArea]`
 
 Default value: $storm::backend::params::storage_areas
 
+##### `frontend_public_host`
+
+Data type: `String`
+
+
+
+Default value: lookup('storm::backend::srm_hostname', String, undef, $hostname)
+
 ### storm::backend::config
 
 StoRM Backend config class
@@ -233,6 +241,70 @@ Data type: `Any`
 
 
 Default value: $storm::backend::storage_areas
+
+##### `gsiftp_pool_members`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::gsiftp_pool_members
+
+##### `gsiftp_pool_balance_strategy`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::gsiftp_pool_balance_strategy
+
+##### `webdav_pool_members`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::webdav_pool_members
+
+##### `rfio_hostname`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::rfio_hostname
+
+##### `rfio_port`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::rfio_port
+
+##### `xroot_hostname`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::xroot_hostname
+
+##### `xroot_port`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::xroot_port
+
+##### `srm_hostname`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::frontend_public_host
 
 ### storm::backend::install
 
@@ -1397,7 +1469,7 @@ The ACL type for storm-backend-server
 
 Alias of `Struct[{
   group => String,
-  permission => String,
+  permission => Enum['R', 'W', 'RW'],
 }]`
 
 ### Storm::Backend::AclMode

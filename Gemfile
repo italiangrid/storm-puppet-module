@@ -10,6 +10,7 @@ gem 'rspec-puppet-facts'
 gem 'jimdo-rspec-puppet-helpers'
 gem 'rspec-puppet-utils'
 gem 'puppet-strings'
+gem 'nokogiri'
 
 # rspec must be v2 for ruby 1.8.7
 if RUBY_VERSION >= '1.8.7' && RUBY_VERSION < '1.9'
