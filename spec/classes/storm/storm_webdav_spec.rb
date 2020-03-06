@@ -88,7 +88,7 @@ describe 'storm::webdav', :type => :class do
 
         it "check storm log directory" do
           is_expected.to contain_file('dav::storm-log-dir').with(
-            :path => '/var/log/storm',
+            :path => '/var/log/storm/webdav',
             :owner => 'test',
             :group => 'test',
             :ensure => 'directory',

@@ -7,7 +7,7 @@ class storm::webdav::config (
   $user_gid = $storm::webdav::user_gid,
 
   $storage_root_dir = $storm::webdav::storage_root_dir,
-  $log_dir = $storm::webdav::log_dir,
+  $log_dir = "${storm::webdav::log_dir}/webdav",
 
   $storage_areas = $storm::webdav::storage_areas,
 
@@ -78,7 +78,7 @@ class storm::webdav::config (
     owner   => $user_name,
     group   => $user_name,
     mode    => '0755',
-    recurse => false,
+    recurse => true,
   }
 
   file { 'dav::hostcert-dir':
