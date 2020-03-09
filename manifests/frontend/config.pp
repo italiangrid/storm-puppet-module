@@ -25,7 +25,7 @@ class storm::frontend::config (
     path    => $conf_file,
     content => template($conf_template_file),
     notify  => Service['storm-frontend-server'],
-    require => Package['storm-frontend-server-mp'],
+    require => Package['storm-frontend-server'],
   }
 
   $sysconfig_file='/etc/sysconfig/storm-frontend-server'
@@ -35,6 +35,6 @@ class storm::frontend::config (
     path    => $sysconfig_file,
     content => template($sysconfig_template_file),
     notify  => Service['storm-frontend-server'],
-    require => Package['storm-frontend-server-mp'],
+    require => Package['storm-frontend-server'],
   }
 }

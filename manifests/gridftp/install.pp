@@ -4,7 +4,8 @@ class storm::gridftp::install (
 
 ) {
 
-  $dependencies = [
+  # Based on storm-globus-gridftp-mp required rpms
+  $required = [
     'umd-release',
     'fetch-crl',
     'edg-mkgridmap',
@@ -19,7 +20,7 @@ class storm::gridftp::install (
     'lcg-expiregridmapdir',
     'cleanup-grid-accounts',
   ]
-  package { $dependencies:
+  package { $required:
     ensure => installed,
   }
 

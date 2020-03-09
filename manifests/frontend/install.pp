@@ -4,7 +4,20 @@ class storm::frontend::install (
 
 ) {
 
-  package { 'storm-frontend-server-mp':
+  # Based on storm-globus-gridftp-mp required rpms
+  $required = [
+    'umd-release',
+    'fetch-crl',
+    'edg-mkgridmap',
+    'lcg-expiregridmapdir',
+    'cleanup-grid-accounts',
+  ]
+  package { $required:
     ensure => installed,
+  }
+
+  package { 'storm-frontend-server':
+    ensure  => installed,
+    require => Package[$required],
   }
 }
