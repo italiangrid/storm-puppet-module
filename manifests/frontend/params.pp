@@ -12,6 +12,7 @@ class storm::frontend::params (
   $db_passwd = $storm::params::db_passwd
 
   $config_dir = lookup('storm::frontend::config_dir', String, undef, '/etc/storm/storm-frontend')
+  $hostcert_dir = lookup('storm::frontend::hostcert_dir', String, undef, '/etc/grid-security/storm')
 
   $port = lookup('storm::frontend::port', Integer, undef, 8444)
   $threadpool_threads_number = lookup('storm::frontend::threadpool_threads_number', Integer, undef, 50)

@@ -7,6 +7,7 @@ class storm::frontend::config (
   $user_gid = $storm::frontend::user_gid,
 
   $config_dir = $storm::frontend::config_dir,
+  $hostcert_dir = $storm::frontend::hostcert_dir,
 
 ) {
 
@@ -33,6 +34,23 @@ class storm::frontend::config (
     mode    => '0750',
     recurse => true,
     require => User[$user_name],
+  }
+
+  file { 'fe::hostcert-dir':
+    ensure  => directory,
+    path    => $hostcert_dir,
+    owner   => $user_name,
+    group   => $user_name,
+    mode    => '0755',
+    recurse => true,
+  }
+
+  storm::service_hostcert { 'fe::host-credentials':
+    hostcert => "${hostcert_dir}/hostcert.pem",
+    hostkey  => "${hostcert_dir}/hostkey.pem",
+    owner    => $user_name,
+    group    => $user_name,
+    require  => File['fe::hostcert-dir'],
   }
 
   $conf_file="${config_dir}/storm-frontend-server.conf"
