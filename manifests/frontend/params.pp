@@ -4,6 +4,8 @@ class storm::frontend::params (
 ) inherits storm::params {
 
   $user_name = $storm::params::user_name
+  $user_uid = $storm::params::user_uid
+  $user_gid = $storm::params::user_gid
 
   $db_host = $storm::params::db_host
   $db_user = $storm::params::db_user
