@@ -43,6 +43,7 @@ pipeline {
       steps {
         script {
           checkout scm
+          sh 'bundle install'
           sh 'bundle exec rake test | tee rake.log'
           sh 'rspec --format html --out rspec_report.html'
           sh 'rspec --format RspecJunitFormatter --out rspec_report.xml'
