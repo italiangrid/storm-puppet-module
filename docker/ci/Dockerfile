@@ -15,7 +15,9 @@ RUN printf "gem: --no-rdoc --no-ri" >> /etc/gemrc && \
 ENV LANG C.UTF-8
 
 # Now do the bundle install. I Split this off to minimize differences between 3 and 4
-RUN bundler install --clean --system --gemfile /Gemfile
+RUN bundle config set clean 'false'
+RUN bundle config set system 'true'
+RUN bundler install --gemfile /Gemfile
 
 #Don't like that is sets clean in global config
 RUN bundle config --delete clean
@@ -23,7 +25,7 @@ RUN bundle config --delete clean
 RUN apt-get update
 RUN apt-get install default-jre default-jdk -y
 
-RUN wget http://repo1.maven.org/maven2/org/codehaus/sonar/runner/sonar-runner-dist/2.4/sonar-runner-dist-2.4.zip && \
+RUN wget https://repo1.maven.org/maven2/org/codehaus/sonar/runner/sonar-runner-dist/2.4/sonar-runner-dist-2.4.zip && \
     unzip sonar-runner-dist-2.4.zip -d /opt/sonar-runner && \
     chmod +x /opt/sonar-runner/sonar-runner-2.4/bin/sonar-runner && \
     rm -rf sonar-runner-dist-2.4.zip

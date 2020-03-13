@@ -2,20 +2,24 @@ source ENV['GEM_SOURCE'] || "https://rubygems.org"
 
 group :test do
   gem "rake"
-  gem "puppet", '>= 5.3', '< 6.0'
+  gem "puppet", '>= 5.5', '< 6.0'
   gem "rspec"
   gem "rspec-puppet"
   gem "rspec-puppet-facts"
   gem "rspec-puppet-utils"
   gem "rspec-puppet-augeas"
-  gem "puppetlabs_spec_helper"
+  gem "puppetlabs_spec_helper", '>= 1.2.0'
   gem "jimdo-rspec-puppet-helpers"
   gem "metadata-json-lint"
   gem 'simplecov', '>= 0.11.0', require: false, group: :test
   gem 'simplecov-console'
   gem 'codecov'
   gem 'semantic_puppet'
+  gem 'facter', '>= 1.7.0'
+  gem 'puppet-strings'
+  gem 'nokogiri'
 
+  gem 'puppet-lint', '>= 1.0.0'
   gem "puppet-lint-absolute_classname-check"
   gem "puppet-lint-leading_zero-check"
   gem "puppet-lint-trailing_comma-check"
@@ -29,9 +33,11 @@ group :test do
   gem 'rspec_junit_formatter'
   gem 'git'
 
-  gem 'puppet-strings'
-
-  if RUBY_VERSION < '2.2.0'
+  # rspec must be v2 for ruby 1.8.7
+  if RUBY_VERSION >= '1.8.7' && RUBY_VERSION < '1.9'
+    gem 'rspec', '~> 2.0'
+    gem 'rake', '~> 10.0'
+  elsif RUBY_VERSION < '2.2.0'
     gem "rubocop", "< 0.60.0"
   else
     # rubocop:disable Bundler/DuplicatedGem
@@ -41,6 +47,8 @@ group :test do
 end
 
 group :development do
+  gem "better_errors"
+  gem "binding_of_caller"
   gem "puppet-blacksmith"
   gem "guard-rake" if RUBY_VERSION >= '2.2.5' # per dependency https://rubygems.org/gems/ruby_dep
   gem "listen", "~> 3.0.0"

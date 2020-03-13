@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'namespace.xml.erb' do
 
-  let(:scope) { PuppetlabsSpec::PuppetInternals.scope }
+  let(:scope) { Puppet::Parser::Scope }
 
   let(:harness) { TemplateHarness.new('templates/etc/storm/backend-server/namespace.xml.erb', scope) }
 
