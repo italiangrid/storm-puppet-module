@@ -99,7 +99,7 @@ describe 'storm::frontend', :type => :class do
             :group  => 'storm',
             :mode   => '0750',
             :ensure => 'directory',
-            :path   => '/etc/storm/storm-frontend',
+            :path   => '/etc/storm/frontend-server',
           )
         end
 
@@ -107,7 +107,7 @@ describe 'storm::frontend', :type => :class do
           title='fe::configure-fe-conf-file'
           is_expected.to contain_file(title).with( 
             :ensure => 'present',
-            :path   => '/etc/storm/storm-frontend/storm-frontend-server.conf',
+            :path   => '/etc/storm/frontend-server/storm-frontend-server.conf',
           )
           is_expected.to contain_file(title).with( :content => /fe.port=8444/ )
           is_expected.to contain_file(title).with( :content => /fe.threadpool.maxpending=200/ )

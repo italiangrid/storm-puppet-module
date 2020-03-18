@@ -11,7 +11,7 @@ class storm::frontend::params (
   $db_user = $storm::params::db_user
   $db_passwd = $storm::params::db_passwd
 
-  $config_dir = lookup('storm::frontend::config_dir', String, undef, '/etc/storm/storm-frontend')
+  $config_dir = lookup('storm::frontend::config_dir', String, undef, '/etc/storm/frontend-server')
   $hostcert_dir = lookup('storm::frontend::hostcert_dir', String, undef, '/etc/grid-security/storm')
 
   $port = lookup('storm::frontend::port', Integer, undef, 8444)
@@ -37,4 +37,8 @@ class storm::frontend::params (
   $security_enable_vomscheck = lookup('storm::frontend::security_enable_vomscheck', Boolean, undef, true)
 
   $log_debuglevel = lookup('storm::frontend::log_debuglevel', String, undef, 'INFO')
+
+  $gridmap_dir = lookup('storm::frontend::gridmap_dir', String, undef, '/etc/grid-security/gridmapdir')
+  $gridmap_file = lookup('storm::frontend::gridmap_file', String, undef, '/etc/grid-security/grid-mapfile')
+
 }
