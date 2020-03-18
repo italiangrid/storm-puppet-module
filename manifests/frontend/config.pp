@@ -12,6 +12,7 @@ class storm::frontend::config (
 
   $config_dir = $storm::frontend::config_dir,
   $hostcert_dir = $storm::frontend::hostcert_dir,
+  $log_dir = $storm::frontend::log_dir
 
   $port = $storm::frontend::port,
 
@@ -66,6 +67,16 @@ class storm::frontend::config (
     mode    => '0750',
     recurse => true,
     require => User[$user_name],
+  }
+
+  # log directory
+  file { 'dav::storm-log-dir':
+    ensure  => directory,
+    path    => $log_dir,
+    owner   => $user_name,
+    group   => $user_name,
+    mode    => '0755',
+    recurse => true,
   }
 
   file { 'fe::hostcert-dir':
