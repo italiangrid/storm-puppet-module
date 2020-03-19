@@ -12,7 +12,7 @@ class storm::frontend::config (
 
   $config_dir = $storm::frontend::config_dir,
   $hostcert_dir = $storm::frontend::hostcert_dir,
-  $log_dir = $storm::frontend::log_dir
+  $log_dir = $storm::frontend::log_dir,
 
   $port = $storm::frontend::port,
 
