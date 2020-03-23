@@ -25,6 +25,7 @@
 #
 # @param connections_max
 #   The number of max allowed connections to server.
+#
 class storm::gridftp (
 
   Integer $port = $storm::gridftp::params::port,

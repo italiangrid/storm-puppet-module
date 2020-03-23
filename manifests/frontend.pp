@@ -3,9 +3,11 @@
 #
 # @example Example of usage
 #    class { 'storm::frontend':
-#      db_host => 'storm-be.example',
-#      db_passwd => 'secret',
+#      be_xmlrpc_host  => 'storm-backend.example',
 #      be_xmlrpc_token => 'secret',
+#      db_host         => 'storm-backend.example',
+#      db_user         => 'storm',
+#      db_passwd       => 'secret',
 #    }
 #
 # @param user_name
@@ -22,6 +24,12 @@
 #
 # @param config_dir
 #   Configuration directory where storm-frontend-server.conf is stored. Default is /etc/storm/frontend-server.
+#
+# @param hostcert_dir
+#   Directory where x509 host certificate and key are stored. Default is /etc/grid-security/storm.
+#
+# @param log_dir
+#   Log directory where StoRM Frontend log files are stored. Default is /var/log/storm.
 #
 # @param port
 #   Frontend service port. Default is 8444.
@@ -74,6 +82,12 @@
 # @param log_debuglevel
 #   Logging level. Possible values are: ERROR, WARN, INFO, DEBUG, DEBUG2. Default is INFO
 #
+# @param gridmap_dir
+#   Gridmap directory path. Defailt value is: /etc/grid-security/gridmapdir
+#
+# @param gridmap_file
+#   Gridmap file path. Defailt value is: /etc/grid-security/grid-mapfile
+#
 class storm::frontend (
 
   String $user_name = $storm::frontend::params::user_name,
@@ -83,6 +97,9 @@ class storm::frontend (
   String $db_passwd = $storm::frontend::params::db_passwd,
 
   String $config_dir = $storm::frontend::params::config_dir,
+
+  String $hostcert_dir = $storm::frontend::params::hostcert_dir,
+  String $log_dir = $storm::frontend::params::log_dir,
 
   Integer $port = $storm::frontend::params::port,
   Integer $threadpool_threads_number = $storm::frontend::params::threadpool_threads_number,
@@ -107,6 +124,9 @@ class storm::frontend (
   Boolean $security_enable_vomscheck = $storm::frontend::params::security_enable_vomscheck,
 
   String $log_debuglevel = $storm::frontend::params::log_debuglevel,
+
+  String $gridmap_dir = $storm::frontend::params::gridmap_dir,
+  String $gridmap_file = $storm::frontend::params::gridmap_file,
 
 ) inherits storm::frontend::params {
 

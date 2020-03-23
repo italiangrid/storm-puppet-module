@@ -332,9 +332,11 @@ StoRM Frontend puppet module
 
 ```puppet
 class { 'storm::frontend':
-  db_host => 'storm-be.example',
-  db_passwd => 'secret',
+  be_xmlrpc_host  => 'storm-backend.example',
   be_xmlrpc_token => 'secret',
+  db_host         => 'storm-backend.example',
+  db_user         => 'storm',
+  db_passwd       => 'secret',
 }
 ```
 
@@ -381,6 +383,22 @@ Data type: `String`
 Configuration directory where storm-frontend-server.conf is stored. Default is /etc/storm/frontend-server.
 
 Default value: $storm::frontend::params::config_dir
+
+##### `hostcert_dir`
+
+Data type: `String`
+
+Directory where x509 host certificate and key are stored. Default is /etc/grid-security/storm.
+
+Default value: $storm::frontend::params::hostcert_dir
+
+##### `log_dir`
+
+Data type: `String`
+
+Log directory where StoRM Frontend log files are stored. Default is /var/log/storm.
+
+Default value: $storm::frontend::params::log_dir
 
 ##### `port`
 
@@ -518,6 +536,22 @@ Logging level. Possible values are: ERROR, WARN, INFO, DEBUG, DEBUG2. Default is
 
 Default value: $storm::frontend::params::log_debuglevel
 
+##### `gridmap_dir`
+
+Data type: `String`
+
+Gridmap directory path. Defailt value is: /etc/grid-security/gridmapdir
+
+Default value: $storm::frontend::params::gridmap_dir
+
+##### `gridmap_file`
+
+Data type: `String`
+
+Gridmap file path. Defailt value is: /etc/grid-security/grid-mapfile
+
+Default value: $storm::frontend::params::gridmap_file
+
 ### storm::frontend::config
 
 StoRM Frontend config class
@@ -534,6 +568,46 @@ Data type: `Any`
 
 Default value: $storm::frontend::user_name
 
+##### `user_uid`
+
+Data type: `Any`
+
+
+
+Default value: $storm::frontend::user_uid
+
+##### `user_gid`
+
+Data type: `Any`
+
+
+
+Default value: $storm::frontend::user_gid
+
+##### `db_host`
+
+Data type: `Any`
+
+
+
+Default value: $storm::frontend::db_host
+
+##### `db_user`
+
+Data type: `Any`
+
+
+
+Default value: $storm::frontend::db_user
+
+##### `db_passwd`
+
+Data type: `Any`
+
+
+
+Default value: $storm::frontend::db_passwd
+
 ##### `config_dir`
 
 Data type: `Any`
@@ -541,6 +615,174 @@ Data type: `Any`
 
 
 Default value: $storm::frontend::config_dir
+
+##### `hostcert_dir`
+
+Data type: `Any`
+
+
+
+Default value: $storm::frontend::hostcert_dir
+
+##### `log_dir`
+
+Data type: `Any`
+
+
+
+Default value: $storm::frontend::log_dir
+
+##### `port`
+
+Data type: `Any`
+
+
+
+Default value: $storm::frontend::port
+
+##### `threadpool_threads_number`
+
+Data type: `Any`
+
+
+
+Default value: $storm::frontend::threadpool_threads_number
+
+##### `threadpool_maxpending`
+
+Data type: `Any`
+
+
+
+Default value: $storm::frontend::threadpool_maxpending
+
+##### `gsoap_maxpending`
+
+Data type: `Any`
+
+
+
+Default value: $storm::frontend::gsoap_maxpending
+
+##### `be_xmlrpc_host`
+
+Data type: `Any`
+
+
+
+Default value: $storm::frontend::be_xmlrpc_host
+
+##### `be_xmlrpc_token`
+
+Data type: `Any`
+
+
+
+Default value: $storm::frontend::be_xmlrpc_token
+
+##### `be_xmlrpc_port`
+
+Data type: `Any`
+
+
+
+Default value: $storm::frontend::be_xmlrpc_port
+
+##### `be_xmlrpc_path`
+
+Data type: `Any`
+
+
+
+Default value: $storm::frontend::be_xmlrpc_path
+
+##### `be_recalltable_port`
+
+Data type: `Any`
+
+
+
+Default value: $storm::frontend::be_recalltable_port
+
+##### `check_user_blacklisting`
+
+Data type: `Any`
+
+
+
+Default value: $storm::frontend::check_user_blacklisting
+
+##### `argus_pepd_endpoint`
+
+Data type: `Any`
+
+
+
+Default value: $storm::frontend::argus_pepd_endpoint
+
+##### `monitoring_enabled`
+
+Data type: `Any`
+
+
+
+Default value: $storm::frontend::monitoring_enabled
+
+##### `monitoring_time_interval`
+
+Data type: `Any`
+
+
+
+Default value: $storm::frontend::monitoring_time_interval
+
+##### `monitoring_detailed`
+
+Data type: `Any`
+
+
+
+Default value: $storm::frontend::monitoring_detailed
+
+##### `security_enable_mapping`
+
+Data type: `Any`
+
+
+
+Default value: $storm::frontend::security_enable_mapping
+
+##### `security_enable_vomscheck`
+
+Data type: `Any`
+
+
+
+Default value: $storm::frontend::security_enable_vomscheck
+
+##### `log_debuglevel`
+
+Data type: `Any`
+
+
+
+Default value: $storm::frontend::log_debuglevel
+
+##### `gridmap_dir`
+
+Data type: `Any`
+
+
+
+Default value: $storm::frontend::gridmap_dir
+
+##### `gridmap_file`
+
+Data type: `Any`
+
+
+
+Default value: $storm::frontend::gridmap_file
 
 ### storm::frontend::install
 
@@ -1090,7 +1332,7 @@ Data type: `Any`
 
 
 
-Default value: $storm::webdav::log_dir
+Default value: "${storm::webdav::log_dir}/webdav"
 
 ##### `storage_areas`
 
