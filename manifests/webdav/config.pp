@@ -124,7 +124,7 @@ class storm::webdav::config (
     group   => $user_name,
     mode    => '0750',
     recurse => true,
-    require => File['dav::storm-webdav-config-dir']
+    require => File['dav::storm-webdav-config-dir'],
   }
 
   if $storage_areas {

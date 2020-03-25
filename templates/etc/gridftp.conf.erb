@@ -8,25 +8,25 @@
 # $GLOBUS_ERROR_VERBOSE 1
 # $GLOBUS_TCP_PORT_RANGE 50000,51000
 
-<% if scope['storm::gridftp::port'] %>
+<% if @port %>
 # Port on which a frontend will listen for client control channel connections, 
 # or on which a data node will listen for connections from a frontend. 
 # If not set a random port will be chosen and printed via the logging mechanism.
-port <%=scope['storm::gridftp::port']%>
+port <%=@port%>
 <% end %>
 
-<% if scope['storm::gridftp::connections_max'] %>
+<% if @connections_max %>
 # Maximum concurrent connections allowed. 
 # Only applies when running in daemon mode. Unlimited if not set.
-connections_max <%=scope['storm::gridftp::connections_max']%>
+connections_max <%=@connections_max%>
 <% end %>
 
-<% if scope['storm::gridftp::port_range'] %>
+<% if @port_range %>
 # Port range to use for incoming connections. The format is "startport,endport".
 # This, along with -data-interface, can be used to enable operation behind a 
 # firewall and/or when NAT is involved. This is the same as setting the environment 
 # variable GLOBUS_TCP_PORT_RANGE.
-port_range <%=scope['storm::gridftp::port_range']%>
+port_range <%=@port_range%>
 <% end %>
 
 # Base path to use when config and log path options are not full paths.

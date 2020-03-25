@@ -6,6 +6,8 @@ class storm::gridftp::config (
   $port_range = $storm::gridftp::port_range,
   $connections_max = $storm::gridftp::connections_max,
 
+  $redirect_lcmaps_log = $storm::gridftp::redirect_lcmaps_log,
+  $llgt_log_file = $storm::gridftp::llgt_log_file,
 ) {
 
   $conf_file='/etc/gridftp.conf'
@@ -15,6 +17,17 @@ class storm::gridftp::config (
     ensure  => present,
     path    => $conf_file,
     content => template($conf_template_file),
+    notify  => Service['storm-globus-gridftp'],
+    require => Package['storm-globus-gridftp-server'],
+  }
+
+  $sysconfig_file='/etc/sysconfig/storm-globus-gridftp'
+  $sysconfig_template_file='storm/etc/sysconfig/storm-globus-gridftp.erb'
+
+  file { 'gftp::configure-gridftp-sysconfig-file':
+    ensure  => present,
+    path    => $sysconfig_file,
+    content => template($sysconfig_template_file),
     notify  => Service['storm-globus-gridftp'],
     require => Package['storm-globus-gridftp-server'],
   }

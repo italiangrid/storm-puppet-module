@@ -26,11 +26,20 @@
 # @param connections_max
 #   The number of max allowed connections to server.
 #
+# @param redirect_lcmaps_log
+#   If true, redirect the LCMAPS log to the file specified by 'llgt_log_file'.
+#
+# @param llgt_log_file
+#   The LCMAPS log file used if 'redirect_lcmaps_log' is true.
+#
 class storm::gridftp (
 
   Integer $port = $storm::gridftp::params::port,
   String $port_range = $storm::gridftp::params::port_range,
   Integer $connections_max = $storm::gridftp::params::connections_max,
+
+  Boolean $redirect_lcmaps_log = $storm::gridftp::params::redirect_lcmaps_log,
+  String $llgt_log_file = $storm::gridftp::params::llgt_log_file,
 
 ) inherits storm::gridftp::params {
 
