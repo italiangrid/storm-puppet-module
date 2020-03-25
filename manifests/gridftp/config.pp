@@ -6,6 +6,9 @@ class storm::gridftp::config (
   $port_range = $storm::gridftp::port_range,
   $connections_max = $storm::gridftp::connections_max,
 
+  $log_single = $storm::gridftp::log_single,
+  $log_transfer = $storm::gridftp::log_transfer,
+
   $redirect_lcmaps_log = $storm::gridftp::redirect_lcmaps_log,
   $llgt_log_file = $storm::gridftp::llgt_log_file,
 ) {
