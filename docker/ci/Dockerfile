@@ -4,7 +4,7 @@ FROM ruby:2.6
 ADD Gemfile /
 
 RUN apt-get update
-RUN apt-get install -y ruby-full libaugeas-dev
+RUN apt-get install -y ruby-full libaugeas-dev vim
 
 # Configure to ever install a ruby gem docs then
 # Install the relevant gems and cleanup after
