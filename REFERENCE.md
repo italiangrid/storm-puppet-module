@@ -847,6 +847,38 @@ The number of max allowed connections to server.
 
 Default value: $storm::gridftp::params::connections_max
 
+##### `log_single`
+
+Data type: `String`
+
+Session log file path. Default is: /var/log/storm/storm-gridftp-session.log
+
+Default value: $storm::gridftp::params::log_single
+
+##### `log_transfer`
+
+Data type: `String`
+
+Transfer log file path. Default is: /var/log/storm/storm-globus-gridftp.log
+
+Default value: $storm::gridftp::params::log_transfer
+
+##### `redirect_lcmaps_log`
+
+Data type: `Boolean`
+
+If true, redirect the LCMAPS log to the file specified by 'llgt_log_file'.
+
+Default value: $storm::gridftp::params::redirect_lcmaps_log
+
+##### `llgt_log_file`
+
+Data type: `String`
+
+The LCMAPS log file used if 'redirect_lcmaps_log' is true.
+
+Default value: $storm::gridftp::params::llgt_log_file
+
 ### storm::gridftp::config
 
 StoRM GridFTP config class
@@ -878,6 +910,38 @@ Data type: `Any`
 
 
 Default value: $storm::gridftp::connections_max
+
+##### `log_single`
+
+Data type: `Any`
+
+
+
+Default value: $storm::gridftp::log_single
+
+##### `log_transfer`
+
+Data type: `Any`
+
+
+
+Default value: $storm::gridftp::log_transfer
+
+##### `redirect_lcmaps_log`
+
+Data type: `Any`
+
+
+
+Default value: $storm::gridftp::redirect_lcmaps_log
+
+##### `llgt_log_file`
+
+Data type: `Any`
+
+
+
+Default value: $storm::gridftp::llgt_log_file
 
 ### storm::gridftp::install
 
