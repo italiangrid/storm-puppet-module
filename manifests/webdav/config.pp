@@ -29,7 +29,9 @@ class storm::webdav::config (
   $tpc_max_connections = $storm::webdav::tpc_max_connections,
   $tpc_verify_checksum = $storm::webdav::tpc_verify_checksum,
 
-  $jvm_opts = $storm::webdav::jvm_opts,
+  $jvm_xms = $storm::webdav::jvm_xms,
+  $jvm_xmx = $storm::webdav::jvm_xmx,
+  $jvm_tmpdir = $storm::webdav::jvm_tmpdir,
 
   $authz_server_enable = $storm::webdav::authz_server_enable,
   $authz_server_issuer = $storm::webdav::authz_server_issuer,
@@ -67,6 +69,15 @@ class storm::webdav::config (
   file { 'dav::hostcert-dir':
     ensure  => directory,
     path    => $hostcert_dir,
+    owner   => 'storm',
+    group   => 'storm',
+    mode    => '0755',
+    recurse => true,
+  }
+
+  file { 'dav::jvm-java-tmpdir':
+    ensure  => directory,
+    path    => $jvm_tmpdir,
     owner   => 'storm',
     group   => 'storm',
     mode    => '0755',
@@ -161,7 +172,7 @@ class storm::webdav::config (
     path    => $sysconfig_file,
     content => template($sysconfig_template_file),
     notify  => Service['storm-webdav'],
-    require => Package['storm-webdav'],
+    require => [File['dav::jvm-java-tmpdir'], Package['storm-webdav']],
   }
 
   case $::osfamily {
@@ -177,7 +188,7 @@ class storm::webdav::config (
             path    => $unit_file,
             content => template($unit_template_file),
             notify  => Service['storm-webdav'],
-            require => Package['storm-webdav'],
+            require => [File['dav::configure-sysconfig-file'], Package['storm-webdav']],
           }
         }
         default: {

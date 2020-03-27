@@ -104,7 +104,11 @@
 #
 # @param tpc_verify_checksum
 #
-# @param jvm_opts
+# @param jvm_xms
+#
+# @param jvm_xmx
+#
+# @param jvm_tmpdir
 #
 # @param authz_server_enable
 #
@@ -157,7 +161,9 @@ class storm::webdav (
   Integer $tpc_max_connections = $storm::webdav::params::tpc_max_connections,
   Boolean $tpc_verify_checksum = $storm::webdav::params::tpc_verify_checksum,
 
-  String $jvm_opts = $storm::webdav::params::jvm_opts,
+  String $jvm_xms = $storm::webdav::params::jvm_xms,
+  String $jvm_xmx = $storm::webdav::params::jvm_xmx,
+  String $jvm_tmpdir = $storm::webdav::params::jvm_tmpdir,
 
   Boolean $authz_server_enable = $storm::webdav::params::authz_server_enable,
   String $authz_server_issuer = $storm::webdav::params::authz_server_issuer,
