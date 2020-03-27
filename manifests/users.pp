@@ -51,20 +51,6 @@ class storm::users (
 
 ) {
 
-  file { $edguser_home:
-    ensure => 'directory',
-    owner  => 'edguser',
-    group  => 'edguser',
-    mode   => '0700',
-  }
-
-  file { $storm_home:
-    ensure => 'directory',
-    owner  => 'storm',
-    group  => 'storm',
-    mode   => '0700',
-  }
-
   accounts::user { 'edguser':
     ensure     => 'present',
     uid        => $edguser_uid,
@@ -73,7 +59,6 @@ class storm::users (
     home       => $edguser_home,
     comment    => 'EDG user',
     membership => 'inclusive',
-    require    => File[$edguser_home],
   }
 
   accounts::user { 'storm':
@@ -85,7 +70,7 @@ class storm::users (
     home       => $storm_home,
     comment    => 'StoRM user',
     membership => 'inclusive',
-    require    => [File[$storm_home], Accounts::User['edguser']],
+    require    => [Accounts::User['edguser']],
   }
 
 }
