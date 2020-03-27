@@ -14,9 +14,6 @@ describe 'storm::webdav', :type => :class do
 
         let(:params) do 
           {
-            'user_name' => 'test',
-            'user_uid' => 1200,
-            'user_gid' => 1200,
             'storage_areas' => [
               {
                 'name' => 'test.vo',
@@ -74,23 +71,11 @@ describe 'storm::webdav', :type => :class do
 
         it { is_expected.to compile.with_all_deps }
 
-        it "check storm-webdav service user" do
-          is_expected.to contain_user('test').with( 
-            :ensure => 'present',
-            :uid => 1200,
-            :gid => 'test',
-          )
-          is_expected.to contain_group('test').with( 
-            :ensure => 'present',
-            :gid => 1200,
-          )
-        end
-
         it "check storm log directory" do
           is_expected.to contain_file('dav::storm-log-dir').with(
             :path => '/var/log/storm/webdav',
-            :owner => 'test',
-            :group => 'test',
+            :owner => 'storm',
+            :group => 'storm',
             :ensure => 'directory',
             :mode => '0755',
           )
@@ -102,20 +87,20 @@ describe 'storm::webdav', :type => :class do
           is_expected.to contain_file('dav::hostcert-dir').with( 
             :ensure => 'directory',
             :path   => '/etc/grid-security/storm-webdav',
-            :owner  => 'test',
-            :group  => 'test',
+            :owner  => 'storm',
+            :group  => 'storm',
             :mode   => '0755',
           )
           is_expected.to contain_file('/etc/grid-security/storm-webdav/hostcert.pem').with( 
             :ensure => 'present',
-            :owner  => 'test',
-            :group  => 'test',
+            :owner  => 'storm',
+            :group  => 'storm',
             :mode   => '0644',
           )
           is_expected.to contain_file('/etc/grid-security/storm-webdav/hostkey.pem').with( 
             :ensure => 'present',
-            :owner  => 'test',
-            :group  => 'test',
+            :owner  => 'storm',
+            :group  => 'storm',
             :mode   => '0400',
           )
         end
@@ -123,7 +108,7 @@ describe 'storm::webdav', :type => :class do
         it "check storm webdav configuration directory" do
           is_expected.to contain_file('dav::storm-webdav-config-dir').with( 
             :owner  => 'root',
-            :group  => 'test',
+            :group  => 'storm',
             :mode   => '0750',
             :ensure => 'directory',
             :path   => '/etc/storm/webdav',
@@ -133,7 +118,7 @@ describe 'storm::webdav', :type => :class do
         it "check storm webdav application configuration directory" do
           is_expected.to contain_file('dav::storm-webdav-app-config-dir').with( 
             :owner  => 'root',
-            :group  => 'test',
+            :group  => 'storm',
             :mode   => '0750',
             :ensure => 'directory',
             :path   => '/etc/storm/webdav/config',
@@ -143,7 +128,7 @@ describe 'storm::webdav', :type => :class do
         it "check storage area configuration directory" do
           is_expected.to contain_file('dav::storm-webdav-sa-config-dir').with( 
             :owner  => 'root',
-            :group  => 'test',
+            :group  => 'storm',
             :mode   => '0750',
             :ensure => 'directory',
             :path   => '/etc/storm/webdav/sa.d',
@@ -233,7 +218,7 @@ describe 'storm::webdav', :type => :class do
             :path   => '/etc/sysconfig/storm-webdav',  
           )
           is_expected.to contain_file(sysconfig_file).that_notifies(['Service[storm-webdav]'])
-          is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_USER=test/ )
+          is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_USER=storm/ )
           is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_HOSTNAME_0=storm-w1.example/ )
           is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_HOSTNAME_1=storm-w2.example/ )
           is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_HTTP_PORT=8080/ )
@@ -278,7 +263,7 @@ describe 'storm::webdav', :type => :class do
               :path   => '/etc/systemd/system/storm-webdav.service',
             )
             is_expected.to contain_file(unit_file).that_notifies(['Service[storm-webdav]'])
-            is_expected.to contain_file(unit_file).with( :content => /User=test/ )
+            is_expected.to contain_file(unit_file).with( :content => /User=storm/ )
             is_expected.to contain_file(unit_file).with( :content => /EnvironmentFile=-\/etc\/sysconfig\/storm-webdav/ )
             is_expected.to contain_file(unit_file).with( :content => /WorkingDirectory=\/etc\/storm\/webdav/ )
           else
@@ -300,18 +285,6 @@ describe 'storm::webdav', :type => :class do
             'debug_port' => 1234,
             'debug_suspend' => false,
           }
-        end
-
-        it "check storm-webdav service is default user" do
-          is_expected.to contain_user('storm').with( 
-            :ensure => 'present',
-            :uid => 1100,
-            :gid => 'storm',
-          )
-          is_expected.to contain_group('storm').with( 
-            :ensure => 'present',
-            :gid => 1100,
-          )
         end
 
         it "check sysconfig file" do

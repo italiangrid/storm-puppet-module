@@ -63,15 +63,6 @@
 #      hostnames => ['localhost', 'alias.for.localhost'],
 #    }
 #
-# @param user_name
-#   Unix user and group name used to run StoRM services.
-#
-# @param user_uid
-#   A custom user id for `user_name`
-#
-# @param user_gid
-#   A custom group id for `user_name`
-#
 # @param storage_root_dir
 #   Storage areas root directory path.
 #
@@ -138,10 +129,6 @@
 # @param debug_suspend
 #
 class storm::webdav (
-
-  String $user_name = $storm::webdav::params::user_name,
-  Integer $user_uid = $storm::webdav::params::user_uid,
-  Integer $user_gid = $storm::webdav::params::user_gid,
 
   String $storage_root_dir = $storm::webdav::params::storage_root_dir,
   String $log_dir = $storm::webdav::params::log_dir,

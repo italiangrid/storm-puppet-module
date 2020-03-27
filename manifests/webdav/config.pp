@@ -2,10 +2,6 @@
 #
 class storm::webdav::config (
 
-  $user_name = $storm::webdav::user_name,
-  $user_uid = $storm::webdav::user_uid,
-  $user_gid = $storm::webdav::user_gid,
-
   $storage_root_dir = $storm::webdav::storage_root_dir,
   $log_dir = "${storm::webdav::log_dir}/webdav",
 
@@ -51,32 +47,19 @@ class storm::webdav::config (
 
 ) {
 
-  # storm user's group
-  group { $user_name:
-    ensure => present,
-    gid    => $user_gid,
-  }
-
-  # storm user
-  user { $user_name:
-    ensure => present,
-    uid    => $user_uid,
-    gid    => $user_name,
-  }
-
   # storage area root path
   storm::storage_root_dir { 'dav::storage-root-dir':
     path  => $storage_root_dir,
-    owner => $user_name,
-    group => $user_name,
+    owner => 'storm',
+    group => 'storm',
   }
 
   # log directory
   file { 'dav::storm-log-dir':
     ensure  => directory,
     path    => $log_dir,
-    owner   => $user_name,
-    group   => $user_name,
+    owner   => 'storm',
+    group   => 'storm',
     mode    => '0755',
     recurse => true,
   }
@@ -84,8 +67,8 @@ class storm::webdav::config (
   file { 'dav::hostcert-dir':
     ensure  => directory,
     path    => $hostcert_dir,
-    owner   => $user_name,
-    group   => $user_name,
+    owner   => 'storm',
+    group   => 'storm',
     mode    => '0755',
     recurse => true,
   }
@@ -93,8 +76,8 @@ class storm::webdav::config (
   storm::service_hostcert { 'dav::host-credentials':
     hostcert => "${hostcert_dir}/hostcert.pem",
     hostkey  => "${hostcert_dir}/hostkey.pem",
-    owner    => $user_name,
-    group    => $user_name,
+    owner    => 'storm',
+    group    => 'storm',
     require  => File['dav::hostcert-dir'],
   }
 
@@ -102,7 +85,7 @@ class storm::webdav::config (
     ensure  => directory,
     path    => $config_dir,
     owner   => 'root',
-    group   => $user_name,
+    group   => 'storm',
     mode    => '0750',
     recurse => true,
   }
@@ -111,7 +94,7 @@ class storm::webdav::config (
     ensure  => directory,
     path    => "${config_dir}/config",
     owner   => 'root',
-    group   => $user_name,
+    group   => 'storm',
     mode    => '0750',
     recurse => true,
     require => File['dav::storm-webdav-config-dir'],
@@ -121,7 +104,7 @@ class storm::webdav::config (
     ensure  => directory,
     path    => "${config_dir}/sa.d",
     owner   => 'root',
-    group   => $user_name,
+    group   => 'storm',
     mode    => '0750',
     recurse => true,
     require => File['dav::storm-webdav-config-dir'],
@@ -145,15 +128,15 @@ class storm::webdav::config (
         ensure  => present,
         path    => "${config_dir}/sa.d/${name}.properties",
         content => template($sa_properties_template_file),
-        owner   => $user_name,
+        owner   => 'storm',
         require => [File['dav::storm-webdav-sa-config-dir'], Package['storm-webdav']],
         notify  => Service['storm-webdav'],
       }
       # check root path
       storm::storage_root_dir { "dav::check-${name}-sa-root-dir":
         path  => $root_path,
-        owner => $user_name,
-        group => $user_name,
+        owner => 'storm',
+        group => 'storm',
       }
     }
   }
