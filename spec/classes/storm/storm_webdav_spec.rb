@@ -26,7 +26,8 @@ describe 'storm::webdav', :type => :class do
                 'authenticated_read_enabled' => true,
                 'anonymous_read_enabled' => false,
                 'vo_map_enabled' => true,
-                'vo_map_grants_write_access' => false,
+                'vo_map_grants_write_permission' => false,
+                'orgs_grant_write_permission' => true,
               },
               {
                 'name' => 'atlas',
@@ -159,10 +160,9 @@ describe 'storm::webdav', :type => :class do
 
         it "check storage area properties files" do
           # test.vo properties
-          testvo_props='dav::create-test.vo-sa-properties-file'
+          testvo_props='/etc/storm/webdav/sa.d/test.vo.properties'
           is_expected.to contain_file(testvo_props).with( 
             :ensure => 'present',
-            :path   => '/etc/storm/webdav/sa.d/test.vo.properties',
           )
           is_expected.to contain_file(testvo_props).with( :content => /name=test.vo/ )
           is_expected.to contain_file(testvo_props).with( :content => /rootPath=\/storage\/test.vo/ )
@@ -172,7 +172,8 @@ describe 'storm::webdav', :type => :class do
           is_expected.to contain_file(testvo_props).with( :content => /authenticatedReadEnabled=true/ )
           is_expected.to contain_file(testvo_props).with( :content => /anonymousReadEnabled=false/ )
           is_expected.to contain_file(testvo_props).with( :content => /voMapEnabled=true/ )
-          is_expected.to contain_file(testvo_props).with( :content => /voMapGrantsWriteAccess=false/ )
+          is_expected.to contain_file(testvo_props).with( :content => /voMapGrantsWritePermission=false/ )
+          is_expected.to contain_file(testvo_props).with( :content => /orgsGrantWritePermission=true/ )
           is_expected.to contain_file(testvo_props).that_notifies(['Service[storm-webdav]'])
           # check test.vo root dir
           is_expected.to contain_storm__storage_root_dir('dav::check-test.vo-sa-root-dir')
@@ -180,10 +181,9 @@ describe 'storm::webdav', :type => :class do
           is_expected.to contain_exec('dav::check-test.vo-sa-root-dir_set_ownership_on_root_directory')
           is_expected.to contain_exec('dav::check-test.vo-sa-root-dir_set_permissions_on_root_directory')
           # atlas properties
-          atlas_props='dav::create-atlas-sa-properties-file'
+          atlas_props='/etc/storm/webdav/sa.d/atlas.properties'
           is_expected.to contain_file(atlas_props).with(
             :ensure => 'present',
-            :path   => '/etc/storm/webdav/sa.d/atlas.properties',
           )
           is_expected.to contain_file(atlas_props).with( :content => /name=atlas/ )
           is_expected.to contain_file(atlas_props).with( :content => /rootPath=\/storage\/atlas/ )
@@ -193,7 +193,8 @@ describe 'storm::webdav', :type => :class do
           is_expected.to contain_file(atlas_props).with( :content => /authenticatedReadEnabled=false/ )
           is_expected.to contain_file(atlas_props).with( :content => /anonymousReadEnabled=true/ )
           is_expected.to contain_file(atlas_props).with( :content => /voMapEnabled=false/ )
-          is_expected.not_to contain_file(atlas_props).with( :content => /voMapGrantsWriteAccess=/ )
+          is_expected.not_to contain_file(atlas_props).with( :content => /voMapGrantsWritePermission=/ )
+          is_expected.not_to contain_file(atlas_props).with( :content => /orgsGrantWritePermission=/ )
           is_expected.to contain_file(atlas_props).that_notifies(['Service[storm-webdav]'])
           # check atlas root dir
           is_expected.to contain_storm__storage_root_dir('dav::check-atlas-sa-root-dir')

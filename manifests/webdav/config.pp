@@ -139,11 +139,11 @@ class storm::webdav::config (
       $authenticated_read_enabled = $sa[authenticated_read_enabled]
       $anonymous_read_enabled = $sa[anonymous_read_enabled]
       $vo_map_enabled = $sa[vo_map_enabled]
-      $vo_map_grants_write_access = $sa[vo_map_grants_write_access]
+      $vo_map_grants_write_permission = $sa[vo_map_grants_write_permission]
+      $orgs_grant_write_permission = $sa[orgs_grant_write_permission]
       # use template
-      file { "dav::create-${name}-sa-properties-file":
+      file { "${config_dir}/sa.d/${name}.properties":
         ensure  => present,
-        path    => "${config_dir}/sa.d/${name}.properties",
         content => template($sa_properties_template_file),
         owner   => $user_name,
         require => [File['dav::storm-webdav-sa-config-dir'], Package['storm-webdav']],
