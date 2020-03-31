@@ -10,9 +10,6 @@
 #      db_passwd       => 'secret',
 #    }
 #
-# @param user_name
-#   Service user. Default value: storm.
-#
 # @param db_host
 #   Host for database connection. Default is localhost.
 #
@@ -21,15 +18,6 @@
 #
 # @param db_passwd
 #   Password for database connection. Default is password.
-#
-# @param config_dir
-#   Configuration directory where storm-frontend-server.conf is stored. Default is /etc/storm/frontend-server.
-#
-# @param hostcert_dir
-#   Directory where x509 host certificate and key are stored. Default is /etc/grid-security/storm.
-#
-# @param log_dir
-#   Log directory where StoRM Frontend log files are stored. Default is /var/log/storm.
 #
 # @param port
 #   Frontend service port. Default is 8444.
@@ -90,16 +78,9 @@
 #
 class storm::frontend (
 
-  String $user_name = $storm::frontend::params::user_name,
-
   String $db_host = $storm::frontend::params::db_host,
   String $db_user = $storm::frontend::params::db_user,
   String $db_passwd = $storm::frontend::params::db_passwd,
-
-  String $config_dir = $storm::frontend::params::config_dir,
-
-  String $hostcert_dir = $storm::frontend::params::hostcert_dir,
-  String $log_dir = $storm::frontend::params::log_dir,
 
   Integer $port = $storm::frontend::params::port,
   Integer $threadpool_threads_number = $storm::frontend::params::threadpool_threads_number,

@@ -21,8 +21,6 @@ describe 'storm::frontend', :type => :class do
             'threadpool_maxpending'     => 300,
             'threadpool_threads_number' => 60,
             'gsoap_maxpending'          => 2000,
-            'config_dir'                => '/etc/storm/fe/config',
-            'user_name'                 => 'test',
             'log_debuglevel'            => 'DEBUG',
             'security_enable_mapping'   => true,
             'security_enable_vomscheck' => false,
@@ -42,21 +40,10 @@ describe 'storm::frontend', :type => :class do
           }
         end
 
-        it "check storm frontend configuration directory" do
-          is_expected.to contain_file('fe::storm-fe-config-dir').with( 
-            :owner  => 'test',
-            :group  => 'test',
-            :mode   => '0750',
-            :ensure => 'directory',
-            :path   => '/etc/storm/fe/config',
-          )
-        end
-
         it "check frontend conf file content" do
-          title='fe::configure-fe-conf-file'
+          title='/etc/storm/frontend-server/storm-frontend-server.conf'
           is_expected.to contain_file(title).with( 
             :ensure => 'present',
-            :path   => '/etc/storm/fe/config/storm-frontend-server.conf',
           )
           is_expected.to contain_file(title).with( :content => /fe.port=8445/ )
           is_expected.to contain_file(title).with( :content => /fe.threadpool.maxpending=300/ )
@@ -81,33 +68,21 @@ describe 'storm::frontend', :type => :class do
         end
 
         it "check sysconfig file" do
-          sysconfig_file='fe::configure-sysconfig-file'
+          sysconfig_file='/etc/sysconfig/storm-frontend-server'
           is_expected.to contain_file(sysconfig_file).with(
             :ensure => 'present',
-            :path   => '/etc/sysconfig/storm-frontend-server',  
           )
           is_expected.to contain_file(sysconfig_file).that_notifies(['Service[storm-frontend-server]'])
-          is_expected.to contain_file(sysconfig_file).with( :content => /STORM_FE_USER=test/ )
+          is_expected.to contain_file(sysconfig_file).with( :content => /STORM_FE_USER=storm/ )
         end
       end
 
       context 'Use default frontend params' do
 
-        it "check storm frontend configuration directory" do
-          is_expected.to contain_file('fe::storm-fe-config-dir').with( 
-            :owner  => 'storm',
-            :group  => 'storm',
-            :mode   => '0750',
-            :ensure => 'directory',
-            :path   => '/etc/storm/frontend-server',
-          )
-        end
-
         it "check frontend conf file content" do
-          title='fe::configure-fe-conf-file'
+          title='/etc/storm/frontend-server/storm-frontend-server.conf'
           is_expected.to contain_file(title).with( 
             :ensure => 'present',
-            :path   => '/etc/storm/frontend-server/storm-frontend-server.conf',
           )
           is_expected.to contain_file(title).with( :content => /fe.port=8444/ )
           is_expected.to contain_file(title).with( :content => /fe.threadpool.maxpending=200/ )
@@ -133,10 +108,9 @@ describe 'storm::frontend', :type => :class do
         end
 
         it "check sysconfig file" do
-          sysconfig_file='fe::configure-sysconfig-file'
+          sysconfig_file='/etc/sysconfig/storm-frontend-server'
           is_expected.to contain_file(sysconfig_file).with(
             :ensure => 'present',
-            :path   => '/etc/sysconfig/storm-frontend-server',  
           )
           is_expected.to contain_file(sysconfig_file).that_notifies(['Service[storm-frontend-server]'])
           is_expected.to contain_file(sysconfig_file).with( :content => /STORM_FE_USER=storm/ )

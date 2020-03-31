@@ -6,7 +6,6 @@ class storm::gridftp::install (
 
   # Based on storm-globus-gridftp-mp required rpms
   $required = [
-    'umd-release',
     'fetch-crl',
     'edg-mkgridmap',
     'lcas',

@@ -16,7 +16,6 @@ describe 'storm::gridftp::install' do
 
       it 'check all dependencies are installed' do
         dependencies = [
-          'umd-release',
           'fetch-crl',
           'edg-mkgridmap',
           'lcas',

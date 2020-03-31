@@ -4,12 +4,9 @@ class storm::webdav::params (
 ) inherits storm::params {
 
   $storage_root_dir = $storm::params::storage_root_dir
-  $log_dir = $storm::params::log_dir
 
   $storage_areas = lookup('storm::webdav::storage_areas', Array[Storm::Webdav::StorageArea], undef, [])
 
-  $config_dir = lookup('storm::webdav::config_dir', String, undef, '/etc/storm/webdav')
-  $hostcert_dir = lookup('storm::webdav::hostcert_dir', String, undef, '/etc/grid-security/storm-webdav')
   $oauth_issuers = lookup('storm::webdav::oauth_issuers', Array[Storm::Webdav::OAuthIssuer], undef, [])
   $hostnames = lookup('storm::webdav::hostnames', Array[String], undef, [])
 
@@ -30,9 +27,7 @@ class storm::webdav::params (
   $tpc_max_connections = lookup('storm::webdav::tpc_max_connections', Integer, undef, 50)
   $tpc_verify_checksum = lookup('storm::webdav::tpc_verify_checksum', Boolean, undef, false)
 
-  $jvm_xms = lookup('storm::webdav::jvm_xms', String, undef, '256m')
-  $jvm_xmx = lookup('storm::webdav::jvm_xmx', String, undef, '512m')
-  $jvm_tmpdir = lookup('storm::webdav::jvm_tmpdir', String, undef, '/var/lib/storm-webdav/work')
+  $jvm_opts = lookup('storm::webdav::jvm_opts', String, undef, '-Xms256m -Xmx512m')
 
   $authz_server_enable = lookup('storm::webdav::authz_server_enable', Boolean, undef, false)
   $authz_server_issuer = lookup('storm::webdav::authz_server_issuer', String, undef, 'https://storm.example:8443')

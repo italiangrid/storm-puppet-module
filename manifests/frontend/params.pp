@@ -3,17 +3,9 @@
 class storm::frontend::params (
 ) inherits storm::params {
 
-  $user_name = $storm::params::user_name
-  $user_uid = $storm::params::user_uid
-  $user_gid = $storm::params::user_gid
-
   $db_host = $storm::params::db_host
   $db_user = $storm::params::db_user
   $db_passwd = $storm::params::db_passwd
-
-  $config_dir = lookup('storm::frontend::config_dir', String, undef, '/etc/storm/frontend-server')
-  $hostcert_dir = lookup('storm::frontend::hostcert_dir', String, undef, '/etc/grid-security/storm')
-  $log_dir = $storm::params::log_dir
 
   $port = lookup('storm::frontend::port', Integer, undef, 8444)
   $threadpool_threads_number = lookup('storm::frontend::threadpool_threads_number', Integer, undef, 50)

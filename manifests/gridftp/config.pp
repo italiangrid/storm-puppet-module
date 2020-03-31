@@ -16,9 +16,8 @@ class storm::gridftp::config (
   $conf_file='/etc/gridftp.conf'
   $conf_template_file='storm/etc/gridftp.conf.erb'
 
-  file { 'gftp::configure-gridftp-conf-file':
+  file { $conf_file:
     ensure  => present,
-    path    => $conf_file,
     content => template($conf_template_file),
     notify  => Service['storm-globus-gridftp'],
     require => Package['storm-globus-gridftp-server'],
@@ -27,7 +26,7 @@ class storm::gridftp::config (
   $sysconfig_file='/etc/sysconfig/storm-globus-gridftp'
   $sysconfig_template_file='storm/etc/sysconfig/storm-globus-gridftp.erb'
 
-  file { 'gftp::configure-gridftp-sysconfig-file':
+  file { $sysconfig_file:
     ensure  => present,
     path    => $sysconfig_file,
     content => template($sysconfig_template_file),

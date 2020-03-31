@@ -66,15 +66,8 @@
 # @param storage_root_dir
 #   Storage areas root directory path.
 #
-# @param log_dir
-#
 # @param storage_areas
 #   List of storage area's configuration.
-#
-# @param config_dir
-#   StoRM WebDAV service configuration directory
-#
-# @param hostcert_dir
 #
 # @param oauth_issuers
 #
@@ -83,8 +76,6 @@
 # @param http_port
 #
 # @param https_port
-#
-# @param trust_anchors_dir
 #
 # @param trust_anchors_refresh_interval
 #
@@ -104,11 +95,7 @@
 #
 # @param tpc_verify_checksum
 #
-# @param jvm_xms
-#
-# @param jvm_xmx
-#
-# @param jvm_tmpdir
+# @param jvm_opts
 #
 # @param authz_server_enable
 #
@@ -135,19 +122,15 @@
 class storm::webdav (
 
   String $storage_root_dir = $storm::webdav::params::storage_root_dir,
-  String $log_dir = $storm::webdav::params::log_dir,
 
   Array[Storm::Webdav::StorageArea] $storage_areas = $storm::webdav::params::storage_areas,
 
-  String $config_dir = $storm::webdav::params::config_dir,
-  String $hostcert_dir = $storm::webdav::params::hostcert_dir,
   Array[Storm::Webdav::OAuthIssuer] $oauth_issuers = $storm::webdav::params::oauth_issuers,
   Array[String] $hostnames = $storm::webdav::params::hostnames,
 
   Integer $http_port = $storm::webdav::params::http_port,
   Integer $https_port = $storm::webdav::params::https_port,
 
-  String $trust_anchors_dir = $storm::webdav::params::trust_anchors_dir,
   Integer $trust_anchors_refresh_interval = $storm::webdav::params::trust_anchors_refresh_interval,
 
   Integer $max_concurrent_connections = $storm::webdav::params::max_concurrent_connections,
@@ -161,9 +144,7 @@ class storm::webdav (
   Integer $tpc_max_connections = $storm::webdav::params::tpc_max_connections,
   Boolean $tpc_verify_checksum = $storm::webdav::params::tpc_verify_checksum,
 
-  String $jvm_xms = $storm::webdav::params::jvm_xms,
-  String $jvm_xmx = $storm::webdav::params::jvm_xmx,
-  String $jvm_tmpdir = $storm::webdav::params::jvm_tmpdir,
+  String $jvm_opts = $storm::webdav::params::jvm_opts,
 
   Boolean $authz_server_enable = $storm::webdav::params::authz_server_enable,
   String $authz_server_issuer = $storm::webdav::params::authz_server_issuer,
