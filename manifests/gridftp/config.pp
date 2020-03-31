@@ -20,7 +20,7 @@ class storm::gridftp::config (
     ensure  => present,
     content => template($conf_template_file),
     notify  => Service['storm-globus-gridftp'],
-    require => Package['storm-globus-gridftp-server'],
+    require => Package['storm-globus-gridftp-mp'],
   }
 
   $sysconfig_file='/etc/sysconfig/storm-globus-gridftp'
@@ -31,6 +31,6 @@ class storm::gridftp::config (
     path    => $sysconfig_file,
     content => template($sysconfig_template_file),
     notify  => Service['storm-globus-gridftp'],
-    require => Package['storm-globus-gridftp-server'],
+    require => Package['storm-globus-gridftp-mp'],
   }
 }

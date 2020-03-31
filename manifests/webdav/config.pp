@@ -48,7 +48,7 @@ class storm::webdav::config (
     path  => $storage_root_dir,
   }
 
-  file { '/var/lib/storm-webdav/work ':
+  file { '/var/lib/storm-webdav/work':
     ensure  => directory,
     owner   => 'storm',
     group   => 'storm',
@@ -104,6 +104,7 @@ class storm::webdav::config (
         owner   => 'root',
         group   => 'storm',
         notify  => Service['storm-webdav'],
+        require => Package['storm-webdav'],
       }
       # check root path
       storm::common_directory { "DAV_${root_path}":
@@ -122,6 +123,7 @@ class storm::webdav::config (
     group   => 'storm',
     mode    => '0644',
     notify  => Service['storm-webdav'],
+    require => Package['storm-webdav'],
   }
 
   $sysconfig_file='/etc/sysconfig/storm-webdav'
@@ -130,5 +132,6 @@ class storm::webdav::config (
     ensure  => present,
     content => template($sysconfig_template_file),
     notify  => Service['storm-webdav'],
+    require => Package['storm-webdav'],
   }
 }

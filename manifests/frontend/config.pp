@@ -72,6 +72,7 @@ class storm::frontend::config (
     group   => 'storm',
     content => template($conf_template_file),
     notify  => Service['storm-frontend-server'],
+    require => Package['storm-frontend-mp'],
   }
 
   $ld_library_path=$::os['architecture'] ? {
@@ -85,5 +86,6 @@ class storm::frontend::config (
     ensure  => present,
     content => template($sysconfig_template_file),
     notify  => Service['storm-frontend-server'],
+    require => Package['storm-frontend-mp'],
   }
 }

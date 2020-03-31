@@ -76,7 +76,6 @@ describe 'storm::webdav', :type => :class do
 
           is_expected.to contain_file('/etc/grid-security/storm-webdav').with( 
             :ensure => 'directory',
-            :path   => '/etc/grid-security/storm-webdav',
             :owner  => 'storm',
             :group  => 'storm',
             :mode   => '0755',
@@ -92,6 +91,15 @@ describe 'storm::webdav', :type => :class do
             :owner  => 'storm',
             :group  => 'storm',
             :mode   => '0400',
+          )
+        end
+
+        it "check java.io.tmpdir exists" do
+          is_expected.to contain_file('/var/lib/storm-webdav/work').with(
+            :ensure => 'directory',
+            :owner  => 'storm',
+            :group  => 'storm',
+            :mode   => '0755',
           )
         end
 
