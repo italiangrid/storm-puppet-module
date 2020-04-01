@@ -5,6 +5,6 @@ class storm::gridftp::service {
   service { 'storm-globus-gridftp':
     ensure  => running,
     enable  => true,
-    require => Package[storm-globus-gridftp-server],
+    require => Package['storm-globus-gridftp-mp'],
   }
 }

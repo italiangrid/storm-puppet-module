@@ -14,6 +14,9 @@ anonymousReadEnabled=<%= @anonymous_read_enabled%>
 <% if defined?(@vo_map_enabled) -%>
 voMapEnabled=<%= @vo_map_enabled %>
 <% end -%>
-<% if defined?(@vo_map_grants_write_access) -%>
-voMapGrantsWriteAccess=<%= @vo_map_grants_write_access %>
+<% if defined?(@vo_map_grants_write_permission) -%>
+voMapGrantsWritePermission=<%= @vo_map_grants_write_permission %>
+<% end -%>
+<% if defined?(@orgs_grant_write_permission) -%>
+orgsGrantWritePermission=<%= @orgs_grant_write_permission %>
 <% end -%>

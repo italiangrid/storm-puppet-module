@@ -63,27 +63,11 @@
 #      hostnames => ['localhost', 'alias.for.localhost'],
 #    }
 #
-# @param user_name
-#   Unix user and group name used to run StoRM services.
-#
-# @param user_uid
-#   A custom user id for `user_name`
-#
-# @param user_gid
-#   A custom group id for `user_name`
-#
 # @param storage_root_dir
 #   Storage areas root directory path.
 #
-# @param log_dir
-#
 # @param storage_areas
 #   List of storage area's configuration.
-#
-# @param config_dir
-#   StoRM WebDAV service configuration directory
-#
-# @param hostcert_dir
 #
 # @param oauth_issuers
 #
@@ -92,8 +76,6 @@
 # @param http_port
 #
 # @param https_port
-#
-# @param trust_anchors_dir
 #
 # @param trust_anchors_refresh_interval
 #
@@ -139,24 +121,16 @@
 #
 class storm::webdav (
 
-  String $user_name = $storm::webdav::params::user_name,
-  Integer $user_uid = $storm::webdav::params::user_uid,
-  Integer $user_gid = $storm::webdav::params::user_gid,
-
   String $storage_root_dir = $storm::webdav::params::storage_root_dir,
-  String $log_dir = $storm::webdav::params::log_dir,
 
   Array[Storm::Webdav::StorageArea] $storage_areas = $storm::webdav::params::storage_areas,
 
-  String $config_dir = $storm::webdav::params::config_dir,
-  String $hostcert_dir = $storm::webdav::params::hostcert_dir,
   Array[Storm::Webdav::OAuthIssuer] $oauth_issuers = $storm::webdav::params::oauth_issuers,
   Array[String] $hostnames = $storm::webdav::params::hostnames,
 
   Integer $http_port = $storm::webdav::params::http_port,
   Integer $https_port = $storm::webdav::params::https_port,
 
-  String $trust_anchors_dir = $storm::webdav::params::trust_anchors_dir,
   Integer $trust_anchors_refresh_interval = $storm::webdav::params::trust_anchors_refresh_interval,
 
   Integer $max_concurrent_connections = $storm::webdav::params::max_concurrent_connections,

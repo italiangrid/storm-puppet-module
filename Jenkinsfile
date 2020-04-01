@@ -35,7 +35,6 @@ pipeline {
   environment {
     SONAR_PROJECT_KEY = 'storm-puppet-module-key'
     SONAR_PROJECT_NAME = 'storm-puppet-module'
-    GIT_CREDENTIAL_ID = 'enrico-github'
   }
 
   stages {
@@ -43,12 +42,11 @@ pipeline {
       steps {
         script {
           checkout scm
-          sh 'bundle install'
-          sh 'bundle exec rake test | tee rake.log'
-          sh 'rspec --format html --out rspec_report.html'
-          sh 'rspec --format RspecJunitFormatter --out rspec_report.xml'
-          archiveArtifacts 'rspec_report.html,rspec_report.xml,rake.log'
-          junit 'rspec_report.xml'
+          sh """
+            bundle install
+            bundle exec rake test | tee rake.log
+          """
+          archiveArtifacts 'rspec_report.html,rake.log'
         }
       }
     }

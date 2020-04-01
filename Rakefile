@@ -27,12 +27,25 @@ task :validate do
   end
 end
 
-RSpec::Core::RakeTask.new(:spec_verbose) do |t|
+RSpec::Core::RakeTask.new(:spec_report_html) do |t|
   t.pattern = 'spec/{classes,defines,unit,functions,templates}/**/*_spec.rb'
   t.rspec_opts = [
     '--format documentation',
     '--color',
-    '--profile'
+    '--profile',
+    '--format html',
+    '--out rspec_report.html',
+  ]
+end
+
+RSpec::Core::RakeTask.new(:spec_report_xml) do |t|
+  t.pattern = 'spec/{classes,defines,unit,functions,templates}/**/*_spec.rb'
+  t.rspec_opts = [
+    '--format documentation',
+    '--color',
+    '--profile',
+    '--format RspecJunitFormatter',
+    '--out rspec_report.xml',
   ]
 end
 
@@ -41,6 +54,10 @@ task :test do
   Rake::Task[:validate].invoke
   Rake::Task[:metadata_lint].invoke
   Rake::Task[:lint].invoke
-  Rake::Task[:spec_verbose].invoke
+  Rake::Task[:spec_report_html].invoke
 end
 
+desc "Build report xml"
+task :report_xml do
+  Rake::Task[:spec_report_xml].invoke
+end

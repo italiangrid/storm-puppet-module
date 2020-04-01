@@ -25,6 +25,7 @@
 * [`storm::install`](#storminstall): StoRM install class
 * [`storm::params`](#stormparams): StoRM params class
 * [`storm::repo`](#stormrepo): Choose which StoRM repository you want to intall and enable. Also a custom list of repository URL can be specified.
+* [`storm::users`](#stormusers): StoRM accounts configuration
 * [`storm::webdav`](#stormwebdav): StoRM WebDAV puppet module
 * [`storm::webdav::config`](#stormwebdavconfig): StoRM WebDAV config class
 * [`storm::webdav::install`](#stormwebdavinstall): StoRM WebDAV install class
@@ -33,7 +34,8 @@
 
 **Defined types**
 
-* [`storm::service_hostcert`](#stormservice_hostcert): Copy hostcert.pem and hostkey.pem from '/etc/grid-security' to the hostcert and hostkey required path, with owner and group specified.
+* [`storm::common_directory`](#stormcommon_directory): Check if a directory path exists. If not, a new directory is created with specific owner and permissions.
+* [`storm::service_hostcert`](#stormservice_hostcert): 
 * [`storm::storage_root_dir`](#stormstorage_root_dir): Check if a storage root directory path exists. If not, a new directory is created with 755 as permissions and the defined owner and group.
 * [`storm::user`](#stormuser): Create a UNIX user. Optionally with a required uid and gid.
 
@@ -344,14 +346,6 @@ class { 'storm::frontend':
 
 The following parameters are available in the `storm::frontend` class.
 
-##### `user_name`
-
-Data type: `String`
-
-Service user. Default value: storm.
-
-Default value: $storm::frontend::params::user_name
-
 ##### `db_host`
 
 Data type: `String`
@@ -375,30 +369,6 @@ Data type: `String`
 Password for database connection. Default is password.
 
 Default value: $storm::frontend::params::db_passwd
-
-##### `config_dir`
-
-Data type: `String`
-
-Configuration directory where storm-frontend-server.conf is stored. Default is /etc/storm/frontend-server.
-
-Default value: $storm::frontend::params::config_dir
-
-##### `hostcert_dir`
-
-Data type: `String`
-
-Directory where x509 host certificate and key are stored. Default is /etc/grid-security/storm.
-
-Default value: $storm::frontend::params::hostcert_dir
-
-##### `log_dir`
-
-Data type: `String`
-
-Log directory where StoRM Frontend log files are stored. Default is /var/log/storm.
-
-Default value: $storm::frontend::params::log_dir
 
 ##### `port`
 
@@ -560,30 +530,6 @@ StoRM Frontend config class
 
 The following parameters are available in the `storm::frontend::config` class.
 
-##### `user_name`
-
-Data type: `Any`
-
-
-
-Default value: $storm::frontend::user_name
-
-##### `user_uid`
-
-Data type: `Any`
-
-
-
-Default value: $storm::frontend::user_uid
-
-##### `user_gid`
-
-Data type: `Any`
-
-
-
-Default value: $storm::frontend::user_gid
-
 ##### `db_host`
 
 Data type: `Any`
@@ -607,30 +553,6 @@ Data type: `Any`
 
 
 Default value: $storm::frontend::db_passwd
-
-##### `config_dir`
-
-Data type: `Any`
-
-
-
-Default value: $storm::frontend::config_dir
-
-##### `hostcert_dir`
-
-Data type: `Any`
-
-
-
-Default value: $storm::frontend::hostcert_dir
-
-##### `log_dir`
-
-Data type: `Any`
-
-
-
-Default value: $storm::frontend::log_dir
 
 ##### `port`
 
@@ -847,6 +769,38 @@ The number of max allowed connections to server.
 
 Default value: $storm::gridftp::params::connections_max
 
+##### `log_single`
+
+Data type: `String`
+
+Session log file path. Default is: /var/log/storm/storm-gridftp-session.log
+
+Default value: $storm::gridftp::params::log_single
+
+##### `log_transfer`
+
+Data type: `String`
+
+Transfer log file path. Default is: /var/log/storm/storm-globus-gridftp.log
+
+Default value: $storm::gridftp::params::log_transfer
+
+##### `redirect_lcmaps_log`
+
+Data type: `Boolean`
+
+If true, redirect the LCMAPS log to the file specified by 'llgt_log_file'.
+
+Default value: $storm::gridftp::params::redirect_lcmaps_log
+
+##### `llgt_log_file`
+
+Data type: `String`
+
+The LCMAPS log file used if 'redirect_lcmaps_log' is true.
+
+Default value: $storm::gridftp::params::llgt_log_file
+
 ### storm::gridftp::config
 
 StoRM GridFTP config class
@@ -878,6 +832,38 @@ Data type: `Any`
 
 
 Default value: $storm::gridftp::connections_max
+
+##### `log_single`
+
+Data type: `Any`
+
+
+
+Default value: $storm::gridftp::log_single
+
+##### `log_transfer`
+
+Data type: `Any`
+
+
+
+Default value: $storm::gridftp::log_transfer
+
+##### `redirect_lcmaps_log`
+
+Data type: `Any`
+
+
+
+Default value: $storm::gridftp::redirect_lcmaps_log
+
+##### `llgt_log_file`
+
+Data type: `Any`
+
+
+
+Default value: $storm::gridftp::llgt_log_file
 
 ### storm::gridftp::install
 
@@ -940,6 +926,95 @@ Data type: `Array[Struct[{ name => String, url => String }]]`
 A list of repository URLs that have to be installed and enabled. Optional.
 
 Default value: []
+
+### storm::users
+
+Parameters
+----------
+
+StoRM needs a 'storm' Unix user, member of an 'edguser' group.
+This class allows the creation of storm and edguser users.
+The parameters are:
+
+* `edguser_uid`: the user id of `edguser` user;
+* `edguser_gid`: the group id of `edguser` group;
+* `edguser_home`: the home path of `edguser`;
+* `storm_uid`: the user id of `storm` user;
+* `storm_gid`: the group id of `storm` group;
+* `storm_home`: the home path of `storm`;
+* `storm_groups`: the list of `storm` user memberships;
+
+#### Examples
+
+##### Example of usage
+
+```puppet
+class { 'storm::users':
+  storm_uid => 991,
+  storm_gid => 991,
+  storm_groups => ['storm', 'edguser', 'test'],
+}
+```
+
+#### Parameters
+
+The following parameters are available in the `storm::users` class.
+
+##### `edguser_uid`
+
+Data type: `Integer`
+
+The user id of `edguser` user.
+
+Default value: 995
+
+##### `edguser_gid`
+
+Data type: `Integer`
+
+
+
+Default value: 995
+
+##### `edguser_home`
+
+Data type: `String`
+
+
+
+Default value: '/var/local/edguser'
+
+##### `storm_uid`
+
+Data type: `Integer`
+
+
+
+Default value: 991
+
+##### `storm_gid`
+
+Data type: `Integer`
+
+
+
+Default value: 991
+
+##### `storm_home`
+
+Data type: `String`
+
+
+
+Default value: '/home/storm'
+
+##### `storm_groups`
+
+Data type: `Array[String]`
+
+
+
+Default value: ['storm','edguser']
 
 ### storm::webdav
 
@@ -1014,30 +1089,6 @@ class { 'storm::webdav':
 
 The following parameters are available in the `storm::webdav` class.
 
-##### `user_name`
-
-Data type: `String`
-
-Unix user and group name used to run StoRM services.
-
-Default value: $storm::webdav::params::user_name
-
-##### `user_uid`
-
-Data type: `Integer`
-
-A custom user id for `user_name`
-
-Default value: $storm::webdav::params::user_uid
-
-##### `user_gid`
-
-Data type: `Integer`
-
-A custom group id for `user_name`
-
-Default value: $storm::webdav::params::user_gid
-
 ##### `storage_root_dir`
 
 Data type: `String`
@@ -1046,14 +1097,6 @@ Storage areas root directory path.
 
 Default value: $storm::webdav::params::storage_root_dir
 
-##### `log_dir`
-
-Data type: `String`
-
-
-
-Default value: $storm::webdav::params::log_dir
-
 ##### `storage_areas`
 
 Data type: `Array[Storm::Webdav::StorageArea]`
@@ -1061,22 +1104,6 @@ Data type: `Array[Storm::Webdav::StorageArea]`
 List of storage area's configuration.
 
 Default value: $storm::webdav::params::storage_areas
-
-##### `config_dir`
-
-Data type: `String`
-
-StoRM WebDAV service configuration directory
-
-Default value: $storm::webdav::params::config_dir
-
-##### `hostcert_dir`
-
-Data type: `String`
-
-
-
-Default value: $storm::webdav::params::hostcert_dir
 
 ##### `oauth_issuers`
 
@@ -1109,14 +1136,6 @@ Data type: `Integer`
 
 
 Default value: $storm::webdav::params::https_port
-
-##### `trust_anchors_dir`
-
-Data type: `String`
-
-
-
-Default value: $storm::webdav::params::trust_anchors_dir
 
 ##### `trust_anchors_refresh_interval`
 
@@ -1294,30 +1313,6 @@ StoRM WebDAV config class
 
 The following parameters are available in the `storm::webdav::config` class.
 
-##### `user_name`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::user_name
-
-##### `user_uid`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::user_uid
-
-##### `user_gid`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::user_gid
-
 ##### `storage_root_dir`
 
 Data type: `Any`
@@ -1326,14 +1321,6 @@ Data type: `Any`
 
 Default value: $storm::webdav::storage_root_dir
 
-##### `log_dir`
-
-Data type: `Any`
-
-
-
-Default value: "${storm::webdav::log_dir}/webdav"
-
 ##### `storage_areas`
 
 Data type: `Any`
@@ -1341,22 +1328,6 @@ Data type: `Any`
 
 
 Default value: $storm::webdav::storage_areas
-
-##### `config_dir`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::config_dir
-
-##### `hostcert_dir`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::hostcert_dir
 
 ##### `oauth_issuers`
 
@@ -1389,14 +1360,6 @@ Data type: `Any`
 
 
 Default value: $storm::webdav::https_port
-
-##### `trust_anchors_dir`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::trust_anchors_dir
 
 ##### `trust_anchors_refresh_interval`
 
@@ -1580,9 +1543,65 @@ StoRM WebDAV service class
 
 ## Defined types
 
+### storm::common_directory
+
+Check if a directory path exists. If not, a new directory is created with specific owner and permissions.
+
+#### Examples
+
+##### Basic usage
+
+```puppet
+storm::common_directory { 'check-root-dir':
+  path => '/storage',
+}
+```
+
+#### Parameters
+
+The following parameters are available in the `storm::common_directory` defined type.
+
+##### `path`
+
+Data type: `String`
+
+The directory path. Required.
+
+##### `owner`
+
+Data type: `String`
+
+Directory's owner. Optional. Default: 'storm'.
+
+Default value: 'storm'
+
+##### `group`
+
+Data type: `String`
+
+Directory's group. Optional. Default: 'storm'.
+
+Default value: 'storm'
+
+##### `permissions`
+
+Data type: `String`
+
+Directory's permissions. Optional. Default: '755'.
+
+Default value: '755'
+
+##### `recurse`
+
+Data type: `Boolean`
+
+If recursion is enabled. Optional. Default: false.
+
+Default value: `false`
+
 ### storm::service_hostcert
 
-Copy hostcert.pem and hostkey.pem from '/etc/grid-security' to the hostcert and hostkey required path, with owner and group specified.
+The storm::service_hostcert class.
 
 #### Examples
 
@@ -1590,10 +1609,7 @@ Copy hostcert.pem and hostkey.pem from '/etc/grid-security' to the hostcert and 
 
 ```puppet
 storm::service_hostcert { 'storm-webdav service host credentials':
-  hostcert => '/etc/grid-security/storm-webdav/hostcert.pem',
-  hostkey => '/etc/grid-security/storm-webdav/hostkey.pem'
-  owner => 'storm',
-  group => 'storm',
+  hostdir => '/etc/grid-security/storm-webdav',
 }
 ```
 
@@ -1601,29 +1617,11 @@ storm::service_hostcert { 'storm-webdav service host credentials':
 
 The following parameters are available in the `storm::service_hostcert` defined type.
 
-##### `hostcert`
+##### `hostdir`
 
 Data type: `String`
 
-The host certificate path where '/etc/grid-security/hostcert.pem' is copied. Required.
 
-##### `hostkey`
-
-Data type: `String`
-
-The host key path where '/etc/grid-security/hostkey.pem' is copied. Required.
-
-##### `owner`
-
-Data type: `String`
-
-Certificate and key's owner. Required.
-
-##### `group`
-
-Data type: `String`
-
-Certificate and key's group name. Required.
 
 ### storm::storage_root_dir
 
@@ -1895,14 +1893,15 @@ Alias of `Struct[{
 The storage area type for storm-webdav
 
 Alias of `Struct[{
-  name                       => String,
-  root_path                  => String,
-  access_points              => Array[String],
-  vos                        => Array[String],
-  orgs                       => Optional[Array[String]],
-  authenticated_read_enabled => Optional[Boolean],
-  anonymous_read_enabled     => Optional[Boolean],
-  vo_map_enabled             => Optional[Boolean],
-  vo_map_grants_write_access => Optional[Boolean],
+  name                           => String,
+  root_path                      => String,
+  access_points                  => Array[String],
+  vos                            => Array[String],
+  orgs                           => Optional[Array[String]],
+  authenticated_read_enabled     => Optional[Boolean],
+  anonymous_read_enabled         => Optional[Boolean],
+  vo_map_enabled                 => Optional[Boolean],
+  vo_map_grants_write_permission => Optional[Boolean],
+  orgs_grant_write_permission    => Optional[Boolean],
 }]`
 

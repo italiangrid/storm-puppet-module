@@ -2,17 +2,9 @@
 #
 class storm::frontend::config (
 
-  $user_name = $storm::frontend::user_name,
-  $user_uid = $storm::frontend::user_uid,
-  $user_gid = $storm::frontend::user_gid,
-
   $db_host = $storm::frontend::db_host,
   $db_user = $storm::frontend::db_user,
   $db_passwd = $storm::frontend::db_passwd,
-
-  $config_dir = $storm::frontend::config_dir,
-  $hostcert_dir = $storm::frontend::hostcert_dir,
-  $log_dir = $storm::frontend::log_dir,
 
   $port = $storm::frontend::port,
 
@@ -44,87 +36,56 @@ class storm::frontend::config (
 
 ) {
 
-  # storm user's group
-  group { $user_name:
-    ensure => present,
-    gid    => $user_gid,
+  # Service's host credentials directory
+  file { '/etc/grid-security/storm':
+    ensure  => directory,
+    owner   => 'storm',
+    group   => 'storm',
+    mode    => '0755',
+    recurse => true,
   }
-
-  # storm user
-  user { $user_name:
+  # Service's hostcert
+  file { '/etc/grid-security/storm/hostcert.pem':
     ensure  => present,
-    uid     => $user_uid,
-    gid     => $user_name,
-    require => Group[$user_name],
+    mode    => '0644',
+    owner   => 'storm',
+    group   => 'storm',
+    source  => '/etc/grid-security/hostcert.pem',
+    require => File['/etc/grid-security/storm'],
+  }
+  # Service's hostkey
+  file { '/etc/grid-security/storm/hostkey.pem':
+    ensure  => present,
+    mode    => '0400',
+    owner   => 'storm',
+    group   => 'storm',
+    source  => '/etc/grid-security/hostkey.pem',
+    require => File['/etc/grid-security/storm'],
   }
 
-  # set ownership and permissions on storm fe config dir
-  file { 'fe::storm-fe-config-dir':
-    ensure  => directory,
-    path    => $config_dir,
-    owner   => $user_name,
-    group   => $user_name,
-    mode    => '0750',
-    recurse => true,
-    require => User[$user_name],
-  }
-
-  # log directory
-  file { 'dav::storm-log-dir':
-    ensure  => directory,
-    path    => $log_dir,
-    owner   => $user_name,
-    group   => $user_name,
-    mode    => '0755',
-    recurse => true,
-  }
-
-  file { 'fe::hostcert-dir':
-    ensure  => directory,
-    path    => $hostcert_dir,
-    owner   => $user_name,
-    group   => $user_name,
-    mode    => '0755',
-    recurse => true,
-  }
-
-  storm::service_hostcert { 'fe::host-credentials':
-    hostcert => "${hostcert_dir}/hostcert.pem",
-    hostkey  => "${hostcert_dir}/hostkey.pem",
-    owner    => $user_name,
-    group    => $user_name,
-    require  => File['fe::hostcert-dir'],
-  }
-
-  $conf_file="${config_dir}/storm-frontend-server.conf"
+  $conf_file='/etc/storm/frontend-server/storm-frontend-server.conf'
   $conf_template_file='storm/etc/storm/frontend-server/storm-frontend-server.conf.erb'
 
-  file { 'fe::configure-fe-conf-file':
+  file { $conf_file:
     ensure  => present,
-    path    => $conf_file,
+    owner   => 'root',
+    group   => 'storm',
     content => template($conf_template_file),
     notify  => Service['storm-frontend-server'],
-    require => Package['storm-frontend-server'],
+    require => Package['storm-frontend-mp'],
   }
 
-  case $::os['architecture'] {
-
-    'x86_64': {
-      $ld_library_path='/usr/lib64/storm'
-    }
-    # In any other case:
-    default: {
-      $ld_library_path='/usr/lib/storm'
-    }
+  $ld_library_path=$::os['architecture'] ? {
+    'x86_64' => '/usr/lib64/storm',
+    default  => '/usr/lib/storm',
   }
 
   $sysconfig_file='/etc/sysconfig/storm-frontend-server'
   $sysconfig_template_file='storm/etc/sysconfig/storm-frontend-server.erb'
-  file { 'fe::configure-sysconfig-file':
+  file { $sysconfig_file:
     ensure  => present,
-    path    => $sysconfig_file,
     content => template($sysconfig_template_file),
     notify  => Service['storm-frontend-server'],
-    require => Package['storm-frontend-server'],
+    require => Package['storm-frontend-mp'],
   }
 }

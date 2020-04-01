@@ -5,6 +5,6 @@ class storm::frontend::service {
   service { 'storm-frontend-server':
     ensure  => running,
     enable  => true,
-    require => Package[storm-frontend-server],
+    require => Package['storm-frontend-mp'],
   }
 }

@@ -14,9 +14,6 @@ describe 'storm::webdav', :type => :class do
 
         let(:params) do 
           {
-            'user_name' => 'test',
-            'user_uid' => 1200,
-            'user_gid' => 1200,
             'storage_areas' => [
               {
                 'name' => 'test.vo',
@@ -26,7 +23,8 @@ describe 'storm::webdav', :type => :class do
                 'authenticated_read_enabled' => true,
                 'anonymous_read_enabled' => false,
                 'vo_map_enabled' => true,
-                'vo_map_grants_write_access' => false,
+                'vo_map_grants_write_permission' => false,
+                'orgs_grant_write_permission' => false,
               },
               {
                 'name' => 'atlas',
@@ -74,95 +72,49 @@ describe 'storm::webdav', :type => :class do
 
         it { is_expected.to compile.with_all_deps }
 
-        it "check storm-webdav service user" do
-          is_expected.to contain_user('test').with( 
-            :ensure => 'present',
-            :uid => 1200,
-            :gid => 'test',
-          )
-          is_expected.to contain_group('test').with( 
-            :ensure => 'present',
-            :gid => 1200,
-          )
-        end
-
-        it "check storm log directory" do
-          is_expected.to contain_file('dav::storm-log-dir').with(
-            :path => '/var/log/storm/webdav',
-            :owner => 'test',
-            :group => 'test',
-            :ensure => 'directory',
-            :mode => '0755',
-          )
-        end
-
         it "check storm-webdav host certificate and key" do
 
-          is_expected.to contain_storm__service_hostcert('dav::host-credentials')
-          is_expected.to contain_file('dav::hostcert-dir').with( 
+          is_expected.to contain_file('/etc/grid-security/storm-webdav').with( 
             :ensure => 'directory',
-            :path   => '/etc/grid-security/storm-webdav',
-            :owner  => 'test',
-            :group  => 'test',
+            :owner  => 'storm',
+            :group  => 'storm',
             :mode   => '0755',
           )
           is_expected.to contain_file('/etc/grid-security/storm-webdav/hostcert.pem').with( 
             :ensure => 'present',
-            :owner  => 'test',
-            :group  => 'test',
+            :owner  => 'storm',
+            :group  => 'storm',
             :mode   => '0644',
           )
           is_expected.to contain_file('/etc/grid-security/storm-webdav/hostkey.pem').with( 
             :ensure => 'present',
-            :owner  => 'test',
-            :group  => 'test',
+            :owner  => 'storm',
+            :group  => 'storm',
             :mode   => '0400',
           )
         end
 
-        it "check storm webdav configuration directory" do
-          is_expected.to contain_file('dav::storm-webdav-config-dir').with( 
-            :owner  => 'root',
-            :group  => 'test',
-            :mode   => '0750',
+        it "check java.io.tmpdir exists" do
+          is_expected.to contain_file('/var/lib/storm-webdav/work').with(
             :ensure => 'directory',
-            :path   => '/etc/storm/webdav',
-          )
-        end
-
-        it "check storm webdav application configuration directory" do
-          is_expected.to contain_file('dav::storm-webdav-app-config-dir').with( 
-            :owner  => 'root',
-            :group  => 'test',
-            :mode   => '0750',
-            :ensure => 'directory',
-            :path   => '/etc/storm/webdav/config',
-          )
-        end
-
-        it "check storage area configuration directory" do
-          is_expected.to contain_file('dav::storm-webdav-sa-config-dir').with( 
-            :owner  => 'root',
-            :group  => 'test',
-            :mode   => '0750',
-            :ensure => 'directory',
-            :path   => '/etc/storm/webdav/sa.d',
+            :owner  => 'storm',
+            :group  => 'storm',
+            :mode   => '0755',
           )
         end
 
         it "check storage areas root directory" do
-          is_expected.to contain_storm__storage_root_dir('dav::storage-root-dir')
-          is_expected.to contain_exec('dav::storage-root-dir_create_root_directory')
-          is_expected.to contain_exec('dav::storage-root-dir_set_ownership_on_root_directory')
-          is_expected.to contain_exec('dav::storage-root-dir_set_permissions_on_root_directory')
+          is_expected.to contain_storm__common_directory('DAV_/storage')
+          is_expected.to contain_exec('mkdir_DAV_/storage')
+          is_expected.to contain_exec('chown_DAV_/storage')
+          is_expected.to contain_exec('chmod_DAV_/storage')
         end
 
         it "check storage area properties files" do
           # test.vo properties
-          testvo_props='dav::create-test.vo-sa-properties-file'
+          testvo_props='/etc/storm/webdav/sa.d/test.vo.properties'
           is_expected.to contain_file(testvo_props).with( 
             :ensure => 'present',
-            :path   => '/etc/storm/webdav/sa.d/test.vo.properties',
           )
           is_expected.to contain_file(testvo_props).with( :content => /name=test.vo/ )
           is_expected.to contain_file(testvo_props).with( :content => /rootPath=\/storage\/test.vo/ )
@@ -172,18 +124,18 @@ describe 'storm::webdav', :type => :class do
           is_expected.to contain_file(testvo_props).with( :content => /authenticatedReadEnabled=true/ )
           is_expected.to contain_file(testvo_props).with( :content => /anonymousReadEnabled=false/ )
           is_expected.to contain_file(testvo_props).with( :content => /voMapEnabled=true/ )
-          is_expected.to contain_file(testvo_props).with( :content => /voMapGrantsWriteAccess=false/ )
+          is_expected.to contain_file(testvo_props).with( :content => /voMapGrantsWritePermission=false/ )
+          is_expected.to contain_file(testvo_props).with( :content => /orgsGrantWritePermission=false/ )
           is_expected.to contain_file(testvo_props).that_notifies(['Service[storm-webdav]'])
           # check test.vo root dir
-          is_expected.to contain_storm__storage_root_dir('dav::check-test.vo-sa-root-dir')
-          is_expected.to contain_exec('dav::check-test.vo-sa-root-dir_create_root_directory')
-          is_expected.to contain_exec('dav::check-test.vo-sa-root-dir_set_ownership_on_root_directory')
-          is_expected.to contain_exec('dav::check-test.vo-sa-root-dir_set_permissions_on_root_directory')
+          is_expected.to contain_storm__common_directory('DAV_/storage/test.vo')
+          is_expected.to contain_exec('mkdir_DAV_/storage/test.vo')
+          is_expected.to contain_exec('chown_DAV_/storage/test.vo')
+          is_expected.to contain_exec('chmod_DAV_/storage/test.vo')
           # atlas properties
-          atlas_props='dav::create-atlas-sa-properties-file'
+          atlas_props='/etc/storm/webdav/sa.d/atlas.properties'
           is_expected.to contain_file(atlas_props).with(
             :ensure => 'present',
-            :path   => '/etc/storm/webdav/sa.d/atlas.properties',
           )
           is_expected.to contain_file(atlas_props).with( :content => /name=atlas/ )
           is_expected.to contain_file(atlas_props).with( :content => /rootPath=\/storage\/atlas/ )
@@ -193,22 +145,22 @@ describe 'storm::webdav', :type => :class do
           is_expected.to contain_file(atlas_props).with( :content => /authenticatedReadEnabled=false/ )
           is_expected.to contain_file(atlas_props).with( :content => /anonymousReadEnabled=true/ )
           is_expected.to contain_file(atlas_props).with( :content => /voMapEnabled=false/ )
-          is_expected.not_to contain_file(atlas_props).with( :content => /voMapGrantsWriteAccess=/ )
+          is_expected.not_to contain_file(atlas_props).with( :content => /voMapGrantsWritePermission=/ )
+          is_expected.not_to contain_file(atlas_props).with( :content => /orgsGrantWritePermission=/ )
           is_expected.to contain_file(atlas_props).that_notifies(['Service[storm-webdav]'])
           # check atlas root dir
-          is_expected.to contain_storm__storage_root_dir('dav::check-atlas-sa-root-dir')
-          is_expected.to contain_exec('dav::check-atlas-sa-root-dir_create_root_directory')
-          is_expected.to contain_exec('dav::check-atlas-sa-root-dir_set_ownership_on_root_directory')
-          is_expected.to contain_exec('dav::check-atlas-sa-root-dir_set_permissions_on_root_directory')
+          is_expected.to contain_storm__common_directory('DAV_/storage/atlas')
+          is_expected.to contain_exec('mkdir_DAV_/storage/atlas')
+          is_expected.to contain_exec('chown_DAV_/storage/atlas')
+          is_expected.to contain_exec('chmod_DAV_/storage/atlas')
         end
 
         it "check application.yml" do
         
-          app_title='dav::configure-application-yml'
+          app_title='/etc/storm/webdav/config/application.yml'
 
           is_expected.to contain_file(app_title).with({
             :ensure => 'present',
-            :path   => '/etc/storm/webdav/config/application.yml',
           })
           is_expected.to contain_file(app_title).with({
             :content => /iam-virgo/,
@@ -227,13 +179,12 @@ describe 'storm::webdav', :type => :class do
         end
 
         it "check sysconfig file" do
-          sysconfig_file='dav::configure-sysconfig-file'
+          sysconfig_file='/etc/sysconfig/storm-webdav'
           is_expected.to contain_file(sysconfig_file).with(
             :ensure => 'present',
-            :path   => '/etc/sysconfig/storm-webdav',  
           )
           is_expected.to contain_file(sysconfig_file).that_notifies(['Service[storm-webdav]'])
-          is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_USER=test/ )
+          is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_USER="storm"/ )
           is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_HOSTNAME_0=storm-w1.example/ )
           is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_HOSTNAME_1=storm-w2.example/ )
           is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_HTTP_PORT=8080/ )
@@ -268,28 +219,6 @@ describe 'storm::webdav', :type => :class do
           is_expected.to contain_file(sysconfig_file).with( :content => /^# STORM_WEBDAV_DEBUG_SUSPEND="y"/ )
 
         end
-
-        it "check systemd unit file" do
-          unit_file='dav::configure-unit-file'
-          case facts[:operatingsystemmajrelease]
-          when '7'
-            is_expected.to contain_file(unit_file).with(
-              :ensure => 'present',
-              :path   => '/etc/systemd/system/storm-webdav.service',
-            )
-            is_expected.to contain_file(unit_file).that_notifies(['Service[storm-webdav]'])
-            is_expected.to contain_file(unit_file).with( :content => /User=test/ )
-            is_expected.to contain_file(unit_file).with( :content => /EnvironmentFile=-\/etc\/sysconfig\/storm-webdav/ )
-            is_expected.to contain_file(unit_file).with( :content => /WorkingDirectory=\/etc\/storm\/webdav/ )
-          else
-            is_expected.not_to contain_file(unit_file)
-          end
-        end
-
-        it "check storage area root path if not exists" do
-
-
-        end
       end
 
       context 'Check sysconfig debug enabled with custom port but not suspended' do
@@ -302,23 +231,10 @@ describe 'storm::webdav', :type => :class do
           }
         end
 
-        it "check storm-webdav service is default user" do
-          is_expected.to contain_user('storm').with( 
-            :ensure => 'present',
-            :uid => 1100,
-            :gid => 'storm',
-          )
-          is_expected.to contain_group('storm').with( 
-            :ensure => 'present',
-            :gid => 1100,
-          )
-        end
-
         it "check sysconfig file" do
-          sysconfig_file='dav::configure-sysconfig-file'
+          sysconfig_file='/etc/sysconfig/storm-webdav'
           is_expected.to contain_file(sysconfig_file).with(
             :ensure => 'present',
-            :path   => '/etc/sysconfig/storm-webdav',
           )
           is_expected.to contain_file(sysconfig_file).with( :content => /^STORM_WEBDAV_DEBUG="y"/ )
           is_expected.to contain_file(sysconfig_file).with( :content => /^STORM_WEBDAV_DEBUG_PORT=1234/ )
@@ -336,10 +252,9 @@ describe 'storm::webdav', :type => :class do
         end
 
         it "check sysconfig file" do
-          sysconfig_file='dav::configure-sysconfig-file'
+          sysconfig_file='/etc/sysconfig/storm-webdav'
           is_expected.to contain_file(sysconfig_file).with(
             :ensure => 'present',
-            :path   => '/etc/sysconfig/storm-webdav',
           )
           is_expected.to contain_file(sysconfig_file).with( :content => /^STORM_WEBDAV_DEBUG="y"/ )
           is_expected.to contain_file(sysconfig_file).with( :content => /^STORM_WEBDAV_DEBUG_PORT=1044/ )

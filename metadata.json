@@ -8,6 +8,10 @@
   "project_page": "https://github.com/enricovianello/storm-puppet-module",
   "issues_url": "https://github.com/enricovianello/storm-puppet-module",
   "dependencies": [
+    {
+      "name": "puppetlabs-accounts",
+      "version_requirement": ">= 6.1.0"
+    }
   ],
   "requirements": [
     {

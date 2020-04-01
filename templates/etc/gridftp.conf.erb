@@ -8,26 +8,20 @@
 # $GLOBUS_ERROR_VERBOSE 1
 # $GLOBUS_TCP_PORT_RANGE 50000,51000
 
-<% if scope['storm::gridftp::port'] %>
 # Port on which a frontend will listen for client control channel connections, 
 # or on which a data node will listen for connections from a frontend. 
 # If not set a random port will be chosen and printed via the logging mechanism.
-port <%=scope['storm::gridftp::port']%>
-<% end %>
+port <%=@port%>
 
-<% if scope['storm::gridftp::connections_max'] %>
 # Maximum concurrent connections allowed. 
 # Only applies when running in daemon mode. Unlimited if not set.
-connections_max <%=scope['storm::gridftp::connections_max']%>
-<% end %>
+connections_max <%=@connections_max%>
 
-<% if scope['storm::gridftp::port_range'] %>
 # Port range to use for incoming connections. The format is "startport,endport".
 # This, along with -data-interface, can be used to enable operation behind a 
 # firewall and/or when NAT is involved. This is the same as setting the environment 
 # variable GLOBUS_TCP_PORT_RANGE.
-port_range <%=scope['storm::gridftp::port_range']%>
-<% end %>
+port_range <%=@port_range%>
 
 # Base path to use when config and log path options are not full paths.
 # By default this is the current directory when the process is started.
@@ -42,11 +36,11 @@ log_level ERROR,WARN,INFO
 # Path of a single file to log all activity to. If neither this option or 
 # log_unique is set, logs will be written to stderr unless the execution mode 
 # is detached or inetd, in which case logging will be disabled.
-log_single /var/log/storm/storm-gridftp-session.log
+log_single <%=@log_single%>
 
 # Log netlogger style info for each transfer into this file. 
 # You may also use the log-level of TRANSFER to include this info in the standard log.
-log_transfer /var/log/storm/storm-globus-gridftp.log
+log_transfer <%=@log_transfer%>
 
 load_dsi_module StoRM
 allowed_modules StoRM
