@@ -13,6 +13,30 @@ describe 'storm::frontend', :type => :class do
       it { is_expected.to compile }
       it { is_expected.to compile.with_all_deps }
 
+      context 'Check frontend host credentials' do
+
+        it 'Check /etc/grid-security/storm directory' do
+          is_expected.to contain_file('/etc/grid-security/storm').with( 
+            :ensure => 'directory',
+            :owner  => 'storm',
+            :group  => 'storm',
+            :mode   => '0755',
+          )
+          is_expected.to contain_file('/etc/grid-security/storm/hostcert.pem').with( 
+            :ensure => 'present',
+            :owner  => 'storm',
+            :group  => 'storm',
+            :mode   => '0644',
+          )
+          is_expected.to contain_file('/etc/grid-security/storm/hostkey.pem').with( 
+            :ensure => 'present',
+            :owner  => 'storm',
+            :group  => 'storm',
+            :mode   => '0400',
+          )
+        end
+      end
+
       context 'Use custom frontend params' do
 
         let(:params) do 
