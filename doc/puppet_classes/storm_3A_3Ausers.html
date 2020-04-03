@@ -154,19 +154,6 @@
   
     <li>
       
-        <span class='name'>edguser_home</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>&#39;/var/local/edguser&#39;</tt>)</em>
-      
-      
-    </li>
-  
-    <li>
-      
         <span class='name'>storm_uid</span>
       
       
@@ -187,19 +174,6 @@
       
       
         <em class="default">(defaults to: <tt>991</tt>)</em>
-      
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>storm_home</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>&#39;/home/storm&#39;</tt>)</em>
       
       
     </li>
@@ -228,6 +202,10 @@
         <pre class="lines">
 
 
+37
+38
+39
+40
 41
 42
 43
@@ -257,26 +235,18 @@
 67
 68
 69
-70
-71
-72
-73
-74
-75
-76</pre>
+70</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/users.pp', line 41</span>
+        <pre class="code"><span class="info file"># File 'manifests/users.pp', line 37</span>
 
 class storm::users (
 
   Integer $edguser_uid = 995,
   Integer $edguser_gid = 995,
-  String $edguser_home = &#39;/var/local/edguser&#39;,
 
   Integer $storm_uid = 991,
   Integer $storm_gid = 991,
-  String $storm_home = &#39;/home/storm&#39;,
   Array[String] $storm_groups = [&#39;storm&#39;,&#39;edguser&#39;],
 
 ) {
@@ -286,7 +256,7 @@ class storm::users (
     uid        =&gt; $edguser_uid,
     gid        =&gt; $edguser_gid,
     group      =&gt; &#39;edguser&#39;,
-    home       =&gt; $edguser_home,
+    home       =&gt; &#39;/var/local/edguser&#39;,
     comment    =&gt; &#39;EDG user&#39;,
     membership =&gt; &#39;inclusive&#39;,
   }
@@ -297,7 +267,7 @@ class storm::users (
     gid        =&gt; $storm_gid,
     group      =&gt; &#39;storm&#39;,
     groups     =&gt; $storm_groups,
-    home       =&gt; $storm_home,
+    home       =&gt; &#39;/home/storm&#39;,
     comment    =&gt; &#39;StoRM user&#39;,
     membership =&gt; &#39;inclusive&#39;,
     require    =&gt; [Accounts::User[&#39;edguser&#39;]],

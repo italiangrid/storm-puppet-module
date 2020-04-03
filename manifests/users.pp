@@ -28,13 +28,9 @@
 #
 # @param edguser_gid
 #
-# @param edguser_home
-#
 # @param storm_uid
 #
 # @param storm_gid
-#
-# @param storm_home
 #
 # @param storm_groups
 #
@@ -42,11 +38,9 @@ class storm::users (
 
   Integer $edguser_uid = 995,
   Integer $edguser_gid = 995,
-  String $edguser_home = '/var/local/edguser',
 
   Integer $storm_uid = 991,
   Integer $storm_gid = 991,
-  String $storm_home = '/home/storm',
   Array[String] $storm_groups = ['storm','edguser'],
 
 ) {
@@ -56,7 +50,7 @@ class storm::users (
     uid        => $edguser_uid,
     gid        => $edguser_gid,
     group      => 'edguser',
-    home       => $edguser_home,
+    home       => '/var/local/edguser',
     comment    => 'EDG user',
     membership => 'inclusive',
   }
@@ -67,7 +61,7 @@ class storm::users (
     gid        => $storm_gid,
     group      => 'storm',
     groups     => $storm_groups,
-    home       => $storm_home,
+    home       => '/home/storm',
     comment    => 'StoRM user',
     membership => 'inclusive',
     require    => [Accounts::User['edguser']],
