@@ -13,12 +13,14 @@ class { 'storm::users':
       'groups'  => [ 'edguser', 'storm', ],
       'uid'     => '995',
       'gid'     => '995',
+      'home'    => '/home/storm',
     },
     'storm'   => {
       'comment' => 'StoRM user',
       'groups'  => [ 'storm', 'edguser', 'storm-SA-read', 'storm-SA-write' ],
       'uid'     => '991',
       'gid'     => '991',
+      'home'    => '/home/edguser',
     },
   },
 }
