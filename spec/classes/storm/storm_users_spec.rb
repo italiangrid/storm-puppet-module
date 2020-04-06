@@ -33,7 +33,7 @@ describe 'storm::users', :type => :class do
             :uid    => 995,
             :gid    => 995,
             :group  => 'edguser',
-            :home   => '/var/local/edguser',
+            :home   => '/home/edguser',
           )
         end
       end
@@ -41,9 +41,28 @@ describe 'storm::users', :type => :class do
       context 'Test custom storm user' do
         let(:params) do 
           {
-            'storm_uid'    => 1100,
-            'storm_gid'    => 1100,
-            'storm_groups' => ['storm', 'edguser', 'pippo'],
+            'users'    => {
+              'edguser' => {
+                'comment' => 'Edguser user',
+                'groups'  => [ 'edguser', 'storm', ],
+                'uid'     => '1101',
+                'gid'     => '1101',
+              },
+              'storm'   => {
+                'comment' => 'StoRM user',
+                'groups'  => [ 'storm', 'edguser', 'storm-SA-read', 'storm-SA-write' ],
+                'uid'     => '1100',
+                'gid'     => '1100',
+              },
+            },
+            'groups'   => {
+              'storm-SA-read'  => {
+                'gid' => '990',
+              },
+              'storm-SA-write' => {
+                'gid' => '989',
+              },
+            },
           }
         end
 
@@ -56,28 +75,18 @@ describe 'storm::users', :type => :class do
             :uid        => 1100,
             :gid        => 1100,
             :group      => 'storm',
-            :groups     => ['storm', 'edguser', 'pippo'],
+            :groups     => [ 'storm', 'edguser', 'storm-SA-read', 'storm-SA-write' ],
           )
         end
-      end
-
-      context 'Test custom edguser user' do
-        let(:params) do 
-          {
-            'edguser_uid' => 1100,
-            'edguser_gid' => 1100,
-          }
-        end
-
-        it { is_expected.to compile.with_all_deps }
 
         it "check edguser user" do
 
           is_expected.to contain_accounts__user('edguser').with( 
             :ensure     => 'present',
-            :uid        => 1100,
-            :gid        => 1100,
+            :uid        => 1101,
+            :gid        => 1101,
             :group      => 'edguser',
+            :groups     => [ 'edguser', 'storm', ],
           )
         end
       end
