@@ -149,17 +149,13 @@
 42
 43
 44
-45
-46
-47</pre>
+45</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/webdav/params.pp', line 3</span>
 
 class storm::webdav::params (
 ) inherits storm::params {
-
-  $storage_root_dir = $storm::params::storage_root_dir
 
   $storage_areas = lookup(&#39;storm::webdav::storage_areas&#39;, Array[Storm::Webdav::StorageArea], undef, [])
 

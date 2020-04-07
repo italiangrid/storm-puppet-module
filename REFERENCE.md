@@ -1089,11 +1089,7 @@ The following parameters are available in the `storm::webdav` class.
 
 ##### `storage_root_dir`
 
-Data type: `String`
-
 Storage areas root directory path.
-
-Default value: $storm::webdav::params::storage_root_dir
 
 ##### `storage_areas`
 
@@ -1318,14 +1314,6 @@ StoRM WebDAV config class
 #### Parameters
 
 The following parameters are available in the `storm::webdav::config` class.
-
-##### `storage_root_dir`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::storage_root_dir
 
 ##### `storage_areas`
 

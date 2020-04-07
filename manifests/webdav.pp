@@ -123,8 +123,6 @@
 #
 class storm::webdav (
 
-  String $storage_root_dir = $storm::webdav::params::storage_root_dir,
-
   Array[Storm::Webdav::StorageArea] $storage_areas = $storm::webdav::params::storage_areas,
 
   Array[Storm::Webdav::OAuthIssuer] $oauth_issuers = $storm::webdav::params::oauth_issuers,

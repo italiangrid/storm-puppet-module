@@ -2,8 +2,6 @@
 #
 class storm::webdav::config (
 
-  $storage_root_dir = $storm::webdav::storage_root_dir,
-
   $storage_areas = $storm::webdav::storage_areas,
 
   $oauth_issuers = $storm::webdav::oauth_issuers,

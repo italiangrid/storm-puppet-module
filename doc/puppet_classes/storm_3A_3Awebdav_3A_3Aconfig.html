@@ -88,19 +88,6 @@
   
     <li>
       
-        <span class='name'>storage_root_dir</span>
-      
-      
-        <span class='type'>(<tt>Any</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>$storm::webdav::storage_root_dir</tt>)</em>
-      
-      
-    </li>
-  
-    <li>
-      
         <span class='name'>storage_areas</span>
       
       
@@ -604,16 +591,12 @@
 143
 144
 145
-146
-147
-148</pre>
+146</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/webdav/config.pp', line 3</span>
 
 class storm::webdav::config (
-
-  $storage_root_dir = $storm::webdav::storage_root_dir,
 
   $storage_areas = $storm::webdav::storage_areas,
 
