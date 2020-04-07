@@ -536,6 +536,19 @@
       
     </li>
   
+    <li>
+      
+        <span class='name'>storm_limit_nofile</span>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$storm::webdav::params::storm_limit_nofile</tt>)</em>
+      
+      
+    </li>
+  
 </ul>
 
 
@@ -547,8 +560,6 @@
         <pre class="lines">
 
 
-122
-123
 124
 125
 126
@@ -597,10 +608,14 @@
 169
 170
 171
-172</pre>
+172
+173
+174
+175
+176</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/webdav.pp', line 122</span>
+        <pre class="code"><span class="info file"># File 'manifests/webdav.pp', line 124</span>
 
 class storm::webdav (
 
@@ -642,6 +657,8 @@ class storm::webdav (
   Boolean $debug = $storm::webdav::params::debug,
   Integer $debug_port = $storm::webdav::params::debug_port,
   Boolean $debug_suspend = $storm::webdav::params::debug_suspend,
+
+  Integer $storm_limit_nofile = $storm::webdav::params::storm_limit_nofile,
 
 ) inherits storm::webdav::params {
 

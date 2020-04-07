@@ -1,10 +1,20 @@
 require 'puppetlabs_spec_helper/rake_tasks'
 require 'puppet-lint/tasks/puppet-lint'
+require 'puppet-syntax/tasks/puppet-syntax'
 require 'metadata-json-lint/rake_task'
 require 'puppet-strings/tasks'
-require 'rspec/core/rake_task'
+# require 'rspec/core/rake_task'
 
-PuppetLint.configuration.fail_on_warnings
+# These two gems aren't always present, for instance
+# on Travis with --without development
+
+begin
+  require 'puppet_blacksmith/rake_tasks'
+rescue LoadError
+end
+
+PuppetLint.configuration.log_format = "%{path}:%{linenumber}:%{check}:%{KIND}:%{message}"
+PuppetLint.configuration.fail_on_warnings = true
 PuppetLint.configuration.send('relative')
 PuppetLint.configuration.send('disable_80chars')
 PuppetLint.configuration.send('disable_140chars')
@@ -12,7 +22,20 @@ PuppetLint.configuration.send('disable_class_inherits_from_params_class')
 PuppetLint.configuration.send('disable_class_parameter_defaults')
 PuppetLint.configuration.send('disable_documentation')
 PuppetLint.configuration.send('disable_single_quote_string_with_variables')
-PuppetLint.configuration.ignore_paths = ["vendor/**/*.pp", "spec/**/*.pp"]
+#PuppetLint.configuration.ignore_paths = ["vendor/**/*.pp", "spec/**/*.pp", "pkg/**/*"]
+
+exclude_paths = [
+  "pkg/**/*",
+  "vendor/**/*",
+  "spec/**/*",
+]
+PuppetLint.configuration.ignore_paths = exclude_paths
+PuppetSyntax.exclude_paths = exclude_paths
+
+desc "Run acceptance tests"
+RSpec::Core::RakeTask.new(:acceptance) do |t|
+  t.pattern = 'spec/acceptance'
+end
 
 desc "Validate manifests, templates, and ruby files"
 task :validate do
@@ -27,37 +50,11 @@ task :validate do
   end
 end
 
-RSpec::Core::RakeTask.new(:spec_report_html) do |t|
-  t.pattern = 'spec/{classes,defines,unit,functions,templates}/**/*_spec.rb'
-  t.rspec_opts = [
-    '--format documentation',
-    '--color',
-    '--profile',
-    '--format html',
-    '--out rspec_report.html',
-  ]
-end
-
-RSpec::Core::RakeTask.new(:spec_report_xml) do |t|
-  t.pattern = 'spec/{classes,defines,unit,functions,templates}/**/*_spec.rb'
-  t.rspec_opts = [
-    '--format documentation',
-    '--color',
-    '--profile',
-    '--format RspecJunitFormatter',
-    '--out rspec_report.xml',
-  ]
-end
-
-desc "Validate, lint and test running"
-task :test do
-  Rake::Task[:validate].invoke
-  Rake::Task[:metadata_lint].invoke
-  Rake::Task[:lint].invoke
-  Rake::Task[:spec_report_html].invoke
-end
-
-desc "Build report xml"
-task :report_xml do
-  Rake::Task[:spec_report_xml].invoke
-end
+desc "Run syntax, lint, and spec tests."
+task :test => [
+  :validate,
+  :syntax,
+  :metadata_lint,
+  :lint,
+  :spec,
+]

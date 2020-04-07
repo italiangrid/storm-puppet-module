@@ -41,12 +41,9 @@ class storm::webdav::config (
   $debug_port = $storm::webdav::debug_port,
   $debug_suspend = $storm::webdav::debug_suspend,
 
-) {
+  $storm_limit_nofile = $storm::webdav::storm_limit_nofile,
 
-  # Storage root directory
-  storm::common_directory { "DAV_${storage_root_dir}":
-    path  => $storage_root_dir,
-  }
+) {
 
   file { '/var/lib/storm-webdav/work':
     ensure  => directory,
@@ -104,13 +101,29 @@ class storm::webdav::config (
         owner   => 'root',
         group   => 'storm',
         notify  => Service['storm-webdav'],
-        require => Package['storm-webdav'],
-      }
-      # check root path
-      storm::common_directory { "DAV_${root_path}":
-        path  => $root_path,
       }
     }
+  }
+
+  $limit_service_dir='/etc/systemd/system/storm-webdav.service.d'
+  file { $limit_service_dir:
+    ensure => directory,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0644',
+  }
+
+  $limit_template_file='storm/etc/systemd/system/storm-webdav.service.d/filelimit.conf.erb'
+  $limit_file='/etc/systemd/system/storm-webdav.service.d/filelimit.conf'
+  # configuration of filelimit.conf
+  file { $limit_file:
+    ensure  => present,
+    content => template($limit_template_file),
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    notify  => Service['storm-webdav'],
+    require => File[$limit_service_dir],
   }
 
   $application_template_file='storm/etc/storm/webdav/config/application.yml.erb'
@@ -123,7 +136,6 @@ class storm::webdav::config (
     group   => 'storm',
     mode    => '0644',
     notify  => Service['storm-webdav'],
-    require => Package['storm-webdav'],
   }
 
   $sysconfig_file='/etc/sysconfig/storm-webdav'
@@ -132,6 +144,5 @@ class storm::webdav::config (
     ensure  => present,
     content => template($sysconfig_template_file),
     notify  => Service['storm-webdav'],
-    require => Package['storm-webdav'],
   }
 }

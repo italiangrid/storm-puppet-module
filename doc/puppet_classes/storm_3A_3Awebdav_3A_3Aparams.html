@@ -149,7 +149,9 @@
 42
 43
 44
-45</pre>
+45
+46
+47</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/webdav/params.pp', line 3</span>
@@ -196,6 +198,8 @@ class storm::webdav::params (
   $debug = lookup(&#39;storm::webdav::debug&#39;, Boolean, undef, false)
   $debug_port = lookup(&#39;storm::webdav::debug_port&#39;, Integer, undef, 1044)
   $debug_suspend = lookup(&#39;storm::webdav::debug_suspend&#39;, Boolean, undef, false)
+
+  $storm_limit_nofile = lookup(&#39;storm::webdav::storm_limit_nofile&#39;, Integer, undef, 65535)
 }</pre>
       </td>
     </tr>

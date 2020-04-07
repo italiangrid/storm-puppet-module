@@ -60,8 +60,6 @@ class storm::users (
 
 ) {
 
-  anchor { 'storm::users::begin': }
   create_resources('group', $groups)
   create_resources('accounts::user', $users)
-  anchor { 'storm::users::end': }
 }

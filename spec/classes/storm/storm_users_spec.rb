@@ -14,9 +14,15 @@ describe 'storm::users', :type => :class do
 
         it { is_expected.to compile.with_all_deps }
 
+        it "check infosys group" do
+          is_expected.to contain_group('infosys').with(
+            :gid        => 996,
+          )
+        end
+
         it "check storm user" do
 
-          is_expected.to contain_accounts__user('storm').with( 
+          is_expected.to contain_accounts__user('storm').with(
             :ensure => 'present',
             :uid    => 991,
             :gid    => 991,
@@ -28,7 +34,7 @@ describe 'storm::users', :type => :class do
 
         it "check edguser user" do
 
-          is_expected.to contain_accounts__user('edguser').with( 
+          is_expected.to contain_accounts__user('edguser').with(
             :ensure => 'present',
             :uid    => 995,
             :gid    => 995,
@@ -68,9 +74,21 @@ describe 'storm::users', :type => :class do
 
         it { is_expected.to compile.with_all_deps }
 
+        it "check storm-SA-read group" do
+          is_expected.to contain_group('storm-SA-read').with(
+            :gid        => 990,
+          )
+        end
+
+        it "check storm-SA-write group" do
+          is_expected.to contain_group('storm-SA-write').with(
+            :gid        => 989,
+          )
+        end
+
         it "check storm user" do
 
-          is_expected.to contain_accounts__user('storm').with( 
+          is_expected.to contain_accounts__user('storm').with(
             :ensure     => 'present',
             :uid        => 1100,
             :gid        => 1100,
@@ -81,7 +99,7 @@ describe 'storm::users', :type => :class do
 
         it "check edguser user" do
 
-          is_expected.to contain_accounts__user('edguser').with( 
+          is_expected.to contain_accounts__user('edguser').with(
             :ensure     => 'present',
             :uid        => 1101,
             :gid        => 1101,

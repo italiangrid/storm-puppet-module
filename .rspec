@@ -1,3 +1,5 @@
 --format documentation
 --color
 --profile
+--format html
+--out rspec_report.html

@@ -42,4 +42,6 @@ class storm::webdav::params (
   $debug = lookup('storm::webdav::debug', Boolean, undef, false)
   $debug_port = lookup('storm::webdav::debug_port', Integer, undef, 1044)
   $debug_suspend = lookup('storm::webdav::debug_suspend', Boolean, undef, false)
+
+  $storm_limit_nofile = lookup('storm::webdav::storm_limit_nofile', Integer, undef, 65535)
 }

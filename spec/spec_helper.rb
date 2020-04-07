@@ -10,15 +10,6 @@ require 'nokogiri'
 
 include RspecPuppetFacts
 
-if ENV['COVERAGE'] == 'yes'
-  require 'simplecov'
-  require 'coveralls'
-
-  SimpleCov.formatter = Coveralls::SimpleCov::Formatter
-  SimpleCov.start do
-    add_filter(/^\/spec\//)
-  end
-end
 
 # rspec 2.x doesn't have RSpec::Support, so fall back to File::ALT_SEPARATOR to
 # detect if running on windows
@@ -30,6 +21,8 @@ end
 fixture_path = File.expand_path(File.join(__FILE__, '..', 'fixtures'))
 
 RSpec.configure do |c|
+
+  c.pattern = 'spec/{classes,defines,unit,functions,templates}/**/*_spec.rb'
 
   default_facts = {
     puppetversion: Puppet.version,
@@ -44,6 +37,6 @@ RSpec.configure do |c|
   c.parser          = ENV['FUTURE_PARSER'] == 'yes' ? 'future' : 'current'
 
   c.after(:suite) do
-    RSpec::Puppet::Coverage.report!(80)
+     RSpec::Puppet::Coverage.report!(80)
   end
 end

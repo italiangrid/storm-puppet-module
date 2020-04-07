@@ -119,6 +119,8 @@
 #
 # @param debug_suspend
 #
+# @param storm_limit_nofile
+#
 class storm::webdav (
 
   String $storage_root_dir = $storm::webdav::params::storage_root_dir,
@@ -159,6 +161,8 @@ class storm::webdav (
   Boolean $debug = $storm::webdav::params::debug,
   Integer $debug_port = $storm::webdav::params::debug_port,
   Boolean $debug_suspend = $storm::webdav::params::debug_suspend,
+
+  Integer $storm_limit_nofile = $storm::webdav::params::storm_limit_nofile,
 
 ) inherits storm::webdav::params {
 
