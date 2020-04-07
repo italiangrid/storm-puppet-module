@@ -4,7 +4,7 @@ class storm::backend::install (
 
 ) {
 
-  package { 'storm-backend-server-mp':
+  package { 'storm-backend-mp':
     ensure => installed,
   }
 }

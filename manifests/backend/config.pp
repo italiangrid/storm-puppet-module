@@ -2,9 +2,6 @@
 #
 class storm::backend::config (
 
-  $user_name = $storm::backend::user_name,
-  $config_dir = $storm::backend::config_dir,
-
   $storage_areas = $storm::backend::storage_areas,
   $gsiftp_pool_members = $storm::backend::gsiftp_pool_members,
   $gsiftp_pool_balance_strategy = $storm::backend::gsiftp_pool_balance_strategy,
@@ -18,34 +15,31 @@ class storm::backend::config (
 ) {
 
   # set ownership and permissions on storm be config dir
-  file { 'be::storm-be-config-dir':
+  file { '/etc/storm/backend-server':
     ensure  => directory,
-    path    => $config_dir,
-    owner   => $user_name,
-    group   => $user_name,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0750',
     recurse => true,
   }
 
-  $namespace_file="${config_dir}/namespace.xml"
+  $namespace_file='/etc/storm/backend-server/namespace.xml'
   $namespace_template_file='storm/etc/storm/backend-server/namespace.xml.erb'
 
-  file { 'be::configure-be-namespace-file':
+  file { $namespace_file:
     ensure  => present,
-    path    => $namespace_file,
     content => template($namespace_template_file),
     notify  => Service['storm-backend-server'],
-    require => Package['storm-backend-server-mp'],
+    require => [Package['storm-backend-mp'], File['/etc/storm/backend-server']],
   }
 
-  $properties_file="${config_dir}/storm.properties"
+  $properties_file='/etc/storm/backend-server/storm.properties'
   $properties_template_file='storm/etc/storm/backend-server/storm.properties.erb'
 
-  file { 'be::configure-be-properties-file':
+  file { $properties_file:
     ensure  => present,
-    path    => $properties_file,
     content => template($properties_template_file),
     notify  => Service['storm-backend-server'],
-    require => Package['storm-backend-server-mp'],
+    require => [Package['storm-backend-mp'], File['/etc/storm/backend-server']],
   }
 }

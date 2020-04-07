@@ -1,6 +1,9 @@
 .vscode
-.pkg/
+pkg
 .yardoc/
 Gemfile.lock
 .bundle/
-spec/fixtures/modules/storm
+spec/fixtures/modules
+rake.log
+rspec_report.html
+rspec_report.xml

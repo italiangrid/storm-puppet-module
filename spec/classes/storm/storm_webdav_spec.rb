@@ -67,6 +67,7 @@ describe 'storm::webdav', :type => :class do
             'authz_server_max_token_lifetime_sec' => 43400,
             'authz_server_secret' => 'secret',
             'require_client_cert' => true,
+            'storm_limit_nofile' => 1046,
           }
         end
 
@@ -103,13 +104,6 @@ describe 'storm::webdav', :type => :class do
           )
         end
 
-        it "check storage areas root directory" do
-          is_expected.to contain_storm__common_directory('DAV_/storage')
-          is_expected.to contain_exec('mkdir_DAV_/storage')
-          is_expected.to contain_exec('chown_DAV_/storage')
-          is_expected.to contain_exec('chmod_DAV_/storage')
-        end
-
         it "check storage area properties files" do
           # test.vo properties
           testvo_props='/etc/storm/webdav/sa.d/test.vo.properties'
@@ -127,11 +121,6 @@ describe 'storm::webdav', :type => :class do
           is_expected.to contain_file(testvo_props).with( :content => /voMapGrantsWritePermission=false/ )
           is_expected.to contain_file(testvo_props).with( :content => /orgsGrantWritePermission=false/ )
           is_expected.to contain_file(testvo_props).that_notifies(['Service[storm-webdav]'])
-          # check test.vo root dir
-          is_expected.to contain_storm__common_directory('DAV_/storage/test.vo')
-          is_expected.to contain_exec('mkdir_DAV_/storage/test.vo')
-          is_expected.to contain_exec('chown_DAV_/storage/test.vo')
-          is_expected.to contain_exec('chmod_DAV_/storage/test.vo')
           # atlas properties
           atlas_props='/etc/storm/webdav/sa.d/atlas.properties'
           is_expected.to contain_file(atlas_props).with(
@@ -148,11 +137,6 @@ describe 'storm::webdav', :type => :class do
           is_expected.not_to contain_file(atlas_props).with( :content => /voMapGrantsWritePermission=/ )
           is_expected.not_to contain_file(atlas_props).with( :content => /orgsGrantWritePermission=/ )
           is_expected.to contain_file(atlas_props).that_notifies(['Service[storm-webdav]'])
-          # check atlas root dir
-          is_expected.to contain_storm__common_directory('DAV_/storage/atlas')
-          is_expected.to contain_exec('mkdir_DAV_/storage/atlas')
-          is_expected.to contain_exec('chown_DAV_/storage/atlas')
-          is_expected.to contain_exec('chmod_DAV_/storage/atlas')
         end
 
         it "check application.yml" do
@@ -218,6 +202,26 @@ describe 'storm::webdav', :type => :class do
           is_expected.to contain_file(sysconfig_file).with( :content => /^# STORM_WEBDAV_DEBUG_PORT=1044/ )
           is_expected.to contain_file(sysconfig_file).with( :content => /^# STORM_WEBDAV_DEBUG_SUSPEND="y"/ )
 
+        end
+
+        it "check storm-webdav.service.d exists" do
+          is_expected.to contain_file('/etc/systemd/system/storm-webdav.service.d').with(
+            :ensure => 'directory',
+            :owner  => 'root',
+            :group  => 'root',
+            :mode   => '0644',
+          )
+        end
+
+        it "check storm-webdav.service.d/filelimit.conf exists" do
+          limit_file='/etc/systemd/system/storm-webdav.service.d/filelimit.conf'
+          is_expected.to contain_file(limit_file).with(
+            :ensure  => 'present',
+            :owner   => 'root',
+            :group   => 'root',
+            :mode    => '0644',
+            :content => /^LimitNOFILE=1046/,
+          )
         end
       end
 

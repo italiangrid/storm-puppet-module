@@ -3,13 +3,9 @@
 class storm::backend::params (
 ) inherits storm::params {
 
-  $user_name = $storm::params::user_name
-
   $db_host = $storm::params::db_host
   $db_user = $storm::params::db_user
   $db_passwd = $storm::params::db_passwd
-
-  $config_dir = lookup('storm::backend::config_dir', String, undef, '/etc/storm/backend-server')
 
   $rfio_port = lookup('storm::backend::rfio_port', Integer, undef, 5001)
   $xroot_port = lookup('storm::backend::xroot_port', Integer, undef, 1094)

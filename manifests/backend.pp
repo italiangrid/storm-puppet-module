@@ -19,13 +19,9 @@ class storm::backend (
 
   String $hostname,
 
-  String $user_name = $storm::backend::params::user_name,
-
   String $db_host = $storm::backend::params::db_host,
   String $db_user = $storm::backend::params::db_user,
   String $db_passwd = $storm::backend::params::db_passwd,
-
-  String $config_dir = $storm::backend::params::config_dir,
 
   String $rfio_hostname = lookup('storm::backend::rfio_hostname', String, undef, $hostname),
   Integer $rfio_port = $storm::backend::params::rfio_port,

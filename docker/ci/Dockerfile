@@ -1,7 +1,6 @@
 FROM ruby:2.6
 
-# Add Gemfile
-ADD Gemfile /
+ADD setup.sh /
 
 RUN apt-get update
 RUN apt-get install -y ruby-full libaugeas-dev vim
@@ -14,13 +13,8 @@ RUN printf "gem: --no-rdoc --no-ri" >> /etc/gemrc && \
 # Enable Unicode
 ENV LANG C.UTF-8
 
-# Now do the bundle install. I Split this off to minimize differences between 3 and 4
-RUN bundle config set clean 'false'
-RUN bundle config set system 'true'
-RUN bundler install --gemfile /Gemfile
-
-#Don't like that is sets clean in global config
-RUN bundle config --delete clean
+RUN chmod +x /setup.sh
+RUN sh setup.sh
 
 RUN apt-get update
 RUN apt-get install default-jre default-jdk -y

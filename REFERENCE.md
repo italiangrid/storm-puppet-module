@@ -25,6 +25,7 @@
 * [`storm::install`](#storminstall): StoRM install class
 * [`storm::params`](#stormparams): StoRM params class
 * [`storm::repo`](#stormrepo): Choose which StoRM repository you want to intall and enable. Also a custom list of repository URL can be specified.
+* [`storm::storage`](#stormstorage): Init testbed storage area's directories
 * [`storm::users`](#stormusers): StoRM accounts configuration
 * [`storm::webdav`](#stormwebdav): StoRM WebDAV puppet module
 * [`storm::webdav::config`](#stormwebdavconfig): StoRM WebDAV config class
@@ -35,9 +36,6 @@
 **Defined types**
 
 * [`storm::common_directory`](#stormcommon_directory): Check if a directory path exists. If not, a new directory is created with specific owner and permissions.
-* [`storm::service_hostcert`](#stormservice_hostcert): 
-* [`storm::storage_root_dir`](#stormstorage_root_dir): Check if a storage root directory path exists. If not, a new directory is created with 755 as permissions and the defined owner and group.
-* [`storm::user`](#stormuser): Create a UNIX user. Optionally with a required uid and gid.
 
 **Data types**
 
@@ -100,14 +98,6 @@ Data type: `String`
 
 
 
-##### `user_name`
-
-Data type: `String`
-
-
-
-Default value: $storm::backend::params::user_name
-
 ##### `db_host`
 
 Data type: `String`
@@ -131,14 +121,6 @@ Data type: `String`
 
 
 Default value: $storm::backend::params::db_passwd
-
-##### `config_dir`
-
-Data type: `String`
-
-
-
-Default value: $storm::backend::params::config_dir
 
 ##### `rfio_hostname`
 
@@ -219,22 +201,6 @@ StoRM Backend config class
 #### Parameters
 
 The following parameters are available in the `storm::backend::config` class.
-
-##### `user_name`
-
-Data type: `Any`
-
-
-
-Default value: $storm::backend::user_name
-
-##### `config_dir`
-
-Data type: `Any`
-
-
-
-Default value: $storm::backend::config_dir
 
 ##### `storage_areas`
 
@@ -927,22 +893,59 @@ A list of repository URLs that have to be installed and enabled. Optional.
 
 Default value: []
 
+### storm::storage
+
+Init testbed storage area's directories
+
+#### Examples
+
+##### Example of usage
+
+```puppet
+class { 'storm::storage':
+  storage_root => '/storage',
+  storage_areas => {
+    'test.vo' => '/storage/test.vo',
+    'tape' => '/storage/tape',
+  },
+}
+```
+
+#### Parameters
+
+The following parameters are available in the `storm::storage` class.
+
+##### `storage_root`
+
+Data type: `String`
+
+
+
+Default value: '/storage'
+
+##### `storage_areas`
+
+Data type: `Hash[String, String]`
+
+
+
+Default value: {
+    'test.vo' => '/storage/test.vo',
+    'test.vo.2' => '/storage/test.vo.2',
+    'igi' => '/storage/igi',
+    'noauth' => '/storage/noauth',
+    'test.vo.bis' => '/storage/test.vo.bis',
+    'nested' => '/storage/nested',
+    'tape' => '/storage/tape',
+  }
+
 ### storm::users
 
 Parameters
 ----------
 
 StoRM needs a 'storm' Unix user, member of an 'edguser' group.
-This class allows the creation of storm and edguser users.
-The parameters are:
-
-* `edguser_uid`: the user id of `edguser` user;
-* `edguser_gid`: the group id of `edguser` group;
-* `edguser_home`: the home path of `edguser`;
-* `storm_uid`: the user id of `storm` user;
-* `storm_gid`: the group id of `storm` group;
-* `storm_home`: the home path of `storm`;
-* `storm_groups`: the list of `storm` user memberships;
+This class creates all the necessary users.
 
 #### Examples
 
@@ -950,9 +953,25 @@ The parameters are:
 
 ```puppet
 class { 'storm::users':
-  storm_uid => 991,
-  storm_gid => 991,
-  storm_groups => ['storm', 'edguser', 'test'],
+  groups => {
+    'infosys' => {
+      gid => '996',
+    },
+  },
+  users => {
+    'edguser' => {
+      'comment' => 'Edguser user',
+      'groups'  => [ edguser, infosys, storm, ],
+      'uid'     => '995',
+      'gid'     => '995',
+    },
+    'storm' => {
+      'comment' => 'StoRM user',
+      'groups'  => [ storm, edguser, ],
+      'uid'     => '991',
+      'gid'     => '991',
+    },
+  }
 }
 ```
 
@@ -960,61 +979,40 @@ class { 'storm::users':
 
 The following parameters are available in the `storm::users` class.
 
-##### `edguser_uid`
+##### `groups`
 
-Data type: `Integer`
-
-The user id of `edguser` user.
-
-Default value: 995
-
-##### `edguser_gid`
-
-Data type: `Integer`
+Data type: `Accounts::Group::Hash`
 
 
 
-Default value: 995
+Default value: {
+    'infosys' => {
+      gid => '996',
+    },
+  }
 
-##### `edguser_home`
+##### `users`
 
-Data type: `String`
-
-
-
-Default value: '/var/local/edguser'
-
-##### `storm_uid`
-
-Data type: `Integer`
+Data type: `Accounts::User::Hash`
 
 
 
-Default value: 991
-
-##### `storm_gid`
-
-Data type: `Integer`
-
-
-
-Default value: 991
-
-##### `storm_home`
-
-Data type: `String`
-
-
-
-Default value: '/home/storm'
-
-##### `storm_groups`
-
-Data type: `Array[String]`
-
-
-
-Default value: ['storm','edguser']
+Default value: {
+    'edguser' => {
+      'comment' => 'Edguser user',
+      'groups'  => [ edguser, infosys, storm, ],
+      'uid'     => '995',
+      'gid'     => '995',
+      'home'    => '/home/edguser',
+    },
+    'storm' => {
+      'comment' => 'StoRM user',
+      'groups'  => [ storm, edguser, ],
+      'uid'     => '991',
+      'gid'     => '991',
+      'home'    => '/home/storm',
+    },
+  }
 
 ### storm::webdav
 
@@ -1054,7 +1052,6 @@ The Storm::Webdav::OAuthIssuer type
 
 ```puppet
 class { 'storm::webdav':
-  storage_root_dir => '/storage',
   storage_areas => [
     {
       name                       => 'test.vo',
@@ -1088,14 +1085,6 @@ class { 'storm::webdav':
 #### Parameters
 
 The following parameters are available in the `storm::webdav` class.
-
-##### `storage_root_dir`
-
-Data type: `String`
-
-Storage areas root directory path.
-
-Default value: $storm::webdav::params::storage_root_dir
 
 ##### `storage_areas`
 
@@ -1305,6 +1294,14 @@ Data type: `Boolean`
 
 Default value: $storm::webdav::params::debug_suspend
 
+##### `storm_limit_nofile`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::webdav::params::storm_limit_nofile
+
 ### storm::webdav::config
 
 StoRM WebDAV config class
@@ -1312,14 +1309,6 @@ StoRM WebDAV config class
 #### Parameters
 
 The following parameters are available in the `storm::webdav::config` class.
-
-##### `storage_root_dir`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::storage_root_dir
 
 ##### `storage_areas`
 
@@ -1529,6 +1518,14 @@ Data type: `Any`
 
 Default value: $storm::webdav::debug_suspend
 
+##### `storm_limit_nofile`
+
+Data type: `Any`
+
+
+
+Default value: $storm::webdav::storm_limit_nofile
+
 ### storm::webdav::install
 
 StoRM WebDAV install class
@@ -1598,108 +1595,6 @@ Data type: `Boolean`
 If recursion is enabled. Optional. Default: false.
 
 Default value: `false`
-
-### storm::service_hostcert
-
-The storm::service_hostcert class.
-
-#### Examples
-
-##### Basic usage
-
-```puppet
-storm::service_hostcert { 'storm-webdav service host credentials':
-  hostdir => '/etc/grid-security/storm-webdav',
-}
-```
-
-#### Parameters
-
-The following parameters are available in the `storm::service_hostcert` defined type.
-
-##### `hostdir`
-
-Data type: `String`
-
-
-
-### storm::storage_root_dir
-
-Check if a storage root directory path exists. If not, a new directory is created with 755 as permissions and the defined owner and group.
-
-#### Examples
-
-##### Basic usage
-
-```puppet
-storm::storage_root_dir { 'check test storage area root dir':
-  path => '/storage/test',
-  owner => 'storm',
-  group => 'storm',
-}
-```
-
-#### Parameters
-
-The following parameters are available in the `storm::storage_root_dir` defined type.
-
-##### `path`
-
-Data type: `String`
-
-The storage root directory path. Required.
-
-##### `owner`
-
-Data type: `String`
-
-Directory's owner. Required.
-
-##### `group`
-
-Data type: `String`
-
-Directory's group. Required.
-
-### storm::user
-
-Create a UNIX user. Optionally with a required uid and gid.
-
-#### Examples
-
-##### Basic usage
-
-```puppet
-storm::user { 'service user':
-  user_name => 'storm',
-}
-```
-
-#### Parameters
-
-The following parameters are available in the `storm::user` defined type.
-
-##### `user_name`
-
-Data type: `String`
-
-The user name. Required.
-
-##### `user_uid`
-
-Data type: `Integer`
-
-User's id. Optional.
-
-Default value: 1100
-
-##### `user_gid`
-
-Data type: `Integer`
-
-User's group id. Optional.
-
-Default value: 1100
 
 ## Data types
 

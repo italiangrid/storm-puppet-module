@@ -43,10 +43,9 @@ pipeline {
         script {
           checkout scm
           sh """
-            bundle install
-            bundle exec rake test | tee rake.log
+            rake test
           """
-          archiveArtifacts 'rspec_report.html,rake.log'
+          archiveArtifacts 'rspec_report.html'
         }
       }
     }

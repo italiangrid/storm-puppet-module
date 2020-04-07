@@ -33,7 +33,6 @@
 #
 # @example Example of usage
 #    class { 'storm::webdav':
-#      storage_root_dir => '/storage',
 #      storage_areas => [
 #        {
 #          name                       => 'test.vo',
@@ -62,9 +61,6 @@
 #      ],
 #      hostnames => ['localhost', 'alias.for.localhost'],
 #    }
-#
-# @param storage_root_dir
-#   Storage areas root directory path.
 #
 # @param storage_areas
 #   List of storage area's configuration.
@@ -119,9 +115,9 @@
 #
 # @param debug_suspend
 #
+# @param storm_limit_nofile
+#
 class storm::webdav (
-
-  String $storage_root_dir = $storm::webdav::params::storage_root_dir,
 
   Array[Storm::Webdav::StorageArea] $storage_areas = $storm::webdav::params::storage_areas,
 
@@ -159,6 +155,8 @@ class storm::webdav (
   Boolean $debug = $storm::webdav::params::debug,
   Integer $debug_port = $storm::webdav::params::debug_port,
   Boolean $debug_suspend = $storm::webdav::params::debug_suspend,
+
+  Integer $storm_limit_nofile = $storm::webdav::params::storm_limit_nofile,
 
 ) inherits storm::webdav::params {
 

@@ -23,8 +23,6 @@ describe 'storm::backend', :type => :class do
 
         let(:params) do
           super().merge({
-            'config_dir'          => '/etc/storm/be/config',
-            'user_name'           => 'test',
             'gsiftp_pool_members' => [
               {
                 'hostname' => 'gridftp-0.example.com',
@@ -66,21 +64,10 @@ describe 'storm::backend', :type => :class do
           })
         end
 
-        it "check storm backend configuration directory" do
-          is_expected.to contain_file('be::storm-be-config-dir').with( 
-            :owner  => 'test',
-            :group  => 'test',
-            :mode   => '0750',
-            :ensure => 'directory',
-            :path   => '/etc/storm/be/config',
-          )
-        end
-
         it "check backend namespace file content" do
-          title='be::configure-be-namespace-file'
+          title='/etc/storm/backend-server/namespace.xml'
           is_expected.to contain_file(title).with( 
             :ensure  => 'present',
-            :path    => '/etc/storm/be/config/namespace.xml',
             :content => my_fixture_read("namespace-0.xml"),
           )
         end
@@ -90,12 +77,11 @@ describe 'storm::backend', :type => :class do
       context 'Use default backend params' do
 
         it "check storm backend configuration directory" do
-          is_expected.to contain_file('be::storm-be-config-dir').with( 
-            :owner  => 'storm',
-            :group  => 'storm',
+          is_expected.to contain_file('/etc/storm/backend-server').with( 
+            :owner  => 'root',
+            :group  => 'root',
             :mode   => '0750',
             :ensure => 'directory',
-            :path   => '/etc/storm/backend-server',
           )
         end
       end

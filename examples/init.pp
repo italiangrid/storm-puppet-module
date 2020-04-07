@@ -1,7 +1,6 @@
-class { 'storm::webdav':
-  user_name     => 'storm',
-  user_uid      => 1100,
-  user_gid      => 1100,
+class { 'storm::users': }
+-> class { 'storm::storage': }
+-> class { 'storm::webdav':
   storage_areas => [
     {
       'name'                       => 'test.vo',
@@ -22,11 +21,21 @@ class { 'storm::webdav':
       'vo_map_enabled'             => false,
     },
   ],
-  hostnames     => ['omii006-vm03.cnaf.infn.it'],
+  use_conscrypt => true,
+  enable_http2  => true,
+  hostnames     => ['webdav.test.example'],
 }
-
-class { 'storm::gridftp':
-  port            => 2811,
-  port_range      => '20000,25000',
-  connections_max => 2000,
+-> class { 'storm::gridftp':
+  port                => 2811,
+  port_range          => '20000,25000',
+  connections_max     => 2000,
+  redirect_lcmaps_log => true,
+  llgt_log_file       => '/var/log/storm/lcmaps.log',
+}
+-> class { 'storm::frontend':
+  be_xmlrpc_host  => 'backend.test.example',
+  be_xmlrpc_token => 'secret',
+  db_host         => 'backend.test.example',
+  db_user         => 'storm',
+  db_passwd       => 'secret',
 }
