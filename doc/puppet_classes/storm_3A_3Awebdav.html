@@ -141,7 +141,6 @@
 </div></p>
       
       <pre class="example code"><code>class { &#39;storm::webdav&#39;:
-  storage_root_dir =&gt; &#39;/storage&#39;,
   storage_areas =&gt; [
     {
       name                       =&gt; &#39;test.vo&#39;,
@@ -174,22 +173,6 @@
   </div>
 <p class="tag_title">Parameters:</p>
 <ul class="param">
-  
-    <li>
-      
-        <span class='name'>storage_root_dir</span>
-      
-      
-        <span class='type'></span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>Storage areas root directory path.</p>
-</div>
-      
-    </li>
   
     <li>
       
@@ -558,6 +541,10 @@
         <pre class="lines">
 
 
+120
+121
+122
+123
 124
 125
 126
@@ -604,14 +591,10 @@
 167
 168
 169
-170
-171
-172
-173
-174</pre>
+170</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/webdav.pp', line 124</span>
+        <pre class="code"><span class="info file"># File 'manifests/webdav.pp', line 120</span>
 
 class storm::webdav (
 

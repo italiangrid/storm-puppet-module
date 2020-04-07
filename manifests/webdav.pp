@@ -33,7 +33,6 @@
 #
 # @example Example of usage
 #    class { 'storm::webdav':
-#      storage_root_dir => '/storage',
 #      storage_areas => [
 #        {
 #          name                       => 'test.vo',
@@ -62,9 +61,6 @@
 #      ],
 #      hostnames => ['localhost', 'alias.for.localhost'],
 #    }
-#
-# @param storage_root_dir
-#   Storage areas root directory path.
 #
 # @param storage_areas
 #   List of storage area's configuration.

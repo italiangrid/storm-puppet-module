@@ -1052,7 +1052,6 @@ The Storm::Webdav::OAuthIssuer type
 
 ```puppet
 class { 'storm::webdav':
-  storage_root_dir => '/storage',
   storage_areas => [
     {
       name                       => 'test.vo',
@@ -1086,10 +1085,6 @@ class { 'storm::webdav':
 #### Parameters
 
 The following parameters are available in the `storm::webdav` class.
-
-##### `storage_root_dir`
-
-Storage areas root directory path.
 
 ##### `storage_areas`
 
