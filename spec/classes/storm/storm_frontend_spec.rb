@@ -122,7 +122,7 @@ describe 'storm::frontend', :type => :class do
           is_expected.to contain_file(title).with( :content => /be.recalltable.port=9998/ )
           is_expected.to contain_file(title).with( :content => /db.host=localhost/ )
           is_expected.to contain_file(title).with( :content => /db.user=storm/ )
-          is_expected.to contain_file(title).with( :content => /db.passwd=secret/ )
+          is_expected.to contain_file(title).with( :content => /db.passwd=storm/ )
           is_expected.to contain_file(title).with( :content => /check.user.blacklisting=false/ )
           is_expected.to contain_file(title).with( :content => /#argus-pepd-endpoint=/ )
           is_expected.to contain_file(title).with( :content => /monitoring.enabled=true/ )

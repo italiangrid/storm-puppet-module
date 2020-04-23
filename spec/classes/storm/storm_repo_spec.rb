@@ -14,98 +14,216 @@ describe 'storm::repo' do
 
         case facts[:operatingsystemmajrelease]
         when '6'
-          it "check stable repo exists and is enabled" do
-            is_expected.to contain_exec('download-stable-repo-el6')
-            is_expected.to contain_exec('enable-stable-repo-el6')
+          it "check stable repo" do
+            is_expected.to contain_yumrepo('storm-stable-centos6').with( 
+              :ensure   => 'present',
+              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm/stable/el6/x86_64/',
+              :enabled  => 1,
+              :protect  => 1,
+              :gpgcheck => 0,
+              :priority => 1,
+            )
           end
-
-          it "check beta repo exists and is disabled" do
-            is_expected.to contain_exec('download-beta-repo-el6')
-            is_expected.to contain_exec('disable-beta-repo-el6')
+          it "check beta repo" do
+            is_expected.to contain_yumrepo('storm-beta-centos6').with( 
+              :ensure   => 'present',
+              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm/beta/el6/x86_64/',
+              :enabled  => 0,
+              :protect  => 1,
+              :gpgcheck => 0,
+              :priority => 1,
+            )
           end
-
-          it "check nighlty repo exists and is disabled" do
-            is_expected.to contain_exec('download-nightly-repo-el6')
-            is_expected.to contain_exec('disable-nightly-repo-el6')
+          it "check nightly repo" do
+            is_expected.to contain_yumrepo('storm-nightly-centos6').with( 
+              :ensure   => 'present',
+              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm/nightly/el6/x86_64/',
+              :enabled  => 0,
+              :protect  => 1,
+              :gpgcheck => 0,
+              :priority => 1,
+            )
           end
         when '7'
-          it "check stable repo exists and is enabled" do
-            is_expected.to contain_exec('download-stable-repo-el7')
-            is_expected.to contain_exec('enable-stable-repo-el7')
+          it "check stable repo" do
+            is_expected.to contain_yumrepo('storm-stable-centos7').with( 
+              :ensure   => 'present',
+              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm/stable/el7/x86_64/',
+              :enabled  => 1,
+              :protect  => 1,
+              :gpgcheck => 0,
+              :priority => 1,
+            )
           end
-
-          it "check beta repo exists and is disabled" do
-            is_expected.to contain_exec('download-beta-repo-el7')
-            is_expected.to contain_exec('disable-beta-repo-el7')
+          it "check beta repo" do
+            is_expected.to contain_yumrepo('storm-beta-centos7').with( 
+              :ensure   => 'present',
+              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm/beta/el7/x86_64/',
+              :enabled  => 0,
+              :protect  => 1,
+              :gpgcheck => 0,
+              :priority => 1,
+            )
           end
-
-          it "check nighlty repo exists and is disabled" do
-            is_expected.to contain_exec('download-nightly-repo-el7')
-            is_expected.to contain_exec('disable-nightly-repo-el7')
+          it "check nightly repo" do
+            is_expected.to contain_yumrepo('storm-nightly-centos7').with( 
+              :ensure   => 'present',
+              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm/nightly/el7/x86_64/',
+              :enabled  => 0,
+              :protect  => 1,
+              :gpgcheck => 0,
+              :priority => 1,
+            )
           end
         end
-
       end
 
-      context 'check custom configuration' do
+      context 'check all installed and stable disabled' do
 
         let(:params) do 
           {
-              :enabled => ['nightly', 'beta'],
+            :enabled => ['nightly', 'beta'],
           }
         end
     
         case facts[:operatingsystemmajrelease]
         when '6'
-
-          it "check stable repo exists and is enabled" do
-            is_expected.to contain_exec('download-stable-repo-el6')
-            is_expected.to contain_exec('disable-stable-repo-el6')
+          it "check stable repo installed but disabled" do
+            is_expected.to contain_yumrepo('storm-stable-centos6').with( 
+              :ensure   => 'present',
+              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm/stable/el6/x86_64/',
+              :enabled  => 0,
+              :protect  => 1,
+              :gpgcheck => 0,
+              :priority => 1,
+            )
           end
-          it "check beta repo exists and is disabled" do
-            is_expected.to contain_exec('download-beta-repo-el6')
-            is_expected.to contain_exec('enable-beta-repo-el6')
+          it "check beta repo is enabled" do
+            is_expected.to contain_yumrepo('storm-beta-centos6').with( 
+              :ensure   => 'present',
+              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm/beta/el6/x86_64/',
+              :enabled  => 1,
+              :protect  => 1,
+              :gpgcheck => 0,
+              :priority => 1,
+            )
           end
-          it "check nighlty repo exists and is disabled" do
-            is_expected.to contain_exec('download-nightly-repo-el6')
-            is_expected.to contain_exec('enable-nightly-repo-el6')
+          it "check nightly repo is enabled" do
+            is_expected.to contain_yumrepo('storm-nightly-centos6').with( 
+              :ensure   => 'present',
+              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm/nightly/el6/x86_64/',
+              :enabled  => 1,
+              :protect  => 1,
+              :gpgcheck => 0,
+              :priority => 1,
+            )
           end
         when '7'
-          it "check stable repo exists and is enabled" do
-            is_expected.to contain_exec('download-stable-repo-el7')
-            is_expected.to contain_exec('disable-stable-repo-el7')
+          it "check stable repo installed but disabled" do
+            is_expected.to contain_yumrepo('storm-stable-centos7').with( 
+              :ensure   => 'present',
+              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm/stable/el7/x86_64/',
+              :enabled  => 0,
+              :protect  => 1,
+              :gpgcheck => 0,
+              :priority => 1,
+            )
           end
-          it "check beta repo exists and is disabled" do
-            is_expected.to contain_exec('download-beta-repo-el7')
-            is_expected.to contain_exec('enable-beta-repo-el7')
+          it "check beta repo is enabled" do
+            is_expected.to contain_yumrepo('storm-beta-centos7').with( 
+              :ensure   => 'present',
+              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm/beta/el7/x86_64/',
+              :enabled  => 1,
+              :protect  => 1,
+              :gpgcheck => 0,
+              :priority => 1,
+            )
           end
-          it "check nighlty repo exists and is disabled" do
-            is_expected.to contain_exec('download-nightly-repo-el7')
-            is_expected.to contain_exec('enable-nightly-repo-el7')
+          it "check nightly repo is enabled" do
+            is_expected.to contain_yumrepo('storm-nightly-centos7').with( 
+              :ensure   => 'present',
+              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm/nightly/el7/x86_64/',
+              :enabled  => 1,
+              :protect  => 1,
+              :gpgcheck => 0,
+              :priority => 1,
+            )
           end
         end
 
       end
 
+      context 'check only stable installed and enabled' do
+
+        let(:params) do 
+          {
+            :installed => ['stable'],
+          }
+        end
+    
+        case facts[:operatingsystemmajrelease]
+        when '6'
+          it "check stable repo installed and enabled" do
+            is_expected.to contain_yumrepo('storm-stable-centos6').with( 
+              :ensure   => 'present',
+              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm/stable/el6/x86_64/',
+              :enabled  => 1,
+              :protect  => 1,
+              :gpgcheck => 0,
+              :priority => 1,
+            )
+          end
+          it "check beta repo not installed" do
+            is_expected.to_not contain_yumrepo('storm-beta-centos6')
+          end
+          it "check nightly repo is enabled" do
+            is_expected.to_not contain_yumrepo('storm-nightly-centos6')
+          end
+        when '7'
+          it "check stable repo installed and enabled" do
+            is_expected.to contain_yumrepo('storm-stable-centos7').with( 
+              :ensure   => 'present',
+              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm/stable/el7/x86_64/',
+              :enabled  => 1,
+              :protect  => 1,
+              :gpgcheck => 0,
+              :priority => 1,
+            )
+          end
+          it "check beta repo not installed" do
+            is_expected.to_not contain_yumrepo('storm-beta-centos7')
+          end
+          it "check nightly repo is enabled" do
+            is_expected.to_not contain_yumrepo('storm-nightly-centos7')
+          end
+        end
+
+      end
+
+      context 'check custom urls' do
+
+        let(:params) do 
+          {
+            :extra => [{
+              'name' => 'test',
+              'baseurl' => 'https://ci.cloud.cnaf.infn.it/rpms'
+            }],
+          }
+        end
+
+        it "check extra repo is installed and enabled" do
+          is_expected.to contain_yumrepo('test').with( 
+            :ensure   => 'present',
+            :baseurl  => 'https://ci.cloud.cnaf.infn.it/rpms',
+            :enabled  => 1,
+            :protect  => 1,
+            :gpgcheck => 0,
+            :priority => 1,
+          )
+        end
+      end
+
     end
-  end
-
-  context 'check custom urls' do
-
-    let(:params) do 
-      {
-        :installed => [],
-        :customs => [{
-          'name' => 'test',
-          'url' => 'https://ci.cloud.cnaf.infn.it/view/storm/job/pkg.storm/job/release-el6-1-11-16/lastSuccessfulBuild/artifact/rpms/storm-test-centos6.repo'
-        }],
-      }
-    end
-
-    it "check repo has been downloaded" do
-      is_expected.to contain_exec('download-custom-test-repo')
-    end
-
   end
 
 end

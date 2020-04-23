@@ -19,7 +19,6 @@ class storm::backend (
 
   String $hostname,
 
-  String $db_host = $storm::backend::params::db_host,
   String $db_user = $storm::backend::params::db_user,
   String $db_passwd = $storm::backend::params::db_passwd,
 
@@ -32,6 +31,7 @@ class storm::backend (
   Storm::Backend::BalanceStrategy $gsiftp_pool_balance_strategy = $storm::backend::params::gsiftp_pool_balance_strategy,
   Array[Storm::Backend::GsiftpPoolMember] $gsiftp_pool_members = $storm::backend::params::gsiftp_pool_members,
   Array[Storm::Backend::WebdavPoolMember] $webdav_pool_members = $storm::backend::params::webdav_pool_members,
+  Array[Storm::Backend::SrmPoolMember] $srm_pool_members = $storm::backend::params::srm_pool_members,
 
   Array[Storm::Backend::StorageArea] $storage_areas = $storm::backend::params::storage_areas,
 

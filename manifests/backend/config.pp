@@ -2,10 +2,14 @@
 #
 class storm::backend::config (
 
+  $db_user = $storm::backend::db_user,
+  $db_passwd = $storm::backend::db_passwd,
+
   $storage_areas = $storm::backend::storage_areas,
   $gsiftp_pool_members = $storm::backend::gsiftp_pool_members,
   $gsiftp_pool_balance_strategy = $storm::backend::gsiftp_pool_balance_strategy,
   $webdav_pool_members = $storm::backend::webdav_pool_members,
+  $srm_pool_members = $storm::backend::srm_pool_members,
   $rfio_hostname = $storm::backend::rfio_hostname,
   $rfio_port = $storm::backend::rfio_port,
   $xroot_hostname = $storm::backend::xroot_hostname,
