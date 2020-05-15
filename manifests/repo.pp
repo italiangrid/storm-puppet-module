@@ -22,14 +22,14 @@ class storm::repo (
 
 ) {
 
-  $base = 'https://repo.cloud.cnaf.infn.it/repository/storm'
+  $base = 'https://repo.cloud.cnaf.infn.it/repository'
   $el = $::operatingsystemmajrelease
 
   $installed.each | $repo | {
 
     $enabled = $repo in $enabled ? { true => 1, default => 0 }
     $name = "storm-${repo}-centos${el}"
-    $baseurl = "${base}/${repo}/el${el}/x86_64/"
+    $baseurl = "${base}/storm-rpm-${repo}/centos${el}/"
 
     yumrepo { $name:
       ensure   => present,
