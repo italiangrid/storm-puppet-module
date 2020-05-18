@@ -3,9 +3,9 @@
 class storm::frontend::params (
 ) inherits storm::params {
 
-  $db_host = $storm::params::db_host
-  $db_user = $storm::params::db_user
-  $db_passwd = $storm::params::db_passwd
+  $db_host = lookup('storm::frontend::db::host', String, undef, 'localhost')
+  $db_user = lookup('storm::frontend::db::user', String, undef, 'storm')
+  $db_passwd = lookup('storm::frontend::db::passwd', String, undef, 'storm')
 
   $port = lookup('storm::frontend::port', Integer, undef, 8444)
   $threadpool_threads_number = lookup('storm::frontend::threadpool_threads_number', Integer, undef, 50)

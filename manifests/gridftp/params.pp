@@ -12,4 +12,7 @@ class storm::gridftp::params (
 
   $redirect_lcmaps_log = lookup('storm::gridftp::redirect_lcmaps_log', Boolean, undef, false)
   $llgt_log_file = lookup('storm::gridftp::llgt_log_file', String, undef, '/var/log/storm/storm-gridftp-lcmaps.log')
+
+  $lcmaps_debug_level = lookup('storm::gridftp::lcmaps_debug_level', Integer, undef, 3)
+  $lcas_debug_level = lookup('storm::gridftp::lcas_debug_level', Integer, undef, 3)
 }

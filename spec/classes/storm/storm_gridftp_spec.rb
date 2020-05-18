@@ -19,6 +19,8 @@ describe 'storm::gridftp', :type => :class do
             'connections_max'     => 4000,
             'redirect_lcmaps_log' => true,
             'llgt_log_file'       => '/var/log/storm/lcmaps.log',
+            'lcmaps_debug_level'  => 0,
+            'lcas_debug_level'    => 0,
           }
         end
 
@@ -38,6 +40,8 @@ describe 'storm::gridftp', :type => :class do
             :ensure => 'present',
           )
           is_expected.to contain_file(title).with( :content => /LLGT_LOG_FILE=\/var\/log\/storm\/lcmaps.log/ )
+          is_expected.to contain_file(title).with( :content => /LCMAPS_DEBUG_LEVEL=0/ )
+          is_expected.to contain_file(title).with( :content => /LCAS_DEBUG_LEVEL=0/ )
         end
       end
 
@@ -59,6 +63,8 @@ describe 'storm::gridftp', :type => :class do
             :ensure => 'present',
           )
           is_expected.to contain_file(title).with( :content => /#LLGT_LOG_FILE=\/var\/log\/storm\/storm-gridftp-lcmaps.log/ )
+          is_expected.to contain_file(title).with( :content => /LCMAPS_DEBUG_LEVEL=3/ )
+          is_expected.to contain_file(title).with( :content => /LCAS_DEBUG_LEVEL=3/ )
         end
       end
     end

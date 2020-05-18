@@ -11,6 +11,9 @@ class storm::gridftp::config (
 
   $redirect_lcmaps_log = $storm::gridftp::redirect_lcmaps_log,
   $llgt_log_file = $storm::gridftp::llgt_log_file,
+
+  $lcmaps_debug_level = $storm::gridftp::lcmaps_debug_level,
+  $lcas_debug_level = $storm::gridftp::lcas_debug_level,
 ) {
 
   $conf_file='/etc/gridftp.conf'

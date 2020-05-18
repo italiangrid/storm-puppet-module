@@ -38,6 +38,12 @@
 # @param llgt_log_file
 #   The LCMAPS log file used if 'redirect_lcmaps_log' is true.
 #
+# @param lcmaps_debug_level
+#   The LCMAPS logging level. Values from 0 (ERROR) to 5 (DEBUG). Default: 3 (INFO)
+#
+# @param lcas_debug_level
+#   The LCAS logging level. Values from 0 (ERROR) to 5 (DEBUG). Default: 3 (INFO)
+#
 class storm::gridftp (
 
   Integer $port = $storm::gridftp::params::port,
@@ -49,6 +55,9 @@ class storm::gridftp (
 
   Boolean $redirect_lcmaps_log = $storm::gridftp::params::redirect_lcmaps_log,
   String $llgt_log_file = $storm::gridftp::params::llgt_log_file,
+
+  Integer $lcmaps_debug_level = $storm::gridftp::params::lcmaps_debug_level,
+  Integer $lcas_debug_level = $storm::gridftp::params::lcas_debug_level,
 
 ) inherits storm::gridftp::params {
 
