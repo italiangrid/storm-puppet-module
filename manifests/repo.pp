@@ -33,6 +33,7 @@ class storm::repo (
 
     yumrepo { $name:
       ensure   => present,
+      descr    => $name,
       baseurl  => $baseurl,
       enabled  => $enabled,
       protect  => 1,
@@ -48,6 +49,7 @@ class storm::repo (
 
     yumrepo { $name:
       ensure   => present,
+      descr    => $name,
       baseurl  => $baseurl,
       enabled  => 1,
       protect  => 1,
