@@ -4,9 +4,9 @@
   "author": "storm",
   "summary": "StoRM puppet module",
   "license": "Apache-2.0",
-  "source": "https://github.com/enricovianello/storm-puppet-module",
-  "project_page": "https://github.com/enricovianello/storm-puppet-module",
-  "issues_url": "https://github.com/enricovianello/storm-puppet-module",
+  "source": "https://github.com/italiangrid/storm-puppet-module",
+  "project_page": "https://github.com/italiangrid/storm-puppet-module",
+  "issues_url": "https://github.com/italiangrid/storm-puppet-module",
   "dependencies": [
     {
       "name": "puppetlabs-accounts",
