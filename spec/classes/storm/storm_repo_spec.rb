@@ -17,7 +17,7 @@ describe 'storm::repo' do
           it "check stable repo" do
             is_expected.to contain_yumrepo('storm-stable-centos6').with( 
               :ensure   => 'present',
-              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm/stable/el6/x86_64/',
+              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm-rpm-stable/centos6/',
               :enabled  => 1,
               :protect  => 1,
               :gpgcheck => 0,
@@ -27,7 +27,7 @@ describe 'storm::repo' do
           it "check beta repo" do
             is_expected.to contain_yumrepo('storm-beta-centos6').with( 
               :ensure   => 'present',
-              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm/beta/el6/x86_64/',
+              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm-rpm-beta/centos6/',
               :enabled  => 0,
               :protect  => 1,
               :gpgcheck => 0,
@@ -37,7 +37,7 @@ describe 'storm::repo' do
           it "check nightly repo" do
             is_expected.to contain_yumrepo('storm-nightly-centos6').with( 
               :ensure   => 'present',
-              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm/nightly/el6/x86_64/',
+              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm-rpm-nightly/centos6/',
               :enabled  => 0,
               :protect  => 1,
               :gpgcheck => 0,
@@ -48,7 +48,7 @@ describe 'storm::repo' do
           it "check stable repo" do
             is_expected.to contain_yumrepo('storm-stable-centos7').with( 
               :ensure   => 'present',
-              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm/stable/el7/x86_64/',
+              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm-rpm-stable/centos7/',
               :enabled  => 1,
               :protect  => 1,
               :gpgcheck => 0,
@@ -58,7 +58,7 @@ describe 'storm::repo' do
           it "check beta repo" do
             is_expected.to contain_yumrepo('storm-beta-centos7').with( 
               :ensure   => 'present',
-              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm/beta/el7/x86_64/',
+              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm-rpm-beta/centos7/',
               :enabled  => 0,
               :protect  => 1,
               :gpgcheck => 0,
@@ -68,7 +68,7 @@ describe 'storm::repo' do
           it "check nightly repo" do
             is_expected.to contain_yumrepo('storm-nightly-centos7').with( 
               :ensure   => 'present',
-              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm/nightly/el7/x86_64/',
+              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm-rpm-nightly/centos7/',
               :enabled  => 0,
               :protect  => 1,
               :gpgcheck => 0,
@@ -91,7 +91,7 @@ describe 'storm::repo' do
           it "check stable repo installed but disabled" do
             is_expected.to contain_yumrepo('storm-stable-centos6').with( 
               :ensure   => 'present',
-              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm/stable/el6/x86_64/',
+              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm-rpm-stable/centos6/',
               :enabled  => 0,
               :protect  => 1,
               :gpgcheck => 0,
@@ -101,7 +101,7 @@ describe 'storm::repo' do
           it "check beta repo is enabled" do
             is_expected.to contain_yumrepo('storm-beta-centos6').with( 
               :ensure   => 'present',
-              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm/beta/el6/x86_64/',
+              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm-rpm-beta/centos6/',
               :enabled  => 1,
               :protect  => 1,
               :gpgcheck => 0,
@@ -111,7 +111,7 @@ describe 'storm::repo' do
           it "check nightly repo is enabled" do
             is_expected.to contain_yumrepo('storm-nightly-centos6').with( 
               :ensure   => 'present',
-              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm/nightly/el6/x86_64/',
+              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm-rpm-nightly/centos6/',
               :enabled  => 1,
               :protect  => 1,
               :gpgcheck => 0,
@@ -122,7 +122,7 @@ describe 'storm::repo' do
           it "check stable repo installed but disabled" do
             is_expected.to contain_yumrepo('storm-stable-centos7').with( 
               :ensure   => 'present',
-              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm/stable/el7/x86_64/',
+              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm-rpm-stable/centos7/',
               :enabled  => 0,
               :protect  => 1,
               :gpgcheck => 0,
@@ -132,7 +132,7 @@ describe 'storm::repo' do
           it "check beta repo is enabled" do
             is_expected.to contain_yumrepo('storm-beta-centos7').with( 
               :ensure   => 'present',
-              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm/beta/el7/x86_64/',
+              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm-rpm-beta/centos7/',
               :enabled  => 1,
               :protect  => 1,
               :gpgcheck => 0,
@@ -142,7 +142,7 @@ describe 'storm::repo' do
           it "check nightly repo is enabled" do
             is_expected.to contain_yumrepo('storm-nightly-centos7').with( 
               :ensure   => 'present',
-              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm/nightly/el7/x86_64/',
+              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm-rpm-nightly/centos7/',
               :enabled  => 1,
               :protect  => 1,
               :gpgcheck => 0,
@@ -166,7 +166,7 @@ describe 'storm::repo' do
           it "check stable repo installed and enabled" do
             is_expected.to contain_yumrepo('storm-stable-centos6').with( 
               :ensure   => 'present',
-              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm/stable/el6/x86_64/',
+              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm-rpm-stable/centos6/',
               :enabled  => 1,
               :protect  => 1,
               :gpgcheck => 0,
@@ -183,7 +183,7 @@ describe 'storm::repo' do
           it "check stable repo installed and enabled" do
             is_expected.to contain_yumrepo('storm-stable-centos7').with( 
               :ensure   => 'present',
-              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm/stable/el7/x86_64/',
+              :baseurl  => 'https://repo.cloud.cnaf.infn.it/repository/storm-rpm-stable/centos7/',
               :enabled  => 1,
               :protect  => 1,
               :gpgcheck => 0,
