@@ -195,9 +195,9 @@ describe 'storm::webdav', :type => :class do
           is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_AUTHZ_SERVER_MAX_TOKEN_LIFETIME_SEC="43400"/ )
           is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_AUTHZ_SERVER_SECRET="secret"/ )
           is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_REQUIRE_CLIENT_CERT="true"/ )
-          is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_USE_CONSCRYPT="true"/ )
-          is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_TPC_USE_CONSCRYPT="true"/ )
-          is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_ENABLE_HTTP2="true"/ )
+          is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_USE_CONSCRYPT="false"/ )
+          is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_TPC_USE_CONSCRYPT="false"/ )
+          is_expected.to contain_file(sysconfig_file).with( :content => /STORM_WEBDAV_ENABLE_HTTP2="false"/ )
           is_expected.to contain_file(sysconfig_file).with( :content => /^# STORM_WEBDAV_DEBUG="y"/ )
           is_expected.to contain_file(sysconfig_file).with( :content => /^# STORM_WEBDAV_DEBUG_PORT=1044/ )
           is_expected.to contain_file(sysconfig_file).with( :content => /^# STORM_WEBDAV_DEBUG_SUSPEND="y"/ )
@@ -225,31 +225,31 @@ describe 'storm::webdav', :type => :class do
         end
       end
 
-      context "Test conscrypt disabled configuration" do
+      context "Test conscrypt enabled configuration" do
         let(:params) do
           {
-            'use_conscrypt' => false,
-            'tpc_use_conscrypt' => false,
+            'use_conscrypt' => true,
+            'tpc_use_conscrypt' => true,
           }
         end
 
-        it "check sysconfig conscrypt configuration is disabled" do
+        it "check sysconfig conscrypt configuration is enabled" do
           sysconfig_file='/etc/sysconfig/storm-webdav'
-          is_expected.to contain_file(sysconfig_file).with( :content => /^STORM_WEBDAV_USE_CONSCRYPT="false"/ )
-          is_expected.to contain_file(sysconfig_file).with( :content => /^STORM_WEBDAV_TPC_USE_CONSCRYPT="false"/ )
+          is_expected.to contain_file(sysconfig_file).with( :content => /^STORM_WEBDAV_USE_CONSCRYPT="true"/ )
+          is_expected.to contain_file(sysconfig_file).with( :content => /^STORM_WEBDAV_TPC_USE_CONSCRYPT="true"/ )
         end
       end
 
-      context "Test HTTP2 disabled configuration" do
+      context "Test HTTP2 enabled configuration" do
         let(:params) do
           {
-            'enable_http2' => false,
+            'enable_http2' => true,
           }
         end
 
-        it "check sysconfig conscrypt configuration is disabled" do
+        it "check sysconfig http2 configuration is enabled" do
           sysconfig_file='/etc/sysconfig/storm-webdav'
-          is_expected.to contain_file(sysconfig_file).with( :content => /^STORM_WEBDAV_ENABLE_HTTP2="false"/ )
+          is_expected.to contain_file(sysconfig_file).with( :content => /^STORM_WEBDAV_ENABLE_HTTP2="true"/ )
         end
       end
 
