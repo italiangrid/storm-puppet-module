@@ -31,9 +31,9 @@ class storm::webdav::config (
   $authz_server_secret = $storm::webdav::authz_server_secret,
   $require_client_cert = $storm::webdav::require_client_cert,
 
-  $use_conscrypt = $storm::webdav::params::use_conscrypt,
-  $tpc_use_conscrypt = $storm::webdav::params::tpc_use_conscrypt,
-  $enable_http2 = $storm::webdav::params::enable_http2,
+  $use_conscrypt = $storm::webdav::use_conscrypt,
+  $tpc_use_conscrypt = $storm::webdav::tpc_use_conscrypt,
+  $enable_http2 = $storm::webdav::enable_http2,
 
   $debug = $storm::webdav::debug,
   $debug_port = $storm::webdav::debug_port,
