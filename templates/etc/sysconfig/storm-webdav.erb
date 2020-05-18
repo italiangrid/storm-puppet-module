@@ -13,9 +13,9 @@ STORM_WEBDAV_SERVER_ADDRESS="0.0.0.0"
 # is handling requests (and possibly any alias)
 # STORM_WEBDAV_HOSTNAME_0="localhost"
 # STORM_WEBDAV_HOSTNAME_1="alias.for.localhost"
-<% @hostnames.each_with_index do | hostname, idx | -%>
+<%- @hostnames.each_with_index do | hostname, idx | -%>
 <%= "STORM_WEBDAV_HOSTNAME_#{idx}=#{hostname}" %>
-<% end -%>
+<%- end -%>
 
 # HTTPS connector port
 STORM_WEBDAV_HTTPS_PORT=<%=@https_port%>
@@ -53,6 +53,12 @@ STORM_WEBDAV_JAR="/usr/share/java/storm-webdav/storm-webdav-server.jar"
 # The StoRM webdav logfile. Do not change this unless you know what you are doing.
 STORM_WEBDAV_LOG="/var/log/storm/webdav/storm-webdav-server.log"
 
+# The StoRM webdav stdout logfile. Do not change this unless you know what you are doing.
+STORM_WEBDAV_OUT="/var/log/storm/webdav/storm-webdav-server.out"
+
+# The StoRM webdav stderr logfile. Do not change this unless you know what you are doing.
+STORM_WEBDAV_ERR="/var/log/storm/webdav/storm-webdav-server.err"
+
 # The StoRM webdav logging configuration. Do not change this unless you know what you are doing.
 STORM_WEBDAV_LOG_CONFIGURATION="/etc/storm/webdav/logback.xml"
 
@@ -70,28 +76,28 @@ STORM_WEBDAV_VO_MAP_FILES_REFRESH_INTERVAL="<%=@vo_map_files_refresh_interval%>"
 
 # StoRM WebDAV server debug option. Uncomment this (and restart the service)
 # if you want to attach a java debugger to the running server process
-<% if @debug %>
+<%- if @debug -%>
 STORM_WEBDAV_DEBUG="y"
-<% else %>
+<%- else -%>
 # STORM_WEBDAV_DEBUG="y"
-<% end %>
+<%- end -%>
 
 # JVM debug port. Used together with STORM_WEBDAV_DEBUG to specify on which
 # port the JVM should listen for incoming debugger.
-<% if @debug %>
+<%- if @debug -%>
 STORM_WEBDAV_DEBUG_PORT=<%=@debug_port%>
-<% else %>
+<%- else -%>
 # STORM_WEBDAV_DEBUG_PORT=1044
-<% end %>
+<%- end -%>
 
 # JVM debug suspend option. Uncomment this to block the process JVM until a remote
 # debugger connects to the debugging port specified with the STORM_WEBDAV_DEBUG_PORT
 # option
-<% if @debug && @debug_suspend%>
+<%- if @debug && @debug_suspend -%>
 STORM_WEBDAV_DEBUG_SUSPEND="y"
-<% else %>
+<%- else -%>
 # STORM_WEBDAV_DEBUG_SUSPEND="y"
-<% end %>
+<%- end -%>
 
 # Max number of active third party copy connections
 STORM_WEBDAV_TPC_MAX_CONNECTIONS="<%=@tpc_max_connections%>"
@@ -101,26 +107,26 @@ STORM_WEBDAV_TPC_VERIFY_CHECKSUM="<%=@tpc_verify_checksum%>"
 
 # Enables the OAuth authorization server, used to issue bearer tokens
 # to clients presenting a VOMS credential
-<% if @authz_server_enable %>
+<%- if @authz_server_enable -%>
 STORM_WEBDAV_AUTHZ_SERVER_ENABLE="<%=@authz_server_enable%>"
-<% else %>
+<%- else -%>
 # STORM_WEBDAV_AUTHZ_SERVER_ENABLE="false"
-<% end %>
+<%- end -%>
 
 # The issuer setting for the token
 # Default: https://${STORM_WEBDAV_HOSTNAME_0}:${STORM_WEBDAV_HTTPS_PORT}
-<% if @authz_server_enable %>
+<%- if @authz_server_enable -%>
 STORM_WEBDAV_AUTHZ_SERVER_ISSUER="<%=@authz_server_issuer%>"
-<% else %>
+<%- else -%>
 # STORM_WEBDAV_AUTHZ_SERVER_ISSUER="https://storm.example:8443"
-<% end %>
+<%- end -%>
 
 # Maximum token lifetime in seconds
-<% if @authz_server_enable %>
+<%- if @authz_server_enable -%>
 STORM_WEBDAV_AUTHZ_SERVER_MAX_TOKEN_LIFETIME_SEC="<%=@authz_server_max_token_lifetime_sec%>"
-<% else %>
+<%- else -%>
 # STORM_WEBDAV_AUTHZ_SERVER_MAX_TOKEN_LIFETIME_SEC="43200"
-<% end %>
+<%- end -%>
 
 # The WebDAV authz server secret
 # This secret is used to sign bearer tokens, so if you have multiple
@@ -129,11 +135,11 @@ STORM_WEBDAV_AUTHZ_SERVER_MAX_TOKEN_LIFETIME_SEC="<%=@authz_server_max_token_lif
 # IMPORTANT: set this in production, do not rely on the default random
 # value as that will cause problems across service restarts
 #
-<% if @authz_server_enable %>
+<%- if @authz_server_enable -%>
 STORM_WEBDAV_AUTHZ_SERVER_SECRET="<%=@authz_server_secret%>"
-<% else %>
+<%- else -%>
 # STORM_WEBDAV_AUTHZ_SERVER_SECRET="areasonablesecretlongerthan256bits"
-<% end %>
+<%- end -%>
 
 # Should StoRM WebDAV always require a valid client certificate on the HTTPS endpoint?
 # Set to 'false' if you want token-based authentication to work (and thus third-party copy)
