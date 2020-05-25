@@ -22,7 +22,7 @@ Build and install module as follow:
 
 ```
 puppet module build
-puppet module install ./pkg/cnafsd-storm-0.2.0.tar.gz
+puppet module install ./pkg/cnafsd-storm-0.2.2.tar.gz
 ```
 
 ## Usage
