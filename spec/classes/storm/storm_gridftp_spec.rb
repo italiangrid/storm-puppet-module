@@ -14,13 +14,14 @@ describe 'storm::gridftp', :type => :class do
 
         let(:params) do 
           {
-            'port'                => 2911,
-            'port_range'          => '30000,40000',
-            'connections_max'     => 4000,
-            'redirect_lcmaps_log' => true,
-            'llgt_log_file'       => '/var/log/storm/lcmaps.log',
-            'lcmaps_debug_level'  => 0,
-            'lcas_debug_level'    => 0,
+            'port'                  => 2911,
+            'port_range'            => '30000,40000',
+            'connections_max'       => 4000,
+            'redirect_lcmaps_log'   => true,
+            'llgt_log_file'         => '/var/log/storm/lcmaps.log',
+            'lcmaps_debug_level'    => 0,
+            'lcas_debug_level'      => 0,
+            'load_storm_dsi_module' => false,
           }
         end
 
@@ -29,9 +30,11 @@ describe 'storm::gridftp', :type => :class do
           is_expected.to contain_file(title).with( 
             :ensure => 'present',
           )
-          is_expected.to contain_file(title).with( :content => /port 2911/ )
-          is_expected.to contain_file(title).with( :content => /port_range 30000,40000/ )
-          is_expected.to contain_file(title).with( :content => /connections_max 4000/ )
+          is_expected.to contain_file(title).with( :content => /^port 2911/ )
+          is_expected.to contain_file(title).with( :content => /^port_range 30000,40000/ )
+          is_expected.to contain_file(title).with( :content => /^connections_max 4000/ )
+          is_expected.to contain_file(title).with( :content => /^# load_dsi_module StoRM/ )
+          is_expected.to contain_file(title).with( :content => /^# allowed_modules StoRM/ )
         end
 
         it "check gridftp sysconf file content" do
@@ -55,6 +58,8 @@ describe 'storm::gridftp', :type => :class do
           is_expected.to contain_file(title).with( :content => /port 2811/ )
           is_expected.to contain_file(title).with( :content => /port_range 20000,25000/ )
           is_expected.to contain_file(title).with( :content => /connections_max 2000/ )
+          is_expected.to contain_file(title).with( :content => /^load_dsi_module StoRM/ )
+          is_expected.to contain_file(title).with( :content => /^allowed_modules StoRM/ )
         end
 
         it "check gridftp sysconf file content" do

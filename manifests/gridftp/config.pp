@@ -14,6 +14,8 @@ class storm::gridftp::config (
 
   $lcmaps_debug_level = $storm::gridftp::lcmaps_debug_level,
   $lcas_debug_level = $storm::gridftp::lcas_debug_level,
+
+  $load_storm_dsi_module = $storm::gridftp::load_storm_dsi_module,
 ) {
 
   $conf_file='/etc/gridftp.conf'

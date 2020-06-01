@@ -15,4 +15,6 @@ class storm::gridftp::params (
 
   $lcmaps_debug_level = lookup('storm::gridftp::lcmaps_debug_level', Integer, undef, 3)
   $lcas_debug_level = lookup('storm::gridftp::lcas_debug_level', Integer, undef, 3)
+
+  $load_storm_dsi_module = lookup('storm::gridftp::load_storm_dsi_module', Boolean, undef, true)
 }

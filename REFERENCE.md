@@ -5,13 +5,11 @@
 
 **Classes**
 
-* [`storm`](#storm): StoRM puppet module parent class
 * [`storm::backend`](#stormbackend): StoRM Backend puppet module
 * [`storm::backend::config`](#stormbackendconfig): StoRM Backend config class
 * [`storm::backend::install`](#stormbackendinstall): StoRM Backend install class
 * [`storm::backend::params`](#stormbackendparams): StoRM Frontend params class
 * [`storm::backend::service`](#stormbackendservice): StoRM Backend service class
-* [`storm::config`](#stormconfig): StoRM config class
 * [`storm::frontend`](#stormfrontend): StoRM Frontend puppet module
 * [`storm::frontend::config`](#stormfrontendconfig): StoRM Frontend config class
 * [`storm::frontend::install`](#stormfrontendinstall): StoRM Frontend install class
@@ -22,7 +20,6 @@
 * [`storm::gridftp::install`](#stormgridftpinstall): StoRM GridFTP install class
 * [`storm::gridftp::params`](#stormgridftpparams): StoRM GridFTP params class
 * [`storm::gridftp::service`](#stormgridftpservice): StoRM GridFTP service class
-* [`storm::install`](#storminstall): StoRM install class
 * [`storm::params`](#stormparams): StoRM params class
 * [`storm::repo`](#stormrepo): Choose which StoRM repository you want to intall and enable. Also a custom list of repository URL can be specified.
 * [`storm::storage`](#stormstorage): Init testbed storage area's directories
@@ -51,20 +48,18 @@
 * [`Storm::Backend::Pool`](#stormbackendpool): The Pool type for storm-backend-server
 * [`Storm::Backend::Quota`](#stormbackendquota): The Quota type for storm-backend-server
 * [`Storm::Backend::Rfio`](#stormbackendrfio): The Rfio type for storm-backend-server
+* [`Storm::Backend::SrmPoolMember`](#stormbackendsrmpoolmember): 
 * [`Storm::Backend::StorageArea`](#stormbackendstoragearea): The storage area type for storm-backend-server
 * [`Storm::Backend::StorageClass`](#stormbackendstorageclass): 
 * [`Storm::Backend::TransferProtocol`](#stormbackendtransferprotocol): The TransferProtocol type for storm-backend-server
 * [`Storm::Backend::Webdav`](#stormbackendwebdav): The WebDAV type for storm-backend-server
 * [`Storm::Backend::WebdavPoolMember`](#stormbackendwebdavpoolmember): 
 * [`Storm::Backend::Xroot`](#stormbackendxroot): The Xroot type for storm-backend-server
+* [`Storm::CustomRepo`](#stormcustomrepo): The storage area type for storm-webdav
 * [`Storm::Webdav::OAuthIssuer`](#stormwebdavoauthissuer): The OAuthIssuer type for storm-webdav
 * [`Storm::Webdav::StorageArea`](#stormwebdavstoragearea): The storage area type for storm-webdav
 
 ## Classes
-
-### storm
-
-StoRM puppet module parent class
 
 ### storm::backend
 
@@ -97,14 +92,6 @@ Description
 Data type: `String`
 
 
-
-##### `db_host`
-
-Data type: `String`
-
-
-
-Default value: $storm::backend::params::db_host
 
 ##### `db_user`
 
@@ -178,6 +165,14 @@ Data type: `Array[Storm::Backend::WebdavPoolMember]`
 
 Default value: $storm::backend::params::webdav_pool_members
 
+##### `srm_pool_members`
+
+Data type: `Array[Storm::Backend::SrmPoolMember]`
+
+
+
+Default value: $storm::backend::params::srm_pool_members
+
 ##### `storage_areas`
 
 Data type: `Array[Storm::Backend::StorageArea]`
@@ -201,6 +196,22 @@ StoRM Backend config class
 #### Parameters
 
 The following parameters are available in the `storm::backend::config` class.
+
+##### `db_user`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::db_user
+
+##### `db_passwd`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::db_passwd
 
 ##### `storage_areas`
 
@@ -233,6 +244,14 @@ Data type: `Any`
 
 
 Default value: $storm::backend::webdav_pool_members
+
+##### `srm_pool_members`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::srm_pool_members
 
 ##### `rfio_hostname`
 
@@ -285,10 +304,6 @@ StoRM Frontend params class
 ### storm::backend::service
 
 StoRM Backend service class
-
-### storm::config
-
-StoRM config class
 
 ### storm::frontend
 
@@ -767,6 +782,30 @@ The LCMAPS log file used if 'redirect_lcmaps_log' is true.
 
 Default value: $storm::gridftp::params::llgt_log_file
 
+##### `lcmaps_debug_level`
+
+Data type: `Integer`
+
+The LCMAPS logging level. Values from 0 (ERROR) to 5 (DEBUG). Default: 3 (INFO)
+
+Default value: $storm::gridftp::params::lcmaps_debug_level
+
+##### `lcas_debug_level`
+
+Data type: `Integer`
+
+The LCAS logging level. Values from 0 (ERROR) to 5 (DEBUG). Default: 3 (INFO)
+
+Default value: $storm::gridftp::params::lcas_debug_level
+
+##### `load_storm_dsi_module`
+
+Data type: `Boolean`
+
+Enable/Disable StoRM DSI module. Default: true (enabled)
+
+Default value: $storm::gridftp::params::load_storm_dsi_module
+
 ### storm::gridftp::config
 
 StoRM GridFTP config class
@@ -831,6 +870,30 @@ Data type: `Any`
 
 Default value: $storm::gridftp::llgt_log_file
 
+##### `lcmaps_debug_level`
+
+Data type: `Any`
+
+
+
+Default value: $storm::gridftp::lcmaps_debug_level
+
+##### `lcas_debug_level`
+
+Data type: `Any`
+
+
+
+Default value: $storm::gridftp::lcas_debug_level
+
+##### `load_storm_dsi_module`
+
+Data type: `Any`
+
+
+
+Default value: $storm::gridftp::load_storm_dsi_module
+
 ### storm::gridftp::install
 
 StoRM GridFTP install class
@@ -842,10 +905,6 @@ StoRM GridFTP params class
 ### storm::gridftp::service
 
 StoRM GridFTP service class
-
-### storm::install
-
-StoRM install class
 
 ### storm::params
 
@@ -885,11 +944,11 @@ The list of repositories that have to be enabled. Allowed values are `stable`, `
 
 Default value: ['stable']
 
-##### `customs`
+##### `extra`
 
-Data type: `Array[Struct[{ name => String, url => String }]]`
+Data type: `Array[Storm::CustomRepo]`
 
-A list of repository URLs that have to be installed and enabled. Optional.
+A list of repository that have to be created. Optional.
 
 Default value: []
 
@@ -1476,7 +1535,7 @@ Data type: `Any`
 
 
 
-Default value: $storm::webdav::params::use_conscrypt
+Default value: $storm::webdav::use_conscrypt
 
 ##### `tpc_use_conscrypt`
 
@@ -1484,7 +1543,7 @@ Data type: `Any`
 
 
 
-Default value: $storm::webdav::params::tpc_use_conscrypt
+Default value: $storm::webdav::tpc_use_conscrypt
 
 ##### `enable_http2`
 
@@ -1492,7 +1551,7 @@ Data type: `Any`
 
 
 
-Default value: $storm::webdav::params::enable_http2
+Default value: $storm::webdav::enable_http2
 
 ##### `debug`
 
@@ -1702,6 +1761,15 @@ Alias of `Struct[{
   port => Optional[Integer],
 }]`
 
+### Storm::Backend::SrmPoolMember
+
+The Storm::Backend::SrmPoolMember data type.
+
+Alias of `Struct[{
+  hostname => String,
+  port     => Optional[Integer],
+}]`
+
 ### Storm::Backend::StorageArea
 
 The storage area type for storm-backend-server
@@ -1772,6 +1840,15 @@ The Xroot type for storm-backend-server
 Alias of `Struct[{
   hostname => String,
   port => Optional[Integer],
+}]`
+
+### Storm::CustomRepo
+
+The storage area type for storm-webdav
+
+Alias of `Struct[{
+  name    => String,
+  baseurl => String,
 }]`
 
 ### Storm::Webdav::OAuthIssuer

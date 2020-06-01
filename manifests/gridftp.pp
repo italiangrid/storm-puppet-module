@@ -44,6 +44,8 @@
 # @param lcas_debug_level
 #   The LCAS logging level. Values from 0 (ERROR) to 5 (DEBUG). Default: 3 (INFO)
 #
+# @param load_storm_dsi_module
+#   Enable/Disable StoRM DSI module. Default: true (enabled)
 class storm::gridftp (
 
   Integer $port = $storm::gridftp::params::port,
@@ -58,6 +60,8 @@ class storm::gridftp (
 
   Integer $lcmaps_debug_level = $storm::gridftp::params::lcmaps_debug_level,
   Integer $lcas_debug_level = $storm::gridftp::params::lcas_debug_level,
+
+  Boolean $load_storm_dsi_module = $storm::gridftp::params::load_storm_dsi_module,
 
 ) inherits storm::gridftp::params {
 

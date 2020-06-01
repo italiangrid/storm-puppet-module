@@ -1,8 +1,8 @@
 {
-  "name": "mwdevel-storm",
-  "version": "0.2.0",
+  "name": "cnafsd-storm",
+  "version": "0.2.3",
   "author": "storm",
-  "summary": "StoRM puppet module",
+  "summary": "StoRM Puppet module",
   "license": "Apache-2.0",
   "source": "https://github.com/italiangrid/storm-puppet-module",
   "project_page": "https://github.com/italiangrid/storm-puppet-module",
