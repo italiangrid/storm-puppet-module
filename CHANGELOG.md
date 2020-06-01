@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.2.3] - 2020-05-25
+
+### Changed
+
+- Allow enable/disable StoRM DSI module for gridftp
+
 ## [0.2.1] - 2020-05-25
 
 ### Changed
