@@ -2,6 +2,7 @@
 #
 class storm::backend::config (
 
+  $db_host = $storm::backend::db_host,
   $db_user = $storm::backend::db_user,
   $db_passwd = $storm::backend::db_passwd,
 
@@ -15,17 +16,21 @@ class storm::backend::config (
   $xroot_hostname = $storm::backend::xroot_hostname,
   $xroot_port = $storm::backend::xroot_port,
   $srm_hostname = $storm::backend::frontend_public_host,
+  $frontend_port = $storm::backend::frontend_port,
 
+  $directory_automatic_creation = $storm::backend::directory_automatic_creation,
+  $directory_writeperm = $storm::backend::directory_writeperm,
+
+  $rest_services_port = $storm::backend::rest_services_port,
+  $rest_services_max_threads = $storm::backend::rest_services_max_threads,
+  $rest_services_max_queue_size = $storm::backend::rest_services_max_queue_size,
+
+  $synchcall_xmlrpc_unsecure_server_port = $storm::backend::synchcall_xmlrpc_unsecure_server_port,
+  $synchcall_xmlrpc_maxthread = $storm::backend::synchcall_xmlrpc_maxthread,
+  $synchcall_xmlrpc_max_queue_size = $storm::backend::synchcall_xmlrpc_max_queue_size,
+  $synchcall_xmlrpc_security_enabled = $storm::backend::synchcall_xmlrpc_security_enabled,
+  $synchcall_xmlrpc_security_token = $storm::backend::synchcall_xmlrpc_security_token,
 ) {
-
-  # set ownership and permissions on storm be config dir
-  file { '/etc/storm/backend-server':
-    ensure  => directory,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0750',
-    recurse => true,
-  }
 
   $namespace_file='/etc/storm/backend-server/namespace.xml'
   $namespace_template_file='storm/etc/storm/backend-server/namespace.xml.erb'
@@ -33,8 +38,10 @@ class storm::backend::config (
   file { $namespace_file:
     ensure  => present,
     content => template($namespace_template_file),
+    owner   => 'root',
+    group   => 'storm',
     notify  => Service['storm-backend-server'],
-    require => [Package['storm-backend-mp'], File['/etc/storm/backend-server']],
+    require => [Package['storm-backend-mp']],
   }
 
   $properties_file='/etc/storm/backend-server/storm.properties'
@@ -43,7 +50,9 @@ class storm::backend::config (
   file { $properties_file:
     ensure  => present,
     content => template($properties_template_file),
+    owner   => 'root',
+    group   => 'storm',
     notify  => Service['storm-backend-server'],
-    require => [Package['storm-backend-mp'], File['/etc/storm/backend-server']],
+    require => [Package['storm-backend-mp']],
   }
 }

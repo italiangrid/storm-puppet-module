@@ -8,22 +8,19 @@
 # StoRM Service DNS
 # ============================
 # hostname with which the service is published
-#   <!! managed by YAIM; please read the above NOTE !!>
 storm.service.FE-public.hostname = <%= @srm_hostname %>
 
 # ============================
 # Front End hosts
 # ============================
 # comma-separated list of hostnames composing the FE. 
-#   <!! managed by YAIM; please read the above NOTE !!>
 storm.service.FE-list.hostnames =  
 
 # ============================
 # Front End service port
 # ============================
 # The Front End binding port
-#   <!! managed by YAIM; please read the above NOTE !!>
-storm.service.port = 8444
+storm.service.port = <%= @frontend_port %>
 
 # ============================
 # Managed SURL endpoints 
@@ -33,7 +30,6 @@ storm.service.port = 8444
 # These entries are used to check the SURL validity. 
 # storm.service.SURL.endpoint = srm://<surl-host>:<surl-port>/<surl-service-path>
 # Example: Example: srm://storm.cnaf.infn.it:8444/srm/managerv2
-#   <!! managed by YAIM; please read the above NOTE !!>
 storm.service.SURL.endpoint =   
 
 # ============================
@@ -53,9 +49,9 @@ storm.service.SURL.default-ports =
 #
 # Parameters to connect to the DB used as channel for the requests. 
 #   <!! managed by YAIM; please read the above NOTE !!>
-storm.service.request-db.host =  
-storm.service.request-db.username =   
-storm.service.request-db.passwd =  
+storm.service.request-db.host = <%= @db_host %>
+storm.service.request-db.username = <%= @db_user %>
+storm.service.request-db.passwd = <%= @db_password %>
 
 #############################################
 ############  PROFILE PARAMETERS ############
@@ -69,9 +65,9 @@ storm.service.request-db.passwd =
 # ============================
 # StoRM Service Generic Behavior
 # ============================
-directory.automatic-creation = false
+directory.automatic-creation = <%= @directory_automatic_creation %>
 # To enable file creation within directories. Useful when authorization is not defined.              
-directory.writeperm = false
+directory.writeperm = false <%= @directory_writeperm %>
 
 
 # ============================
@@ -160,21 +156,24 @@ asynch.PickingMaxBatchSize=100
 # ======================================
 synchcall.directoryManager.maxLsEntry=2000
 
+
 # ============================
 # REST Services parameter
 # ============================
-storm.rest.services.port=9998
-storm.rest.services.maxthreads=100
-storm.rest.services.max_queue_size=1000
+storm.rest.services.port=<%= @rest_services_port %>
+storm.rest.services.maxthreads=<%= @rest_services_max_threads %>
+storm.rest.services.max_queue_size=<%= @rest_services_max_queue_size %>
+
 
 # ============================
 # XMLRPC Server parameter
 # ============================
-synchcall.xmlrpc.unsecureServerPort=8080
-synchcall.xmlrpc.maxthread=256
-synchcall.xmlrpc.max_queue_size=1000
-synchcall.xmlrpc.security.enabled=true
-synchcall.xmlrpc.security.token=
+synchcall.xmlrpc.unsecureServerPort=<%= @synchcall_xmlrpc_unsecure_server_port %>
+synchcall.xmlrpc.maxthread=<%= @synchcall_xmlrpc_maxthread %>
+synchcall.xmlrpc.max_queue_size=<%= @synchcall_xmlrpc_max_queue_size %>
+synchcall.xmlrpc.security.enabled=<%= @synchcall_xmlrpc_security_enabled %>
+synchcall.xmlrpc.security.token=<%= @synchcall_xmlrpc_security_token %>
+
 
 # =======================
 # Pinned Files cleaning parameters
@@ -215,17 +214,17 @@ asynch.srmcopy.gridftp.timeout = 15000
 # Garbage Collector parameter
 # ===========================
 #
-#Enable/Disable Garbage Collector
-#purging=true
+# Enable/Disable Garbage Collector
+purging=true
 #
-#Time interval for between two requests in garbage collection. In seconds
+# Time interval for between two requests in garbage collection. In seconds
 purge.interval=600
 #
-#Number of requests removed at each run. Every run purge max 800 requests in final status 
+# Number of requests removed at each run. Every run purge max 800 requests in final status 
 purge.size=800
 #
-#Time after that the GC consider a _terminated_ request as garbage
-#Default: 21600s (6h)
+# Time after that the GC consider a _terminated_ request as garbage
+# Default: 21600s (6h)
 expired.request.time=21600
 
 
