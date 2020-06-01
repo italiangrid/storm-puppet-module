@@ -42,5 +42,11 @@ log_single <%=@log_single%>
 # You may also use the log-level of TRANSFER to include this info in the standard log.
 log_transfer <%=@log_transfer%>
 
+# Load StoRM DSI module
+<%- if @load_storm_dsi_module -%>
 load_dsi_module StoRM
 allowed_modules StoRM
+<%- else -%>
+# load_dsi_module StoRM
+# allowed_modules StoRM
+<%- end -%>
