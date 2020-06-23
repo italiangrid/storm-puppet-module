@@ -40,7 +40,6 @@ storm.service.SURL.endpoint =
 # These entries are used to check the SURL validity. 
 # storm.service.SURL.default-ports = <surl-port>
 # Example: 8444
-#   <!! managed by YAIM; please read the above NOTE !!>
 storm.service.SURL.default-ports =   
 
 # ============================
@@ -48,10 +47,9 @@ storm.service.SURL.default-ports =
 # ============================
 #
 # Parameters to connect to the DB used as channel for the requests. 
-#   <!! managed by YAIM; please read the above NOTE !!>
-storm.service.request-db.host = <%= @db_host %>
-storm.service.request-db.username = <%= @db_user %>
-storm.service.request-db.passwd = <%= @db_password %>
+storm.service.request-db.host = <%= @hostname %>
+storm.service.request-db.username = <%= @database['storm_username'] %>
+storm.service.request-db.passwd = <%= @database['storm_password'] %>
 
 #############################################
 ############  PROFILE PARAMETERS ############

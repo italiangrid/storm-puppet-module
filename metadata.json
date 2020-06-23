@@ -9,12 +9,16 @@
   "issues_url": "https://github.com/italiangrid/storm-puppet-module",
   "dependencies": [
     {
-      "name": "puppetlabs-accounts",
+      "name": "puppetlabs/accounts",
       "version_requirement": ">= 6.1.0"
     },
     {
       "name": "puppetlabs/mysql",
-      "version_requirement": ">=10.4.0"
+      "version_requirement": ">= 10.4.0"
+    },
+    {
+      "name": "CERNOps/bdii",
+      "version_requirement": ">= 1.2.2"
     }
   ],
   "requirements": [

@@ -1,4 +1,5 @@
 type Storm::Backend::WebdavPoolMember = Struct[{
   hostname => String,
-  port     => Optional[Integer],
+  http_port => Optional[Integer],
+  https_port => Optional[Integer],
 }]

@@ -12,8 +12,6 @@ describe 'storm::users', :type => :class do
 
       context 'Check default storm and edguser user' do
 
-        it { is_expected.to compile.with_all_deps }
-
         it "check infosys group" do
           is_expected.to contain_group('infosys').with(
             :gid        => 996,
@@ -71,8 +69,6 @@ describe 'storm::users', :type => :class do
             },
           }
         end
-
-        it { is_expected.to compile.with_all_deps }
 
         it "check storm-SA-read group" do
           is_expected.to contain_group('storm-SA-read').with(

@@ -19,9 +19,8 @@ class storm::backend (
 
   String $hostname,
 
-  String $db_host = lookup('storm::backend::db_host', String, undef, $hostname),
-  String $db_user = $storm::backend::params::db_user,
-  String $db_passwd = $storm::backend::params::db_passwd,
+  Storm::Backend::Info $info = $storm::backend::params::info,
+  Storm::Backend::Database $database = $storm::backend::params::database,
 
   String $rfio_hostname = lookup('storm::backend::rfio_hostname', String, undef, $hostname),
   Integer $rfio_port = $storm::backend::params::rfio_port,
@@ -59,7 +58,25 @@ class storm::backend (
   contain storm::backend::config
   contain storm::backend::service
 
-  Class['storm::backend::install']
+  class { 'bdii':
+    selinux => false,
+  }
+  -> class { 'storm::db':
+    fqdn_hostname  => $hostname,
+    storm_username => $database[storm_username],
+    storm_password => $database[storm_password],
+  }
+  -> Class['storm::backend::install']
   -> Class['storm::backend::config']
   -> Class['storm::backend::service']
+  -> class { 'storm::info':
+    backend_hostname     => $hostname,
+    sitename             => $info[sitename],
+    storage_default_root => $info[storage_default_root],
+    frontend_public_host => $frontend_public_host,
+    frontend_port        => $frontend_port,
+    rest_services_port   => $rest_services_port,
+    webdav_pool_members  => $webdav_pool_members,
+    srm_pool_members     => $srm_pool_members,
+  }
 }

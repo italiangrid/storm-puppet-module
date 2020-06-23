@@ -24,14 +24,38 @@
           <prot name="gsiftp">
             <id>0</id>
             <schema>gsiftp</schema>
-            <hostname>gridftp-0.example.com</hostname>
+            <host>gridftp-0.example.com</host>
             <port>2811</port>
           </prot>
           <prot name="gsiftp">
             <id>1</id>
             <schema>gsiftp</schema>
-            <hostname>gridftp-1.example.com</hostname>
+            <host>gridftp-1.example.com</host>
             <port>2811</port>
+          </prot>
+          <prot name="https">
+            <id>2</id>
+            <schema>https</schema>
+            <host>webdav-0.example.com</host>
+            <port>8443</port>
+          </prot>
+          <prot name="http">
+            <id>3</id>
+            <schema>http</schema>
+            <host>webdav-0.example.com</host>
+            <port>8085</port>
+          </prot>
+          <prot name="https">
+            <id>4</id>
+            <schema>https</schema>
+            <host>webdav-1.example.com</host>
+            <port>8443</port>
+          </prot>
+          <prot name="http">
+            <id>5</id>
+            <schema>http</schema>
+            <host>webdav-1.example.com</host>
+            <port>8085</port>
           </prot>
         </trans-prot>
         <pool>
@@ -54,7 +78,7 @@
         <fixed>permit-all</fixed>
       </storage-area-authz>
       <properties>
-        <RetentionPolicy>replica</RetentionPolicy>
+        <RetentionPolicy>custodial</RetentionPolicy>
         <AccessLatency>online</AccessLatency>
         <ExpirationMode>neverExpire</ExpirationMode>
         <TotalOnlineSize unit="Byte" limited-size="true">4000000000</TotalOnlineSize>
@@ -69,13 +93,13 @@
           <prot name="gsiftp">
             <id>0</id>
             <schema>gsiftp</schema>
-            <hostname>gridftp-0.example.com</hostname>
+            <host>gridftp-0.example.com</host>
             <port>2811</port>
           </prot>
           <prot name="gsiftp">
             <id>1</id>
             <schema>gsiftp</schema>
-            <hostname>gridftp-1.example.com</hostname>
+            <host>gridftp-1.example.com</host>
             <port>2811</port>
           </prot>
         </trans-prot>

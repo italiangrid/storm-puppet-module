@@ -3,7 +3,7 @@ require 'puppet-lint/tasks/puppet-lint'
 require 'puppet-syntax/tasks/puppet-syntax'
 require 'metadata-json-lint/rake_task'
 require 'puppet-strings/tasks'
-# require 'rspec/core/rake_task'
+require 'rspec/core/rake_task'
 
 # These two gems aren't always present, for instance
 # on Travis with --without development
@@ -13,7 +13,7 @@ begin
 rescue LoadError
 end
 
-PuppetLint.configuration.log_format = "%{path}:%{linenumber}:%{check}:%{KIND}:%{message}"
+PuppetLint.configuration.log_format = '%{filename} - %{message}'
 PuppetLint.configuration.fail_on_warnings = true
 PuppetLint.configuration.send('relative')
 PuppetLint.configuration.send('disable_80chars')
@@ -31,11 +31,6 @@ exclude_paths = [
 ]
 PuppetLint.configuration.ignore_paths = exclude_paths
 PuppetSyntax.exclude_paths = exclude_paths
-
-desc "Run acceptance tests"
-RSpec::Core::RakeTask.new(:acceptance) do |t|
-  t.pattern = 'spec/acceptance'
-end
 
 desc "Validate manifests, templates, and ruby files"
 task :validate do

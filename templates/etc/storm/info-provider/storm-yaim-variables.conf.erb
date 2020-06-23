@@ -1,0 +1,93 @@
+SITE_NAME=<%= @sitename %>
+STORM_BACKEND_HOST=<%= @backend_hostname %>
+STORM_DEFAULT_ROOT=<%= @storage_default_root %>
+STORM_FRONTEND_PATH=<%= @frontend_path %>
+STORM_FRONTEND_PORT=<%= @frontend_port %>
+STORM_FRONTEND_PUBLIC_HOST=<%= @frontend_public_host %>
+STORM_BACKEND_REST_SERVICES_PORT=<%= @rest_services_port %>
+STORM_ENDPOINT_QUALITY_LEVEL=<%= @endpoint_quality_level %>
+<%-
+@enabled_access_protocols=[]
+@storage_areas.each do | sa |
+  @sa_transfer_protocols=sa['transfer_protocols'] ? sa['transfer_protocols'] : ['file', 'gsiftp']
+  @sa_transfer_protocols.each do | ap |
+    if !@enabled_access_protocols.include?(ap)
+      @enabled_access_protocols.push(ap)
+    end
+  end
+end
+-%>
+STORM_INFO_FILE_SUPPORT=<%= @enabled_access_protocols.include?('file') %>
+STORM_INFO_RFIO_SUPPORT=<%= @enabled_access_protocols.include?('rfio') %>
+STORM_INFO_GRIDFTP_SUPPORT=<%= @enabled_access_protocols.include?('gsiftp') %>
+STORM_INFO_ROOT_SUPPORT=<%= @enabled_access_protocols.include?('xroot') %>
+STORM_INFO_HTTP_SUPPORT=<%= @enabled_access_protocols.include?('https') %>
+STORM_INFO_HTTPS_SUPPORT=<%= @enabled_access_protocols.include?('https') %>
+<%-
+@frontend_host_list=[]
+@srm_pool_members.each do | e |
+  @frontend_host_list.push(e['hostname'])
+end
+-%>
+STORM_FRONTEND_HOST_LIST=<%= @frontend_host_list.join(',') %>
+<%-
+@webdav_pool_list=[]
+@webdav_pool_members.each do | e |
+  @http_port=e['http_port'] != nil ? e['http_port'] : 8085
+  @https_port=e['https_port'] != nil ? e['https_port'] : 8443
+  @http_endpoint="http://#{e['hostname']}:#{@http_port}/"
+  @https_endpoint="https://#{e['hostname']}:#{@https_port}/"
+  @webdav_pool_list.push(@http_endpoint)
+  @webdav_pool_list.push(@https_endpoint)
+end
+-%>
+STORM_WEBDAV_POOL_LIST=<%= @webdav_pool_list.join(',') %>
+<%-
+@sa_list=[]
+@vo_list=[]
+@storage_areas.each do | sa |
+  @sa_list.push(sa['name'])
+  sa['vos'].each do | vo |
+    if !@vo_list.include?(vo)
+      @vo_list.push(vo)
+    end
+  end
+  @sa_upp=sa['name'].upcase.gsub("-", "").gsub(".","")
+  @sa_low=sa['name'].downcase
+  @sa_fs_space_token=sa['space_token'] ? sa['space_token'] : "#{@sa_upp}-TOKEN"
+  @sa_vos=sa['vos']
+  @sa_root=sa['root_path']
+  @sa_storage_class=sa['storage_class'] ? sa['storage_class'] : "T0D1"
+  @sa_accesspoints=sa['access_points']
+  @sa_fs_driver=sa['fs_driver'] ? sa['fs_driver'] : sa['fs_type'] == 'gpfs' ? 'gpfs' : 'posixfs'
+  @sa_online_size=sa['online_size']
+  @sa_nearline_size=sa['nearline_size']
+  if @sa_nearline_size == nil
+    if @sa_fs_driver == "gpfs"
+      fail("missing nearline size for #{@sa_low}")
+    else
+      @sa_nearline_size=0
+    end
+  end
+-%>
+STORM_<%= @sa_upp %>_VONAME='<%= @sa_vos.join(' ') %>'
+STORM_<%= @sa_upp %>_ONLINE_SIZE=<%= @sa_online_size %>
+STORM_<%= @sa_upp %>_NEARLINE_SIZE=<%= @sa_nearline_size %>
+STORM_<%= @sa_upp %>_TOKEN=<%= @sa_fs_space_token %>
+STORM_<%= @sa_upp %>_ROOT=<%= @sa_root %>
+STORM_<%= @sa_upp %>_STORAGECLASS=<%= @sa_storage_class %>
+STORM_<%= @sa_upp %>_ACCESSPOINT='<%= @sa_accesspoints.join(' ') %>'
+<%-
+  @sa_dn_regex=sa['dn_regex']
+  if @sa_dn_regex != nil
+    @sa_dn_regex.split('/').each do | part |
+      if not part.empty? -%>
+STORM_<%= @sa_upp %>_DN_<%= @part.split('=')[0].upcase %>_REGEX=<%= @part.split('=')[1] %>
+<%-   end
+    end
+  end
+end
+-%>
+STORM_STORAGEAREA_LIST='<%= @sa_list.join(' ') %>'
+VOS='<%= @vo_list.join(' ') %>'
+

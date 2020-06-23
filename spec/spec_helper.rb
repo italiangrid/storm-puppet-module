@@ -10,6 +10,8 @@ require 'nokogiri'
 
 include RspecPuppetFacts
 
+# Add the 'root_home' fact to all tests
+add_custom_fact :root_home, '/root'
 
 # rspec 2.x doesn't have RSpec::Support, so fall back to File::ALT_SEPARATOR to
 # detect if running on windows

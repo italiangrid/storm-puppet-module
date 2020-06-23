@@ -16,18 +16,26 @@ describe 'storm::backend', :type => :class do
         facts
       end
 
-      it { is_expected.to compile }
-      it { is_expected.to compile.with_all_deps }
+      # it { is_expected.to compile }
+      # it { is_expected.to compile.with_all_deps }
 
       context 'Use custom backend params' do
 
         let(:params) do
           super().merge({
+            'frontend_public_host' => 'frontend-0.example.com',
             'gsiftp_pool_members' => [
               {
                 'hostname' => 'gridftp-0.example.com',
               }, {
                 'hostname' => 'gridftp-1.example.com',
+              }
+            ],
+            'webdav_pool_members' => [
+              {
+                'hostname' => 'webdav-0.example.com',
+              }, {
+                'hostname' => 'webdav-1.example.com',
               }
             ],
             'storage_areas'       => [
@@ -47,9 +55,10 @@ describe 'storm::backend', :type => :class do
                 'access_points' => ['/atlas', '/atlasdisk'],
                 'vos' => ['atlas'],
                 'fs_type' => 'gpfs',
-                'storage_class' => 'T0D1',
+                'storage_class' => 'T1D0',
                 'online_size' => 4,
                 'nearline_size' => 10,
+                'transfer_protocols' => ['file','gsiftp'],
                 'gsiftp_pool_balance_strategy' => 'weight',
                 'gsiftp_pool_members' => [
                   {
@@ -76,14 +85,6 @@ describe 'storm::backend', :type => :class do
 
       context 'Use default backend params' do
 
-        it "check storm backend configuration directory" do
-          is_expected.to contain_file('/etc/storm/backend-server').with( 
-            :owner  => 'root',
-            :group  => 'root',
-            :mode   => '0750',
-            :ensure => 'directory',
-          )
-        end
       end
 
     end

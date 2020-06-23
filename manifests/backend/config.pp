@@ -2,9 +2,10 @@
 #
 class storm::backend::config (
 
-  $db_host = $storm::backend::db_host,
-  $db_user = $storm::backend::db_user,
-  $db_passwd = $storm::backend::db_passwd,
+  $hostname = $storm::backend::hostname,
+
+  $info = $storm::backend::info,
+  $database = $storm::backend::database,
 
   $storage_areas = $storm::backend::storage_areas,
   $gsiftp_pool_members = $storm::backend::gsiftp_pool_members,
@@ -16,6 +17,7 @@ class storm::backend::config (
   $xroot_hostname = $storm::backend::xroot_hostname,
   $xroot_port = $storm::backend::xroot_port,
   $srm_hostname = $storm::backend::frontend_public_host,
+  $frontend_public_host = $storm::backend::frontend_public_host,
   $frontend_port = $storm::backend::frontend_port,
 
   $directory_automatic_creation = $storm::backend::directory_automatic_creation,

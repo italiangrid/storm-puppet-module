@@ -27,6 +27,7 @@ describe 'namespace.xml.erb' do
         'storage_class' => 'T0D1',
         'online_size' => 4,
         'nearline_size' => 10,
+        'transfer_protocols' => ['file', 'gsiftp'],
         'gsiftp_pool_balance_strategy' => 'weight',
         'gsiftp_pool_members' => [
           {
@@ -40,6 +41,26 @@ describe 'namespace.xml.erb' do
     ]
   end  
 
+  let(:gsiftp_pool_members) do
+    [
+      {
+        'hostname' => 'gridftp-0.example.com',
+      }, {
+        'hostname' => 'gridftp-1.example.com',
+      }
+    ]
+  end
+
+  let(:webdav_pool_members) do
+    [
+      {
+        'hostname' => 'webdav-0.example.com',
+      }, {
+        'hostname' => 'webdav-1.example.com',
+      }
+    ]
+  end
+
   it 'has two storage areas' do
     expect(storage_areas.size).to eq(2)
   end
@@ -47,8 +68,8 @@ describe 'namespace.xml.erb' do
   it 'render the same file each time' do
 
     harness.set('@storage_areas', storage_areas)
-    harness.set('@gsiftp_pool_members', [])
-    harness.set('@webdav_pool_members', [])
+    harness.set('@gsiftp_pool_members', gsiftp_pool_members)
+    harness.set('@webdav_pool_members', webdav_pool_members)
 
     rendered = harness.run
 
@@ -57,6 +78,16 @@ describe 'namespace.xml.erb' do
 
     namespace = Nokogiri::Slop(rendered)
     expect(namespace.search('filesystems').search('filesystem').first.root.text).to eq("/storage/test.vo")
-    
+
+    schema = Nokogiri::XML::Schema(my_fixture_read("namespace.xsd"))
+    errors = schema.validate(xml_doc)
+
+    puts rendered
+
+    errors.each do |error|
+      puts error.message
+    end
+
+    expect(errors).to match_array([])
   end
 end
