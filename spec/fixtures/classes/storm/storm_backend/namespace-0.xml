@@ -24,37 +24,37 @@
           <prot name="gsiftp">
             <id>0</id>
             <schema>gsiftp</schema>
-            <host>gridftp-0.example.com</host>
+            <host>gridftp-0.example.org</host>
             <port>2811</port>
           </prot>
           <prot name="gsiftp">
             <id>1</id>
             <schema>gsiftp</schema>
-            <host>gridftp-1.example.com</host>
+            <host>gridftp-1.example.org</host>
             <port>2811</port>
           </prot>
           <prot name="https">
             <id>2</id>
             <schema>https</schema>
-            <host>webdav-0.example.com</host>
+            <host>webdav-0.example.org</host>
             <port>8443</port>
           </prot>
           <prot name="http">
             <id>3</id>
             <schema>http</schema>
-            <host>webdav-0.example.com</host>
+            <host>webdav-0.example.org</host>
             <port>8085</port>
           </prot>
           <prot name="https">
             <id>4</id>
             <schema>https</schema>
-            <host>webdav-1.example.com</host>
+            <host>webdav-1.example.org</host>
             <port>8443</port>
           </prot>
           <prot name="http">
             <id>5</id>
             <schema>http</schema>
-            <host>webdav-1.example.com</host>
+            <host>webdav-1.example.org</host>
             <port>8085</port>
           </prot>
         </trans-prot>
@@ -93,13 +93,13 @@
           <prot name="gsiftp">
             <id>0</id>
             <schema>gsiftp</schema>
-            <host>gridftp-0.example.com</host>
+            <host>gridftp-0.example.org</host>
             <port>2811</port>
           </prot>
           <prot name="gsiftp">
             <id>1</id>
             <schema>gsiftp</schema>
-            <host>gridftp-1.example.com</host>
+            <host>gridftp-1.example.org</host>
             <port>2811</port>
           </prot>
         </trans-prot>

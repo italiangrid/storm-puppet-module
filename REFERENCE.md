@@ -10,6 +10,10 @@
 * [`storm::backend::install`](#stormbackendinstall): StoRM Backend install class
 * [`storm::backend::params`](#stormbackendparams): StoRM Frontend params class
 * [`storm::backend::service`](#stormbackendservice): StoRM Backend service class
+* [`storm::db`](#stormdb): StoRM Database class
+* [`storm::db::config`](#stormdbconfig): StoRM DB config class
+* [`storm::db::install`](#stormdbinstall): StoRM DB install class
+* [`storm::db::params`](#stormdbparams): StoRM DB params class
 * [`storm::frontend`](#stormfrontend): StoRM Frontend puppet module
 * [`storm::frontend::config`](#stormfrontendconfig): StoRM Frontend config class
 * [`storm::frontend::install`](#stormfrontendinstall): StoRM Frontend install class
@@ -20,6 +24,10 @@
 * [`storm::gridftp::install`](#stormgridftpinstall): StoRM GridFTP install class
 * [`storm::gridftp::params`](#stormgridftpparams): StoRM GridFTP params class
 * [`storm::gridftp::service`](#stormgridftpservice): StoRM GridFTP service class
+* [`storm::info`](#storminfo): StoRM Info Provider class
+* [`storm::info::config`](#storminfoconfig): 
+* [`storm::info::install`](#storminfoinstall): StoRM Info install class
+* [`storm::info::params`](#storminfoparams): StoRM Info params class
 * [`storm::params`](#stormparams): StoRM params class
 * [`storm::repo`](#stormrepo): Choose which StoRM repository you want to intall and enable. Also a custom list of repository URL can be specified.
 * [`storm::storage`](#stormstorage): Init testbed storage area's directories
@@ -39,12 +47,14 @@
 * [`Storm::Backend::Acl`](#stormbackendacl): The ACL type for storm-backend-server
 * [`Storm::Backend::AclMode`](#stormbackendaclmode): 
 * [`Storm::Backend::BalanceStrategy`](#stormbackendbalancestrategy): 
+* [`Storm::Backend::Database`](#stormbackenddatabase): 
 * [`Storm::Backend::Endpoint`](#stormbackendendpoint): The Endpoint type for storm-backend-server
 * [`Storm::Backend::FileSystem`](#stormbackendfilesystem): The FileSystem type for storm-backend-server
 * [`Storm::Backend::FsDriver`](#stormbackendfsdriver): 
 * [`Storm::Backend::FsType`](#stormbackendfstype): 
 * [`Storm::Backend::Gsiftp`](#stormbackendgsiftp): The Gsiftp type for storm-backend-server
 * [`Storm::Backend::GsiftpPoolMember`](#stormbackendgsiftppoolmember): 
+* [`Storm::Backend::Info`](#stormbackendinfo): 
 * [`Storm::Backend::Pool`](#stormbackendpool): The Pool type for storm-backend-server
 * [`Storm::Backend::Quota`](#stormbackendquota): The Quota type for storm-backend-server
 * [`Storm::Backend::Rfio`](#stormbackendrfio): The Rfio type for storm-backend-server
@@ -63,12 +73,7 @@
 
 ### storm::backend
 
-Parameters
-----------
-
-The StoRM Backend configuration parameters are:
-
-* `name`: description
+StoRM Backend puppet module
 
 #### Examples
 
@@ -83,31 +88,27 @@ class { 'storm::backend':
 
 The following parameters are available in the `storm::backend` class.
 
-##### `name`
-
-Description
-
 ##### `hostname`
 
 Data type: `String`
 
+StoRM Backend Fully Qualified Domain Name
 
+##### `info`
 
-##### `db_user`
-
-Data type: `String`
-
-
-
-Default value: $storm::backend::params::db_user
-
-##### `db_passwd`
-
-Data type: `String`
+Data type: `Storm::Backend::Info`
 
 
 
-Default value: $storm::backend::params::db_passwd
+Default value: $storm::backend::params::info
+
+##### `database`
+
+Data type: `Storm::Backend::Database`
+
+
+
+Default value: $storm::backend::params::database
 
 ##### `rfio_hostname`
 
@@ -189,6 +190,406 @@ Data type: `String`
 
 Default value: lookup('storm::backend::srm_hostname', String, undef, $hostname)
 
+##### `frontend_port`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::frontend_port
+
+##### `directory_automatic_creation`
+
+Data type: `Boolean`
+
+
+
+Default value: $storm::backend::params::directory_automatic_creation
+
+##### `directory_writeperm`
+
+Data type: `Boolean`
+
+
+
+Default value: $storm::backend::params::directory_writeperm
+
+##### `rest_services_port`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::rest_services_port
+
+##### `rest_services_max_threads`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::rest_services_max_threads
+
+##### `rest_services_max_queue_size`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::rest_services_max_queue_size
+
+##### `synchcall_xmlrpc_unsecure_server_port`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::synchcall_xmlrpc_unsecure_server_port
+
+##### `synchcall_xmlrpc_maxthread`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::synchcall_xmlrpc_maxthread
+
+##### `synchcall_xmlrpc_max_queue_size`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::synchcall_xmlrpc_max_queue_size
+
+##### `synchcall_xmlrpc_security_enabled`
+
+Data type: `Boolean`
+
+
+
+Default value: $storm::backend::params::synchcall_xmlrpc_security_enabled
+
+##### `synchcall_xmlrpc_security_token`
+
+Data type: `String`
+
+
+
+Default value: $storm::backend::params::synchcall_xmlrpc_security_token
+
+##### `ptg_skip_acl_setup`
+
+Data type: `Boolean`
+
+
+
+Default value: $storm::backend::params::ptg_skip_acl_setup
+
+##### `pinlifetime_default`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::pinlifetime_default
+
+##### `pinlifetime_maximum`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::pinlifetime_maximum
+
+##### `sanity_check_enabled`
+
+Data type: `Boolean`
+
+
+
+Default value: $storm::backend::params::sanity_check_enabled
+
+##### `service_du_enabled`
+
+Data type: `Boolean`
+
+
+
+Default value: $storm::backend::params::service_du_enabled
+
+##### `service_du_delay`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::service_du_delay
+
+##### `service_du_interval`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::service_du_interval
+
+##### `synchcall_max_ls_entries`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::synchcall_max_ls_entries
+
+##### `gc_pinnedfiles_cleaning_delay`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::gc_pinnedfiles_cleaning_delay
+
+##### `gc_pinnedfiles_cleaning_interval`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::gc_pinnedfiles_cleaning_interval
+
+##### `gc_purge_enabled`
+
+Data type: `Boolean`
+
+
+
+Default value: $storm::backend::params::gc_purge_enabled
+
+##### `gc_purge_interval`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::gc_purge_interval
+
+##### `gc_purge_size`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::gc_purge_size
+
+##### `gc_expired_request_time`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::gc_expired_request_time
+
+##### `gc_ptp_transit_interval`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::gc_ptp_transit_interval
+
+##### `gc_ptp_transit_start_delay`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::gc_ptp_transit_start_delay
+
+##### `extraslashes_file`
+
+Data type: `String`
+
+
+
+Default value: $storm::backend::params::extraslashes_file
+
+##### `extraslashes_root`
+
+Data type: `String`
+
+
+
+Default value: $storm::backend::params::extraslashes_root
+
+##### `extraslashes_gsiftp`
+
+Data type: `String`
+
+
+
+Default value: $storm::backend::params::extraslashes_gsiftp
+
+##### `db_connection_pool_enabled`
+
+Data type: `Boolean`
+
+
+
+Default value: $storm::backend::params::db_connection_pool_enabled
+
+##### `db_connection_pool_max_active`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::db_connection_pool_max_active
+
+##### `db_connection_pool_max_wait`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::db_connection_pool_max_wait
+
+##### `asynch_db_reconnect_period`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::asynch_db_reconnect_period
+
+##### `asynch_db_delay_period`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::asynch_db_delay_period
+
+##### `asynch_picking_initial_delay`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::asynch_picking_initial_delay
+
+##### `asynch_picking_time_interval`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::asynch_picking_time_interval
+
+##### `asynch_picking_max_batch_size`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::asynch_picking_max_batch_size
+
+##### `requests_scheduler_core_size`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::requests_scheduler_core_size
+
+##### `requests_scheduler_max_size`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::requests_scheduler_max_size
+
+##### `requests_scheduler_queue_size`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::requests_scheduler_queue_size
+
+##### `ptp_requests_scheduler_core_size`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::ptp_requests_scheduler_core_size
+
+##### `ptp_requests_scheduler_max_size`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::ptp_requests_scheduler_max_size
+
+##### `ptp_requests_scheduler_queue_size`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::ptp_requests_scheduler_queue_size
+
+##### `ptg_requests_scheduler_core_size`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::ptg_requests_scheduler_core_size
+
+##### `ptg_requests_scheduler_max_size`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::ptg_requests_scheduler_max_size
+
+##### `ptg_requests_scheduler_queue_size`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::ptg_requests_scheduler_queue_size
+
+##### `bol_requests_scheduler_core_size`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::bol_requests_scheduler_core_size
+
+##### `bol_requests_scheduler_max_size`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::bol_requests_scheduler_max_size
+
+##### `bol_requests_scheduler_queue_size`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::bol_requests_scheduler_queue_size
+
 ### storm::backend::config
 
 StoRM Backend config class
@@ -197,21 +598,29 @@ StoRM Backend config class
 
 The following parameters are available in the `storm::backend::config` class.
 
-##### `db_user`
+##### `hostname`
 
 Data type: `Any`
 
 
 
-Default value: $storm::backend::db_user
+Default value: $storm::backend::hostname
 
-##### `db_passwd`
+##### `info`
 
 Data type: `Any`
 
 
 
-Default value: $storm::backend::db_passwd
+Default value: $storm::backend::info
+
+##### `database`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::database
 
 ##### `storage_areas`
 
@@ -293,6 +702,414 @@ Data type: `Any`
 
 Default value: $storm::backend::frontend_public_host
 
+##### `frontend_public_host`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::frontend_public_host
+
+##### `frontend_port`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::frontend_port
+
+##### `directory_automatic_creation`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::directory_automatic_creation
+
+##### `directory_writeperm`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::directory_writeperm
+
+##### `rest_services_port`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::rest_services_port
+
+##### `rest_services_max_threads`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::rest_services_max_threads
+
+##### `rest_services_max_queue_size`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::rest_services_max_queue_size
+
+##### `synchcall_xmlrpc_unsecure_server_port`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::synchcall_xmlrpc_unsecure_server_port
+
+##### `synchcall_xmlrpc_maxthread`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::synchcall_xmlrpc_maxthread
+
+##### `synchcall_xmlrpc_max_queue_size`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::synchcall_xmlrpc_max_queue_size
+
+##### `synchcall_xmlrpc_security_enabled`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::synchcall_xmlrpc_security_enabled
+
+##### `synchcall_xmlrpc_security_token`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::synchcall_xmlrpc_security_token
+
+##### `ptg_skip_acl_setup`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::ptg_skip_acl_setup
+
+##### `pinlifetime_default`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::pinlifetime_default
+
+##### `pinlifetime_maximum`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::pinlifetime_maximum
+
+##### `sanity_check_enabled`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::sanity_check_enabled
+
+##### `service_du_enabled`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::service_du_enabled
+
+##### `service_du_delay`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::service_du_delay
+
+##### `service_du_interval`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::service_du_interval
+
+##### `synchcall_max_ls_entries`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::synchcall_max_ls_entries
+
+##### `gc_pinnedfiles_cleaning_delay`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::gc_pinnedfiles_cleaning_delay
+
+##### `gc_pinnedfiles_cleaning_interval`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::gc_pinnedfiles_cleaning_interval
+
+##### `gc_purge_enabled`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::gc_purge_enabled
+
+##### `gc_purge_interval`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::gc_purge_interval
+
+##### `gc_purge_size`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::gc_purge_size
+
+##### `gc_expired_request_time`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::gc_expired_request_time
+
+##### `gc_ptp_transit_interval`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::gc_ptp_transit_interval
+
+##### `gc_ptp_transit_start_delay`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::gc_ptp_transit_start_delay
+
+##### `extraslashes_file`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::extraslashes_file
+
+##### `extraslashes_root`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::extraslashes_root
+
+##### `extraslashes_gsiftp`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::extraslashes_gsiftp
+
+##### `db_connection_pool_enabled`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::db_connection_pool_enabled
+
+##### `db_connection_pool_max_active`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::db_connection_pool_max_active
+
+##### `db_connection_pool_max_wait`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::db_connection_pool_max_wait
+
+##### `asynch_db_reconnect_period`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::asynch_db_reconnect_period
+
+##### `asynch_db_delay_period`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::asynch_db_delay_period
+
+##### `asynch_picking_initial_delay`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::asynch_picking_initial_delay
+
+##### `asynch_picking_time_interval`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::asynch_picking_time_interval
+
+##### `asynch_picking_max_batch_size`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::asynch_picking_max_batch_size
+
+##### `requests_scheduler_core_size`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::requests_scheduler_core_size
+
+##### `requests_scheduler_max_size`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::requests_scheduler_max_size
+
+##### `requests_scheduler_queue_size`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::requests_scheduler_queue_size
+
+##### `ptp_requests_scheduler_core_size`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::ptp_requests_scheduler_core_size
+
+##### `ptp_requests_scheduler_max_size`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::ptp_requests_scheduler_max_size
+
+##### `ptp_requests_scheduler_queue_size`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::ptp_requests_scheduler_queue_size
+
+##### `ptg_requests_scheduler_core_size`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::ptg_requests_scheduler_core_size
+
+##### `ptg_requests_scheduler_max_size`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::ptg_requests_scheduler_max_size
+
+##### `ptg_requests_scheduler_queue_size`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::ptg_requests_scheduler_queue_size
+
+##### `bol_requests_scheduler_core_size`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::bol_requests_scheduler_core_size
+
+##### `bol_requests_scheduler_max_size`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::bol_requests_scheduler_max_size
+
+##### `bol_requests_scheduler_queue_size`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::bol_requests_scheduler_queue_size
+
 ### storm::backend::install
 
 StoRM Backend install class
@@ -304,6 +1121,110 @@ StoRM Frontend params class
 ### storm::backend::service
 
 StoRM Backend service class
+
+### storm::db
+
+StoRM Database class
+
+#### Examples
+
+##### Install and configure database as follow:
+
+```puppet
+class { 'storm::db':
+  fqdn_hostname  => 'be.test.example',
+  root_password  => 'secret',
+  storm_password => 'secret',
+}
+```
+
+#### Parameters
+
+The following parameters are available in the `storm::db` class.
+
+##### `fqdn_hostname`
+
+Data type: `String`
+
+The Fully Qualyfied Domain Name of the host where database is installed. Required.
+
+Default value: $storm::db::params::fqdn_hostname
+
+##### `root_password`
+
+Data type: `String`
+
+The MySQL root user password. Optional.
+
+Default value: $storm::db::params::root_password
+
+##### `storm_username`
+
+Data type: `String`
+
+The database user used by StoRM services. Default: 'storm'. Optional.
+
+Default value: $storm::db::params::storm_username
+
+##### `storm_password`
+
+Data type: `String`
+
+The password of database user used by StoRM services. Default: 'bluemoon'. Optional.
+
+Default value: $storm::db::params::storm_password
+
+### storm::db::config
+
+StoRM DB config class
+
+#### Parameters
+
+The following parameters are available in the `storm::db::config` class.
+
+##### `fqdn_hostname`
+
+Data type: `Any`
+
+
+
+Default value: $storm::db::fqdn_hostname
+
+##### `storm_username`
+
+Data type: `Any`
+
+
+
+Default value: $storm::db::storm_username
+
+##### `storm_password`
+
+Data type: `Any`
+
+
+
+Default value: $storm::db::storm_password
+
+### storm::db::install
+
+StoRM DB install class
+
+#### Parameters
+
+The following parameters are available in the `storm::db::install` class.
+
+##### `root_password`
+
+Data type: `Any`
+
+
+
+Default value: $storm::db::root_password
+
+### storm::db::params
+
+StoRM DB params class
 
 ### storm::frontend
 
@@ -905,6 +1826,231 @@ StoRM GridFTP params class
 ### storm::gridftp::service
 
 StoRM GridFTP service class
+
+### storm::info
+
+StoRM Info Provider class
+
+#### Examples
+
+##### Example of usage
+
+```puppet
+class { 'storm::info':
+}
+```
+
+#### Parameters
+
+The following parameters are available in the `storm::info` class.
+
+##### `config_file`
+
+Data type: `String`
+
+
+
+Default value: $storm::info::params::config_file
+
+##### `backend_hostname`
+
+Data type: `String`
+
+
+
+Default value: $storm::info::params::backend_hostname
+
+##### `frontend_public_host`
+
+Data type: `String`
+
+
+
+Default value: $storm::info::params::frontend_public_host
+
+##### `sitename`
+
+Data type: `String`
+
+
+
+Default value: $storm::info::params::sitename
+
+##### `storage_areas`
+
+Data type: `Array[Storm::Backend::StorageArea]`
+
+
+
+Default value: $storm::info::params::storage_areas
+
+##### `storage_default_root`
+
+Data type: `String`
+
+
+
+Default value: $storm::info::params::storage_default_root
+
+##### `frontend_path`
+
+Data type: `String`
+
+
+
+Default value: $storm::info::params::frontend_path
+
+##### `frontend_port`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::info::params::frontend_port
+
+##### `rest_services_port`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::info::params::rest_services_port
+
+##### `endpoint_quality_level`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::info::params::endpoint_quality_level
+
+##### `webdav_pool_members`
+
+Data type: `Array[Storm::Backend::WebdavPoolMember]`
+
+
+
+Default value: $storm::info::params::webdav_pool_members
+
+##### `srm_pool_members`
+
+Data type: `Array[Storm::Backend::SrmPoolMember]`
+
+
+
+Default value: $storm::info::params::srm_pool_members
+
+### storm::info::config
+
+The storm::info::config class.
+
+#### Parameters
+
+The following parameters are available in the `storm::info::config` class.
+
+##### `sitename`
+
+Data type: `Any`
+
+
+
+Default value: $storm::info::sitename
+
+##### `backend_hostname`
+
+Data type: `Any`
+
+
+
+Default value: $storm::info::backend_hostname
+
+##### `storage_areas`
+
+Data type: `Any`
+
+
+
+Default value: $storm::info::storage_areas
+
+##### `config_file`
+
+Data type: `Any`
+
+
+
+Default value: $storm::info::config_file
+
+##### `storage_default_root`
+
+Data type: `Any`
+
+
+
+Default value: $storm::info::storage_default_root
+
+##### `frontend_public_host`
+
+Data type: `Any`
+
+
+
+Default value: $storm::info::frontend_public_host
+
+##### `frontend_path`
+
+Data type: `Any`
+
+
+
+Default value: $storm::info::frontend_path
+
+##### `frontend_port`
+
+Data type: `Any`
+
+
+
+Default value: $storm::info::frontend_port
+
+##### `rest_services_port`
+
+Data type: `Any`
+
+
+
+Default value: $storm::info::rest_services_port
+
+##### `endpoint_quality_level`
+
+Data type: `Any`
+
+
+
+Default value: $storm::info::endpoint_quality_level
+
+##### `webdav_pool_members`
+
+Data type: `Any`
+
+
+
+Default value: $storm::info::webdav_pool_members
+
+##### `srm_pool_members`
+
+Data type: `Any`
+
+
+
+Default value: $storm::info::srm_pool_members
+
+### storm::info::install
+
+StoRM Info install class
+
+### storm::info::params
+
+StoRM Info params class
 
 ### storm::params
 
@@ -1678,6 +2824,16 @@ The Storm::Backend::BalanceStrategy data type.
 
 Alias of `Enum['round-robin', 'smart-rr', 'random', 'weight']`
 
+### Storm::Backend::Database
+
+The Storm::Backend::Database data type.
+
+Alias of `Struct[{
+  root_password  => Optional[String],
+  storm_username => Optional[String],
+  storm_password => Optional[String],
+}]`
+
 ### Storm::Backend::Endpoint
 
 The Endpoint type for storm-backend-server
@@ -1727,6 +2883,23 @@ Alias of `Struct[{
   hostname => String,
   port     => Optional[Integer],
   weight   => Optional[Integer],
+}]`
+
+### Storm::Backend::Info
+
+The Storm::Backend::Info data type.
+
+Alias of `Struct[{
+  sitename => Optional[String],
+  backend_hostname => Optional[String],
+  storage_default_root => Optional[String],
+  frontend_public_host => Optional[String],
+  frontend_path => Optional[String],
+  frontend_port => Optional[Integer],
+  rest_services_port => Optional[Integer],
+  endpoint_quality_level => Optional[Integer],
+  webdav_pool_list => Optional[String],
+  frontend_host_list => Optional[String],
 }]`
 
 ### Storm::Backend::Pool
@@ -1830,7 +3003,8 @@ The Storm::Backend::WebdavPoolMember data type.
 
 Alias of `Struct[{
   hostname => String,
-  port     => Optional[Integer],
+  http_port => Optional[Integer],
+  https_port => Optional[Integer],
 }]`
 
 ### Storm::Backend::Xroot

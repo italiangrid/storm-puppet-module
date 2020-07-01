@@ -4,14 +4,14 @@ class storm::backend::params (
 ) inherits storm::params {
 
   $info = lookup('storm::backend::info', Storm::Backend::Info, undef, {
-    sitename => 'StoRM',
-    storage_default_root => '/storage',
+    'sitename' => 'StoRM',
+    'storage_default_root' => '/storage',
   })
 
   $database = lookup('storm::backend::database', Storm::Backend::Database, undef, {
-    root_password  => 'storm',
-    storm_username => 'storm',
-    storm_password => 'bluemoon',
+    'root_password'  => 'storm',
+    'storm_username' => 'storm',
+    'storm_password' => 'bluemoon',
   })
 
   $rfio_port = lookup('storm::backend::rfio_port', Integer, undef, 5001)
@@ -48,4 +48,67 @@ class storm::backend::params (
   $synchcall_xmlrpc_max_queue_size = lookup('storm::backend::synchcall_xmlrpc_max_queue_size', Integer, undef, 1000)
   $synchcall_xmlrpc_security_enabled = lookup('storm::backend::synchcall_xmlrpc_security_enabled', Boolean, undef, true)
   $synchcall_xmlrpc_security_token = lookup('storm::backend::synchcall_xmlrpc_security_token', String, undef, 'secret')
+
+  # Skip ACL setup for PTG requests
+  $ptg_skip_acl_setup = lookup('storm::backend::ptg_skip_acl_setup', Boolean, undef, false)
+
+  # pin lifetime
+  $pinlifetime_default = lookup('storm::backend::pinlifetime_default', Integer, undef, 259200)
+  $pinlifetime_maximum = lookup('storm::backend::pinlifetime_maximum', Integer, undef, 1814400)
+
+  # sanity check enabled
+  $sanity_check_enabled = lookup('storm::backend::sanity_check_enabled', Boolean, undef, true)
+
+  # DU service
+  $service_du_enabled = lookup('storm::backend::service_du_enabled', Boolean, undef, false)
+  $service_du_delay = lookup('storm::backend::service_du_delay', Integer, undef, 60)
+  $service_du_interval = lookup('storm::backend::service_du_interval', Integer, undef, 360)
+
+  # ls max entries
+  $synchcall_max_ls_entries = lookup('storm::backend::synchcall_max_ls_entries', Integer, undef, 2000)
+
+  # Pinned Files cleaning parameters
+  $gc_pinnedfiles_cleaning_delay = lookup('storm::backend::gc_pinnedfiles_cleaning_delay', Integer, undef, 10)
+  $gc_pinnedfiles_cleaning_interval = lookup('storm::backend::gc_pinnedfiles_cleaning_interval', Integer, undef, 300)
+
+  # Garbage Collector
+  $gc_purge_enabled = lookup('storm::backend::gc_purge_enabled', Boolean, undef, true)
+  $gc_purge_interval = lookup('storm::backend::gc_purge_interval', Integer, undef, 600)
+  $gc_purge_size = lookup('storm::backend::gc_purge_size', Integer, undef, 800)
+  $gc_expired_request_time = lookup('storm::backend::gc_expired_request_time', Integer, undef, 21600)
+  # Expired-Put-Requests-Agent parameters
+  $gc_ptp_transit_interval = lookup('storm::backend::gc_ptp_transit_interval', Integer, undef, 300)
+  $gc_ptp_transit_start_delay = lookup('storm::backend::gc_ptp_transit_start_delay', Integer, undef, 10)
+
+  # extraslashes
+  $extraslashes_file = lookup('storm::backend::extraslashes_file', String, undef, '')
+  $extraslashes_root = lookup('storm::backend::extraslashes_root', String, undef, '/')
+  $extraslashes_gsiftp = lookup('storm::backend::extraslashes_gsiftp', String, undef, '/')
+
+  # Db Connection Pool
+  $db_connection_pool_enabled = lookup('storm::backend::db_connection_pool_enabled', Boolean, undef, true)
+  $db_connection_pool_max_active = lookup('storm::backend::params::db_connection_pool_max_active', Integer, undef, 200)
+  $db_connection_pool_max_wait = lookup('storm::backend::params::db_connection_pool_max_wait', Integer, undef, 50)
+
+  # Asynch Picker
+  $asynch_db_reconnect_period = lookup('storm::backend::asynch_db_reconnect_period', Integer, undef, 18000)
+  $asynch_db_delay_period = lookup('storm::backend::asynch_db_delay_period', Integer, undef, 30)
+  $asynch_picking_initial_delay = lookup('storm::backend::asynch_picking_initial_delay', Integer, undef, 1)
+  $asynch_picking_time_interval = lookup('storm::backend::asynch_picking_time_interval', Integer, undef, 2)
+  $asynch_picking_max_batch_size = lookup('storm::backend::asynch_picking_max_batch_size', Integer, undef, 100)
+
+  # Scheduler pools
+  $requests_scheduler_core_size = lookup('storm::backend::requests_scheduler_core_size', Integer, undef, 50)
+  $requests_scheduler_max_size = lookup('storm::backend::requests_scheduler_core_size', Integer, undef, 200)
+  $requests_scheduler_queue_size = lookup('storm::backend::requests_scheduler_core_size', Integer, undef, 2000)
+  $ptp_requests_scheduler_core_size = lookup('storm::backend::ptp_requests_scheduler_core_size', Integer, undef, 50)
+  $ptp_requests_scheduler_max_size = lookup('storm::backend::ptp_requests_scheduler_max_size', Integer, undef, 200)
+  $ptp_requests_scheduler_queue_size = lookup('storm::backend::ptp_requests_scheduler_queue_size', Integer, undef, 1000)
+  $ptg_requests_scheduler_core_size = lookup('storm::backend::ptg_requests_scheduler_core_size', Integer, undef, 50)
+  $ptg_requests_scheduler_max_size = lookup('storm::backend::ptg_requests_scheduler_max_size', Integer, undef, 200)
+  $ptg_requests_scheduler_queue_size = lookup('storm::backend::ptg_requests_scheduler_queue_size', Integer, undef, 2000)
+  $bol_requests_scheduler_core_size = lookup('storm::backend::bol_requests_scheduler_core_size', Integer, undef, 50)
+  $bol_requests_scheduler_max_size = lookup('storm::backend::bol_requests_scheduler_max_size', Integer, undef, 200)
+  $bol_requests_scheduler_queue_size = lookup('storm::backend::bol_requests_scheduler_queue_size', Integer, undef, 2000)
+
 }

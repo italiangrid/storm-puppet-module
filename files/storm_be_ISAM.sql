@@ -18,7 +18,6 @@ CREATE TABLE IF NOT EXISTS db_version (
 DELETE FROM storm_be_ISAM.db_version;
 INSERT INTO storm_be_ISAM.db_version (major,minor,revision,description) VALUES (1,1,0,'27 May 2011');
 
-
 --
 -- Table structure for table `storage_space`
 --

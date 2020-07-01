@@ -1,7 +1,32 @@
 # @summary StoRM Info Provider class
 #
-# @param example
-#   Description of example param
+# @example Example of usage
+#    class { 'storm::info':
+#    }
+#
+# @param config_file
+#
+# @param backend_hostname
+#
+# @param frontend_public_host
+#
+# @param sitename
+#
+# @param storage_areas
+#
+# @param storage_default_root
+#
+# @param frontend_path
+#
+# @param frontend_port
+#
+# @param rest_services_port
+#
+# @param endpoint_quality_level
+#
+# @param webdav_pool_members
+#
+# @param srm_pool_members
 #
 class storm::info (
 
