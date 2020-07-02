@@ -25,10 +25,8 @@ describe 'storm::backend', :type => :class do
           super().merge({
             'hostname' => 'storm.example.org',
             'frontend_public_host' => 'frontend.example.org',
-            'database' => {
-              'storm_username' => 'test',
-              'storm_password' => 'secret,'
-            }, 
+            'db_storm_username' => 'test',
+            'db_storm_password' => 'secret',
             'gsiftp_pool_members' => [
               {
                 'hostname' => 'gridftp-0.example.org',

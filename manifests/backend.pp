@@ -4,11 +4,8 @@
 # @example Example of usage
 #    class { 'storm::backend':
 #      hostname => 'be.test.example',
-#      database => {
-#        root_password  => 'storm',
-#        storm_username => 'storm',
-#        storm_password => 'bluemoon',
-#      },
+#      db_root_password  => 'storm',
+#      db_storm_password => 'bluemoon',
 #      gsiftp_pool_members => [
 #        {
 #          'hostname' => 'gridftp.test.example',
@@ -34,9 +31,11 @@
 # @param hostname
 #   StoRM Backend Fully Qualified Domain Name
 #
-# @param info
+# @param db_root_password
 #
-# @param database
+# @param db_storm_username
+#
+# @param db_storm_password
 #
 # @param rfio_hostname
 #
@@ -158,12 +157,24 @@
 #
 # @param bol_requests_scheduler_queue_size
 #
+# @param info_sitename
+#
+# @param info_storage_default_root
+#
+# @param info_endpoint_quality_level
+#
+# @param info_webdav_pool_list
+#
+# @param info_frontend_host_list
+#
 class storm::backend (
 
   String $hostname,
 
-  Storm::Backend::Info $info = $storm::backend::params::info,
-  Storm::Backend::Database $database = $storm::backend::params::database,
+  # Db
+  String $db_root_password = $storm::backend::params::db_root_password,
+  String $db_storm_username = $storm::backend::db_storm_username,
+  String $db_storm_password = $storm::backend::db_storm_password,
 
   String $rfio_hostname = lookup('storm::backend::rfio_hostname', String, undef, $hostname),
   Integer $rfio_port = $storm::backend::params::rfio_port,
@@ -256,6 +267,15 @@ class storm::backend (
   Integer $bol_requests_scheduler_max_size = $storm::backend::params::bol_requests_scheduler_max_size,
   Integer $bol_requests_scheduler_queue_size = $storm::backend::params::bol_requests_scheduler_queue_size,
 
+  # Info
+  String $info_sitename = $storm::backend::params::info_sitename,
+  String $info_storage_default_root = $storm::backend::params::info_storage_default_root,
+  Integer $info_endpoint_quality_level = $storm::backend::params::info_endpoint_quality_level,
+  Array[Storm::Backend::WebdavPoolMember] $info_webdav_pool_list = lookup('storm::backend::info_webdav_pool_list',
+    Array[Storm::Backend::WebdavPoolMember], undef, $webdav_pool_members),
+  Array[Storm::Backend::SrmPoolMember] $info_frontend_host_list = lookup('storm::backend::info_frontend_host_list',
+    Array[Storm::Backend::SrmPoolMember], undef, $srm_pool_members),
+
 ) inherits storm::backend::params {
 
   contain storm::backend::install
@@ -267,20 +287,21 @@ class storm::backend (
   }
   -> class { 'storm::db':
     fqdn_hostname  => $hostname,
-    storm_username => $database[storm_username],
-    storm_password => $database[storm_password],
+    storm_username => $db_storm_username,
+    storm_password => $db_storm_password,
   }
   -> Class['storm::backend::install']
   -> Class['storm::backend::config']
   -> Class['storm::backend::service']
   -> class { 'storm::info':
-    backend_hostname     => $hostname,
-    sitename             => $info[sitename],
-    storage_default_root => $info[storage_default_root],
-    frontend_public_host => $frontend_public_host,
-    frontend_port        => $frontend_port,
-    rest_services_port   => $rest_services_port,
-    webdav_pool_members  => $webdav_pool_members,
-    srm_pool_members     => $srm_pool_members,
+    backend_hostname       => $hostname,
+    sitename               => $info_sitename,
+    storage_default_root   => $info_storage_default_root,
+    endpoint_quality_level => $info_endpoint_quality_level,
+    frontend_public_host   => $frontend_public_host,
+    frontend_port          => $frontend_port,
+    rest_services_port     => $rest_services_port,
+    webdav_pool_members    => $info_webdav_pool_list,
+    srm_pool_members       => $info_frontend_host_list,
   }
 }

@@ -3,16 +3,13 @@
 class storm::backend::params (
 ) inherits storm::params {
 
-  $info = lookup('storm::backend::info', Storm::Backend::Info, undef, {
-    'sitename' => 'StoRM',
-    'storage_default_root' => '/storage',
-  })
+  $info_sitename = lookup('storm::backend::info_sitename', String, undef, 'StoRM site')
+  $info_storage_default_root = lookup('storm::backend::info_storage_default_root', String, undef, '/storage')
+  $info_endpoint_quality_level = lookup('storm::backend::info_endpoint_quality_level', Integer, undef, 2)
 
-  $database = lookup('storm::backend::database', Storm::Backend::Database, undef, {
-    'root_password'  => 'storm',
-    'storm_username' => 'storm',
-    'storm_password' => 'bluemoon',
-  })
+  $db_root_password = lookup('storm::backend::db_root_password', String, undef, 'storm')
+  $db_storm_username = lookup('storm::backend::db_storm_username', String, undef, 'storm')
+  $db_storm_password = lookup('storm::backend::db_storm_password', String, undef, 'bluemoon')
 
   $rfio_port = lookup('storm::backend::rfio_port', Integer, undef, 5001)
   $xroot_port = lookup('storm::backend::xroot_port', Integer, undef, 1094)

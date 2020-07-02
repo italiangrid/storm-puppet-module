@@ -4,8 +4,9 @@ class storm::backend::config (
 
   $hostname = $storm::backend::hostname,
 
-  $info = $storm::backend::info,
-  $database = $storm::backend::database,
+  $db_root_password = $storm::backend::db_root_password,
+  $db_storm_username = $storm::backend::db_storm_username,
+  $db_storm_password = $storm::backend::db_storm_password,
 
   $storage_areas = $storm::backend::storage_areas,
   $gsiftp_pool_members = $storm::backend::gsiftp_pool_members,

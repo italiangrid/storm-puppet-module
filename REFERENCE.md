@@ -47,14 +47,12 @@
 * [`Storm::Backend::Acl`](#stormbackendacl): The ACL type for storm-backend-server
 * [`Storm::Backend::AclMode`](#stormbackendaclmode): 
 * [`Storm::Backend::BalanceStrategy`](#stormbackendbalancestrategy): 
-* [`Storm::Backend::Database`](#stormbackenddatabase): 
 * [`Storm::Backend::Endpoint`](#stormbackendendpoint): The Endpoint type for storm-backend-server
 * [`Storm::Backend::FileSystem`](#stormbackendfilesystem): The FileSystem type for storm-backend-server
 * [`Storm::Backend::FsDriver`](#stormbackendfsdriver): 
 * [`Storm::Backend::FsType`](#stormbackendfstype): 
 * [`Storm::Backend::Gsiftp`](#stormbackendgsiftp): The Gsiftp type for storm-backend-server
 * [`Storm::Backend::GsiftpPoolMember`](#stormbackendgsiftppoolmember): 
-* [`Storm::Backend::Info`](#stormbackendinfo): 
 * [`Storm::Backend::Pool`](#stormbackendpool): The Pool type for storm-backend-server
 * [`Storm::Backend::Quota`](#stormbackendquota): The Quota type for storm-backend-server
 * [`Storm::Backend::Rfio`](#stormbackendrfio): The Rfio type for storm-backend-server
@@ -81,6 +79,29 @@ StoRM Backend puppet module
 
 ```puppet
 class { 'storm::backend':
+  hostname => 'be.test.example',
+  db_root_password  => 'storm',
+  db_storm_password => 'bluemoon',
+  gsiftp_pool_members => [
+    {
+      'hostname' => 'gridftp.test.example',
+    },
+  ],
+  webdav_pool_members => [
+    {
+      'hostname' => 'webdav.test.example',
+    },
+  ],
+  storage_areas => [
+    {
+      'name'               => 'test.vo',
+      'root_path'          => '/storage/test.vo',
+      'access_points'      => ['/test.vo'],
+      'vos'                => ['test.vo'],
+      'storage_class'      => 'T0D1',
+      'online_size'        => 4,
+      'transfer_protocols' => ['file', 'gsiftp', 'https'],
+    },
 }
 ```
 
@@ -94,21 +115,29 @@ Data type: `String`
 
 StoRM Backend Fully Qualified Domain Name
 
-##### `info`
+##### `db_root_password`
 
-Data type: `Storm::Backend::Info`
-
-
-
-Default value: $storm::backend::params::info
-
-##### `database`
-
-Data type: `Storm::Backend::Database`
+Data type: `String`
 
 
 
-Default value: $storm::backend::params::database
+Default value: $storm::backend::params::db_root_password
+
+##### `db_storm_username`
+
+Data type: `String`
+
+
+
+Default value: $storm::backend::db_storm_username
+
+##### `db_storm_password`
+
+Data type: `String`
+
+
+
+Default value: $storm::backend::db_storm_password
 
 ##### `rfio_hostname`
 
@@ -590,6 +619,48 @@ Data type: `Integer`
 
 Default value: $storm::backend::params::bol_requests_scheduler_queue_size
 
+##### `info_sitename`
+
+Data type: `String`
+
+
+
+Default value: $storm::backend::params::info_sitename
+
+##### `info_storage_default_root`
+
+Data type: `String`
+
+
+
+Default value: $storm::backend::params::info_storage_default_root
+
+##### `info_endpoint_quality_level`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::info_endpoint_quality_level
+
+##### `info_webdav_pool_list`
+
+Data type: `Array[Storm::Backend::WebdavPoolMember]`
+
+
+
+Default value: lookup('storm::backend::info_webdav_pool_list',
+    Array[Storm::Backend::WebdavPoolMember], undef, $webdav_pool_members)
+
+##### `info_frontend_host_list`
+
+Data type: `Array[Storm::Backend::SrmPoolMember]`
+
+
+
+Default value: lookup('storm::backend::info_frontend_host_list',
+    Array[Storm::Backend::SrmPoolMember], undef, $srm_pool_members)
+
 ### storm::backend::config
 
 StoRM Backend config class
@@ -606,21 +677,29 @@ Data type: `Any`
 
 Default value: $storm::backend::hostname
 
-##### `info`
+##### `db_root_password`
 
 Data type: `Any`
 
 
 
-Default value: $storm::backend::info
+Default value: $storm::backend::db_root_password
 
-##### `database`
+##### `db_storm_username`
 
 Data type: `Any`
 
 
 
-Default value: $storm::backend::database
+Default value: $storm::backend::db_storm_username
+
+##### `db_storm_password`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::db_storm_password
 
 ##### `storage_areas`
 
@@ -2824,16 +2903,6 @@ The Storm::Backend::BalanceStrategy data type.
 
 Alias of `Enum['round-robin', 'smart-rr', 'random', 'weight']`
 
-### Storm::Backend::Database
-
-The Storm::Backend::Database data type.
-
-Alias of `Struct[{
-  root_password  => Optional[String],
-  storm_username => Optional[String],
-  storm_password => Optional[String],
-}]`
-
 ### Storm::Backend::Endpoint
 
 The Endpoint type for storm-backend-server
@@ -2883,23 +2952,6 @@ Alias of `Struct[{
   hostname => String,
   port     => Optional[Integer],
   weight   => Optional[Integer],
-}]`
-
-### Storm::Backend::Info
-
-The Storm::Backend::Info data type.
-
-Alias of `Struct[{
-  sitename => Optional[String],
-  backend_hostname => Optional[String],
-  storage_default_root => Optional[String],
-  frontend_public_host => Optional[String],
-  frontend_path => Optional[String],
-  frontend_port => Optional[Integer],
-  rest_services_port => Optional[Integer],
-  endpoint_quality_level => Optional[Integer],
-  webdav_pool_list => Optional[String],
-  frontend_host_list => Optional[String],
 }]`
 
 ### Storm::Backend::Pool
