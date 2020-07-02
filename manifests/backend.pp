@@ -3,6 +3,32 @@
 #
 # @example Example of usage
 #    class { 'storm::backend':
+#      hostname => 'be.test.example',
+#      database => {
+#        root_password  => 'storm',
+#        storm_username => 'storm',
+#        storm_password => 'bluemoon',
+#      },
+#      gsiftp_pool_members => [
+#        {
+#          'hostname' => 'gridftp.test.example',
+#        },
+#      ],
+#      webdav_pool_members => [
+#        {
+#          'hostname' => 'webdav.test.example',
+#        },
+#      ],
+#      storage_areas => [
+#        {
+#          'name'               => 'test.vo',
+#          'root_path'          => '/storage/test.vo',
+#          'access_points'      => ['/test.vo'],
+#          'vos'                => ['test.vo'],
+#          'storage_class'      => 'T0D1',
+#          'online_size'        => 4,
+#          'transfer_protocols' => ['file', 'gsiftp', 'https'],
+#        },
 #    }
 #
 # @param hostname
