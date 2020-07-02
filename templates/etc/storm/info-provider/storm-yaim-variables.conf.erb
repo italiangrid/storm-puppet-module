@@ -8,6 +8,9 @@ STORM_BACKEND_REST_SERVICES_PORT=<%= @rest_services_port %>
 STORM_ENDPOINT_QUALITY_LEVEL=<%= @endpoint_quality_level %>
 <%-
 @enabled_access_protocols=[]
+@transfer_protocols.each do | tp |
+  @enabled_access_protocols.push(tp)
+end
 @storage_areas.each do | sa |
   @sa_transfer_protocols=sa['transfer_protocols'] ? sa['transfer_protocols'] : ['file', 'gsiftp']
   @sa_transfer_protocols.each do | ap |
@@ -18,11 +21,11 @@ STORM_ENDPOINT_QUALITY_LEVEL=<%= @endpoint_quality_level %>
 end
 -%>
 STORM_INFO_FILE_SUPPORT=<%= @enabled_access_protocols.include?('file') %>
-STORM_INFO_RFIO_SUPPORT=<%= @enabled_access_protocols.include?('rfio') %>
 STORM_INFO_GRIDFTP_SUPPORT=<%= @enabled_access_protocols.include?('gsiftp') %>
 STORM_INFO_ROOT_SUPPORT=<%= @enabled_access_protocols.include?('xroot') %>
-STORM_INFO_HTTP_SUPPORT=<%= @enabled_access_protocols.include?('https') %>
-STORM_INFO_HTTPS_SUPPORT=<%= @enabled_access_protocols.include?('https') %>
+STORM_INFO_HTTP_SUPPORT=<%= @enabled_access_protocols.include?('webdav') %>
+STORM_INFO_HTTPS_SUPPORT=<%= @enabled_access_protocols.include?('webdav') %>
+STORM_INFO_RFIO_SUPPORT=false
 <%-
 @frontend_host_list=[]
 @srm_pool_members.each do | e |

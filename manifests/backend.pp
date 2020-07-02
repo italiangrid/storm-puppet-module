@@ -32,28 +32,41 @@
 #   StoRM Backend Fully Qualified Domain Name
 #
 # @param db_root_password
+#   MySQL root user password
 #
 # @param db_storm_username
+#   The name of user used to connect to local database. Default: storm
 #
 # @param db_storm_password
-#
-# @param rfio_hostname
-#
-# @param rfio_port
+#   Password for the user in `db_storm_username`
 #
 # @param xroot_hostname
+#   Root server (default value for all Storage Areas).
+#   Note: you may change the settings for each SA acting on its configuration.
 #
 # @param xroot_port
+#   Root server port (default value for all Storage Areas).
 #
 # @param gsiftp_pool_balance_strategy
+#   Load balancing strategy for GridFTP server pool (default value for all Storage Areas).
+#   Note: you may change the settings for each SA acting on its configuration.
+#   Available values: round-robin, smart-rr, random, weight. Default value: round-robin
 #
 # @param gsiftp_pool_members
+#   GridFTP servers pool list (default value for all Storage Areas).
+#   Note: you may change the settings for each SA acting on its configuration.
 #
 # @param webdav_pool_members
+#   WebDAV endpoints pool list (default value for all Storage Areas).
+#   Note: you may change the settings for each SA acting on its configuration.
 #
 # @param srm_pool_members
+#   Frontend endpoints pool list (default value for all Storage Areas).
+#   Note: you may change the settings for each SA acting on its configuration.
 #
 # @param storage_areas
+#
+# @param transfer_protocols
 #
 # @param frontend_public_host
 #
@@ -176,9 +189,6 @@ class storm::backend (
   String $db_storm_username = $storm::backend::db_storm_username,
   String $db_storm_password = $storm::backend::db_storm_password,
 
-  String $rfio_hostname = lookup('storm::backend::rfio_hostname', String, undef, $hostname),
-  Integer $rfio_port = $storm::backend::params::rfio_port,
-
   String $xroot_hostname = lookup('storm::backend::xroot_hostname', String, undef, $hostname),
   Integer $xroot_port = $storm::backend::params::xroot_port,
 
@@ -186,6 +196,8 @@ class storm::backend (
   Array[Storm::Backend::GsiftpPoolMember] $gsiftp_pool_members = $storm::backend::params::gsiftp_pool_members,
   Array[Storm::Backend::WebdavPoolMember] $webdav_pool_members = $storm::backend::params::webdav_pool_members,
   Array[Storm::Backend::SrmPoolMember] $srm_pool_members = $storm::backend::params::srm_pool_members,
+
+  Array[Storm::Backend::TransferProtocol] $transfer_protocols = $storm::backend::params::transfer_protocols,
 
   Array[Storm::Backend::StorageArea] $storage_areas = $storm::backend::params::storage_areas,
 

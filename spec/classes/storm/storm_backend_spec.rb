@@ -49,6 +49,7 @@ describe 'storm::backend', :type => :class do
                 'hostname' => 'frontend-1.example.org',
               }
             ],
+            'transfer_protocols' => ['file','gsiftp','webdav'],
             'storage_areas'       => [
               {
                 'name' => 'test.vo',
@@ -58,7 +59,7 @@ describe 'storm::backend', :type => :class do
                 'storage_class' => 'T1D1',
                 'online_size' => 4,
                 'nearline_size' => 10,
-                'transfer_protocols' => ['file','gsiftp','root','http','https'],
+                'transfer_protocols' => ['file','gsiftp','webdav','xroot'],
               },
               {
                 'name' => 'atlas',
@@ -69,7 +70,6 @@ describe 'storm::backend', :type => :class do
                 'storage_class' => 'T1D0',
                 'online_size' => 4,
                 'nearline_size' => 10,
-                'transfer_protocols' => ['file','gsiftp'],
                 'gsiftp_pool_balance_strategy' => 'weight',
                 'gsiftp_pool_members' => [
                   {

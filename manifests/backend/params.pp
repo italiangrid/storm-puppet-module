@@ -11,7 +11,6 @@ class storm::backend::params (
   $db_storm_username = lookup('storm::backend::db_storm_username', String, undef, 'storm')
   $db_storm_password = lookup('storm::backend::db_storm_password', String, undef, 'bluemoon')
 
-  $rfio_port = lookup('storm::backend::rfio_port', Integer, undef, 5001)
   $xroot_port = lookup('storm::backend::xroot_port', Integer, undef, 1094)
 
   $gsiftp_pool_balance_strategy = lookup('storm::backend::gsiftp_pool_balance_strategy',
@@ -25,6 +24,8 @@ class storm::backend::params (
 
   $srm_pool_members = lookup('storm::backend::srm_pool_members',
     Array[Storm::Backend::SrmPoolMember], undef, [])
+
+  $transfer_protocols = lookup('storm::backend::transfer_protocols', Array[Storm::Backend::TransferProtocol], undef, ['file', 'gsiftp'])
 
   $storage_areas = lookup('storm::backend::storage_areas', Array[Storm::Backend::StorageArea], undef, [])
 

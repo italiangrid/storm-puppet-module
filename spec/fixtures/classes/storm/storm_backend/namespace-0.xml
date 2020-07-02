@@ -33,26 +33,37 @@
             <host>gridftp-1.example.org</host>
             <port>2811</port>
           </prot>
-          <prot name="https">
+          <prot name="root">
+            <schema>root</schema>
+            <host>storm.example.org</host>
+            <port>1094</port>
+          </prot>
+          <prot name="xroot">
             <id>2</id>
+            <schema>xroot</schema>
+            <host>storm.example.org</host>
+            <port>1094</port>
+          </prot>
+          <prot name="https">
+            <id>3</id>
             <schema>https</schema>
             <host>webdav-0.example.org</host>
             <port>8443</port>
           </prot>
           <prot name="http">
-            <id>3</id>
+            <id>4</id>
             <schema>http</schema>
             <host>webdav-0.example.org</host>
             <port>8085</port>
           </prot>
           <prot name="https">
-            <id>4</id>
+            <id>5</id>
             <schema>https</schema>
             <host>webdav-1.example.org</host>
             <port>8443</port>
           </prot>
           <prot name="http">
-            <id>5</id>
+            <id>6</id>
             <schema>http</schema>
             <host>webdav-1.example.org</host>
             <port>8085</port>
@@ -101,6 +112,30 @@
             <schema>gsiftp</schema>
             <host>gridftp-1.example.org</host>
             <port>2811</port>
+          </prot>
+          <prot name="https">
+            <id>2</id>
+            <schema>https</schema>
+            <host>webdav-0.example.org</host>
+            <port>8443</port>
+          </prot>
+          <prot name="http">
+            <id>3</id>
+            <schema>http</schema>
+            <host>webdav-0.example.org</host>
+            <port>8085</port>
+          </prot>
+          <prot name="https">
+            <id>4</id>
+            <schema>https</schema>
+            <host>webdav-1.example.org</host>
+            <port>8443</port>
+          </prot>
+          <prot name="http">
+            <id>5</id>
+            <schema>http</schema>
+            <host>webdav-1.example.org</host>
+            <port>8085</port>
           </prot>
         </trans-prot>
         <pool>

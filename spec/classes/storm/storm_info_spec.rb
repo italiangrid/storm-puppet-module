@@ -37,6 +37,7 @@ describe 'storm::info', :type => :class do
                 'hostname' => 'webdav-1.example.com',
               }
             ],
+            'transfer_protocols' => ['file','gsiftp','webdav'],
             'storage_areas'       => [
               {
                 'name' => 'test.vo',
@@ -46,7 +47,7 @@ describe 'storm::info', :type => :class do
                 'storage_class' => 'T1D1',
                 'online_size' => 4,
                 'nearline_size' => 10,
-                'transfer_protocols' => ['file','gsiftp','root','http','https'],
+                'transfer_protocols' => ['file','gsiftp','xroot','webdav'],
               },
               {
                 'name' => 'atlas',
@@ -79,7 +80,7 @@ describe 'storm::info', :type => :class do
           is_expected.to contain_file(title).with( :content => /STORM_INFO_FILE_SUPPORT=true/ )
           is_expected.to contain_file(title).with( :content => /STORM_INFO_RFIO_SUPPORT=false/ )
           is_expected.to contain_file(title).with( :content => /STORM_INFO_GRIDFTP_SUPPORT=true/ )
-          is_expected.to contain_file(title).with( :content => /STORM_INFO_ROOT_SUPPORT=false/ )
+          is_expected.to contain_file(title).with( :content => /STORM_INFO_ROOT_SUPPORT=true/ )
           is_expected.to contain_file(title).with( :content => /STORM_INFO_HTTP_SUPPORT=true/ )
           is_expected.to contain_file(title).with( :content => /STORM_INFO_HTTPS_SUPPORT=true/ )
 

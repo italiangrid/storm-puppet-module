@@ -13,6 +13,7 @@ class storm::info::config (
   $endpoint_quality_level = $storm::info::endpoint_quality_level,
   $webdav_pool_members = $storm::info::webdav_pool_members,
   $srm_pool_members = $storm::info::srm_pool_members,
+  $transfer_protocols = $storm::info::transfer_protocols,
 
 ) {
 

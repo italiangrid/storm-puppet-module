@@ -45,20 +45,20 @@
 
       @sa_quota=sa['quota']
 
-      @sa_transfer_protocols=sa['transfer_protocols'] ? sa['transfer_protocols'] : ['file', 'gsiftp']
+      if sa['transfer_protocols']
+        @sa_transfer_protocols=sa['transfer_protocols']
+      elsif @transfer_protocols
+        @sa_transfer_protocols=@transfer_protocols
+      else
+        @sa_transfer_protocols=['file', 'gsiftp']
+      end
 
-      @sa_gsiftp_members=sa['gsiftp_pool_members']
-      if @sa_gsiftp_members == nil and @gsiftp_pool_members != nil
+      if sa['gsiftp_pool_members']
+        @sa_gsiftp_members=sa['gsiftp_pool_members']
+      elsif @gsiftp_pool_members
         @sa_gsiftp_members=@gsiftp_pool_members
-      end
-
-      @sa_rfio_hostname=sa['rfio_hostname']
-      if @sa_rfio_hostname == nil and @rfio_hostname != nil
-        @sa_rfio_hostname=@rfio_hostname
-      end
-      @sa_rfio_port=sa['rfio_port']
-      if @sa_rfio_port == nil and @rfio_port != nil
-        @sa_rfio_port=@rfio_port
+      else
+        @sa_gsiftp_members=[]
       end
 
       @sa_xroot_hostname=sa['xroot_hostname']
@@ -70,9 +70,12 @@
         @sa_xroot_port=@xroot_port
       end
 
-      @sa_webdav_members=sa['webdav_pool_members']
-      if @sa_webdav_members == nil and @webdav_pool_members != nil
+      if sa['webdav_pool_members']
+        @sa_webdav_members=sa['webdav_pool_members']
+      elsif @webdav_pool_members
         @sa_webdav_members=@webdav_pool_members
+      else
+        @sa_webdav_members=[]
       end
 
       @sa_gsiftp_balance_strategy=sa['gsiftp_pool_balance_strategy']
@@ -157,21 +160,6 @@
               <%- @protocol_id+=1 -%>
             <%- end -%>
           <%- end -%>
-          <%- if @sa_transfer_protocols.include?('rfio') -%>
-            <%- if @sa_rfio_hostname == nil -%>
-              <%= fail("rfio transfer protocol is enabled for #{@sa_low} but no rfio_hostname is defined for storage area or globally") %>
-            <%- end -%>
-            <%- if @sa_rfio_port == nil -%>
-              <%= fail("rfio transfer protocol is enabled for #{@sa_low} but no rfio_port is defined for storage area or globally") %>
-            <%- end -%>
-          <prot name="rfio">
-            <id><%= @protocol_id %></id>
-            <schema>rfio</schema>
-            <host><%= @sa_rfio_hostname %></host>
-            <port><%= @sa_rfio_port %></port>
-          </prot>
-            <%- @protocol_id+=1 -%>
-          <%- end -%>
           <%- if @sa_transfer_protocols.include?('xroot') -%>
             <%- if @sa_xroot_hostname == nil -%>
               <%= fail("xroot transfer protocol is enabled for #{@sa_low} but no xroot_hostname is defined for storage area or globally") %>
@@ -192,7 +180,7 @@
           </prot>
             <%- @protocol_id+=1 -%>
           <%- end -%>
-          <%- if @sa_transfer_protocols.include?('https') -%>
+          <%- if @sa_transfer_protocols.include?('webdav') -%>
             <%- if @sa_webdav_members == nil -%>
               <%= fail("https transfer protocol is enabled for #{@sa_low} but no webdav_pool_members is defined for storage area or globally") %>
             <%- end -%>

@@ -13,11 +13,12 @@ class storm::backend::config (
   $gsiftp_pool_balance_strategy = $storm::backend::gsiftp_pool_balance_strategy,
   $webdav_pool_members = $storm::backend::webdav_pool_members,
   $srm_pool_members = $storm::backend::srm_pool_members,
-  $rfio_hostname = $storm::backend::rfio_hostname,
-  $rfio_port = $storm::backend::rfio_port,
+
+  $transfer_protocols = $storm::backend::transfer_protocols,
+
   $xroot_hostname = $storm::backend::xroot_hostname,
   $xroot_port = $storm::backend::xroot_port,
-  $srm_hostname = $storm::backend::frontend_public_host,
+
   $frontend_public_host = $storm::backend::frontend_public_host,
   $frontend_port = $storm::backend::frontend_port,
 

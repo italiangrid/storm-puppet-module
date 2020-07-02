@@ -1,6 +1,6 @@
 {
   "name": "cnafsd-storm",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "author": "storm",
   "summary": "StoRM Puppet module",
   "license": "Apache-2.0",
@@ -17,8 +17,8 @@
       "version_requirement": ">= 10.4.0"
     },
     {
-      "name": "CERNOps/bdii",
-      "version_requirement": ">= 1.2.2"
+      "name": "cnafsd/bdii",
+      "version_requirement": ">= 1.3.1"
     }
   ],
   "requirements": [

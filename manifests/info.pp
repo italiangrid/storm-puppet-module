@@ -43,6 +43,8 @@ class storm::info (
   Array[Storm::Backend::WebdavPoolMember] $webdav_pool_members = $storm::info::params::webdav_pool_members,
   Array[Storm::Backend::SrmPoolMember] $srm_pool_members = $storm::info::params::srm_pool_members,
 
+  Array[Storm::Backend::TransferProtocol] $transfer_protocols = $storm::info::params::transfer_protocols,
+
   String $config_file = $storm::info::params::config_file,
 
 ) inherits storm::info::params {

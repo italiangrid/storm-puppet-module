@@ -17,4 +17,5 @@ class storm::info::params (
   $endpoint_quality_level = lookup('storm::info::endpoint_quality_level', Integer, undef, 2)
   $webdav_pool_members = lookup('storm::info::webdav_pool_members', Array[Storm::Backend::WebdavPoolMember], undef, [])
   $srm_pool_members = lookup('storm::info::srm_pool_members', Array[Storm::Backend::SrmPoolMember], undef, [])
+  $transfer_protocols = lookup('storm::info::transfer_protocols', Array[Storm::Backend::TransferProtocol], undef, ['file', 'gsiftp'])
 }
