@@ -8,16 +8,17 @@ class storm::backend::config (
   $db_storm_username = $storm::backend::db_storm_username,
   $db_storm_password = $storm::backend::db_storm_password,
 
-  $storage_areas = $storm::backend::storage_areas,
+  $xroot_hostname = $storm::backend::xroot_hostname,
+  $xroot_port = $storm::backend::xroot_port,
+
   $gsiftp_pool_members = $storm::backend::gsiftp_pool_members,
   $gsiftp_pool_balance_strategy = $storm::backend::gsiftp_pool_balance_strategy,
   $webdav_pool_members = $storm::backend::webdav_pool_members,
   $srm_pool_members = $storm::backend::srm_pool_members,
-
   $transfer_protocols = $storm::backend::transfer_protocols,
+  $fs_type = $storm::backend::fs_type,
 
-  $xroot_hostname = $storm::backend::xroot_hostname,
-  $xroot_port = $storm::backend::xroot_port,
+  $storage_areas = $storm::backend::storage_areas,
 
   $frontend_public_host = $storm::backend::frontend_public_host,
   $frontend_port = $storm::backend::frontend_port,

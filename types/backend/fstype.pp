@@ -1,1 +1,1 @@
-type Storm::Backend::FsType = Enum['ext3', 'gpfs']
+type Storm::Backend::FsType = Enum['posixfs', 'gpfs', 'test']

@@ -5,7 +5,6 @@ type Storm::Backend::StorageArea = Struct[{
   access_points                => Array[String],
   vos                          => Array[String],
   fs_type                      => Optional[Storm::Backend::FsType],
-  fs_driver                    => Optional[Storm::Backend::FsDriver],
   space_token                  => Optional[String],
   authz                        => Optional[String],
   storage_class                => Optional[Storm::Backend::StorageClass],

@@ -53,30 +53,45 @@
 #   Available values: round-robin, smart-rr, random, weight. Default value: round-robin
 #
 # @param gsiftp_pool_members
+#   Array of Storm::Backend::GsiftpPoolMember.
 #   GridFTP servers pool list (default value for all Storage Areas).
 #   Note: you may change the settings for each SA acting on its configuration.
 #
 # @param webdav_pool_members
+#   Array of Storm::Backend::WebdavPoolMember.
 #   WebDAV endpoints pool list (default value for all Storage Areas).
 #   Note: you may change the settings for each SA acting on its configuration.
 #
 # @param srm_pool_members
+#   Array of Storm::Backend::SrmPoolMember.
 #   Frontend endpoints pool list (default value for all Storage Areas).
 #   Note: you may change the settings for each SA acting on its configuration.
 #
-# @param storage_areas
-#
 # @param transfer_protocols
+#   List of supported (and published) transfer protocols (default value for all Storage Areas). 
+#   Note: you may change the settings for each SA acting on its configuration.
+#
+# @param fs_type
+#   File System Type (default value for all Storage Areas).
+#   Note: you may change the settings for each SA acting on its configuration.
+#   Available values: posixfs, gpfs and test. Default value: posixfs
+#
+# @param storage_areas
+#   List of supported Storage Areas. Array of Storm::Backend::StorageArea.
 #
 # @param frontend_public_host
+#   StoRM Frontend service public host. It’s used by StoRM Info Provider to publish the SRM endpoint into the Resource BDII.
+#   Default value: `hostname`
 #
 # @param frontend_port
+#   StoRM Frontend service port. Default value: 8444
 #
 # @param directory_automatic_creation
 #
 # @param directory_writeperm
 #
 # @param rest_services_port
+#   StoRM backend server rest port. Default value: 9998
 #
 # @param rest_services_max_threads
 #
@@ -91,6 +106,7 @@
 # @param synchcall_xmlrpc_security_enabled
 #
 # @param synchcall_xmlrpc_security_token
+#  Token used in communication to the StoRM Frontend
 #
 # @param ptg_skip_acl_setup
 #
@@ -171,8 +187,10 @@
 # @param bol_requests_scheduler_queue_size
 #
 # @param info_sitename
+#  It’s the human-readable name of your site used to set the Glue-SiteName attribute.
 #
 # @param info_storage_default_root
+#  Default directory for Storage Areas.
 #
 # @param info_endpoint_quality_level
 #
@@ -186,27 +204,37 @@ class storm::backend (
 
   # Db
   String $db_root_password = $storm::backend::params::db_root_password,
-  String $db_storm_username = $storm::backend::db_storm_username,
-  String $db_storm_password = $storm::backend::db_storm_password,
+  String $db_storm_username = $storm::backend::params::db_storm_username,
+  String $db_storm_password = $storm::backend::params::db_storm_password,
 
+  ### Default values for Storage Areas
+  # 1. xroot
   String $xroot_hostname = lookup('storm::backend::xroot_hostname', String, undef, $hostname),
   Integer $xroot_port = $storm::backend::params::xroot_port,
-
+  # 2. gridftp pool
   Storm::Backend::BalanceStrategy $gsiftp_pool_balance_strategy = $storm::backend::params::gsiftp_pool_balance_strategy,
   Array[Storm::Backend::GsiftpPoolMember] $gsiftp_pool_members = $storm::backend::params::gsiftp_pool_members,
+  # 3. webdav pool
   Array[Storm::Backend::WebdavPoolMember] $webdav_pool_members = $storm::backend::params::webdav_pool_members,
+  # 4. frontend pool
   Array[Storm::Backend::SrmPoolMember] $srm_pool_members = $storm::backend::params::srm_pool_members,
-
+  # 5. transfer protocols
   Array[Storm::Backend::TransferProtocol] $transfer_protocols = $storm::backend::params::transfer_protocols,
+  # 6. fs-type
+  Storm::Backend::FsType $fs_type = $storm::backend::params::fs_type,
 
+  # Storage Areas
   Array[Storm::Backend::StorageArea] $storage_areas = $storm::backend::params::storage_areas,
 
+  # Frontend public host and port
   String $frontend_public_host = lookup('storm::backend::srm_hostname', String, undef, $hostname),
   Integer $frontend_port = $storm::backend::params::frontend_port,
 
+  # Directory options
   Boolean $directory_automatic_creation = $storm::backend::params::directory_automatic_creation,
   Boolean $directory_writeperm = $storm::backend::params::directory_writeperm,
 
+  # REST server conf
   Integer $rest_services_port = $storm::backend::params::rest_services_port,
   Integer $rest_services_max_threads = $storm::backend::params::rest_services_max_threads,
   Integer $rest_services_max_queue_size = $storm::backend::params::rest_services_max_queue_size,
@@ -279,7 +307,7 @@ class storm::backend (
   Integer $bol_requests_scheduler_max_size = $storm::backend::params::bol_requests_scheduler_max_size,
   Integer $bol_requests_scheduler_queue_size = $storm::backend::params::bol_requests_scheduler_queue_size,
 
-  # Info
+  # Info Provider
   String $info_sitename = $storm::backend::params::info_sitename,
   String $info_storage_default_root = $storm::backend::params::info_storage_default_root,
   Integer $info_endpoint_quality_level = $storm::backend::params::info_endpoint_quality_level,

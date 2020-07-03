@@ -3,32 +3,34 @@
 class storm::backend::params (
 ) inherits storm::params {
 
-  $info_sitename = lookup('storm::backend::info_sitename', String, undef, 'StoRM site')
-  $info_storage_default_root = lookup('storm::backend::info_storage_default_root', String, undef, '/storage')
-  $info_endpoint_quality_level = lookup('storm::backend::info_endpoint_quality_level', Integer, undef, 2)
-
+  # Db
   $db_root_password = lookup('storm::backend::db_root_password', String, undef, 'storm')
   $db_storm_username = lookup('storm::backend::db_storm_username', String, undef, 'storm')
   $db_storm_password = lookup('storm::backend::db_storm_password', String, undef, 'bluemoon')
 
+  ### Default values for Storage Areas
+  # 1. xroot
   $xroot_port = lookup('storm::backend::xroot_port', Integer, undef, 1094)
-
+  # 2. gridftp pool
   $gsiftp_pool_balance_strategy = lookup('storm::backend::gsiftp_pool_balance_strategy',
     Storm::Backend::BalanceStrategy, undef, 'round-robin')
-
   $gsiftp_pool_members = lookup('storm::backend::gsiftp_pool_members',
     Array[Storm::Backend::GsiftpPoolMember], undef, [])
-
+  # 3. webdav pool
   $webdav_pool_members = lookup('storm::backend::webdav_pool_members',
     Array[Storm::Backend::WebdavPoolMember], undef, [])
-
+  # 4. frontend pool
   $srm_pool_members = lookup('storm::backend::srm_pool_members',
     Array[Storm::Backend::SrmPoolMember], undef, [])
-
+  # 5. transfer protocols
   $transfer_protocols = lookup('storm::backend::transfer_protocols', Array[Storm::Backend::TransferProtocol], undef, ['file', 'gsiftp'])
+  # 6. fs-type
+  $fs_type = lookup('storm::backend::fs_type', Storm::Backend::FsType, undef, 'posixfs')
 
+  # Storage Areas
   $storage_areas = lookup('storm::backend::storage_areas', Array[Storm::Backend::StorageArea], undef, [])
 
+  # Frontend public host and port
   $frontend_port = lookup('storm::backend::frontend_port', Integer, undef, 8444)
 
   # StoRM Service Generic Behavior
@@ -109,4 +111,8 @@ class storm::backend::params (
   $bol_requests_scheduler_max_size = lookup('storm::backend::bol_requests_scheduler_max_size', Integer, undef, 200)
   $bol_requests_scheduler_queue_size = lookup('storm::backend::bol_requests_scheduler_queue_size', Integer, undef, 2000)
 
+  # Info Provider
+  $info_sitename = lookup('storm::backend::info_sitename', String, undef, 'StoRM site')
+  $info_storage_default_root = lookup('storm::backend::info_storage_default_root', String, undef, '/storage')
+  $info_endpoint_quality_level = lookup('storm::backend::info_endpoint_quality_level', Integer, undef, 2)
 }

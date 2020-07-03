@@ -7,9 +7,24 @@
 
       @sa_root=sa['root_path']
 
-      @sa_fs_type=sa['fs_type'] ? sa['fs_type'] : 'ext3'
-
-      @sa_fs_driver=sa['fs_driver'] ? sa['fs_driver'] : sa['fs_type'] == 'gpfs' ? 'gpfs' : 'posixfs'
+      if sa['fs_type']
+        @sa_fs=sa['fs_type']
+      elsif @fs_type
+        @sa_fs=@fs_type
+      else
+        @sa_fs='posixfs'
+      end
+      case @sa_fs
+      when 'gpfs'
+        @sa_fs_type = 'gpfs'
+        @sa_fs_driver = 'gpfs'
+      when 'test'
+        @sa_fs_type = 'ext3'
+        @sa_fs_driver = 'test'
+      else
+        @sa_fs_type = 'ext3'
+        @sa_fs_driver = 'posixfs'
+      end
 
       @sa_fs_space_system= @sa_fs_driver == 'gpfs' ? 'GPFSSpaceSystem' : 'MockSpaceSystem'
 
