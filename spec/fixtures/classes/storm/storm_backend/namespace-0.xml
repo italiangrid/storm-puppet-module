@@ -9,8 +9,8 @@
         <fixed>permit-all</fixed>
       </storage-area-authz>
       <properties>
-        <RetentionPolicy>custodial</RetentionPolicy>
-        <AccessLatency>nearline</AccessLatency>
+        <RetentionPolicy>replica</RetentionPolicy>
+        <AccessLatency>online</AccessLatency>
         <ExpirationMode>neverExpire</ExpirationMode>
         <TotalOnlineSize unit="Byte" limited-size="true">4000000000</TotalOnlineSize>
         <TotalNearlineSize unit="Byte">0</TotalNearlineSize>
@@ -90,10 +90,10 @@
       </storage-area-authz>
       <properties>
         <RetentionPolicy>custodial</RetentionPolicy>
-        <AccessLatency>online</AccessLatency>
+        <AccessLatency>nearline</AccessLatency>
         <ExpirationMode>neverExpire</ExpirationMode>
         <TotalOnlineSize unit="Byte" limited-size="true">4000000000</TotalOnlineSize>
-        <TotalNearlineSize unit="Byte">0</TotalNearlineSize>
+        <TotalNearlineSize unit="Byte">10000000000</TotalNearlineSize>
       </properties>
       <capabilities>
         <aclMode>AoT</aclMode>

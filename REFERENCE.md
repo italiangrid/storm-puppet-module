@@ -38,10 +38,6 @@
 * [`storm::webdav::params`](#stormwebdavparams): StoRM WebDAV params class
 * [`storm::webdav::service`](#stormwebdavservice): StoRM WebDAV service class
 
-**Defined types**
-
-* [`storm::common_directory`](#stormcommon_directory): Check if a directory path exists. If not, a new directory is created with specific owner and permissions.
-
 **Data types**
 
 * [`Storm::Backend::Acl`](#stormbackendacl): The ACL type for storm-backend-server
@@ -119,7 +115,7 @@ StoRM Backend Fully Qualified Domain Name
 
 Data type: `String`
 
-
+MySQL root user password
 
 Default value: $storm::backend::params::db_root_password
 
@@ -127,39 +123,24 @@ Default value: $storm::backend::params::db_root_password
 
 Data type: `String`
 
+The name of user used to connect to local database. Default: storm
 
-
-Default value: $storm::backend::db_storm_username
+Default value: $storm::backend::params::db_storm_username
 
 ##### `db_storm_password`
 
 Data type: `String`
 
+Password for the user in `db_storm_username`
 
-
-Default value: $storm::backend::db_storm_password
-
-##### `rfio_hostname`
-
-Data type: `String`
-
-
-
-Default value: lookup('storm::backend::rfio_hostname', String, undef, $hostname)
-
-##### `rfio_port`
-
-Data type: `Integer`
-
-
-
-Default value: $storm::backend::params::rfio_port
+Default value: $storm::backend::params::db_storm_password
 
 ##### `xroot_hostname`
 
 Data type: `String`
 
-
+Root server (default value for all Storage Areas).
+Note: you may change the settings for each SA acting on its configuration.
 
 Default value: lookup('storm::backend::xroot_hostname', String, undef, $hostname)
 
@@ -167,7 +148,7 @@ Default value: lookup('storm::backend::xroot_hostname', String, undef, $hostname
 
 Data type: `Integer`
 
-
+Root server port (default value for all Storage Areas).
 
 Default value: $storm::backend::params::xroot_port
 
@@ -175,7 +156,9 @@ Default value: $storm::backend::params::xroot_port
 
 Data type: `Storm::Backend::BalanceStrategy`
 
-
+Load balancing strategy for GridFTP server pool (default value for all Storage Areas).
+Note: you may change the settings for each SA acting on its configuration.
+Available values: round-robin, smart-rr, random, weight. Default value: round-robin
 
 Default value: $storm::backend::params::gsiftp_pool_balance_strategy
 
@@ -183,7 +166,9 @@ Default value: $storm::backend::params::gsiftp_pool_balance_strategy
 
 Data type: `Array[Storm::Backend::GsiftpPoolMember]`
 
-
+Array of Storm::Backend::GsiftpPoolMember.
+GridFTP servers pool list (default value for all Storage Areas).
+Note: you may change the settings for each SA acting on its configuration.
 
 Default value: $storm::backend::params::gsiftp_pool_members
 
@@ -191,7 +176,9 @@ Default value: $storm::backend::params::gsiftp_pool_members
 
 Data type: `Array[Storm::Backend::WebdavPoolMember]`
 
-
+Array of Storm::Backend::WebdavPoolMember.
+WebDAV endpoints pool list (default value for all Storage Areas).
+Note: you may change the settings for each SA acting on its configuration.
 
 Default value: $storm::backend::params::webdav_pool_members
 
@@ -199,15 +186,36 @@ Default value: $storm::backend::params::webdav_pool_members
 
 Data type: `Array[Storm::Backend::SrmPoolMember]`
 
-
+Array of Storm::Backend::SrmPoolMember.
+Frontend endpoints pool list (default value for all Storage Areas).
+Note: you may change the settings for each SA acting on its configuration.
 
 Default value: $storm::backend::params::srm_pool_members
+
+##### `transfer_protocols`
+
+Data type: `Array[Storm::Backend::TransferProtocol]`
+
+List of supported (and published) transfer protocols (default value for all Storage Areas).
+Note: you may change the settings for each SA acting on its configuration.
+
+Default value: $storm::backend::params::transfer_protocols
+
+##### `fs_type`
+
+Data type: `Storm::Backend::FsType`
+
+File System Type (default value for all Storage Areas).
+Note: you may change the settings for each SA acting on its configuration.
+Available values: posixfs, gpfs and test. Default value: posixfs
+
+Default value: $storm::backend::params::fs_type
 
 ##### `storage_areas`
 
 Data type: `Array[Storm::Backend::StorageArea]`
 
-
+List of supported Storage Areas. Array of Storm::Backend::StorageArea.
 
 Default value: $storm::backend::params::storage_areas
 
@@ -215,7 +223,8 @@ Default value: $storm::backend::params::storage_areas
 
 Data type: `String`
 
-
+StoRM Frontend service public host. It’s used by StoRM Info Provider to publish the SRM endpoint into the Resource BDII.
+Default value: `hostname`
 
 Default value: lookup('storm::backend::srm_hostname', String, undef, $hostname)
 
@@ -223,7 +232,7 @@ Default value: lookup('storm::backend::srm_hostname', String, undef, $hostname)
 
 Data type: `Integer`
 
-
+StoRM Frontend service port. Default value: 8444
 
 Default value: $storm::backend::params::frontend_port
 
@@ -247,7 +256,7 @@ Default value: $storm::backend::params::directory_writeperm
 
 Data type: `Integer`
 
-
+StoRM backend server rest port. Default value: 9998
 
 Default value: $storm::backend::params::rest_services_port
 
@@ -303,7 +312,7 @@ Default value: $storm::backend::params::synchcall_xmlrpc_security_enabled
 
 Data type: `String`
 
-
+Token used in communication to the StoRM Frontend
 
 Default value: $storm::backend::params::synchcall_xmlrpc_security_token
 
@@ -623,7 +632,7 @@ Default value: $storm::backend::params::bol_requests_scheduler_queue_size
 
 Data type: `String`
 
-
+It’s the human-readable name of your site used to set the Glue-SiteName attribute.
 
 Default value: $storm::backend::params::info_sitename
 
@@ -631,7 +640,7 @@ Default value: $storm::backend::params::info_sitename
 
 Data type: `String`
 
-
+Default directory for Storage Areas.
 
 Default value: $storm::backend::params::info_storage_default_root
 
@@ -701,13 +710,21 @@ Data type: `Any`
 
 Default value: $storm::backend::db_storm_password
 
-##### `storage_areas`
+##### `xroot_hostname`
 
 Data type: `Any`
 
 
 
-Default value: $storm::backend::storage_areas
+Default value: $storm::backend::xroot_hostname
+
+##### `xroot_port`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::xroot_port
 
 ##### `gsiftp_pool_members`
 
@@ -741,45 +758,29 @@ Data type: `Any`
 
 Default value: $storm::backend::srm_pool_members
 
-##### `rfio_hostname`
+##### `transfer_protocols`
 
 Data type: `Any`
 
 
 
-Default value: $storm::backend::rfio_hostname
+Default value: $storm::backend::transfer_protocols
 
-##### `rfio_port`
-
-Data type: `Any`
-
-
-
-Default value: $storm::backend::rfio_port
-
-##### `xroot_hostname`
+##### `fs_type`
 
 Data type: `Any`
 
 
 
-Default value: $storm::backend::xroot_hostname
+Default value: $storm::backend::fs_type
 
-##### `xroot_port`
-
-Data type: `Any`
-
-
-
-Default value: $storm::backend::xroot_port
-
-##### `srm_hostname`
+##### `storage_areas`
 
 Data type: `Any`
 
 
 
-Default value: $storm::backend::frontend_public_host
+Default value: $storm::backend::storage_areas
 
 ##### `frontend_public_host`
 
@@ -2019,6 +2020,14 @@ Data type: `Array[Storm::Backend::SrmPoolMember]`
 
 Default value: $storm::info::params::srm_pool_members
 
+##### `transfer_protocols`
+
+Data type: `Array[Storm::Backend::TransferProtocol]`
+
+
+
+Default value: $storm::info::params::transfer_protocols
+
 ### storm::info::config
 
 The storm::info::config class.
@@ -2122,6 +2131,14 @@ Data type: `Any`
 
 
 Default value: $storm::info::srm_pool_members
+
+##### `transfer_protocols`
+
+Data type: `Any`
+
+
+
+Default value: $storm::info::transfer_protocols
 
 ### storm::info::install
 
@@ -2822,64 +2839,6 @@ StoRM WebDAV params class
 
 StoRM WebDAV service class
 
-## Defined types
-
-### storm::common_directory
-
-Check if a directory path exists. If not, a new directory is created with specific owner and permissions.
-
-#### Examples
-
-##### Basic usage
-
-```puppet
-storm::common_directory { 'check-root-dir':
-  path => '/storage',
-}
-```
-
-#### Parameters
-
-The following parameters are available in the `storm::common_directory` defined type.
-
-##### `path`
-
-Data type: `String`
-
-The directory path. Required.
-
-##### `owner`
-
-Data type: `String`
-
-Directory's owner. Optional. Default: 'storm'.
-
-Default value: 'storm'
-
-##### `group`
-
-Data type: `String`
-
-Directory's group. Optional. Default: 'storm'.
-
-Default value: 'storm'
-
-##### `permissions`
-
-Data type: `String`
-
-Directory's permissions. Optional. Default: '755'.
-
-Default value: '755'
-
-##### `recurse`
-
-Data type: `Boolean`
-
-If recursion is enabled. Optional. Default: false.
-
-Default value: `false`
-
 ## Data types
 
 ### Storm::Backend::Acl
@@ -2934,7 +2893,7 @@ Alias of `Enum['posixfs', 'gpfs', 'test']`
 
 The Storm::Backend::FsType data type.
 
-Alias of `Enum['ext3', 'gpfs']`
+Alias of `Enum['posixfs', 'gpfs', 'test']`
 
 ### Storm::Backend::Gsiftp
 
@@ -3005,7 +2964,6 @@ Alias of `Struct[{
   access_points                => Array[String],
   vos                          => Array[String],
   fs_type                      => Optional[Storm::Backend::FsType],
-  fs_driver                    => Optional[Storm::Backend::FsDriver],
   space_token                  => Optional[String],
   authz                        => Optional[String],
   storage_class                => Optional[Storm::Backend::StorageClass],
@@ -3036,7 +2994,7 @@ Alias of `Enum['T0D1', 'T1D0', 'T1D1']`
 
 The TransferProtocol type for storm-backend-server
 
-Alias of `Enum['file', 'gsiftp', 'rfio', 'root', 'http', 'https']`
+Alias of `Enum['file', 'gsiftp', 'xroot', 'webdav']`
 
 ### Storm::Backend::Webdav
 

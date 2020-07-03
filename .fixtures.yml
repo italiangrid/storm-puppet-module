@@ -2,8 +2,7 @@ fixtures:
   forge_modules:
     accounts: "puppetlabs/accounts"
     mysql: "puppetlabs/mysql"
-    bdii: "CERNOps/bdii"
+    bdii: "cnafsd/bdii"
     firewall: "puppetlabs/firewall"
-    concat: "puppetlabs/concat"
   repositories:
     stdlib: "git://github.com/puppetlabs/puppetlabs-stdlib"

@@ -56,9 +56,8 @@ describe 'storm::backend', :type => :class do
                 'root_path' => '/storage/test.vo',
                 'access_points' => ['/test.vo'],
                 'vos' => ['test.vo', 'test.vo.2'],
-                'storage_class' => 'T1D1',
+                'storage_class' => 'T0D1',
                 'online_size' => 4,
-                'nearline_size' => 10,
                 'transfer_protocols' => ['file','gsiftp','webdav','xroot'],
               },
               {

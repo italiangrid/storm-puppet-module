@@ -32,26 +32,33 @@
 
       @sa_authz=sa['authz'] ? sa['authz'] : "permit-all"
 
-      @sa_storage_class=sa['storage_class'] ? sa['storage_class'] : "T0D1"
-      if @sa_storage_class == "T0D1"
-        @sa_retention_policy="replica"
-        @sa_access_latency="online"
-      else
-        @sa_retention_policy="custodial"
-        if @sa_storage_class == "T1D1"
-          @sa_access_latency="nearline"
-        else
-          @sa_access_latency="online"
-        end
+      @sa_online_size=sa['online_size']
+      if !@sa_online_size
+        fail("missing online size for #{@sa_low}")
       end
 
-      @sa_online_size=sa['online_size']
-
-      @sa_nearline_size=sa['nearline_size']
-      if @sa_nearline_size == nil and @sa_fs_driver == "gpfs"
-        fail("missing nearline size for #{@sa_low}")
-      else
+      @sa_storage_class=sa['storage_class'] ? sa['storage_class'] : "T0D1"
+      case @sa_storage_class
+      when 'T0D1'
+        @sa_retention_policy="replica"
+        @sa_access_latency="online"
         @sa_nearline_size=0
+      when 'T1D0'
+        @sa_retention_policy="custodial"
+        @sa_access_latency="nearline"
+        @sa_nearline_size=sa['nearline_size']
+        if !@sa_nearline_size
+          fail("missing nearline size for #{@sa_low}")
+        end
+      when 'T1D1'
+        @sa_retention_policy="custodial"
+        @sa_access_latency="online"
+        @sa_nearline_size=sa['nearline_size']
+        if !@sa_nearline_size
+          fail("missing nearline size for #{@sa_low}")
+        end
+      else
+        fail("invalid storage class for #{@sa_low}: #{@sa_storage_class}")
       end
 
       @sa_acl_mode=sa['acl_mode'] ? sa['acl_mode'] : "AoT"
