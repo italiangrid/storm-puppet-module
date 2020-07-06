@@ -6,7 +6,13 @@ describe 'storm::backend::service' do
 
     context "on #{os}" do
 
-      let(:pre_condition) { 'include storm::backend::install' }
+      let(:pre_condition) {
+      <<-EOF
+        class { 'storm::backend':
+          hostname => 'foo',
+        }
+      EOF
+      }
 
       let(:facts) do
         facts

@@ -3,6 +3,9 @@
 class storm::backend::params (
 ) inherits storm::params {
 
+  # Native libs gpfs
+  $install_native_libs_gpfs = lookup('storm::backend::install_native_libs_gpfs', Boolean, undef, false)
+
   # Db
   $db_root_password = lookup('storm::backend::db_root_password', String, undef, 'storm')
   $db_storm_username = lookup('storm::backend::db_storm_username', String, undef, 'storm')
@@ -76,6 +79,7 @@ class storm::backend::params (
   $gc_purge_interval = lookup('storm::backend::gc_purge_interval', Integer, undef, 600)
   $gc_purge_size = lookup('storm::backend::gc_purge_size', Integer, undef, 800)
   $gc_expired_request_time = lookup('storm::backend::gc_expired_request_time', Integer, undef, 21600)
+  $gc_expired_inprogress_time = lookup('storm::backend::gc_expired_inprogress_time', Integer, undef, 2592000)
   # Expired-Put-Requests-Agent parameters
   $gc_ptp_transit_interval = lookup('storm::backend::gc_ptp_transit_interval', Integer, undef, 300)
   $gc_ptp_transit_start_delay = lookup('storm::backend::gc_ptp_transit_start_delay', Integer, undef, 10)

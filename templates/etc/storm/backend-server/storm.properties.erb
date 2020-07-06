@@ -211,6 +211,10 @@ purge.size=<%= @gc_purge_size %>
 # Time after that the GC consider a _terminated_ request as garbage
 # Default: 21600s (6h)
 expired.request.time=<%= @gc_expired_request_time %>
+#
+# Time after that the GC consider an _in-progress_ ptp request as garbage
+# Default: 2592000 (1 month)
+expired.inprogress.time=<%= @gc_expired_inprogress_time %>
 
 
 # ==========================================================

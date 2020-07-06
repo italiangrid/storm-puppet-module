@@ -75,9 +75,14 @@ StoRM Backend puppet module
 
 ```puppet
 class { 'storm::backend':
-  hostname => 'be.test.example',
+  hostname => 'backend.test.example',
   db_root_password  => 'storm',
   db_storm_password => 'bluemoon',
+  srm_pool_members => [
+    {
+      'hostname' => 'frontend.test.example',
+    }
+  ],
   gsiftp_pool_members => [
     {
       'hostname' => 'gridftp.test.example',
@@ -98,6 +103,7 @@ class { 'storm::backend':
       'online_size'        => 4,
       'transfer_protocols' => ['file', 'gsiftp', 'https'],
     },
+  ],
 }
 ```
 
@@ -110,6 +116,14 @@ The following parameters are available in the `storm::backend` class.
 Data type: `String`
 
 StoRM Backend Fully Qualified Domain Name
+
+##### `install_native_libs_gpfs`
+
+Data type: `Boolean`
+
+Set this if you need to install storm-native-libs-gpfs. Default: false.
+
+Default value: $storm::backend::params::install_native_libs_gpfs
 
 ##### `db_root_password`
 
@@ -215,7 +229,8 @@ Default value: $storm::backend::params::fs_type
 
 Data type: `Array[Storm::Backend::StorageArea]`
 
-List of supported Storage Areas. Array of Storm::Backend::StorageArea.
+List of supported Storage Areas.
+Array of [Storm::Backend::StorageArea](#stormbackendstoragearea).
 
 Default value: $storm::backend::params::storage_areas
 
@@ -240,7 +255,7 @@ Default value: $storm::backend::params::frontend_port
 
 Data type: `Boolean`
 
-
+Flag to enable automatic missing directory creation upon srmPrepareToPut requests. Default: false.
 
 Default value: $storm::backend::params::directory_automatic_creation
 
@@ -248,7 +263,7 @@ Default value: $storm::backend::params::directory_automatic_creation
 
 Data type: `Boolean`
 
-
+Flag to enable directory write permission setting upon srmMkDir requests on created directories. Default: false.
 
 Default value: $storm::backend::params::directory_writeperm
 
@@ -256,7 +271,7 @@ Default value: $storm::backend::params::directory_writeperm
 
 Data type: `Integer`
 
-StoRM backend server rest port. Default value: 9998
+REST services port. Default value: 9998
 
 Default value: $storm::backend::params::rest_services_port
 
@@ -264,7 +279,7 @@ Default value: $storm::backend::params::rest_services_port
 
 Data type: `Integer`
 
-
+REST services max active requests. Default: 100
 
 Default value: $storm::backend::params::rest_services_max_threads
 
@@ -272,7 +287,7 @@ Default value: $storm::backend::params::rest_services_max_threads
 
 Data type: `Integer`
 
-
+REST services max queue size of accepted requests. Default: 1000
 
 Default value: $storm::backend::params::rest_services_max_queue_size
 
@@ -280,7 +295,7 @@ Default value: $storm::backend::params::rest_services_max_queue_size
 
 Data type: `Integer`
 
-
+Port to listen on for incoming XML-RPC connections from Frontends(s). Default: 8080
 
 Default value: $storm::backend::params::synchcall_xmlrpc_unsecure_server_port
 
@@ -288,7 +303,9 @@ Default value: $storm::backend::params::synchcall_xmlrpc_unsecure_server_port
 
 Data type: `Integer`
 
-
+Number of threads managing XML-RPC connection from Frontends(s).
+A well sized value for this parameter have to be at least equal to the sum of the number of working threads in all Frontends.
+Default: 100.
 
 Default value: $storm::backend::params::synchcall_xmlrpc_maxthread
 
@@ -296,7 +313,7 @@ Default value: $storm::backend::params::synchcall_xmlrpc_maxthread
 
 Data type: `Integer`
 
-
+Max number of accepted and queued XML-RPC connection from Frontends(s). Default: **1000**
 
 Default value: $storm::backend::params::synchcall_xmlrpc_max_queue_size
 
@@ -304,7 +321,7 @@ Default value: $storm::backend::params::synchcall_xmlrpc_max_queue_size
 
 Data type: `Boolean`
 
-
+Whether the backend will require a token to be present for accepting XML-RPC requests. Default: true.
 
 Default value: $storm::backend::params::synchcall_xmlrpc_security_enabled
 
@@ -312,7 +329,8 @@ Default value: $storm::backend::params::synchcall_xmlrpc_security_enabled
 
 Data type: `String`
 
-Token used in communication to the StoRM Frontend
+The token that the backend will require to be present for accepting XML-RPC requests.
+Mandatory if synchcall_xmlrpc_security_enabled is true.
 
 Default value: $storm::backend::params::synchcall_xmlrpc_security_token
 
@@ -320,7 +338,7 @@ Default value: $storm::backend::params::synchcall_xmlrpc_security_token
 
 Data type: `Boolean`
 
-
+Skip ACL setup for PtG requests. Default: false.
 
 Default value: $storm::backend::params::ptg_skip_acl_setup
 
@@ -328,7 +346,8 @@ Default value: $storm::backend::params::ptg_skip_acl_setup
 
 Data type: `Integer`
 
-
+Default PinLifetime in seconds used for pinning files in case of srmPrepareToPut or srmPrepareToGet operation
+without any pinLifetime specified. Default: 259200.
 
 Default value: $storm::backend::params::pinlifetime_default
 
@@ -336,7 +355,7 @@ Default value: $storm::backend::params::pinlifetime_default
 
 Data type: `Integer`
 
-
+Maximum PinLifetime allowed in seconds. Default: 1814400.
 
 Default value: $storm::backend::params::pinlifetime_maximum
 
@@ -344,7 +363,7 @@ Default value: $storm::backend::params::pinlifetime_maximum
 
 Data type: `Boolean`
 
-
+Enable/disable sanity checks during bootstrap phase. Default: true.
 
 Default value: $storm::backend::params::sanity_check_enabled
 
@@ -352,7 +371,7 @@ Default value: $storm::backend::params::sanity_check_enabled
 
 Data type: `Boolean`
 
-
+Flag to enable disk usage service. Default: false.
 
 Default value: $storm::backend::params::service_du_enabled
 
@@ -360,7 +379,7 @@ Default value: $storm::backend::params::service_du_enabled
 
 Data type: `Integer`
 
-
+The initial delay before the service is started (seconds). Default: 60.
 
 Default value: $storm::backend::params::service_du_delay
 
@@ -368,7 +387,7 @@ Default value: $storm::backend::params::service_du_delay
 
 Data type: `Integer`
 
-
+The interval in seconds between successive run. Default: 360.
 
 Default value: $storm::backend::params::service_du_interval
 
@@ -376,7 +395,8 @@ Default value: $storm::backend::params::service_du_interval
 
 Data type: `Integer`
 
-
+Maximum number of entries returned by an srmLs call.
+Since in case of recursive srmLs results can be in order of million, this prevent a server overload. Default: 500.
 
 Default value: $storm::backend::params::synchcall_max_ls_entries
 
@@ -384,7 +404,7 @@ Default value: $storm::backend::params::synchcall_max_ls_entries
 
 Data type: `Integer`
 
-
+Initial delay before starting the reserved space, JIT ACLs and pinned files garbage collection process, in seconds. Default: 10.
 
 Default value: $storm::backend::params::gc_pinnedfiles_cleaning_delay
 
@@ -392,7 +412,7 @@ Default value: $storm::backend::params::gc_pinnedfiles_cleaning_delay
 
 Data type: `Integer`
 
-
+Time interval in seconds between successive purging run. Default: 300.
 
 Default value: $storm::backend::params::gc_pinnedfiles_cleaning_interval
 
@@ -400,7 +420,7 @@ Default value: $storm::backend::params::gc_pinnedfiles_cleaning_interval
 
 Data type: `Boolean`
 
-
+Enable the request garbage collector. Default: true.
 
 Default value: $storm::backend::params::gc_purge_enabled
 
@@ -408,7 +428,7 @@ Default value: $storm::backend::params::gc_purge_enabled
 
 Data type: `Integer`
 
-
+Time interval in seconds between successive purging run. Default: 600.
 
 Default value: $storm::backend::params::gc_purge_interval
 
@@ -416,7 +436,8 @@ Default value: $storm::backend::params::gc_purge_interval
 
 Data type: `Integer`
 
-
+Number of requests picked up for cleaning from the requests garbage collector at each run.
+This value is use also by Tape Recall Garbage Collector. Default: 800
 
 Default value: $storm::backend::params::gc_purge_size
 
@@ -424,15 +445,24 @@ Default value: $storm::backend::params::gc_purge_size
 
 Data type: `Integer`
 
-
+Time in seconds to consider a request expired after its submission. Default: 604800 seconds (1 week).
+From StoRM 1.11.13 it is used also to identify how much time is needed to consider a completed recall task as cleanable.
 
 Default value: $storm::backend::params::gc_expired_request_time
+
+##### `gc_expired_inprogress_time`
+
+Data type: `Integer`
+
+Time in seconds to consider an in-progress ptp request as expired. Default: 2592000 seconds (1 month).
+
+Default value: $storm::backend::params::gc_expired_inprogress_time
 
 ##### `gc_ptp_transit_interval`
 
 Data type: `Integer`
 
-
+Time interval in seconds between successive expired put requests agent run. Default: 3000.
 
 Default value: $storm::backend::params::gc_ptp_transit_interval
 
@@ -440,7 +470,7 @@ Default value: $storm::backend::params::gc_ptp_transit_interval
 
 Data type: `Integer`
 
-
+Initial delay before starting the expired put requests agent process, in seconds. Default: 60
 
 Default value: $storm::backend::params::gc_ptp_transit_start_delay
 
@@ -448,7 +478,7 @@ Default value: $storm::backend::params::gc_ptp_transit_start_delay
 
 Data type: `String`
 
-
+Add extra slashes after the “authority” part of a TURL for file protocol. Defaul: ''
 
 Default value: $storm::backend::params::extraslashes_file
 
@@ -456,7 +486,7 @@ Default value: $storm::backend::params::extraslashes_file
 
 Data type: `String`
 
-
+Add extra slashes after the “authority” part of a TURL for xroot protocol. Default: '/'
 
 Default value: $storm::backend::params::extraslashes_root
 
@@ -464,7 +494,7 @@ Default value: $storm::backend::params::extraslashes_root
 
 Data type: `String`
 
-
+Add extra slashes after the “authority” part of a TURL for gsiftp protocol. Default: '/'
 
 Default value: $storm::backend::params::extraslashes_gsiftp
 
@@ -472,7 +502,7 @@ Default value: $storm::backend::params::extraslashes_gsiftp
 
 Data type: `Boolean`
 
-
+Enable the database connection pool. Default: true
 
 Default value: $storm::backend::params::db_connection_pool_enabled
 
@@ -480,7 +510,7 @@ Default value: $storm::backend::params::db_connection_pool_enabled
 
 Data type: `Integer`
 
-
+Database connection pool max active connections. Default: 10
 
 Default value: $storm::backend::params::db_connection_pool_max_active
 
@@ -488,7 +518,7 @@ Default value: $storm::backend::params::db_connection_pool_max_active
 
 Data type: `Integer`
 
-
+Database connection pool max wait time to provide a connection. Default: 50
 
 Default value: $storm::backend::params::db_connection_pool_max_wait
 
@@ -496,7 +526,7 @@ Default value: $storm::backend::params::db_connection_pool_max_wait
 
 Data type: `Integer`
 
-
+Database connection refresh time intervall in seconds. Default: 18000
 
 Default value: $storm::backend::params::asynch_db_reconnect_period
 
@@ -504,7 +534,7 @@ Default value: $storm::backend::params::asynch_db_reconnect_period
 
 Data type: `Integer`
 
-
+Database connection refresh initial delay in seconds. Default: 30.
 
 Default value: $storm::backend::params::asynch_db_delay_period
 
@@ -512,7 +542,7 @@ Default value: $storm::backend::params::asynch_db_delay_period
 
 Data type: `Integer`
 
-
+Initial delay before starting to pick requests from the DB, in seconds. Default: 1.
 
 Default value: $storm::backend::params::asynch_picking_initial_delay
 
@@ -520,7 +550,7 @@ Default value: $storm::backend::params::asynch_picking_initial_delay
 
 Data type: `Integer`
 
-
+Polling interval in seconds to pick up new SRM requests. Default: 2.
 
 Default value: $storm::backend::params::asynch_picking_time_interval
 
@@ -528,7 +558,7 @@ Default value: $storm::backend::params::asynch_picking_time_interval
 
 Data type: `Integer`
 
-
+Maximum number of requests picked up at each polling time. Default: 100.
 
 Default value: $storm::backend::params::asynch_picking_max_batch_size
 
@@ -536,7 +566,7 @@ Default value: $storm::backend::params::asynch_picking_max_batch_size
 
 Data type: `Integer`
 
-
+Crusher Scheduler worker pool base size. Default: 50.
 
 Default value: $storm::backend::params::requests_scheduler_core_size
 
@@ -544,7 +574,7 @@ Default value: $storm::backend::params::requests_scheduler_core_size
 
 Data type: `Integer`
 
-
+Crusher Schedule worker pool max size. Default: 200.
 
 Default value: $storm::backend::params::requests_scheduler_max_size
 
@@ -552,7 +582,7 @@ Default value: $storm::backend::params::requests_scheduler_max_size
 
 Data type: `Integer`
 
-
+Request queue maximum size. Default: 2000.
 
 Default value: $storm::backend::params::requests_scheduler_queue_size
 
@@ -560,7 +590,7 @@ Default value: $storm::backend::params::requests_scheduler_queue_size
 
 Data type: `Integer`
 
-
+PrepareToPut worker pool base size. Default: 50.
 
 Default value: $storm::backend::params::ptp_requests_scheduler_core_size
 
@@ -568,7 +598,7 @@ Default value: $storm::backend::params::ptp_requests_scheduler_core_size
 
 Data type: `Integer`
 
-
+PrepareToPut worker pool max size. Default: 200.
 
 Default value: $storm::backend::params::ptp_requests_scheduler_max_size
 
@@ -576,7 +606,7 @@ Default value: $storm::backend::params::ptp_requests_scheduler_max_size
 
 Data type: `Integer`
 
-
+PrepareToPut request queue maximum size. Default: 1000.
 
 Default value: $storm::backend::params::ptp_requests_scheduler_queue_size
 
@@ -584,7 +614,7 @@ Default value: $storm::backend::params::ptp_requests_scheduler_queue_size
 
 Data type: `Integer`
 
-
+PrepareToGet worker pool base size. Default: 50.
 
 Default value: $storm::backend::params::ptg_requests_scheduler_core_size
 
@@ -592,7 +622,7 @@ Default value: $storm::backend::params::ptg_requests_scheduler_core_size
 
 Data type: `Integer`
 
-
+PrepareToGet worker pool max size. Default: 200.
 
 Default value: $storm::backend::params::ptg_requests_scheduler_max_size
 
@@ -600,7 +630,7 @@ Default value: $storm::backend::params::ptg_requests_scheduler_max_size
 
 Data type: `Integer`
 
-
+PrepareToGet request queue maximum size. Default: 2000.
 
 Default value: $storm::backend::params::ptg_requests_scheduler_queue_size
 
@@ -608,7 +638,7 @@ Default value: $storm::backend::params::ptg_requests_scheduler_queue_size
 
 Data type: `Integer`
 
-
+BringOnline worker pool base size. Default: 50.
 
 Default value: $storm::backend::params::bol_requests_scheduler_core_size
 
@@ -616,7 +646,7 @@ Default value: $storm::backend::params::bol_requests_scheduler_core_size
 
 Data type: `Integer`
 
-
+BringOnline Worker pool max size. Default: 200.
 
 Default value: $storm::backend::params::bol_requests_scheduler_max_size
 
@@ -624,7 +654,7 @@ Default value: $storm::backend::params::bol_requests_scheduler_max_size
 
 Data type: `Integer`
 
-
+BringOnline request queue maximum size. Default: 2000.
 
 Default value: $storm::backend::params::bol_requests_scheduler_queue_size
 
@@ -648,7 +678,7 @@ Default value: $storm::backend::params::info_storage_default_root
 
 Data type: `Integer`
 
-
+Endpoint maturity level to be published by the StoRM info provider. Default value: 2.
 
 Default value: $storm::backend::params::info_endpoint_quality_level
 
@@ -656,7 +686,7 @@ Default value: $storm::backend::params::info_endpoint_quality_level
 
 Data type: `Array[Storm::Backend::WebdavPoolMember]`
 
-
+List of published webdav endpoints.
 
 Default value: lookup('storm::backend::info_webdav_pool_list',
     Array[Storm::Backend::WebdavPoolMember], undef, $webdav_pool_members)
@@ -665,7 +695,7 @@ Default value: lookup('storm::backend::info_webdav_pool_list',
 
 Data type: `Array[Storm::Backend::SrmPoolMember]`
 
-
+List of published srm endpoints.
 
 Default value: lookup('storm::backend::info_frontend_host_list',
     Array[Storm::Backend::SrmPoolMember], undef, $srm_pool_members)
@@ -685,6 +715,14 @@ Data type: `Any`
 
 
 Default value: $storm::backend::hostname
+
+##### `install_native_libs_gpfs`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::install_native_libs_gpfs
 
 ##### `db_root_password`
 
@@ -989,6 +1027,14 @@ Data type: `Any`
 
 
 Default value: $storm::backend::gc_expired_request_time
+
+##### `gc_expired_inprogress_time`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::gc_expired_inprogress_time
 
 ##### `gc_ptp_transit_interval`
 

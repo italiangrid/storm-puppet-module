@@ -4,6 +4,8 @@ class storm::backend::config (
 
   $hostname = $storm::backend::hostname,
 
+  $install_native_libs_gpfs = $storm::backend::install_native_libs_gpfs,
+
   $db_root_password = $storm::backend::db_root_password,
   $db_storm_username = $storm::backend::db_storm_username,
   $db_storm_password = $storm::backend::db_storm_password,
@@ -56,6 +58,7 @@ class storm::backend::config (
   $gc_purge_interval = $storm::backend::gc_purge_interval,
   $gc_purge_size = $storm::backend::gc_purge_size,
   $gc_expired_request_time = $storm::backend::gc_expired_request_time,
+  $gc_expired_inprogress_time = $storm::backend::gc_expired_inprogress_time,
   $gc_ptp_transit_interval = $storm::backend::gc_ptp_transit_interval,
   $gc_ptp_transit_start_delay = $storm::backend::gc_ptp_transit_start_delay,
 
