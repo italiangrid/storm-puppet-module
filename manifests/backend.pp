@@ -47,7 +47,7 @@
 #   The name of user used to connect to local database. Default: storm
 #
 # @param db_storm_password
-#   Password for the user in `db_storm_username`
+#   Password for the user in `db_storm_username`. Default: bluemoon
 #
 # @param xroot_hostname
 #   Root server (default value for all Storage Areas).
