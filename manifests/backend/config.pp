@@ -6,6 +6,8 @@ class storm::backend::config (
 
   $install_native_libs_gpfs = $storm::backend::install_native_libs_gpfs,
 
+  $install_mysql_and_create_database = $storm::backend::install_mysql_and_create_database,
+
   $db_root_password = $storm::backend::db_root_password,
   $db_storm_username = $storm::backend::db_storm_username,
   $db_storm_password = $storm::backend::db_storm_password,
@@ -32,11 +34,11 @@ class storm::backend::config (
   $rest_services_max_threads = $storm::backend::rest_services_max_threads,
   $rest_services_max_queue_size = $storm::backend::rest_services_max_queue_size,
 
-  $synchcall_xmlrpc_unsecure_server_port = $storm::backend::synchcall_xmlrpc_unsecure_server_port,
-  $synchcall_xmlrpc_maxthread = $storm::backend::synchcall_xmlrpc_maxthread,
-  $synchcall_xmlrpc_max_queue_size = $storm::backend::synchcall_xmlrpc_max_queue_size,
-  $synchcall_xmlrpc_security_enabled = $storm::backend::synchcall_xmlrpc_security_enabled,
-  $synchcall_xmlrpc_security_token = $storm::backend::synchcall_xmlrpc_security_token,
+  $xmlrpc_unsecure_server_port = $storm::backend::xmlrpc_unsecure_server_port,
+  $xmlrpc_maxthread = $storm::backend::xmlrpc_maxthread,
+  $xmlrpc_max_queue_size = $storm::backend::xmlrpc_max_queue_size,
+  $xmlrpc_security_enabled = $storm::backend::xmlrpc_security_enabled,
+  $xmlrpc_security_token = $storm::backend::xmlrpc_security_token,
 
   $ptg_skip_acl_setup = $storm::backend::ptg_skip_acl_setup,
 
@@ -49,7 +51,7 @@ class storm::backend::config (
   $service_du_delay = $storm::backend::service_du_delay,
   $service_du_interval = $storm::backend::service_du_interval,
 
-  $synchcall_max_ls_entries = $storm::backend::synchcall_max_ls_entries,
+  $max_ls_entries = $storm::backend::max_ls_entries,
 
   $gc_pinnedfiles_cleaning_delay = $storm::backend::gc_pinnedfiles_cleaning_delay,
   $gc_pinnedfiles_cleaning_interval = $storm::backend::gc_pinnedfiles_cleaning_interval,
@@ -89,9 +91,27 @@ class storm::backend::config (
   $bol_requests_scheduler_max_size = $storm::backend::bol_requests_scheduler_max_size,
   $bol_requests_scheduler_queue_size = $storm::backend::bol_requests_scheduler_queue_size,
 
+  $info_config_file = $storm::backend::info_config_file,
+  $info_sitename = $storm::backend::info_sitename,
+  $info_storage_default_root = $storm::backend::info_storage_default_root,
+  $info_endpoint_quality_level = $storm::backend::info_endpoint_quality_level,
+
 ) {
 
   $namespace_file='/etc/storm/backend-server/namespace.xml'
+  $properties_file='/etc/storm/backend-server/storm.properties'
+
+  if $install_mysql_and_create_database {
+    class { 'storm::db':
+      fqdn_hostname  => $hostname,
+      storm_username => $db_storm_username,
+      storm_password => $db_storm_password,
+      root_password  => $db_root_password,
+      notify         => Service['storm-backend-server'],
+      before         => [File[$namespace_file], File[$properties_file]],
+    }
+  }
+
   $namespace_template_file='storm/etc/storm/backend-server/namespace.xml.erb'
 
   file { $namespace_file:
@@ -103,7 +123,6 @@ class storm::backend::config (
     require => [Package['storm-backend-mp']],
   }
 
-  $properties_file='/etc/storm/backend-server/storm.properties'
   $properties_template_file='storm/etc/storm/backend-server/storm.properties.erb'
 
   file { $properties_file:
@@ -113,5 +132,16 @@ class storm::backend::config (
     group   => 'storm',
     notify  => Service['storm-backend-server'],
     require => [Package['storm-backend-mp']],
+  }
+
+  $info_yaim_template_file='storm/etc/storm/info-provider/storm-yaim-variables.conf.erb'
+
+  file { $info_config_file:
+    ensure  => present,
+    content => template($info_yaim_template_file),
+    owner   => 'root',
+    group   => 'storm',
+    notify  => Exec['configure-info-provider'],
+    require => [Package['storm-dynamic-info-provider']],
   }
 }

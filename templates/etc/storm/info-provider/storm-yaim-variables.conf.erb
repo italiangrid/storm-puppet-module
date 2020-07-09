@@ -1,11 +1,11 @@
-SITE_NAME=<%= @sitename %>
-STORM_BACKEND_HOST=<%= @backend_hostname %>
-STORM_DEFAULT_ROOT=<%= @storage_default_root %>
-STORM_FRONTEND_PATH=<%= @frontend_path %>
+SITE_NAME=<%= @info_sitename %>
+STORM_BACKEND_HOST=<%= @hostname %>
+STORM_DEFAULT_ROOT=<%= @info_storage_default_root %>
+STORM_FRONTEND_PATH=/srm/managerv2
 STORM_FRONTEND_PORT=<%= @frontend_port %>
 STORM_FRONTEND_PUBLIC_HOST=<%= @frontend_public_host %>
 STORM_BACKEND_REST_SERVICES_PORT=<%= @rest_services_port %>
-STORM_ENDPOINT_QUALITY_LEVEL=<%= @endpoint_quality_level %>
+STORM_ENDPOINT_QUALITY_LEVEL=<%= @info_endpoint_quality_level %>
 <%-
 @enabled_access_protocols=[]
 @transfer_protocols.each do | tp |
@@ -62,7 +62,26 @@ STORM_WEBDAV_POOL_LIST=<%= @webdav_pool_list.join(',') %>
   @sa_root=sa['root_path']
   @sa_storage_class=sa['storage_class'] ? sa['storage_class'] : "T0D1"
   @sa_accesspoints=sa['access_points']
-  @sa_fs_driver=sa['fs_driver'] ? sa['fs_driver'] : sa['fs_type'] == 'gpfs' ? 'gpfs' : 'posixfs'
+  
+  if sa['fs_type']
+    @sa_fs=sa['fs_type']
+  elsif @fs_type
+    @sa_fs=@fs_type
+  else
+    @sa_fs='posixfs'
+  end
+  case @sa_fs
+  when 'gpfs'
+    @sa_fs_type = 'gpfs'
+    @sa_fs_driver = 'gpfs'
+  when 'test'
+    @sa_fs_type = 'ext3'
+    @sa_fs_driver = 'test'
+  else
+    @sa_fs_type = 'ext3'
+    @sa_fs_driver = 'posixfs'
+  end
+  
   @sa_online_size=sa['online_size']
   @sa_nearline_size=sa['nearline_size']
   if @sa_nearline_size == nil

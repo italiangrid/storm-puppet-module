@@ -40,6 +40,9 @@
 # @param install_native_libs_gpfs
 #   Set this if you need to install storm-native-libs-gpfs. Default: false.
 #
+# @param install_mysql_and_create_database
+#   Set this to true if you need to install MySQL and create StoRM database. Default: false.
+#
 # @param db_root_password
 #   MySQL root user password
 #
@@ -113,23 +116,23 @@
 # @param rest_services_max_queue_size
 #   REST services max queue size of accepted requests. Default: 1000
 #
-# @param synchcall_xmlrpc_unsecure_server_port
+# @param xmlrpc_unsecure_server_port
 #   Port to listen on for incoming XML-RPC connections from Frontends(s). Default: 8080
 #
-# @param synchcall_xmlrpc_maxthread
+# @param xmlrpc_maxthread
 #   Number of threads managing XML-RPC connection from Frontends(s).
 #   A well sized value for this parameter have to be at least equal to the sum of the number of working threads in all Frontends.
 #   Default: 100.
 #
-# @param synchcall_xmlrpc_max_queue_size
+# @param xmlrpc_max_queue_size
 #   Max number of accepted and queued XML-RPC connection from Frontends(s). Default: **1000**
 #
-# @param synchcall_xmlrpc_security_enabled
+# @param xmlrpc_security_enabled
 #   Whether the backend will require a token to be present for accepting XML-RPC requests. Default: true.
 #
-# @param synchcall_xmlrpc_security_token
+# @param xmlrpc_security_token
 #   The token that the backend will require to be present for accepting XML-RPC requests.
-#   Mandatory if synchcall_xmlrpc_security_enabled is true.
+#   Mandatory if xmlrpc_security_enabled is true.
 #
 # @param ptg_skip_acl_setup
 #   Skip ACL setup for PtG requests. Default: false.
@@ -153,7 +156,7 @@
 # @param service_du_interval
 #   The interval in seconds between successive run. Default: 360.
 #
-# @param synchcall_max_ls_entries
+# @param max_ls_entries
 #   Maximum number of entries returned by an srmLs call.
 #   Since in case of recursive srmLs results can be in order of million, this prevent a server overload. Default: 500.
 #
@@ -274,11 +277,13 @@ class storm::backend (
 
   String $hostname,
 
-  # Native libs gpfs
+  # Install native libs gpfs
   Boolean $install_native_libs_gpfs = $storm::backend::params::install_native_libs_gpfs,
 
-  # Db
+  # Install MySQL and/or create database
+  Boolean $install_mysql_and_create_database = $storm::backend::params::install_mysql_and_create_database,
   String $db_root_password = $storm::backend::params::db_root_password,
+  # Db connection
   String $db_storm_username = $storm::backend::params::db_storm_username,
   String $db_storm_password = $storm::backend::params::db_storm_password,
 
@@ -315,11 +320,11 @@ class storm::backend (
   Integer $rest_services_max_queue_size = $storm::backend::params::rest_services_max_queue_size,
 
   # XMLRPC Server parameter
-  Integer $synchcall_xmlrpc_unsecure_server_port = $storm::backend::params::synchcall_xmlrpc_unsecure_server_port,
-  Integer $synchcall_xmlrpc_maxthread = $storm::backend::params::synchcall_xmlrpc_maxthread,
-  Integer $synchcall_xmlrpc_max_queue_size = $storm::backend::params::synchcall_xmlrpc_max_queue_size,
-  Boolean $synchcall_xmlrpc_security_enabled = $storm::backend::params::synchcall_xmlrpc_security_enabled,
-  String $synchcall_xmlrpc_security_token = $storm::backend::params::synchcall_xmlrpc_security_token,
+  Integer $xmlrpc_unsecure_server_port = $storm::backend::params::xmlrpc_unsecure_server_port,
+  Integer $xmlrpc_maxthread = $storm::backend::params::xmlrpc_maxthread,
+  Integer $xmlrpc_max_queue_size = $storm::backend::params::xmlrpc_max_queue_size,
+  Boolean $xmlrpc_security_enabled = $storm::backend::params::xmlrpc_security_enabled,
+  String $xmlrpc_security_token = $storm::backend::params::xmlrpc_security_token,
 
   # Skip ACL setup for PTG requests
   Boolean $ptg_skip_acl_setup = $storm::backend::params::ptg_skip_acl_setup,
@@ -337,7 +342,7 @@ class storm::backend (
   Integer $service_du_interval = $storm::backend::params::service_du_interval,
 
   # Ls max entries
-  Integer $synchcall_max_ls_entries = $storm::backend::params::synchcall_max_ls_entries,
+  Integer $max_ls_entries = $storm::backend::params::max_ls_entries,
 
   # Pinned Files cleaning parameters
   Integer $gc_pinnedfiles_cleaning_delay = $storm::backend::params::gc_pinnedfiles_cleaning_delay,
@@ -384,6 +389,7 @@ class storm::backend (
   Integer $bol_requests_scheduler_queue_size = $storm::backend::params::bol_requests_scheduler_queue_size,
 
   # Info Provider
+  String $info_config_file = $storm::backend::params::info_config_file,
   String $info_sitename = $storm::backend::params::info_sitename,
   String $info_storage_default_root = $storm::backend::params::info_storage_default_root,
   Integer $info_endpoint_quality_level = $storm::backend::params::info_endpoint_quality_level,
@@ -398,26 +404,7 @@ class storm::backend (
   contain storm::backend::config
   contain storm::backend::service
 
-  class { 'bdii':
-    selinux => false,
-  }
-  -> class { 'storm::db':
-    fqdn_hostname  => $hostname,
-    storm_username => $db_storm_username,
-    storm_password => $db_storm_password,
-  }
-  -> Class['storm::backend::install']
+  Class['storm::backend::install']
   -> Class['storm::backend::config']
   -> Class['storm::backend::service']
-  -> class { 'storm::info':
-    backend_hostname       => $hostname,
-    sitename               => $info_sitename,
-    storage_default_root   => $info_storage_default_root,
-    endpoint_quality_level => $info_endpoint_quality_level,
-    frontend_public_host   => $frontend_public_host,
-    frontend_port          => $frontend_port,
-    rest_services_port     => $rest_services_port,
-    webdav_pool_members    => $info_webdav_pool_list,
-    srm_pool_members       => $info_frontend_host_list,
-  }
 }

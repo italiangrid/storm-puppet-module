@@ -6,8 +6,11 @@ class storm::backend::params (
   # Native libs gpfs
   $install_native_libs_gpfs = lookup('storm::backend::install_native_libs_gpfs', Boolean, undef, false)
 
-  # Db
+  # Install MySQL and/or create database
+  $install_mysql_and_create_database = lookup('storm::backend::install_mysql_and_create_database', Boolean, undef, false)
   $db_root_password = lookup('storm::backend::db_root_password', String, undef, 'storm')
+
+  # Db
   $db_storm_username = lookup('storm::backend::db_storm_username', String, undef, 'storm')
   $db_storm_password = lookup('storm::backend::db_storm_password', String, undef, 'bluemoon')
 
@@ -46,11 +49,11 @@ class storm::backend::params (
   $rest_services_max_queue_size = lookup('storm::backend::rest_services_max_queue_size', Integer, undef, 1000)
 
   # XMLRPC Server parameter
-  $synchcall_xmlrpc_unsecure_server_port = lookup('storm::backend::synchcall_xmlrpc_unsecure_server_port', Integer, undef, 8080)
-  $synchcall_xmlrpc_maxthread = lookup('storm::backend::synchcall_xmlrpc_maxthread', Integer, undef, 256)
-  $synchcall_xmlrpc_max_queue_size = lookup('storm::backend::synchcall_xmlrpc_max_queue_size', Integer, undef, 1000)
-  $synchcall_xmlrpc_security_enabled = lookup('storm::backend::synchcall_xmlrpc_security_enabled', Boolean, undef, true)
-  $synchcall_xmlrpc_security_token = lookup('storm::backend::synchcall_xmlrpc_security_token', String, undef, 'secret')
+  $xmlrpc_unsecure_server_port = lookup('storm::backend::xmlrpc_unsecure_server_port', Integer, undef, 8080)
+  $xmlrpc_maxthread = lookup('storm::backend::xmlrpc_maxthread', Integer, undef, 256)
+  $xmlrpc_max_queue_size = lookup('storm::backend::xmlrpc_max_queue_size', Integer, undef, 1000)
+  $xmlrpc_security_enabled = lookup('storm::backend::xmlrpc_security_enabled', Boolean, undef, true)
+  $xmlrpc_security_token = lookup('storm::backend::xmlrpc_security_token', String, undef, 'secret')
 
   # Skip ACL setup for PTG requests
   $ptg_skip_acl_setup = lookup('storm::backend::ptg_skip_acl_setup', Boolean, undef, false)
@@ -68,7 +71,7 @@ class storm::backend::params (
   $service_du_interval = lookup('storm::backend::service_du_interval', Integer, undef, 360)
 
   # ls max entries
-  $synchcall_max_ls_entries = lookup('storm::backend::synchcall_max_ls_entries', Integer, undef, 2000)
+  $max_ls_entries = lookup('storm::backend::max_ls_entries', Integer, undef, 2000)
 
   # Pinned Files cleaning parameters
   $gc_pinnedfiles_cleaning_delay = lookup('storm::backend::gc_pinnedfiles_cleaning_delay', Integer, undef, 10)
@@ -116,6 +119,7 @@ class storm::backend::params (
   $bol_requests_scheduler_queue_size = lookup('storm::backend::bol_requests_scheduler_queue_size', Integer, undef, 2000)
 
   # Info Provider
+  $info_config_file = lookup('storm::backend::info_config_file', String, undef, '/etc/storm/info-provider/storm-yaim-variables.conf')
   $info_sitename = lookup('storm::backend::info_sitename', String, undef, 'StoRM site')
   $info_storage_default_root = lookup('storm::backend::info_storage_default_root', String, undef, '/storage')
   $info_endpoint_quality_level = lookup('storm::backend::info_endpoint_quality_level', Integer, undef, 2)

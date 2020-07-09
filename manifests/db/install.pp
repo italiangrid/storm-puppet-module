@@ -3,6 +3,9 @@
 class storm::db::install (
 
   $root_password = $storm::db::root_password,
+  $fqdn_hostname = $storm::db::fqdn_hostname,
+  $storm_username = $storm::db::storm_username,
+  $storm_password = $storm::db::storm_password,
 
 ) inherits storm::db {
 

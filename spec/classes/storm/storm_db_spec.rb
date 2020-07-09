@@ -41,6 +41,12 @@ describe 'storm::db', :type => :class do
           )
         end
 
+        it "check grants on storm_db" do
+          is_expected.to contain_mysql_grant('test@test/storm_db.*')
+          is_expected.to contain_mysql_grant('test@localhost/storm_db.*')
+          is_expected.to contain_mysql_grant('test@%/storm_db.*')
+        end
+
         it "check storm be ISAM db creation" do
           is_expected.to contain_mysql__db('storm_be_ISAM').with(
             :user => 'test',
@@ -49,6 +55,18 @@ describe 'storm::db', :type => :class do
             :grant => 'ALL',
             :sql => '/tmp/storm_be_ISAM.sql',
           )
+        end
+
+        it "check grants on storm_be_ISAM" do
+          is_expected.to contain_mysql_grant('test@test/storm_be_ISAM.*')
+          is_expected.to contain_mysql_grant('test@localhost/storm_be_ISAM.*')
+          is_expected.to contain_mysql_grant('test@%/storm_be_ISAM.*')
+        end
+
+        it "check users" do
+          is_expected.to contain_mysql_user('test@test')
+          is_expected.to contain_mysql_user('test@localhost')
+          is_expected.to contain_mysql_user('test@%')
         end
       end
 

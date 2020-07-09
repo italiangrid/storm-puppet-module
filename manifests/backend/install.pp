@@ -4,6 +4,11 @@ class storm::backend::install (
 
 ) {
 
+  class { 'bdii':
+    selinux  => false,
+    firewall => false,
+  }
+
   package { 'storm-backend-mp':
     ensure => installed,
   }
@@ -23,5 +28,9 @@ class storm::backend::install (
         }
       }
     }
+  }
+
+  package { 'storm-dynamic-info-provider':
+    ensure  => installed,
   }
 }

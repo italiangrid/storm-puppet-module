@@ -36,22 +36,11 @@
 #
 class storm::users (
 
-  Accounts::Group::Hash $groups = {
-    'infosys' => {
-      gid => '996',
-    },
-  },
+  Accounts::Group::Hash $groups = {},
   Accounts::User::Hash $users = {
-    'edguser' => {
-      'comment' => 'Edguser user',
-      'groups'  => [ edguser, infosys, storm, ],
-      'uid'     => '995',
-      'gid'     => '995',
-      'home'    => '/home/edguser',
-    },
     'storm' => {
       'comment' => 'StoRM user',
-      'groups'  => [ storm, edguser, ],
+      'groups'  => [ storm, ],
       'uid'     => '991',
       'gid'     => '991',
       'home'    => '/home/storm',

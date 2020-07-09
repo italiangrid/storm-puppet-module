@@ -10,13 +10,7 @@ describe 'storm::users', :type => :class do
         facts
       end
 
-      context 'Check default storm and edguser user' do
-
-        it "check infosys group" do
-          is_expected.to contain_group('infosys').with(
-            :gid        => 996,
-          )
-        end
+      context 'Check default storm user' do
 
         it "check storm user" do
 
@@ -26,20 +20,10 @@ describe 'storm::users', :type => :class do
             :gid    => 991,
             :group  => 'storm',
             :home   => '/home/storm',
-            :groups => ['storm', 'edguser'],
+            :groups => ['storm'],
           )
         end
 
-        it "check edguser user" do
-
-          is_expected.to contain_accounts__user('edguser').with(
-            :ensure => 'present',
-            :uid    => 995,
-            :gid    => 995,
-            :group  => 'edguser',
-            :home   => '/home/edguser',
-          )
-        end
       end
 
       context 'Test custom storm user' do
