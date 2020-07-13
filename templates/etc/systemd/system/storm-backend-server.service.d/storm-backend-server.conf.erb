@@ -1,0 +1,17 @@
+[Service]
+# options for the JVM running the StoRM BE server
+<%- if @jmx -%><%- else -%># <%- end -%>Environment="STORM_BE_JMX_OPTS=<%=@jmx_options%>"
+# options for the JVM running the StoRM BE server
+<%- if @debug -%>
+Environment="STORM_BE_JVM_OPTS=<%=@jvm_options%> -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=<%=@debug_port%>,<%- if @debug_suspend -%>suspend=y<%- else -%>suspend=n<%- end -%>"
+<%- else -%>
+Environment="STORM_BE_JVM_OPTS=<%=@jvm_options%>"
+<%- end -%>
+# LCMAPS config file
+Environment="LCMAPS_DB_FILE=<%=@lcmaps_db_file%>"
+# LCMAPS user mapping policy (defined in $LCMAPS_DB_FILE)
+Environment="LCMAPS_POLICY_NAME=<%=@lcmaps_policy_name%>"
+# LCMAPS log file
+Environment="LCMAPS_LOG_FILE=<%=@lcmaps_log_file%>"
+# LCMAPS log verbosity: 0 minimum (default), 5 maximum
+Environment="LCMAPS_DEBUG_LEVEL=<%=@lcmaps_debug_level%>"

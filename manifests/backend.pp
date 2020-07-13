@@ -273,6 +273,26 @@
 # @param info_frontend_host_list
 #   List of published srm endpoints.
 #
+# @param jvm_options
+#
+# @param jmx
+#
+# @param jmx_options
+#
+# @param debug
+#
+# @param debug_port
+#
+# @param debug_suspend
+#
+# @param lcmaps_db_file
+#
+# @param lcmaps_policy_name
+#
+# @param lcmaps_log_file
+#
+# @param lcmaps_debug_level
+#
 class storm::backend (
 
   String $hostname,
@@ -397,6 +417,24 @@ class storm::backend (
     Array[Storm::Backend::WebdavPoolMember], undef, $webdav_pool_members),
   Array[Storm::Backend::SrmPoolMember] $info_frontend_host_list = lookup('storm::backend::info_frontend_host_list',
     Array[Storm::Backend::SrmPoolMember], undef, $srm_pool_members),
+
+  # JVM options
+  String $jvm_options = $storm::backend::params::jvm_options,
+
+  # JMX options
+  Boolean $jmx = $storm::backend::params::jmx,
+  String $jmx_options = $storm::backend::params::jmx_options,
+
+  # Debug options
+  Boolean $debug = $storm::backend::params::debug,
+  Integer $debug_port = $storm::backend::params::debug_port,
+  Boolean $debug_suspend = $storm::backend::params::debug_suspend,
+
+  # LCMAPS
+  String $lcmaps_db_file = $storm::backend::params::lcmaps_db_file,
+  String $lcmaps_policy_name = $storm::backend::params::lcmaps_policy_name,
+  String $lcmaps_log_file = $storm::backend::params::lcmaps_log_file,
+  Integer $lcmaps_debug_level = $storm::backend::params::lcmaps_debug_level,
 
 ) inherits storm::backend::params {
 

@@ -42,9 +42,24 @@ describe 'storm::db', :type => :class do
         end
 
         it "check grants on storm_db" do
-          is_expected.to contain_mysql_grant('test@test/storm_db.*')
-          is_expected.to contain_mysql_grant('test@localhost/storm_db.*')
-          is_expected.to contain_mysql_grant('test@%/storm_db.*')
+          is_expected.to contain_mysql_grant('test@test/storm_db.*').with(
+            :privileges => 'ALL',
+            :provider   => 'mysql',
+            :user       => "test@test",
+            :table      => 'storm_db.*',
+          )
+          is_expected.to contain_mysql_grant('test@localhost/storm_db.*').with(
+            :privileges => 'ALL',
+            :provider   => 'mysql',
+            :user       => "test@localhost",
+            :table      => 'storm_db.*',
+          )
+          is_expected.to contain_mysql_grant('test@%/storm_db.*').with(
+            :privileges => 'ALL',
+            :provider   => 'mysql',
+            :user       => "test@%",
+            :table      => 'storm_db.*',
+          )
         end
 
         it "check storm be ISAM db creation" do
@@ -58,9 +73,24 @@ describe 'storm::db', :type => :class do
         end
 
         it "check grants on storm_be_ISAM" do
-          is_expected.to contain_mysql_grant('test@test/storm_be_ISAM.*')
-          is_expected.to contain_mysql_grant('test@localhost/storm_be_ISAM.*')
-          is_expected.to contain_mysql_grant('test@%/storm_be_ISAM.*')
+          is_expected.to contain_mysql_grant('test@test/storm_be_ISAM.*').with(
+            :privileges => 'ALL',
+            :provider   => 'mysql',
+            :user       => "test@test",
+            :table      => 'storm_be_ISAM.*',
+          )
+          is_expected.to contain_mysql_grant('test@localhost/storm_be_ISAM.*').with(
+            :privileges => 'ALL',
+            :provider   => 'mysql',
+            :user       => "test@localhost",
+            :table      => 'storm_be_ISAM.*',
+          )
+          is_expected.to contain_mysql_grant('test@%/storm_be_ISAM.*').with(
+            :privileges => 'ALL',
+            :provider   => 'mysql',
+            :user       => "test@%",
+            :table      => 'storm_be_ISAM.*',
+          )
         end
 
         it "check users" do
@@ -68,7 +98,66 @@ describe 'storm::db', :type => :class do
           is_expected.to contain_mysql_user('test@localhost')
           is_expected.to contain_mysql_user('test@%')
         end
+
       end
+
+      context 'Default configuration' do
+        let(:params) do 
+          {
+            'fqdn_hostname' => 'test.example.org',
+          }
+        end
+
+        it "check grants on storm_db" do
+          is_expected.to contain_mysql_grant('storm@test/storm_db.*').with(
+            :privileges => 'ALL',
+            :provider   => 'mysql',
+            :user       => "storm@test",
+            :table      => 'storm_db.*',
+          )
+          is_expected.to contain_mysql_grant('storm@localhost/storm_db.*').with(
+            :privileges => 'ALL',
+            :provider   => 'mysql',
+            :user       => "storm@localhost",
+            :table      => 'storm_db.*',
+          )
+          is_expected.to contain_mysql_grant('storm@%/storm_db.*').with(
+            :privileges => 'ALL',
+            :provider   => 'mysql',
+            :user       => "storm@%",
+            :table      => 'storm_db.*',
+          )
+        end
+
+        it "check grants on storm_be_ISAM" do
+          is_expected.to contain_mysql_grant('storm@test/storm_be_ISAM.*').with(
+            :privileges => 'ALL',
+            :provider   => 'mysql',
+            :user       => "storm@test",
+            :table      => 'storm_be_ISAM.*',
+          )
+          is_expected.to contain_mysql_grant('storm@localhost/storm_be_ISAM.*').with(
+            :privileges => 'ALL',
+            :provider   => 'mysql',
+            :user       => "storm@localhost",
+            :table      => 'storm_be_ISAM.*',
+          )
+          is_expected.to contain_mysql_grant('storm@%/storm_be_ISAM.*').with(
+            :privileges => 'ALL',
+            :provider   => 'mysql',
+            :user       => "storm@%",
+            :table      => 'storm_be_ISAM.*',
+          )
+        end
+
+        it "check users" do
+          is_expected.to contain_mysql_user('storm@test')
+          is_expected.to contain_mysql_user('storm@localhost')
+          is_expected.to contain_mysql_user('storm@%')
+        end
+
+      end
+
 
     end
   end

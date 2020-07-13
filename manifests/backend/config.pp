@@ -96,10 +96,54 @@ class storm::backend::config (
   $info_storage_default_root = $storm::backend::info_storage_default_root,
   $info_endpoint_quality_level = $storm::backend::info_endpoint_quality_level,
 
+  $jvm_options = $storm::backend::jvm_options,
+
+  $jmx = $storm::backend::jmx,
+  $jmx_options = $storm::backend::jmx_options,
+
+  $debug = $storm::backend::debug,
+  $debug_port = $storm::backend::debug_port,
+  $debug_suspend = $storm::backend::debug_suspend,
+
+  $lcmaps_db_file = $storm::backend::lcmaps_db_file,
+  $lcmaps_policy_name = $storm::backend::lcmaps_policy_name,
+  $lcmaps_log_file = $storm::backend::lcmaps_log_file,
+  $lcmaps_debug_level = $storm::backend::lcmaps_debug_level,
+
 ) {
+
+  # Service's host credentials directory
+  if !defined(File['/etc/grid-security/storm']) {
+    file { '/etc/grid-security/storm':
+      ensure  => directory,
+      owner   => 'storm',
+      group   => 'storm',
+      mode    => '0755',
+      recurse => true,
+    }
+    # Service's hostcert
+    file { '/etc/grid-security/storm/hostcert.pem':
+      ensure  => present,
+      mode    => '0644',
+      owner   => 'storm',
+      group   => 'storm',
+      source  => '/etc/grid-security/hostcert.pem',
+      require => File['/etc/grid-security/storm'],
+    }
+    # Service's hostkey
+    file { '/etc/grid-security/storm/hostkey.pem':
+      ensure  => present,
+      mode    => '0400',
+      owner   => 'storm',
+      group   => 'storm',
+      source  => '/etc/grid-security/hostkey.pem',
+      require => File['/etc/grid-security/storm'],
+    }
+  }
 
   $namespace_file='/etc/storm/backend-server/namespace.xml'
   $properties_file='/etc/storm/backend-server/storm.properties'
+  $service_file='/etc/systemd/system/storm-backend-server.service.d/storm-backend-server.conf'
 
   if $install_mysql_and_create_database {
     class { 'storm::db':
@@ -132,6 +176,27 @@ class storm::backend::config (
     group   => 'storm',
     notify  => Service['storm-backend-server'],
     require => [Package['storm-backend-mp']],
+  }
+
+  $service_dir='/etc/systemd/system/storm-backend-server.service.d'
+
+  file { $service_dir:
+    ensure => directory,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0644',
+  }
+
+  $service_template_file='storm/etc/systemd/system/storm-backend-server.service.d/storm-backend-server.conf.erb'
+
+  file { $service_file:
+    ensure  => present,
+    content => template($service_template_file),
+    mode    => '0644',
+    owner   => 'root',
+    group   => 'root',
+    notify  => Service['storm-backend-server'],
+    require => [Package['storm-backend-mp'], File[$service_dir]],
   }
 
   $info_yaim_template_file='storm/etc/storm/info-provider/storm-yaim-variables.conf.erb'

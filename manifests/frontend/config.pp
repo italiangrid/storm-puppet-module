@@ -37,30 +37,32 @@ class storm::frontend::config (
 ) {
 
   # Service's host credentials directory
-  file { '/etc/grid-security/storm':
-    ensure  => directory,
-    owner   => 'storm',
-    group   => 'storm',
-    mode    => '0755',
-    recurse => true,
-  }
-  # Service's hostcert
-  file { '/etc/grid-security/storm/hostcert.pem':
-    ensure  => present,
-    mode    => '0644',
-    owner   => 'storm',
-    group   => 'storm',
-    source  => '/etc/grid-security/hostcert.pem',
-    require => File['/etc/grid-security/storm'],
-  }
-  # Service's hostkey
-  file { '/etc/grid-security/storm/hostkey.pem':
-    ensure  => present,
-    mode    => '0400',
-    owner   => 'storm',
-    group   => 'storm',
-    source  => '/etc/grid-security/hostkey.pem',
-    require => File['/etc/grid-security/storm'],
+  if !defined(File['/etc/grid-security/storm']) {
+    file { '/etc/grid-security/storm':
+      ensure  => directory,
+      owner   => 'storm',
+      group   => 'storm',
+      mode    => '0755',
+      recurse => true,
+    }
+    # Service's hostcert
+    file { '/etc/grid-security/storm/hostcert.pem':
+      ensure  => present,
+      mode    => '0644',
+      owner   => 'storm',
+      group   => 'storm',
+      source  => '/etc/grid-security/hostcert.pem',
+      require => File['/etc/grid-security/storm'],
+    }
+    # Service's hostkey
+    file { '/etc/grid-security/storm/hostkey.pem':
+      ensure  => present,
+      mode    => '0400',
+      owner   => 'storm',
+      group   => 'storm',
+      source  => '/etc/grid-security/hostkey.pem',
+      require => File['/etc/grid-security/storm'],
+    }
   }
 
   $conf_file='/etc/storm/frontend-server/storm-frontend-server.conf'

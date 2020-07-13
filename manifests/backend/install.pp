@@ -10,12 +10,14 @@ class storm::backend::install (
   }
 
   package { 'storm-backend-mp':
-    ensure => installed,
+    ensure  => installed,
+    require => [Class['bdii']],
   }
 
   if $storm::backend::install_native_libs_gpfs {
     package { 'storm-native-libs-gpfs' :
-      ensure => installed,
+      ensure  => installed,
+      require => [Package['storm-backend-mp']],
     }
   } else {
     # fail in case native libs gfps are needed
@@ -32,5 +34,6 @@ class storm::backend::install (
 
   package { 'storm-dynamic-info-provider':
     ensure  => installed,
+    require => [Package['storm-backend-mp']],
   }
 }

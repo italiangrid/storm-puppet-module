@@ -123,4 +123,22 @@ class storm::backend::params (
   $info_sitename = lookup('storm::backend::info_sitename', String, undef, 'StoRM site')
   $info_storage_default_root = lookup('storm::backend::info_storage_default_root', String, undef, '/storage')
   $info_endpoint_quality_level = lookup('storm::backend::info_endpoint_quality_level', Integer, undef, 2)
+
+  # JVM Options
+  $jvm_options = lookup('storm::backend::jvm_options', String, undef, '-Xms512m -Xmx512m')
+
+  # JMX options
+  $jmx = lookup('storm::backend::jmx', Boolean, undef, false)
+  $jmx_options = lookup('storm::backend::jmx_options', String, undef, '-Dcom.sun.management.jmxremote.port=8501 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false')
+
+  # Debug options
+  $debug = lookup('storm::backend::debug', Boolean, undef, false)
+  $debug_port = lookup('storm::backend::debug_port', Integer, undef, 1044)
+  $debug_suspend = lookup('storm::backend::debug_suspend', Boolean, undef, false)
+
+  # LCMAPS options
+  $lcmaps_db_file = lookup('storm::backend::lcmaps_db_file', String, undef, '/etc/storm/backend-server/lcmaps.db')
+  $lcmaps_policy_name = lookup('storm::backend::lcmaps_policy_name', String, undef, 'standard')
+  $lcmaps_log_file = lookup('storm::backend::lcmaps_log_file', String, undef, '/var/log/storm/lcmaps.log')
+  $lcmaps_debug_level = lookup('storm::backend::lcmaps_debug_level', Integer, undef, 0)
 }

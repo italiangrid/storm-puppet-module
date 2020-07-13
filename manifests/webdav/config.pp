@@ -103,8 +103,8 @@ class storm::webdav::config (
     }
   }
 
-  $limit_service_dir='/etc/systemd/system/storm-webdav.service.d'
-  file { $limit_service_dir:
+  $service_dir='/etc/systemd/system/storm-webdav.service.d'
+  file { $service_dir:
     ensure => directory,
     owner  => 'root',
     group  => 'root',
@@ -121,7 +121,7 @@ class storm::webdav::config (
     group   => 'root',
     mode    => '0644',
     notify  => Service['storm-webdav'],
-    require => File[$limit_service_dir],
+    require => File[$service_dir],
   }
 
   $application_template_file='storm/etc/storm/webdav/config/application.yml.erb'
@@ -136,11 +136,12 @@ class storm::webdav::config (
     notify  => Service['storm-webdav'],
   }
 
-  $sysconfig_file='/etc/sysconfig/storm-webdav'
-  $sysconfig_template_file='storm/etc/sysconfig/storm-webdav.erb'
-  file { $sysconfig_file:
+  $environment_file='/etc/systemd/system/storm-webdav.service.d/storm-webdav.conf'
+  $environment_template_file='storm/etc/systemd/system/storm-webdav.service.d/storm-webdav.conf.erb'
+  file { $environment_file:
     ensure  => present,
-    content => template($sysconfig_template_file),
+    content => template($environment_template_file),
     notify  => Service['storm-webdav'],
+    require => File[$service_dir],
   }
 }

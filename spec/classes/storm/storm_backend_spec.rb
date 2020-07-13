@@ -84,6 +84,7 @@ describe 'storm::backend', :type => :class do
             'info_sitename' => 'test',
             'info_storage_default_root' => '/another-storage',
             'info_endpoint_quality_level' => 1,
+            'jvm_options' => '-Xms512m -Xmx1024m',
           })
         end
 
@@ -210,8 +211,34 @@ describe 'storm::backend', :type => :class do
         it "check if exec of storm-info-provider configure has been run" do
           is_expected.to contain_exec('configure-info-provider')
         end
-      end
+  
+        it "check if exec of storm-info-provider configure has been run" do
+          is_expected.to contain_exec('configure-info-provider')
+        end
 
+        it "check service directory" do
+          is_expected.to contain_file('/etc/systemd/system/storm-backend-server.service.d').with(
+            :ensure => 'directory',
+            :owner  => 'root',
+            :group  => 'root',
+            :mode   => '0644',
+          )
+        end
+
+        it "check service file content" do
+          title='/etc/systemd/system/storm-backend-server.service.d/storm-backend-server.conf'
+          is_expected.to contain_file(title).with( 
+            :ensure => 'present',
+          )
+          is_expected.to contain_file(title).with( :content => /^Environment="STORM_BE_JVM_OPTS=-Xms512m -Xmx1024m"/ )
+          is_expected.to contain_file(title).with( :content => /^Environment="LCMAPS_DB_FILE=\/etc\/storm\/backend-server\/lcmaps.db"/ )
+          is_expected.to contain_file(title).with( :content => /^Environment="LCMAPS_POLICY_NAME=standard"/ )
+          is_expected.to contain_file(title).with( :content => /^Environment="LCMAPS_LOG_FILE=\/var\/log\/storm\/lcmaps.log"/ )
+          is_expected.to contain_file(title).with( :content => /^Environment="LCMAPS_DEBUG_LEVEL=0"/ )
+  
+        end
+
+      end
     end
   end
 end
