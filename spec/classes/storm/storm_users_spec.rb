@@ -20,7 +20,7 @@ describe 'storm::users', :type => :class do
             :gid    => 991,
             :group  => 'storm',
             :home   => '/home/storm',
-            :groups => ['storm'],
+            :groups => ['storm', 'edguser'],
           )
         end
 

@@ -28,7 +28,7 @@
 
       @sa_fs_space_system= @sa_fs_driver == 'gpfs' ? 'GPFSSpaceSystem' : 'MockSpaceSystem'
 
-      @sa_fs_space_token=sa['space_token'] ? sa['space_token'] : "#{@sa_upp}-TOKEN"
+      @sa_fs_space_token=sa['space_token'] ? sa['space_token'] : "#{@sa_upp}_TOKEN"
 
       @sa_authz=sa['authz'] ? sa['authz'] : "permit-all"
 

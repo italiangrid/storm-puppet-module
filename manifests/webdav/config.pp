@@ -103,6 +103,18 @@ class storm::webdav::config (
     }
   }
 
+  $application_template_file='storm/etc/storm/webdav/config/application.yml.erb'
+  $application_file='/etc/storm/webdav/config/application.yml'
+  # configuration of application.yml
+  file { $application_file:
+    ensure  => present,
+    content => template($application_template_file),
+    owner   => 'root',
+    group   => 'storm',
+    mode    => '0644',
+    notify  => Service['storm-webdav'],
+  }
+
   $service_dir='/etc/systemd/system/storm-webdav.service.d'
   file { $service_dir:
     ensure => directory,
@@ -120,20 +132,8 @@ class storm::webdav::config (
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    notify  => Service['storm-webdav'],
+    notify  => [Exec['webdav-daemon-reload'], Service['storm-webdav']],
     require => File[$service_dir],
-  }
-
-  $application_template_file='storm/etc/storm/webdav/config/application.yml.erb'
-  $application_file='/etc/storm/webdav/config/application.yml'
-  # configuration of application.yml
-  file { $application_file:
-    ensure  => present,
-    content => template($application_template_file),
-    owner   => 'root',
-    group   => 'storm',
-    mode    => '0644',
-    notify  => Service['storm-webdav'],
   }
 
   $environment_file='/etc/systemd/system/storm-webdav.service.d/storm-webdav.conf'
@@ -141,7 +141,7 @@ class storm::webdav::config (
   file { $environment_file:
     ensure  => present,
     content => template($environment_template_file),
-    notify  => Service['storm-webdav'],
+    notify  => [Exec['webdav-daemon-reload'], Service['storm-webdav']],
     require => File[$service_dir],
   }
 }

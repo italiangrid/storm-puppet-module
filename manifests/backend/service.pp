@@ -2,14 +2,17 @@
 #
 class storm::backend::service {
 
+  exec { 'backend-daemon-reload':
+    command     => '/usr/bin/systemctl daemon-reload',
+    refreshonly => true,
+  }
   service { 'storm-backend-server':
     ensure  => running,
     enable  => true,
-    require => Package['storm-backend-mp'],
+    require => Exec['backend-daemon-reload'],
   }
   exec { 'configure-info-provider':
     command     => '/usr/libexec/storm-info-provider configure',
-    unless      => '/bin/rpm -q storm-dynamic-info-provider',
     refreshonly => true,
     require     => [Service['storm-backend-server']],
   }

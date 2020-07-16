@@ -5,12 +5,11 @@ class storm::db::config (
   $fqdn_hostname = $storm::db::fqdn_hostname,
   $storm_username = $storm::db::storm_username,
   $storm_password = $storm::db::storm_password,
-  $root_password = $storm::db::root_password,
 
 ) {
 
   $short_hostname = regsubst($fqdn_hostname, '^([^.]*).*$', '\1')
-  notice("Short hostname: ${short_hostname} defined")
+  notice("Computed short hostname for ${fqdn_hostname} => ${short_hostname}")
 
   file { '/tmp/storm_db.sql':
     ensure => present,

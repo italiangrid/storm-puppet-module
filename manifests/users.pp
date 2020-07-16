@@ -40,7 +40,7 @@ class storm::users (
   Accounts::User::Hash $users = {
     'storm' => {
       'comment' => 'StoRM user',
-      'groups'  => [ storm, ],
+      'groups'  => [ storm, edguser ],
       'uid'     => '991',
       'gid'     => '991',
       'home'    => '/home/storm',

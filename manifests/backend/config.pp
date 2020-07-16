@@ -143,7 +143,6 @@ class storm::backend::config (
 
   $namespace_file='/etc/storm/backend-server/namespace.xml'
   $properties_file='/etc/storm/backend-server/storm.properties'
-  $service_file='/etc/systemd/system/storm-backend-server.service.d/storm-backend-server.conf'
 
   if $install_mysql_and_create_database {
     class { 'storm::db':
@@ -163,8 +162,7 @@ class storm::backend::config (
     content => template($namespace_template_file),
     owner   => 'root',
     group   => 'storm',
-    notify  => Service['storm-backend-server'],
-    require => [Package['storm-backend-mp']],
+    notify  => [Service['storm-backend-server']],
   }
 
   $properties_template_file='storm/etc/storm/backend-server/storm.properties.erb'
@@ -174,8 +172,7 @@ class storm::backend::config (
     content => template($properties_template_file),
     owner   => 'root',
     group   => 'storm',
-    notify  => Service['storm-backend-server'],
-    require => [Package['storm-backend-mp']],
+    notify  => [Service['storm-backend-server']],
   }
 
   $service_dir='/etc/systemd/system/storm-backend-server.service.d'
@@ -187,6 +184,7 @@ class storm::backend::config (
     mode   => '0644',
   }
 
+  $service_file='/etc/systemd/system/storm-backend-server.service.d/storm-backend-server.conf'
   $service_template_file='storm/etc/systemd/system/storm-backend-server.service.d/storm-backend-server.conf.erb'
 
   file { $service_file:
@@ -195,8 +193,8 @@ class storm::backend::config (
     mode    => '0644',
     owner   => 'root',
     group   => 'root',
-    notify  => Service['storm-backend-server'],
-    require => [Package['storm-backend-mp'], File[$service_dir]],
+    notify  => [Exec['backend-daemon-reload'], Service['storm-backend-server']],
+    require => [File[$service_dir]],
   }
 
   $info_yaim_template_file='storm/etc/storm/info-provider/storm-yaim-variables.conf.erb'
@@ -206,7 +204,6 @@ class storm::backend::config (
     content => template($info_yaim_template_file),
     owner   => 'root',
     group   => 'storm',
-    notify  => Exec['configure-info-provider'],
-    require => [Package['storm-dynamic-info-provider']],
+    notify  => [Exec['configure-info-provider']],
   }
 }

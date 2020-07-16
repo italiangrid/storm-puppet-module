@@ -4,14 +4,8 @@ class storm::backend::install (
 
 ) {
 
-  class { 'bdii':
-    selinux  => false,
-    firewall => false,
-  }
-
   package { 'storm-backend-mp':
     ensure  => installed,
-    require => [Class['bdii']],
   }
 
   if $storm::backend::install_native_libs_gpfs {

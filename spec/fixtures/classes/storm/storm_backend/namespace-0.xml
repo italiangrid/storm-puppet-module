@@ -1,7 +1,7 @@
 <namespace xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="namespace-1.5.0.xsd" version="1.5.0">
   <filesystems>
     <filesystem name="TESTVO-FS" fs_type="ext3">
-      <space-token-description>TESTVO-TOKEN</space-token-description>
+      <space-token-description>TESTVO_TOKEN</space-token-description>
       <root>/storage/test.vo</root>
       <filesystem-driver>it.grid.storm.filesystem.swig.posixfs</filesystem-driver>
       <spacesystem-driver>it.grid.storm.filesystem.MockSpaceSystem</spacesystem-driver>
@@ -81,7 +81,7 @@
       </capabilities>
     </filesystem>
     <filesystem name="ATLAS-FS" fs_type="gpfs">
-      <space-token-description>ATLAS-TOKEN</space-token-description>
+      <space-token-description>ATLAS_TOKEN</space-token-description>
       <root>/storage/atlas</root>
       <filesystem-driver>it.grid.storm.filesystem.swig.gpfs</filesystem-driver>
       <spacesystem-driver>it.grid.storm.filesystem.GPFSSpaceSystem</spacesystem-driver>
