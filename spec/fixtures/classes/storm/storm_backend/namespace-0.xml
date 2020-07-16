@@ -2,6 +2,7 @@
   <filesystems>
     <filesystem name="TESTVO-FS" fs_type="ext3">
       <space-token-description>TESTVO_TOKEN</space-token-description>
+      <storage-class>T0D1</storage-class>
       <root>/storage/test.vo</root>
       <filesystem-driver>it.grid.storm.filesystem.swig.posixfs</filesystem-driver>
       <spacesystem-driver>it.grid.storm.filesystem.MockSpaceSystem</spacesystem-driver>
@@ -82,6 +83,7 @@
     </filesystem>
     <filesystem name="ATLAS-FS" fs_type="gpfs">
       <space-token-description>ATLAS_TOKEN</space-token-description>
+      <storage-class>T1D0</storage-class>
       <root>/storage/atlas</root>
       <filesystem-driver>it.grid.storm.filesystem.swig.gpfs</filesystem-driver>
       <spacesystem-driver>it.grid.storm.filesystem.GPFSSpaceSystem</spacesystem-driver>

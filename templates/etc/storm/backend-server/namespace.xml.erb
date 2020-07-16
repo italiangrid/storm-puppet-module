@@ -110,6 +110,7 @@
 -%>
     <filesystem name="<%= @sa_upp %>-FS" fs_type="<%= @sa_fs_type %>">
       <space-token-description><%= @sa_fs_space_token %></space-token-description>
+      <storage-class><%= @sa_storage_class %></storage-class>
       <root><%= @sa_root %></root>
       <filesystem-driver>it.grid.storm.filesystem.swig.<%= @sa_fs_driver %></filesystem-driver>
       <spacesystem-driver>it.grid.storm.filesystem.<%= @sa_fs_space_system %></spacesystem-driver>
