@@ -55,7 +55,7 @@ STORM_WEBDAV_POOL_LIST=<%= @webdav_pool_list.join(',') %>
       @vo_list.push(vo)
     end
   end
-  @sa_upp=sa['name'].upcase.gsub("-", "").gsub(".","")
+  @sa_upp=sa['name'].upcase.gsub("-", "").gsub(".","").gsub("_","")
   @sa_low=sa['name'].downcase
   @sa_fs_space_token=sa['space_token'] ? sa['space_token'] : "#{@sa_upp}-TOKEN"
   @sa_vos=sa['vos']
@@ -83,18 +83,31 @@ STORM_WEBDAV_POOL_LIST=<%= @webdav_pool_list.join(',') %>
   end
   
   @sa_online_size=sa['online_size']
-  @sa_nearline_size=sa['nearline_size']
-  if @sa_nearline_size == nil
-    if @sa_fs_driver == "gpfs"
+
+  @sa_storage_class=sa['storage_class'] ? sa['storage_class'] : "T0D1"
+  case @sa_storage_class
+  when 'T0D1'
+    @sa_nearline_size=nil
+  when 'T1D0'
+    @sa_nearline_size=sa['nearline_size']
+    if !@sa_nearline_size
       fail("missing nearline size for #{@sa_low}")
-    else
-      @sa_nearline_size=0
     end
+  when 'T1D1'
+    @sa_nearline_size=sa['nearline_size']
+    if !@sa_nearline_size
+      fail("missing nearline size for #{@sa_low}")
+    end
+  else
+    fail("invalid storage class for #{@sa_low}: #{@sa_storage_class}")
   end
+
 -%>
 STORM_<%= @sa_upp %>_VONAME='<%= @sa_vos.join(' ') %>'
 STORM_<%= @sa_upp %>_ONLINE_SIZE=<%= @sa_online_size %>
+<%- if @sa_nearline_size != nil -%>
 STORM_<%= @sa_upp %>_NEARLINE_SIZE=<%= @sa_nearline_size %>
+<%- end -%>
 STORM_<%= @sa_upp %>_TOKEN=<%= @sa_fs_space_token %>
 STORM_<%= @sa_upp %>_ROOT=<%= @sa_root %>
 STORM_<%= @sa_upp %>_STORAGECLASS=<%= @sa_storage_class %>

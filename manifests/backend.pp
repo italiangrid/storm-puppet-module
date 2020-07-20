@@ -293,6 +293,8 @@
 #
 # @param lcmaps_debug_level
 #
+# @param http_turl_prefix
+#
 class storm::backend (
 
   String $hostname,
@@ -435,6 +437,9 @@ class storm::backend (
   String $lcmaps_policy_name = $storm::backend::params::lcmaps_policy_name,
   String $lcmaps_log_file = $storm::backend::params::lcmaps_log_file,
   Integer $lcmaps_debug_level = $storm::backend::params::lcmaps_debug_level,
+
+  # HTTP TURL prefix
+  String $http_turl_prefix = $storm::backend::params::http_turl_prefix,
 
 ) inherits storm::backend::params {
 

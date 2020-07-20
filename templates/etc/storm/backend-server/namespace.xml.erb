@@ -2,7 +2,7 @@
   <filesystems>
 <%- @storage_areas.each do | sa |
 
-      @sa_upp=sa['name'].upcase.gsub("-", "").gsub(".","")
+      @sa_upp=sa['name'].upcase.gsub("-", "").gsub(".","").gsub("_","")
       @sa_low=sa['name'].downcase
 
       @sa_root=sa['root_path']

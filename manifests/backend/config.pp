@@ -110,6 +110,8 @@ class storm::backend::config (
   $lcmaps_log_file = $storm::backend::lcmaps_log_file,
   $lcmaps_debug_level = $storm::backend::lcmaps_debug_level,
 
+  $http_turl_prefix = $storm::backend::http_turl_prefix,
+
 ) {
 
   # Service's host credentials directory

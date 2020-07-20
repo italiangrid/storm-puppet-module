@@ -141,4 +141,8 @@ class storm::backend::params (
   $lcmaps_policy_name = lookup('storm::backend::lcmaps_policy_name', String, undef, 'standard')
   $lcmaps_log_file = lookup('storm::backend::lcmaps_log_file', String, undef, '/var/log/storm/lcmaps.log')
   $lcmaps_debug_level = lookup('storm::backend::lcmaps_debug_level', Integer, undef, 0)
+
+  # HTTP TURL prefix
+  $http_turl_prefix = lookup('storm::backend::http_turl_prefix', String, undef, '')
+
 }

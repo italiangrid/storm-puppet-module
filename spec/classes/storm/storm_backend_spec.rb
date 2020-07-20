@@ -190,7 +190,7 @@ describe 'storm::backend', :type => :class do
 
           is_expected.to contain_file(title).with( :content => /STORM_TESTVO_VONAME='test.vo test.vo.2'/ )
           is_expected.to contain_file(title).with( :content => /STORM_TESTVO_ONLINE_SIZE=4/ )
-          is_expected.to contain_file(title).with( :content => /STORM_TESTVO_NEARLINE_SIZE=0/ )
+          is_expected.not_to contain_file(title).with( :content => /STORM_TESTVO_NEARLINE_SIZE=0/ )
           is_expected.to contain_file(title).with( :content => /STORM_TESTVO_TOKEN=TESTVO-TOKEN/ )
           is_expected.to contain_file(title).with( :content => /STORM_TESTVO_ROOT=\/storage\/test.vo/ )
           is_expected.to contain_file(title).with( :content => /STORM_TESTVO_STORAGECLASS=T0D1/ )
