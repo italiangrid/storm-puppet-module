@@ -86,7 +86,7 @@
       <storage-class>T1D0</storage-class>
       <root>/storage/atlas</root>
       <filesystem-driver>it.grid.storm.filesystem.swig.gpfs</filesystem-driver>
-      <spacesystem-driver>it.grid.storm.filesystem.GPFSSpaceSystem</spacesystem-driver>
+      <spacesystem-driver>it.grid.storm.filesystem.MockSpaceSystem</spacesystem-driver>
       <storage-area-authz>
         <fixed>permit-all</fixed>
       </storage-area-authz>

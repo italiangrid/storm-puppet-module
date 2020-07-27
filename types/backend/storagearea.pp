@@ -1,4 +1,10 @@
 # @summary The storage area type for storm-backend-server
+# Mandatory fields: name, root_path, online_size
+# |   Property Name   |   Description     |
+# |:------------------|:------------------|
+# | name              | The name of the storage area. Mandatory. |
+# | root_path         | The absolute real path of the storage area parent directory. Mandatory. |
+# | access_points     | List of relative logical paths used to access storage area. Optional variable. Default value: /`name`. |
 type Storm::Backend::StorageArea = Struct[{
   name                         => String,
   root_path                    => String,
@@ -23,4 +29,5 @@ type Storm::Backend::StorageArea = Struct[{
   gsiftp_pool_balance_strategy => Optional[Storm::Backend::BalanceStrategy],
   gsiftp_pool_members          => Optional[Array[Storm::Backend::GsiftpPoolMember]],
   webdav_pool_members          => Optional[Array[Storm::Backend::WebdavPoolMember]],
+  use_gpfs_preallocation       => Optional[Boolean],
 }]
