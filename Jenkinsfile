@@ -26,16 +26,7 @@ pipeline {
     timeout(time: 1, unit: 'HOURS')
   }
 
-  parameters {
-    string(name: 'SONAR_PROJECT_VERSION', defaultValue: '0.1.0', description: 'Module version')
-  }
-
   triggers { cron('@daily') }
-
-  environment {
-    SONAR_PROJECT_KEY = 'storm-puppet-module-key'
-    SONAR_PROJECT_NAME = 'storm-puppet-module'
-  }
 
   stages {
     stage('rspec-tests') {
@@ -46,18 +37,6 @@ pipeline {
             rake test
           """
           archiveArtifacts 'rspec_report.html'
-        }
-      }
-    }
-    stage('sonar-analysis') {
-      steps {
-        script {
-          sh 'rm -rf spec/fixtures'
-          withSonarQubeEnv{
-            def sonar_opts="-Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.login=${SONAR_AUTH_TOKEN}"
-            def project_opts="-Dsonar.projectKey=${env.SONAR_PROJECT_KEY} -Dsonar.projectName='${env.SONAR_PROJECT_NAME}' -Dsonar.projectVersion=${params.SONAR_PROJECT_VERSION} -Dsonar.exclusions=spec/fixtures -Dsonar.sources=."
-            sh "sonar-runner ${sonar_opts} ${project_opts}"
-          }
         }
       }
     }
