@@ -8,5 +8,6 @@ class storm::db::params (
   $root_password = lookup('storm::db::root_password', String, undef, 'storm')
   $storm_username = lookup('storm::db::storm_username', String, undef, 'storm')
   $storm_password = lookup('storm::db::storm_password', String, undef, 'bluemoon')
+  $max_connections = lookup('storm::db::max_connections', Integer, undef, 1024)
 
 }

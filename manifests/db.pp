@@ -12,6 +12,9 @@
 # @param storm_password
 #   The password of database user used by StoRM services. Default: 'bluemoon'. Optional.
 #
+# @param max_connections
+#   Sets max_connections option's value into /etc/my.cnf 
+#
 # @example Install and configure database as follow:
 #   class { 'storm::db':
 #     fqdn_hostname  => 'be.test.example',
@@ -24,6 +27,7 @@ class storm::db (
   String $root_password = $storm::db::params::root_password,
   String $storm_username = $storm::db::params::storm_username,
   String $storm_password = $storm::db::params::storm_password,
+  Integer $max_connections = $storm::db::params::max_connections,
 
 ) inherits storm::db::params {
 

@@ -1534,6 +1534,14 @@ The password of database user used by StoRM services. Default: 'bluemoon'. Optio
 
 Default value: $storm::db::params::storm_password
 
+##### `max_connections`
+
+Data type: `Integer`
+
+Sets max_connections option's value into /etc/my.cnf
+
+Default value: $storm::db::params::max_connections
+
 ### storm::db::config
 
 StoRM DB config class
@@ -1581,6 +1589,14 @@ Data type: `Any`
 
 
 Default value: $storm::db::root_password
+
+##### `max_connections`
+
+Data type: `Any`
+
+
+
+Default value: $storm::db::max_connections
 
 ### storm::db::params
 
@@ -2984,12 +3000,19 @@ Alias of `Struct[{
 
 ### Storm::Backend::StorageArea
 
-Mandatory fields: name, root_path, online_size
-|   Property Name   |   Description     |
-|:------------------|:------------------|
-| name              | The name of the storage area. Mandatory. |
-| root_path         | The absolute real path of the storage area parent directory. Mandatory. |
-| access_points     | List of relative logical paths used to access storage area. Optional variable. Default value: /`name`. |
+Mandatory fields:
+<ul><li>name</li><li>root_path</li><li>online_size</li></ul>
+
+<table>
+  <thead>
+    <tr><th>Property Name</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>name</td><td>The name of the storage area. Mandatory.</td></tr>
+    <tr><td>root_path</td><td>The absolute real path of the storage area parent directory. Mandatory.</td></tr>
+    <tr><td>access_points</td><td>List of relative logical paths used to access storage area. Optional variable. Default value: /{name}.</td></tr>
+  </tbody>
+</table>
 
 Alias of `Struct[{
   name                         => String,

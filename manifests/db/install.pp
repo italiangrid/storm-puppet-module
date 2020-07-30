@@ -3,6 +3,7 @@
 class storm::db::install (
 
   $root_password = $storm::db::root_password,
+  $max_connections = $storm::db::max_connections,
 
 ) inherits storm::db {
 
@@ -31,8 +32,9 @@ class storm::db::install (
     require            => Yumrepo['repo.mysql.com'],
     override_options   => {
       mysqld      => {
-        'bind-address' => '127.0.0.1',
-        'log-error'    => '/var/log/mysqld.log',
+        'bind-address'    => '127.0.0.1',
+        'log-error'       => '/var/log/mysqld.log',
+        'max_connections' => $max_connections,
       },
       mysqld_safe => {
         'log-error' => '/var/log/mysqld.log',
