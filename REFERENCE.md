@@ -24,10 +24,6 @@
 * [`storm::gridftp::install`](#stormgridftpinstall): StoRM GridFTP install class
 * [`storm::gridftp::params`](#stormgridftpparams): StoRM GridFTP params class
 * [`storm::gridftp::service`](#stormgridftpservice): StoRM GridFTP service class
-* [`storm::info`](#storminfo): StoRM Info Provider class
-* [`storm::info::config`](#storminfoconfig): 
-* [`storm::info::install`](#storminfoinstall): StoRM Info install class
-* [`storm::info::params`](#storminfoparams): StoRM Info params class
 * [`storm::params`](#stormparams): StoRM params class
 * [`storm::repo`](#stormrepo): Choose which StoRM repository you want to intall and enable. Also a custom list of repository URL can be specified.
 * [`storm::storage`](#stormstorage): Init testbed storage area's directories
@@ -37,6 +33,10 @@
 * [`storm::webdav::install`](#stormwebdavinstall): StoRM WebDAV install class
 * [`storm::webdav::params`](#stormwebdavparams): StoRM WebDAV params class
 * [`storm::webdav::service`](#stormwebdavservice): StoRM WebDAV service class
+
+**Defined types**
+
+* [`storm::rootdir`](#stormrootdir): StoRM root directory defined resource
 
 **Data types**
 
@@ -125,6 +125,14 @@ Set this if you need to install storm-native-libs-gpfs. Default: false.
 
 Default value: $storm::backend::params::install_native_libs_gpfs
 
+##### `install_mysql_and_create_database`
+
+Data type: `Boolean`
+
+Set this to true if you need to install MySQL and create StoRM database. Default: false.
+
+Default value: $storm::backend::params::install_mysql_and_create_database
+
 ##### `db_root_password`
 
 Data type: `String`
@@ -145,7 +153,7 @@ Default value: $storm::backend::params::db_storm_username
 
 Data type: `String`
 
-Password for the user in `db_storm_username`
+Password for the user in `db_storm_username`. Default: bluemoon
 
 Default value: $storm::backend::params::db_storm_password
 
@@ -172,7 +180,8 @@ Data type: `Storm::Backend::BalanceStrategy`
 
 Load balancing strategy for GridFTP server pool (default value for all Storage Areas).
 Note: you may change the settings for each SA acting on its configuration.
-Available values: round-robin, smart-rr, random, weight. Default value: round-robin
+Available values: round-robin, smart-rr, random, weight. Default value: round-robin.
+See [Storm::Backend::BalanceStrategy](#stormbackendbalancestrategy).
 
 Default value: $storm::backend::params::gsiftp_pool_balance_strategy
 
@@ -180,7 +189,7 @@ Default value: $storm::backend::params::gsiftp_pool_balance_strategy
 
 Data type: `Array[Storm::Backend::GsiftpPoolMember]`
 
-Array of Storm::Backend::GsiftpPoolMember.
+Array of [Storm::Backend::GsiftpPoolMember](#stormbackendgsiftppoolmember).
 GridFTP servers pool list (default value for all Storage Areas).
 Note: you may change the settings for each SA acting on its configuration.
 
@@ -190,7 +199,7 @@ Default value: $storm::backend::params::gsiftp_pool_members
 
 Data type: `Array[Storm::Backend::WebdavPoolMember]`
 
-Array of Storm::Backend::WebdavPoolMember.
+Array of [Storm::Backend::WebdavPoolMember](#stormbackendwebdavpoolmember).
 WebDAV endpoints pool list (default value for all Storage Areas).
 Note: you may change the settings for each SA acting on its configuration.
 
@@ -200,7 +209,7 @@ Default value: $storm::backend::params::webdav_pool_members
 
 Data type: `Array[Storm::Backend::SrmPoolMember]`
 
-Array of Storm::Backend::SrmPoolMember.
+Array of [Storm::Backend::SrmPoolMember](#stormbackendsrmpoolmember).
 Frontend endpoints pool list (default value for all Storage Areas).
 Note: you may change the settings for each SA acting on its configuration.
 
@@ -222,6 +231,7 @@ Data type: `Storm::Backend::FsType`
 File System Type (default value for all Storage Areas).
 Note: you may change the settings for each SA acting on its configuration.
 Available values: posixfs, gpfs and test. Default value: posixfs
+See [Storm::Backend::FsType](#stormbackendfstype).
 
 Default value: $storm::backend::params::fs_type
 
@@ -291,15 +301,15 @@ REST services max queue size of accepted requests. Default: 1000
 
 Default value: $storm::backend::params::rest_services_max_queue_size
 
-##### `synchcall_xmlrpc_unsecure_server_port`
+##### `xmlrpc_unsecure_server_port`
 
 Data type: `Integer`
 
 Port to listen on for incoming XML-RPC connections from Frontends(s). Default: 8080
 
-Default value: $storm::backend::params::synchcall_xmlrpc_unsecure_server_port
+Default value: $storm::backend::params::xmlrpc_unsecure_server_port
 
-##### `synchcall_xmlrpc_maxthread`
+##### `xmlrpc_maxthread`
 
 Data type: `Integer`
 
@@ -307,32 +317,32 @@ Number of threads managing XML-RPC connection from Frontends(s).
 A well sized value for this parameter have to be at least equal to the sum of the number of working threads in all Frontends.
 Default: 100.
 
-Default value: $storm::backend::params::synchcall_xmlrpc_maxthread
+Default value: $storm::backend::params::xmlrpc_maxthread
 
-##### `synchcall_xmlrpc_max_queue_size`
+##### `xmlrpc_max_queue_size`
 
 Data type: `Integer`
 
 Max number of accepted and queued XML-RPC connection from Frontends(s). Default: **1000**
 
-Default value: $storm::backend::params::synchcall_xmlrpc_max_queue_size
+Default value: $storm::backend::params::xmlrpc_max_queue_size
 
-##### `synchcall_xmlrpc_security_enabled`
+##### `xmlrpc_security_enabled`
 
 Data type: `Boolean`
 
 Whether the backend will require a token to be present for accepting XML-RPC requests. Default: true.
 
-Default value: $storm::backend::params::synchcall_xmlrpc_security_enabled
+Default value: $storm::backend::params::xmlrpc_security_enabled
 
-##### `synchcall_xmlrpc_security_token`
+##### `xmlrpc_security_token`
 
 Data type: `String`
 
 The token that the backend will require to be present for accepting XML-RPC requests.
-Mandatory if synchcall_xmlrpc_security_enabled is true.
+Mandatory if xmlrpc_security_enabled is true.
 
-Default value: $storm::backend::params::synchcall_xmlrpc_security_token
+Default value: $storm::backend::params::xmlrpc_security_token
 
 ##### `ptg_skip_acl_setup`
 
@@ -391,14 +401,14 @@ The interval in seconds between successive run. Default: 360.
 
 Default value: $storm::backend::params::service_du_interval
 
-##### `synchcall_max_ls_entries`
+##### `max_ls_entries`
 
 Data type: `Integer`
 
 Maximum number of entries returned by an srmLs call.
 Since in case of recursive srmLs results can be in order of million, this prevent a server overload. Default: 500.
 
-Default value: $storm::backend::params::synchcall_max_ls_entries
+Default value: $storm::backend::params::max_ls_entries
 
 ##### `gc_pinnedfiles_cleaning_delay`
 
@@ -486,7 +496,7 @@ Default value: $storm::backend::params::extraslashes_file
 
 Data type: `String`
 
-Add extra slashes after the “authority” part of a TURL for xroot protocol. Default: '/'
+Add extra slashes after the “authority” part of a TURL for xroot protocol. Default: ''
 
 Default value: $storm::backend::params::extraslashes_root
 
@@ -700,6 +710,102 @@ List of published srm endpoints.
 Default value: lookup('storm::backend::info_frontend_host_list',
     Array[Storm::Backend::SrmPoolMember], undef, $srm_pool_members)
 
+##### `jvm_options`
+
+Data type: `String`
+
+
+
+Default value: $storm::backend::params::jvm_options
+
+##### `jmx`
+
+Data type: `Boolean`
+
+
+
+Default value: $storm::backend::params::jmx
+
+##### `jmx_options`
+
+Data type: `String`
+
+
+
+Default value: $storm::backend::params::jmx_options
+
+##### `debug`
+
+Data type: `Boolean`
+
+
+
+Default value: $storm::backend::params::debug
+
+##### `debug_port`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::debug_port
+
+##### `debug_suspend`
+
+Data type: `Boolean`
+
+
+
+Default value: $storm::backend::params::debug_suspend
+
+##### `lcmaps_db_file`
+
+Data type: `String`
+
+
+
+Default value: $storm::backend::params::lcmaps_db_file
+
+##### `lcmaps_policy_name`
+
+Data type: `String`
+
+
+
+Default value: $storm::backend::params::lcmaps_policy_name
+
+##### `lcmaps_log_file`
+
+Data type: `String`
+
+
+
+Default value: $storm::backend::params::lcmaps_log_file
+
+##### `lcmaps_debug_level`
+
+Data type: `Integer`
+
+
+
+Default value: $storm::backend::params::lcmaps_debug_level
+
+##### `http_turl_prefix`
+
+Data type: `String`
+
+
+
+Default value: $storm::backend::params::http_turl_prefix
+
+##### `info_config_file`
+
+Data type: `String`
+
+
+
+Default value: $storm::backend::params::info_config_file
+
 ### storm::backend::config
 
 StoRM Backend config class
@@ -723,6 +829,14 @@ Data type: `Any`
 
 
 Default value: $storm::backend::install_native_libs_gpfs
+
+##### `install_mysql_and_create_database`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::install_mysql_and_create_database
 
 ##### `db_root_password`
 
@@ -876,45 +990,45 @@ Data type: `Any`
 
 Default value: $storm::backend::rest_services_max_queue_size
 
-##### `synchcall_xmlrpc_unsecure_server_port`
+##### `xmlrpc_unsecure_server_port`
 
 Data type: `Any`
 
 
 
-Default value: $storm::backend::synchcall_xmlrpc_unsecure_server_port
+Default value: $storm::backend::xmlrpc_unsecure_server_port
 
-##### `synchcall_xmlrpc_maxthread`
-
-Data type: `Any`
-
-
-
-Default value: $storm::backend::synchcall_xmlrpc_maxthread
-
-##### `synchcall_xmlrpc_max_queue_size`
+##### `xmlrpc_maxthread`
 
 Data type: `Any`
 
 
 
-Default value: $storm::backend::synchcall_xmlrpc_max_queue_size
+Default value: $storm::backend::xmlrpc_maxthread
 
-##### `synchcall_xmlrpc_security_enabled`
-
-Data type: `Any`
-
-
-
-Default value: $storm::backend::synchcall_xmlrpc_security_enabled
-
-##### `synchcall_xmlrpc_security_token`
+##### `xmlrpc_max_queue_size`
 
 Data type: `Any`
 
 
 
-Default value: $storm::backend::synchcall_xmlrpc_security_token
+Default value: $storm::backend::xmlrpc_max_queue_size
+
+##### `xmlrpc_security_enabled`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::xmlrpc_security_enabled
+
+##### `xmlrpc_security_token`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::xmlrpc_security_token
 
 ##### `ptg_skip_acl_setup`
 
@@ -972,13 +1086,13 @@ Data type: `Any`
 
 Default value: $storm::backend::service_du_interval
 
-##### `synchcall_max_ls_entries`
+##### `max_ls_entries`
 
 Data type: `Any`
 
 
 
-Default value: $storm::backend::synchcall_max_ls_entries
+Default value: $storm::backend::max_ls_entries
 
 ##### `gc_pinnedfiles_cleaning_delay`
 
@@ -1235,6 +1349,126 @@ Data type: `Any`
 
 
 Default value: $storm::backend::bol_requests_scheduler_queue_size
+
+##### `info_config_file`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::info_config_file
+
+##### `info_sitename`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::info_sitename
+
+##### `info_storage_default_root`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::info_storage_default_root
+
+##### `info_endpoint_quality_level`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::info_endpoint_quality_level
+
+##### `jvm_options`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::jvm_options
+
+##### `jmx`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::jmx
+
+##### `jmx_options`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::jmx_options
+
+##### `debug`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::debug
+
+##### `debug_port`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::debug_port
+
+##### `debug_suspend`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::debug_suspend
+
+##### `lcmaps_db_file`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::lcmaps_db_file
+
+##### `lcmaps_policy_name`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::lcmaps_policy_name
+
+##### `lcmaps_log_file`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::lcmaps_log_file
+
+##### `lcmaps_debug_level`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::lcmaps_debug_level
+
+##### `http_turl_prefix`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::http_turl_prefix
 
 ### storm::backend::install
 
@@ -1953,247 +2187,6 @@ StoRM GridFTP params class
 
 StoRM GridFTP service class
 
-### storm::info
-
-StoRM Info Provider class
-
-#### Examples
-
-##### Example of usage
-
-```puppet
-class { 'storm::info':
-}
-```
-
-#### Parameters
-
-The following parameters are available in the `storm::info` class.
-
-##### `config_file`
-
-Data type: `String`
-
-
-
-Default value: $storm::info::params::config_file
-
-##### `backend_hostname`
-
-Data type: `String`
-
-
-
-Default value: $storm::info::params::backend_hostname
-
-##### `frontend_public_host`
-
-Data type: `String`
-
-
-
-Default value: $storm::info::params::frontend_public_host
-
-##### `sitename`
-
-Data type: `String`
-
-
-
-Default value: $storm::info::params::sitename
-
-##### `storage_areas`
-
-Data type: `Array[Storm::Backend::StorageArea]`
-
-
-
-Default value: $storm::info::params::storage_areas
-
-##### `storage_default_root`
-
-Data type: `String`
-
-
-
-Default value: $storm::info::params::storage_default_root
-
-##### `frontend_path`
-
-Data type: `String`
-
-
-
-Default value: $storm::info::params::frontend_path
-
-##### `frontend_port`
-
-Data type: `Integer`
-
-
-
-Default value: $storm::info::params::frontend_port
-
-##### `rest_services_port`
-
-Data type: `Integer`
-
-
-
-Default value: $storm::info::params::rest_services_port
-
-##### `endpoint_quality_level`
-
-Data type: `Integer`
-
-
-
-Default value: $storm::info::params::endpoint_quality_level
-
-##### `webdav_pool_members`
-
-Data type: `Array[Storm::Backend::WebdavPoolMember]`
-
-
-
-Default value: $storm::info::params::webdav_pool_members
-
-##### `srm_pool_members`
-
-Data type: `Array[Storm::Backend::SrmPoolMember]`
-
-
-
-Default value: $storm::info::params::srm_pool_members
-
-##### `transfer_protocols`
-
-Data type: `Array[Storm::Backend::TransferProtocol]`
-
-
-
-Default value: $storm::info::params::transfer_protocols
-
-### storm::info::config
-
-The storm::info::config class.
-
-#### Parameters
-
-The following parameters are available in the `storm::info::config` class.
-
-##### `sitename`
-
-Data type: `Any`
-
-
-
-Default value: $storm::info::sitename
-
-##### `backend_hostname`
-
-Data type: `Any`
-
-
-
-Default value: $storm::info::backend_hostname
-
-##### `storage_areas`
-
-Data type: `Any`
-
-
-
-Default value: $storm::info::storage_areas
-
-##### `config_file`
-
-Data type: `Any`
-
-
-
-Default value: $storm::info::config_file
-
-##### `storage_default_root`
-
-Data type: `Any`
-
-
-
-Default value: $storm::info::storage_default_root
-
-##### `frontend_public_host`
-
-Data type: `Any`
-
-
-
-Default value: $storm::info::frontend_public_host
-
-##### `frontend_path`
-
-Data type: `Any`
-
-
-
-Default value: $storm::info::frontend_path
-
-##### `frontend_port`
-
-Data type: `Any`
-
-
-
-Default value: $storm::info::frontend_port
-
-##### `rest_services_port`
-
-Data type: `Any`
-
-
-
-Default value: $storm::info::rest_services_port
-
-##### `endpoint_quality_level`
-
-Data type: `Any`
-
-
-
-Default value: $storm::info::endpoint_quality_level
-
-##### `webdav_pool_members`
-
-Data type: `Any`
-
-
-
-Default value: $storm::info::webdav_pool_members
-
-##### `srm_pool_members`
-
-Data type: `Any`
-
-
-
-Default value: $storm::info::srm_pool_members
-
-##### `transfer_protocols`
-
-Data type: `Any`
-
-
-
-Default value: $storm::info::transfer_protocols
-
-### storm::info::install
-
-StoRM Info install class
-
-### storm::info::params
-
-StoRM Info params class
-
 ### storm::params
 
 storm class default parameters
@@ -2250,11 +2243,11 @@ Init testbed storage area's directories
 
 ```puppet
 class { 'storm::storage':
-  storage_root => '/storage',
-  storage_areas => {
-    'test.vo' => '/storage/test.vo',
-    'tape' => '/storage/tape',
-  },
+  root_directories => [
+    '/storage',
+    '/storage/disk',
+    '/storage/tape',
+  ],
 }
 ```
 
@@ -2262,29 +2255,13 @@ class { 'storm::storage':
 
 The following parameters are available in the `storm::storage` class.
 
-##### `storage_root`
+##### `root_directories`
 
-Data type: `String`
+Data type: `Array[String]`
 
+A list of all storage root directories owned by storm user. You must add also all parent directories.
 
-
-Default value: '/storage'
-
-##### `storage_areas`
-
-Data type: `Hash[String, String]`
-
-
-
-Default value: {
-    'test.vo' => '/storage/test.vo',
-    'test.vo.2' => '/storage/test.vo.2',
-    'igi' => '/storage/igi',
-    'noauth' => '/storage/noauth',
-    'test.vo.bis' => '/storage/test.vo.bis',
-    'nested' => '/storage/nested',
-    'tape' => '/storage/tape',
-  }
+Default value: ['/storage']
 
 ### storm::users
 
@@ -2332,11 +2309,7 @@ Data type: `Accounts::Group::Hash`
 
 
 
-Default value: {
-    'infosys' => {
-      gid => '996',
-    },
-  }
+Default value: {}
 
 ##### `users`
 
@@ -2345,16 +2318,9 @@ Data type: `Accounts::User::Hash`
 
 
 Default value: {
-    'edguser' => {
-      'comment' => 'Edguser user',
-      'groups'  => [ edguser, infosys, storm, ],
-      'uid'     => '995',
-      'gid'     => '995',
-      'home'    => '/home/edguser',
-    },
     'storm' => {
       'comment' => 'StoRM user',
-      'groups'  => [ storm, edguser, ],
+      'groups'  => [ storm, edguser ],
       'uid'     => '991',
       'gid'     => '991',
       'home'    => '/home/storm',
@@ -2885,6 +2851,22 @@ StoRM WebDAV params class
 
 StoRM WebDAV service class
 
+## Defined types
+
+### storm::rootdir
+
+StoRM root directory defined resource
+
+#### Parameters
+
+The following parameters are available in the `storm::rootdir` defined type.
+
+##### `path`
+
+Data type: `String`
+
+
+
 ## Data types
 
 ### Storm::Backend::Acl
@@ -3002,7 +2984,12 @@ Alias of `Struct[{
 
 ### Storm::Backend::StorageArea
 
-The storage area type for storm-backend-server
+Mandatory fields: name, root_path, online_size
+|   Property Name   |   Description     |
+|:------------------|:------------------|
+| name              | The name of the storage area. Mandatory. |
+| root_path         | The absolute real path of the storage area parent directory. Mandatory. |
+| access_points     | List of relative logical paths used to access storage area. Optional variable. Default value: /`name`. |
 
 Alias of `Struct[{
   name                         => String,
@@ -3028,6 +3015,7 @@ Alias of `Struct[{
   gsiftp_pool_balance_strategy => Optional[Storm::Backend::BalanceStrategy],
   gsiftp_pool_members          => Optional[Array[Storm::Backend::GsiftpPoolMember]],
   webdav_pool_members          => Optional[Array[Storm::Backend::WebdavPoolMember]],
+  use_gpfs_preallocation       => Optional[Boolean],
 }]`
 
 ### Storm::Backend::StorageClass
