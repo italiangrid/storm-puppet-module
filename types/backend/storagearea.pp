@@ -36,5 +36,4 @@ type Storm::Backend::StorageArea = Struct[{
   gsiftp_pool_balance_strategy => Optional[Storm::Backend::BalanceStrategy],
   gsiftp_pool_members          => Optional[Array[Storm::Backend::GsiftpPoolMember]],
   webdav_pool_members          => Optional[Array[Storm::Backend::WebdavPoolMember]],
-  use_gpfs_preallocation       => Optional[Boolean],
 }]
