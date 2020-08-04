@@ -7,13 +7,10 @@
 
 * [`storm::backend`](#stormbackend): StoRM Backend puppet module
 * [`storm::backend::config`](#stormbackendconfig): StoRM Backend config class
+* [`storm::backend::configdb`](#stormbackendconfigdb): StoRM Backend DB config class
 * [`storm::backend::install`](#stormbackendinstall): StoRM Backend install class
 * [`storm::backend::params`](#stormbackendparams): StoRM Frontend params class
 * [`storm::backend::service`](#stormbackendservice): StoRM Backend service class
-* [`storm::db`](#stormdb): StoRM Database class
-* [`storm::db::config`](#stormdbconfig): StoRM DB config class
-* [`storm::db::install`](#stormdbinstall): StoRM DB install class
-* [`storm::db::params`](#stormdbparams): StoRM DB params class
 * [`storm::frontend`](#stormfrontend): StoRM Frontend puppet module
 * [`storm::frontend::config`](#stormfrontendconfig): StoRM Frontend config class
 * [`storm::frontend::install`](#stormfrontendinstall): StoRM Frontend install class
@@ -76,8 +73,8 @@ StoRM Backend puppet module
 ```puppet
 class { 'storm::backend':
   hostname => 'backend.test.example',
-  db_root_password  => 'storm',
-  db_storm_password => 'bluemoon',
+  db_user => 'storm',
+  db_password => 'bluemoon',
   srm_pool_members => [
     {
       'hostname' => 'frontend.test.example',
@@ -125,37 +122,45 @@ Set this if you need to install storm-native-libs-gpfs. Default: false.
 
 Default value: $storm::backend::params::install_native_libs_gpfs
 
-##### `install_mysql_and_create_database`
+##### `mysql_server_install`
 
 Data type: `Boolean`
 
-Set this to true if you need to install MySQL and create StoRM database. Default: false.
+Install MySQL server on the same host. Default: false.
 
-Default value: $storm::backend::params::install_mysql_and_create_database
+Default value: $storm::backend::params::mysql_server_install
 
-##### `db_root_password`
+##### `mysql_server_root_password`
 
 Data type: `String`
 
-MySQL root user password
+Used to configure MySQL server in case mysql_server_install is true. Default: 'storm'.
 
-Default value: $storm::backend::params::db_root_password
+Default value: $storm::backend::params::mysql_server_root_password
 
-##### `db_storm_username`
+##### `mysql_server_override_options`
+
+Data type: `Data`
+
+Used to configure MySQL server in case mysql_server_install is true.
+
+Default value: $storm::backend::params::mysql_server_override_options
+
+##### `db_username`
 
 Data type: `String`
 
 The name of user used to connect to local database. Default: storm
 
-Default value: $storm::backend::params::db_storm_username
+Default value: $storm::backend::params::db_username
 
-##### `db_storm_password`
+##### `db_password`
 
 Data type: `String`
 
 Password for the user in `db_storm_username`. Default: bluemoon
 
-Default value: $storm::backend::params::db_storm_password
+Default value: $storm::backend::params::db_password
 
 ##### `xroot_hostname`
 
@@ -830,37 +835,45 @@ Data type: `Any`
 
 Default value: $storm::backend::install_native_libs_gpfs
 
-##### `install_mysql_and_create_database`
+##### `db_username`
 
 Data type: `Any`
 
 
 
-Default value: $storm::backend::install_mysql_and_create_database
+Default value: $storm::backend::db_username
 
-##### `db_root_password`
-
-Data type: `Any`
-
-
-
-Default value: $storm::backend::db_root_password
-
-##### `db_storm_username`
+##### `db_password`
 
 Data type: `Any`
 
 
 
-Default value: $storm::backend::db_storm_username
+Default value: $storm::backend::db_password
 
-##### `db_storm_password`
+##### `mysql_server_install`
 
 Data type: `Any`
 
 
 
-Default value: $storm::backend::db_storm_password
+Default value: $storm::backend::mysql_server_install
+
+##### `mysql_server_root_password`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::mysql_server_root_password
+
+##### `mysql_server_override_options`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::mysql_server_override_options
 
 ##### `xroot_hostname`
 
@@ -1470,6 +1483,38 @@ Data type: `Any`
 
 Default value: $storm::backend::http_turl_prefix
 
+### storm::backend::configdb
+
+StoRM Backend DB config class
+
+#### Parameters
+
+The following parameters are available in the `storm::backend::configdb` class.
+
+##### `fqdn_hostname`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::hostname
+
+##### `storm_username`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::db_username
+
+##### `storm_password`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::db_password
+
 ### storm::backend::install
 
 StoRM Backend install class
@@ -1481,126 +1526,6 @@ StoRM Frontend params class
 ### storm::backend::service
 
 StoRM Backend service class
-
-### storm::db
-
-StoRM Database class
-
-#### Examples
-
-##### Install and configure database as follow:
-
-```puppet
-class { 'storm::db':
-  fqdn_hostname  => 'be.test.example',
-  root_password  => 'secret',
-  storm_password => 'secret',
-}
-```
-
-#### Parameters
-
-The following parameters are available in the `storm::db` class.
-
-##### `fqdn_hostname`
-
-Data type: `String`
-
-The Fully Qualyfied Domain Name of the host where database is installed. Required.
-
-Default value: $storm::db::params::fqdn_hostname
-
-##### `root_password`
-
-Data type: `String`
-
-The MySQL root user password. Optional.
-
-Default value: $storm::db::params::root_password
-
-##### `storm_username`
-
-Data type: `String`
-
-The database user used by StoRM services. Default: 'storm'. Optional.
-
-Default value: $storm::db::params::storm_username
-
-##### `storm_password`
-
-Data type: `String`
-
-The password of database user used by StoRM services. Default: 'bluemoon'. Optional.
-
-Default value: $storm::db::params::storm_password
-
-##### `max_connections`
-
-Data type: `Integer`
-
-Sets max_connections option's value into /etc/my.cnf
-
-Default value: $storm::db::params::max_connections
-
-### storm::db::config
-
-StoRM DB config class
-
-#### Parameters
-
-The following parameters are available in the `storm::db::config` class.
-
-##### `fqdn_hostname`
-
-Data type: `Any`
-
-
-
-Default value: $storm::db::fqdn_hostname
-
-##### `storm_username`
-
-Data type: `Any`
-
-
-
-Default value: $storm::db::storm_username
-
-##### `storm_password`
-
-Data type: `Any`
-
-
-
-Default value: $storm::db::storm_password
-
-### storm::db::install
-
-StoRM DB install class
-
-#### Parameters
-
-The following parameters are available in the `storm::db::install` class.
-
-##### `root_password`
-
-Data type: `Any`
-
-
-
-Default value: $storm::db::root_password
-
-##### `max_connections`
-
-Data type: `Any`
-
-
-
-Default value: $storm::db::max_connections
-
-### storm::db::params
-
-StoRM DB params class
 
 ### storm::frontend
 
@@ -3038,7 +2963,6 @@ Alias of `Struct[{
   gsiftp_pool_balance_strategy => Optional[Storm::Backend::BalanceStrategy],
   gsiftp_pool_members          => Optional[Array[Storm::Backend::GsiftpPoolMember]],
   webdav_pool_members          => Optional[Array[Storm::Backend::WebdavPoolMember]],
-  use_gpfs_preallocation       => Optional[Boolean],
 }]`
 
 ### Storm::Backend::StorageClass

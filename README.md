@@ -132,9 +132,11 @@ StoRM Backend class:
 |:--------------------------------|:------------------|
 | `hostname` <span style="color:red">*</span> | StoRM Backend Fully Qualified Domain Name. **Mandatory**. |
 | `install_native_libs_gpfs`      | Set this if you need to install storm-native-libs-gpfs. Default value: **false**. |
-| `db_root_password`              | MySQL root user password. Default value: **storm** |
-| `db_storm_username`             | The name of user used to connect to local database. Default value: **storm**. |
-| `db_storm_password`             | Password for the user in `db_storm_username`. Default value: **bluemoon**. |
+| `db_username`             | The name of user used to connect to local database. Default value: **storm**. |
+| `db_password`             | Password for the user in `db_storm_username`. Default value: **bluemoon**. |
+| `mysql_server_install` |
+| `mysql_server_root_password` |
+| `mysql_server_override_options` |
 | `xroot_hostname`                | Root server (default value for all Storage Areas). Note: you may change the settings for each SA acting on its configuration. Default value: `hostname`|
 | `xroot_port`                    | Root server port (default value for all Storage Areas). Default value: **1094**|
 | `gsiftp_pool_balance_strategy`  | |
@@ -208,8 +210,6 @@ Example of StoRM Backend configuration:
 ```
 class { 'storm::backend':
   hostname => 'backend.test.example',
-  db_root_password  => 'storm',
-  db_storm_password => 'bluemoon',
   srm_pool_members => [
     {
       'hostname' => 'frontend.test.example',
