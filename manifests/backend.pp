@@ -4,7 +4,7 @@
 # @example Example of usage
 #    class { 'storm::backend':
 #      hostname => 'backend.test.example',
-#      db_user => 'storm',
+#      db_username => 'storm',
 #      db_password => 'bluemoon',
 #      srm_pool_members => [
 #        {
