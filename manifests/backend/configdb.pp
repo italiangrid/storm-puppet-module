@@ -1,10 +1,10 @@
-# @summary StoRM DB config class
+# @summary StoRM Backend DB config class
 #
-class storm::db::config (
+class storm::backend::configdb (
 
-  $fqdn_hostname = $storm::db::fqdn_hostname,
-  $storm_username = $storm::db::storm_username,
-  $storm_password = $storm::db::storm_password,
+  $fqdn_hostname = $storm::backend::hostname,
+  $storm_username = $storm::backend::db_username,
+  $storm_password = $storm::backend::db_password,
 
 ) {
 
@@ -42,6 +42,7 @@ class storm::db::config (
   mysql_user { "${storm_username}@${short_hostname}":
     ensure        => 'present',
     password_hash => mysql::password($storm_password),
+    require       => [Mysql::Db['storm_db'], Mysql::Db['storm_be_ISAM']],
   }
   mysql_grant { "${storm_username}@${short_hostname}/storm_db.*":
     privileges => 'ALL',
@@ -61,6 +62,7 @@ class storm::db::config (
   mysql_user { "${storm_username}@%":
     ensure        => 'present',
     password_hash => mysql::password($storm_password),
+    require       => [Mysql::Db['storm_db'], Mysql::Db['storm_be_ISAM']],
   }
   mysql_grant { "${storm_username}@%/storm_db.*":
     privileges => 'ALL',
@@ -80,6 +82,7 @@ class storm::db::config (
   mysql_user { "${storm_username}@localhost":
     ensure        => 'present',
     password_hash => mysql::password($storm_password),
+    require       => [Mysql::Db['storm_db'], Mysql::Db['storm_be_ISAM']],
   }
   mysql_grant { "${storm_username}@localhost/storm_db.*":
     privileges => 'ALL',

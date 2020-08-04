@@ -9,7 +9,7 @@ describe 'storm::backend::service' do
       let(:pre_condition) {
       <<-EOF
         class { 'storm::backend':
-          hostname => 'foo',
+          hostname => 'storm.example.org',
         }
       EOF
       }

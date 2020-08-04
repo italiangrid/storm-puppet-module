@@ -8,7 +8,7 @@ describe 'storm::backend', :type => :class do
 
       let(:params) do 
         {
-          'hostname' => 'storm.example',
+          'hostname' => 'storm.example.org',
         }
       end
 
@@ -16,18 +16,14 @@ describe 'storm::backend', :type => :class do
         facts
       end
 
-      # it { is_expected.to compile }
-      # it { is_expected.to compile.with_all_deps }
-
-      context 'Use custom backend params' do
+      context 'with custom backend params' do
 
         let(:params) do
           super().merge({
-            'hostname' => 'storm.example.org',
             'install_native_libs_gpfs' => true,
             'frontend_public_host' => 'frontend.example.org',
-            'db_storm_username' => 'test',
-            'db_storm_password' => 'secret',
+            'db_username' => 'test',
+            'db_password' => 'secret',
             'gsiftp_pool_members' => [
               {
                 'hostname' => 'gridftp-0.example.org',
@@ -157,8 +153,8 @@ describe 'storm::backend', :type => :class do
           is_expected.to contain_file(title).with( :content => /transit.interval=300/ )
           is_expected.to contain_file(title).with( :content => /transit.delay=10/ )
           is_expected.to contain_file(title).with( :content => /ptg.skip-acl-setup=false/ )
-          
-          # is_expected.to contain_file(title).with( :content => // )
+          is_expected.to contain_file(title).with( :content => /http.turl_prefix=/ )
+
           # is_expected.to contain_file(title).with( :content => // )
           # is_expected.to contain_file(title).with( :content => // )
         end
@@ -239,6 +235,255 @@ describe 'storm::backend', :type => :class do
         end
 
       end
+
+      context 'with custom db username and password' do
+
+        let(:params) do
+          super().merge({
+            'db_username' => 'test',
+            'db_password' => 'secret',
+          })
+        end
+      
+        case facts[:operatingsystemmajrelease]
+        when '6'
+          it 'check mysql repo for centos 6 is installed' do
+            is_expected.to contain_yumrepo('repo.mysql.com').with(
+              :ensure => 'present',
+              :descr => 'repo.mysql.com',
+              :baseurl => 'http://repo.mysql.com/yum/mysql-5.6-community/el/6/x86_64/',
+              :enabled => 1,
+              :gpgcheck => true,
+              :gpgkey => 'http://repo.mysql.com/RPM-GPG-KEY-mysql',
+            )
+          end
+        when '7'
+          it 'check mysql repo for centos 7 is installed' do
+            is_expected.to contain_yumrepo('repo.mysql.com').with(
+              :ensure => 'present',
+              :descr => 'repo.mysql.com',
+              :baseurl => 'http://repo.mysql.com/yum/mysql-5.6-community/el/7/x86_64/',
+              :enabled => 1,
+              :gpgcheck => true,
+              :gpgkey => 'http://repo.mysql.com/RPM-GPG-KEY-mysql',
+            )
+          end
+        end
+  
+        it 'check mysql client is installed' do
+          is_expected.to contain_class('mysql::client').with(
+            :package_name => 'mysql-community-client',
+          )
+        end
+
+        it 'check mysql server is not installed' do
+          is_expected.not_to contain_class('mysql::server')
+        end
+
+        it "check db scripts exist" do
+          storm_db='/tmp/storm_db.sql'
+          is_expected.to contain_file(storm_db).with( 
+            :ensure => 'present',
+          )
+          storm_be_isam='/tmp/storm_be_ISAM.sql'
+          is_expected.to contain_file(storm_be_isam).with( 
+            :ensure => 'present',
+          )
+        end
+
+        it "check storm db creation" do
+          is_expected.to contain_mysql__db('storm_db').with(
+            :user => 'test',
+            :password => 'secret',
+            :host => 'storm.example.org',
+            :grant => 'ALL',
+            :sql => '/tmp/storm_db.sql',
+          )
+        end
+
+        it "check grants on storm_db" do
+          is_expected.to contain_mysql_grant('test@storm/storm_db.*').with(
+            :privileges => 'ALL',
+            :provider   => 'mysql',
+            :user       => "test@storm",
+            :table      => 'storm_db.*',
+          )
+          is_expected.to contain_mysql_grant('test@localhost/storm_db.*').with(
+            :privileges => 'ALL',
+            :provider   => 'mysql',
+            :user       => "test@localhost",
+            :table      => 'storm_db.*',
+          )
+          is_expected.to contain_mysql_grant('test@%/storm_db.*').with(
+            :privileges => 'ALL',
+            :provider   => 'mysql',
+            :user       => "test@%",
+            :table      => 'storm_db.*',
+          )
+        end
+
+        it "check storm be ISAM db creation" do
+          is_expected.to contain_mysql__db('storm_be_ISAM').with(
+            :user => 'test',
+            :password => 'secret',
+            :host => 'storm.example.org',
+            :grant => 'ALL',
+            :sql => '/tmp/storm_be_ISAM.sql',
+          )
+        end
+
+        it "check grants on storm_be_ISAM" do
+          is_expected.to contain_mysql_grant('test@storm/storm_be_ISAM.*').with(
+            :privileges => 'ALL',
+            :provider   => 'mysql',
+            :user       => "test@storm",
+            :table      => 'storm_be_ISAM.*',
+          )
+          is_expected.to contain_mysql_grant('test@localhost/storm_be_ISAM.*').with(
+            :privileges => 'ALL',
+            :provider   => 'mysql',
+            :user       => "test@localhost",
+            :table      => 'storm_be_ISAM.*',
+          )
+          is_expected.to contain_mysql_grant('test@%/storm_be_ISAM.*').with(
+            :privileges => 'ALL',
+            :provider   => 'mysql',
+            :user       => "test@%",
+            :table      => 'storm_be_ISAM.*',
+          )
+        end
+
+        it "check users" do
+          is_expected.to contain_mysql_user('test@storm')
+          is_expected.to contain_mysql_user('test@localhost')
+          is_expected.to contain_mysql_user('test@%')
+        end
+      end
+
+      context 'with MySQL server enabled and default db username and password' do
+
+        let(:params) do
+          super().merge({
+            'mysql_server_install' => true,
+            'mysql_server_root_password' => 'secret',
+            'mysql_server_override_options' => {
+              'mysqld'      => {
+                'bind-address'    => '127.0.0.1',
+                'log-error'       => '/var/log/mysqld.log',
+                'max_connections' => 3000,
+              },
+              'mysqld_safe' => {
+                'log-error' => '/var/log/mysqld.log',
+              },
+            },
+          })
+        end
+      
+        it "check MySQL server is installed" do
+          is_expected.to contain_class('mysql::server').with(
+            :package_name => 'mysql-community-server',
+            :manage_config_file => true,
+            :service_name => 'mysqld',
+            :root_password => 'secret',
+            :override_options => {
+              'mysqld'      => {
+                'bind-address'    => '127.0.0.1',
+                'log-error'       => '/var/log/mysqld.log',
+                'max_connections' => 3000,
+              },
+              'mysqld_safe' => {
+                'log-error' => '/var/log/mysqld.log',
+              },
+            },
+          )
+        end
+
+        it 'check mysql client is installed' do
+          is_expected.to contain_class('mysql::client').with(
+            :package_name => 'mysql-community-client',
+          )
+        end
+
+        it "check db scripts exist" do
+          storm_db='/tmp/storm_db.sql'
+          is_expected.to contain_file(storm_db).with( 
+            :ensure => 'present',
+          )
+          storm_be_isam='/tmp/storm_be_ISAM.sql'
+          is_expected.to contain_file(storm_be_isam).with( 
+            :ensure => 'present',
+          )
+        end
+
+        it "check storm db creation" do
+          is_expected.to contain_mysql__db('storm_db').with(
+            :user => 'storm',
+            :password => 'bluemoon',
+            :host => 'storm.example.org',
+            :grant => 'ALL',
+            :sql => '/tmp/storm_db.sql',
+          )
+        end
+
+        it "check grants on storm_db" do
+          is_expected.to contain_mysql_grant('storm@storm/storm_db.*').with(
+            :privileges => 'ALL',
+            :provider   => 'mysql',
+            :user       => "storm@storm",
+            :table      => 'storm_db.*',
+          )
+          is_expected.to contain_mysql_grant('storm@localhost/storm_db.*').with(
+            :privileges => 'ALL',
+            :provider   => 'mysql',
+            :user       => "storm@localhost",
+            :table      => 'storm_db.*',
+          )
+          is_expected.to contain_mysql_grant('storm@%/storm_db.*').with(
+            :privileges => 'ALL',
+            :provider   => 'mysql',
+            :user       => "storm@%",
+            :table      => 'storm_db.*',
+          )
+        end
+
+        it "check storm be ISAM db creation" do
+          is_expected.to contain_mysql__db('storm_be_ISAM').with(
+            :user => 'storm',
+            :password => 'bluemoon',
+            :host => 'storm.example.org',
+            :grant => 'ALL',
+            :sql => '/tmp/storm_be_ISAM.sql',
+          )
+        end
+
+        it "check grants on storm_be_ISAM" do
+          is_expected.to contain_mysql_grant('storm@storm/storm_be_ISAM.*').with(
+            :privileges => 'ALL',
+            :provider   => 'mysql',
+            :user       => "storm@storm",
+            :table      => 'storm_be_ISAM.*',
+          )
+          is_expected.to contain_mysql_grant('storm@localhost/storm_be_ISAM.*').with(
+            :privileges => 'ALL',
+            :provider   => 'mysql',
+            :user       => "storm@localhost",
+            :table      => 'storm_be_ISAM.*',
+          )
+          is_expected.to contain_mysql_grant('storm@%/storm_be_ISAM.*').with(
+            :privileges => 'ALL',
+            :provider   => 'mysql',
+            :user       => "storm@%",
+            :table      => 'storm_be_ISAM.*',
+          )
+        end
+
+        it "check users" do
+          is_expected.to contain_mysql_user('storm@storm')
+          is_expected.to contain_mysql_user('storm@localhost')
+          is_expected.to contain_mysql_user('storm@%')
+        end
+      end
+        
     end
   end
 end

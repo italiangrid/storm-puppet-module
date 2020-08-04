@@ -6,11 +6,12 @@ class storm::backend::config (
 
   $install_native_libs_gpfs = $storm::backend::install_native_libs_gpfs,
 
-  $install_mysql_and_create_database = $storm::backend::install_mysql_and_create_database,
+  $db_username = $storm::backend::db_username,
+  $db_password = $storm::backend::db_password,
 
-  $db_root_password = $storm::backend::db_root_password,
-  $db_storm_username = $storm::backend::db_storm_username,
-  $db_storm_password = $storm::backend::db_storm_password,
+  $mysql_server_install = $storm::backend::mysql_server_install,
+  $mysql_server_root_password = $storm::backend::mysql_server_root_password,
+  $mysql_server_override_options = $storm::backend::mysql_server_override_options,
 
   $xroot_hostname = $storm::backend::xroot_hostname,
   $xroot_port = $storm::backend::xroot_port,
@@ -146,17 +147,6 @@ class storm::backend::config (
   $namespace_file='/etc/storm/backend-server/namespace.xml'
   $properties_file='/etc/storm/backend-server/storm.properties'
 
-  if $install_mysql_and_create_database {
-    class { 'storm::db':
-      fqdn_hostname  => $hostname,
-      storm_username => $db_storm_username,
-      storm_password => $db_storm_password,
-      root_password  => $db_root_password,
-      notify         => Service['storm-backend-server'],
-      before         => [File[$namespace_file], File[$properties_file]],
-    }
-  }
-
   $namespace_template_file='storm/etc/storm/backend-server/namespace.xml.erb'
 
   file { $namespace_file:
@@ -208,4 +198,5 @@ class storm::backend::config (
     group   => 'storm',
     notify  => [Exec['configure-info-provider']],
   }
+
 }

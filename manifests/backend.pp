@@ -4,8 +4,8 @@
 # @example Example of usage
 #    class { 'storm::backend':
 #      hostname => 'backend.test.example',
-#      db_root_password  => 'storm',
-#      db_storm_password => 'bluemoon',
+#      db_user => 'storm',
+#      db_password => 'bluemoon',
 #      srm_pool_members => [
 #        {
 #          'hostname' => 'frontend.test.example',
@@ -40,16 +40,19 @@
 # @param install_native_libs_gpfs
 #   Set this if you need to install storm-native-libs-gpfs. Default: false.
 #
-# @param install_mysql_and_create_database
-#   Set this to true if you need to install MySQL and create StoRM database. Default: false.
+# @param mysql_server_install
+#   Install MySQL server on the same host. Default: false.
 #
-# @param db_root_password
-#   MySQL root user password
+# @param mysql_server_root_password
+#   Used to configure MySQL server in case mysql_server_install is true. Default: 'storm'.
 #
-# @param db_storm_username
+# @param mysql_server_override_options
+#   Used to configure MySQL server in case mysql_server_install is true. 
+#
+# @param db_username
 #   The name of user used to connect to local database. Default: storm
 #
-# @param db_storm_password
+# @param db_password
 #   Password for the user in `db_storm_username`. Default: bluemoon
 #
 # @param xroot_hostname
@@ -302,12 +305,14 @@ class storm::backend (
   # Install native libs gpfs
   Boolean $install_native_libs_gpfs = $storm::backend::params::install_native_libs_gpfs,
 
-  # Install MySQL and/or create database
-  Boolean $install_mysql_and_create_database = $storm::backend::params::install_mysql_and_create_database,
-  String $db_root_password = $storm::backend::params::db_root_password,
   # Db connection
-  String $db_storm_username = $storm::backend::params::db_storm_username,
-  String $db_storm_password = $storm::backend::params::db_storm_password,
+  String $db_username = $storm::backend::params::db_username,
+  String $db_password = $storm::backend::params::db_password,
+
+  # MySQL Server options
+  Boolean $mysql_server_install = $storm::backend::params::mysql_server_install,
+  String $mysql_server_root_password = $storm::backend::params::mysql_server_root_password,
+  Data $mysql_server_override_options = $storm::backend::params::mysql_server_override_options,
 
   ### Default values for Storage Areas
   # 1. xroot
@@ -444,10 +449,12 @@ class storm::backend (
 ) inherits storm::backend::params {
 
   contain storm::backend::install
+  contain storm::backend::configdb
   contain storm::backend::config
   contain storm::backend::service
 
   Class['storm::backend::install']
+  -> Class['storm::backend::configdb']
   -> Class['storm::backend::config']
   -> Class['storm::backend::service']
 }

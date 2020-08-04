@@ -10,7 +10,7 @@ describe 'storm::backend::install' do
         let(:pre_condition) do
           <<-EOF
             class { 'storm::backend':
-              hostname => 'foo',
+              hostname => 'storm.example.org',
             }
           EOF
         end
@@ -33,7 +33,7 @@ describe 'storm::backend::install' do
         let(:pre_condition) do
           <<-EOF
             class { 'storm::backend':
-              hostname => 'foo',
+              hostname => 'storm.example.org',
               fs_type => 'gpfs',
             }
           EOF
@@ -51,7 +51,7 @@ describe 'storm::backend::install' do
         let(:pre_condition) do
           <<-EOF
             class { 'storm::backend':
-              hostname => 'foo',
+              hostname => 'storm.example.org',
               storage_areas => [
                 {
                   name => 'test.vo',
@@ -81,7 +81,7 @@ describe 'storm::backend::install' do
         let(:pre_condition) do
           <<-EOF
             class { 'storm::backend':
-              hostname => 'foo',
+              hostname => 'storm.example.org',
               install_native_libs_gpfs => true,
               fs_type => 'gpfs',
             }
@@ -106,7 +106,7 @@ describe 'storm::backend::install' do
         let(:pre_condition) do
           <<-EOF
             class { 'storm::backend':
-              hostname => 'foo',
+              hostname => 'storm.example.org',
               install_native_libs_gpfs => true,
               storage_areas => [
                 {
