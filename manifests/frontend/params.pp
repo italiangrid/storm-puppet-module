@@ -3,7 +3,6 @@
 class storm::frontend::params (
 ) inherits storm::params {
 
-  $db_host = lookup('storm::frontend::db::host', String, undef, 'localhost')
   $db_user = lookup('storm::frontend::db::user', String, undef, 'storm')
   $db_passwd = lookup('storm::frontend::db::passwd', String, undef, 'storm')
 
@@ -12,7 +11,6 @@ class storm::frontend::params (
   $threadpool_maxpending = lookup('storm::frontend::threadpool.maxpending', Integer, undef, 200)
   $gsoap_maxpending = lookup('storm::frontend::gsoap_maxpending', Integer, undef, 1000)
 
-  $be_xmlrpc_host = lookup('storm::frontend::be_xmlrpc_host', String, undef, 'localhost')
   $be_xmlrpc_token = lookup('storm::frontend::be_xmlrpc_token', String, undef, 'token')
   $be_xmlrpc_port = lookup('storm::frontend::be_xmlrpc_port', Integer, undef, 8080)
   $be_xmlrpc_path = lookup('storm::frontend::be_xmlrpc_path', String, undef, '/RPC2')

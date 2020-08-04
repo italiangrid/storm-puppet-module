@@ -10,8 +10,23 @@
 #      db_passwd       => 'secret',
 #    }
 #
+# @param be_xmlrpc_host
+#   Backend hostname. Required.
+#
+# @param be_xmlrpc_port
+#   Backend XML-RPC server port. Default is 8080.
+#
+# @param be_xmlrpc_token
+#   Token used for communicating with Backend service. Mandatory, has no default.
+#
+# @param be_xmlrpc_path
+#   XML-RPC server path. Default is /RPC2.
+#
+# @param be_recalltable_port
+#   REST server port running on the Backend machine. Default is 9998.
+#
 # @param db_host
-#   Host for database connection. Default is localhost.
+#   Host for database connection. Default is set to be_xmlrpc_host.
 #
 # @param db_user
 #   User for database connection. Default is storm.
@@ -30,21 +45,6 @@
 #
 # @param gsoap_maxpending
 #   Size of the GSOAP queue used to maintain pending SRM requests. Default is 1000.
-#
-# @param be_xmlrpc_host
-#   Backend hostname. Default is localhost.
-#
-# @param be_xmlrpc_port
-#   Backend XML-RPC server port. Default is 8080.
-#
-# @param be_xmlrpc_token
-#   Token used for communicating with Backend service. Mandatory, has no default.
-#
-# @param be_xmlrpc_path
-#   XML-RPC server path. Default is /RPC2.
-#
-# @param be_recalltable_port
-#   REST server port running on the Backend machine. Default is 9998.
 #
 # @param check_user_blacklisting
 #   Enable/disable user blacklisting. Default is false.
@@ -78,7 +78,13 @@
 #
 class storm::frontend (
 
-  String $db_host = $storm::frontend::params::db_host,
+  String $be_xmlrpc_host,
+  String $be_xmlrpc_token = $storm::frontend::params::be_xmlrpc_token,
+  Integer $be_xmlrpc_port = $storm::frontend::params::be_xmlrpc_port,
+  String $be_xmlrpc_path = $storm::frontend::params::be_xmlrpc_path,
+  Integer $be_recalltable_port = $storm::frontend::params::be_recalltable_port,
+
+  String $db_host = lookup('storm::frontend::db::host', String, undef, $be_xmlrpc_host),
   String $db_user = $storm::frontend::params::db_user,
   String $db_passwd = $storm::frontend::params::db_passwd,
 
@@ -86,13 +92,6 @@ class storm::frontend (
   Integer $threadpool_threads_number = $storm::frontend::params::threadpool_threads_number,
   Integer $threadpool_maxpending = $storm::frontend::params::threadpool_maxpending,
   Integer $gsoap_maxpending = $storm::frontend::params::gsoap_maxpending,
-
-  String $be_xmlrpc_host = $storm::frontend::params::be_xmlrpc_host,
-  String $be_xmlrpc_token = $storm::frontend::params::be_xmlrpc_token,
-  Integer $be_xmlrpc_port = $storm::frontend::params::be_xmlrpc_port,
-  String $be_xmlrpc_path = $storm::frontend::params::be_xmlrpc_path,
-
-  Integer $be_recalltable_port = $storm::frontend::params::be_recalltable_port,
 
   Boolean $check_user_blacklisting = $storm::frontend::params::check_user_blacklisting,
   String $argus_pepd_endpoint = $storm::frontend::params::argus_pepd_endpoint,
