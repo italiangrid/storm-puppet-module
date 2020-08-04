@@ -8,7 +8,7 @@ class storm::backend::params (
 
   # Db connection
   $db_username = lookup('storm::backend::db_username', String, undef, 'storm')
-  $db_password = lookup('storm::backend::db_password', String, undef, 'bluemoon')
+  $db_password = lookup('storm::backend::db_password', String, undef, 'storm')
 
   # Db MySQL server
   $mysql_server_install = lookup('storm::backend::mysql_server_install', Boolean, undef, false)

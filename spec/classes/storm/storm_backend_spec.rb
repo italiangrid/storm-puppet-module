@@ -418,7 +418,7 @@ describe 'storm::backend', :type => :class do
         it "check storm db creation" do
           is_expected.to contain_mysql__db('storm_db').with(
             :user => 'storm',
-            :password => 'bluemoon',
+            :password => 'storm',
             :host => 'storm.example.org',
             :grant => 'ALL',
             :sql => '/tmp/storm_db.sql',
@@ -449,7 +449,7 @@ describe 'storm::backend', :type => :class do
         it "check storm be ISAM db creation" do
           is_expected.to contain_mysql__db('storm_be_ISAM').with(
             :user => 'storm',
-            :password => 'bluemoon',
+            :password => 'storm',
             :host => 'storm.example.org',
             :grant => 'ALL',
             :sql => '/tmp/storm_be_ISAM.sql',
