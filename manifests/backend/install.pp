@@ -4,11 +4,6 @@ class storm::backend::install (
 
 ) {
 
-  ## StoRM Backend
-  package { 'storm-backend-mp':
-    ensure  => installed,
-  }
-
   ## MySQL
   $basearch = 'x86_64'
   $el = $::operatingsystemmajrelease
@@ -40,6 +35,12 @@ class storm::backend::install (
       require            => Yumrepo['repo.mysql.com'],
       override_options   => $storm::backend::mysql_server_override_options,
     }
+  }
+
+  ## StoRM Backend
+  package { 'storm-backend-mp':
+    ensure  => installed,
+    require => Yumrepo['repo.mysql.com'],
   }
 
   if $storm::backend::install_native_libs_gpfs {
