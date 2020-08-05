@@ -21,6 +21,7 @@
 * [`storm::gridftp::install`](#stormgridftpinstall): StoRM GridFTP install class
 * [`storm::gridftp::params`](#stormgridftpparams): StoRM GridFTP params class
 * [`storm::gridftp::service`](#stormgridftpservice): StoRM GridFTP service class
+* [`storm::gridmap`](#stormgridmap): Utility class used to create gridmap dir, grid-mapfile, groupmapfile and pool accounts
 * [`storm::params`](#stormparams): StoRM params class
 * [`storm::repo`](#stormrepo): Choose which StoRM repository you want to intall and enable. Also a custom list of repository URL can be specified.
 * [`storm::storage`](#stormstorage): Init testbed storage area's directories
@@ -73,7 +74,7 @@ StoRM Backend puppet module
 ```puppet
 class { 'storm::backend':
   hostname => 'backend.test.example',
-  db_user => 'storm',
+  db_username => 'storm',
   db_password => 'bluemoon',
   srm_pool_members => [
     {
@@ -1549,13 +1550,51 @@ class { 'storm::frontend':
 
 The following parameters are available in the `storm::frontend` class.
 
+##### `be_xmlrpc_host`
+
+Data type: `String`
+
+Backend hostname. Required.
+
+##### `be_xmlrpc_port`
+
+Data type: `Integer`
+
+Backend XML-RPC server port. Default is 8080.
+
+Default value: $storm::frontend::params::be_xmlrpc_port
+
+##### `be_xmlrpc_token`
+
+Data type: `String`
+
+Token used for communicating with Backend service. Mandatory, has no default.
+
+Default value: $storm::frontend::params::be_xmlrpc_token
+
+##### `be_xmlrpc_path`
+
+Data type: `String`
+
+XML-RPC server path. Default is /RPC2.
+
+Default value: $storm::frontend::params::be_xmlrpc_path
+
+##### `be_recalltable_port`
+
+Data type: `Integer`
+
+REST server port running on the Backend machine. Default is 9998.
+
+Default value: $storm::frontend::params::be_recalltable_port
+
 ##### `db_host`
 
 Data type: `String`
 
-Host for database connection. Default is localhost.
+Host for database connection. Default is set to be_xmlrpc_host.
 
-Default value: $storm::frontend::params::db_host
+Default value: lookup('storm::frontend::db::host', String, undef, $be_xmlrpc_host)
 
 ##### `db_user`
 
@@ -1604,46 +1643,6 @@ Data type: `Integer`
 Size of the GSOAP queue used to maintain pending SRM requests. Default is 1000.
 
 Default value: $storm::frontend::params::gsoap_maxpending
-
-##### `be_xmlrpc_host`
-
-Data type: `String`
-
-Backend hostname. Default is localhost.
-
-Default value: $storm::frontend::params::be_xmlrpc_host
-
-##### `be_xmlrpc_port`
-
-Data type: `Integer`
-
-Backend XML-RPC server port. Default is 8080.
-
-Default value: $storm::frontend::params::be_xmlrpc_port
-
-##### `be_xmlrpc_token`
-
-Data type: `String`
-
-Token used for communicating with Backend service. Mandatory, has no default.
-
-Default value: $storm::frontend::params::be_xmlrpc_token
-
-##### `be_xmlrpc_path`
-
-Data type: `String`
-
-XML-RPC server path. Default is /RPC2.
-
-Default value: $storm::frontend::params::be_xmlrpc_path
-
-##### `be_recalltable_port`
-
-Data type: `Integer`
-
-REST server port running on the Backend machine. Default is 9998.
-
-Default value: $storm::frontend::params::be_recalltable_port
 
 ##### `check_user_blacklisting`
 
@@ -2128,6 +2127,61 @@ StoRM GridFTP params class
 
 StoRM GridFTP service class
 
+### storm::gridmap
+
+Utility class used to create gridmap dir, grid-mapfile, groupmapfile and pool accounts
+
+#### Parameters
+
+The following parameters are available in the `storm::gridmap` class.
+
+##### `gridmapdir_owner`
+
+Data type: `String`
+
+
+
+Default value: 'storm'
+
+##### `gridmapdir_group`
+
+Data type: `String`
+
+
+
+Default value: 'storm'
+
+##### `gridmapdir_mode`
+
+Data type: `String`
+
+
+
+Default value: '0770'
+
+##### `gridmap_data`
+
+Data type: `Array[Data]`
+
+
+
+Default value: [{
+    'vo' => 'test.vo',
+    'group' => 'testvo',
+    'pool_name' => 'tstvo',
+    'pool_size' => 20,
+    'pool_base_uid' => 7100,
+    'pool_gid' => 7100,
+
+  },{
+    'vo' => 'test.vo.2',
+    'group' => 'testvodue',
+    'pool_name' => 'testdue',
+    'pool_size' => 20,
+    'pool_base_uid' => 8100,
+    'pool_gid' => 8100,
+  }]
+
 ### storm::params
 
 storm class default parameters
@@ -2250,7 +2304,7 @@ Data type: `Accounts::Group::Hash`
 
 
 
-Default value: {}
+Default value: { }
 
 ##### `users`
 
@@ -2259,11 +2313,18 @@ Data type: `Accounts::User::Hash`
 
 
 Default value: {
+    'edguser' => {
+      'comment' => 'Edguser user',
+      'groups'  => [ edguser, storm, ],
+      'uid'     => '1101',
+      'gid'     => '1101',
+      'home'    => '/home/edguser',
+    },
     'storm' => {
       'comment' => 'StoRM user',
-      'groups'  => [ storm, edguser ],
-      'uid'     => '991',
-      'gid'     => '991',
+      'groups'  => [ storm, edguser, ],
+      'uid'     => '1100',
+      'gid'     => '1100',
       'home'    => '/home/storm',
     },
   }
