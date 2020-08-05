@@ -234,6 +234,19 @@ describe 'storm::backend', :type => :class do
   
         end
 
+        it "check log directory" do
+          is_expected.to contain_file('/var/log/storm').with( 
+            :ensure => 'directory',
+            :owner  => 'storm',
+            :group  => 'storm',
+            :mode   => '0755',
+          )
+        end
+
+        it "check backend reload" do
+          is_expected.to contain_exec('backend-daemon-reload')
+        end
+
       end
 
       context 'with custom db username and password' do

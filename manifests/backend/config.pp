@@ -144,6 +144,17 @@ class storm::backend::config (
     }
   }
 
+  # Service's log directory
+  if !defined(File['/var/log/storm']) {
+    file { '/var/log/storm':
+      ensure  => directory,
+      owner   => 'storm',
+      group   => 'storm',
+      mode    => '0755',
+      recurse => true,
+    }
+  }
+
   $namespace_file='/etc/storm/backend-server/namespace.xml'
   $properties_file='/etc/storm/backend-server/storm.properties'
 
