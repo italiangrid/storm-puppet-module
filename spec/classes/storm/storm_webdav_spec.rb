@@ -220,6 +220,20 @@ describe 'storm::webdav', :type => :class do
             :content => /^LimitNOFILE=1046/,
           )
         end
+
+        it "check log directory" do
+          is_expected.to contain_file('/var/log/storm').with( 
+            :ensure => 'directory',
+            :owner  => 'storm',
+            :group  => 'storm',
+            :mode   => '0755',
+          )
+        end
+
+        it "check webdav reload" do
+          is_expected.to contain_exec('webdav-daemon-reload')
+        end
+
       end
 
       context "Test conscrypt enabled configuration" do

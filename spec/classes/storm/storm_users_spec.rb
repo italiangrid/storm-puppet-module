@@ -10,23 +10,35 @@ describe 'storm::users', :type => :class do
         facts
       end
 
-      context 'Check default storm user' do
+      context 'with default storm::users' do
 
         it "check storm user" do
 
           is_expected.to contain_accounts__user('storm').with(
             :ensure => 'present',
-            :uid    => 991,
-            :gid    => 991,
+            :uid    => 1100,
+            :gid    => 1100,
             :group  => 'storm',
             :home   => '/home/storm',
             :groups => ['storm', 'edguser'],
           )
         end
 
+        it "check edguser user" do
+
+          is_expected.to contain_accounts__user('edguser').with(
+            :ensure => 'present',
+            :uid    => 1101,
+            :gid    => 1101,
+            :group  => 'edguser',
+            :home   => '/home/edguser',
+            :groups => ['edguser', 'storm'],
+          )
+        end
+
       end
 
-      context 'Test custom storm user' do
+      context 'with custom storm::users' do
         let(:params) do 
           {
             'users'    => {
