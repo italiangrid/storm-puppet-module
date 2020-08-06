@@ -9,18 +9,17 @@ class storm::gridmap (
   Array[Data] $gridmap_data = [{
     'vo' => 'test.vo',
     'group' => 'testvo',
+    'gid' => 7100,
     'pool_name' => 'tstvo',
     'pool_size' => 20,
     'pool_base_uid' => 7100,
-    'pool_gid' => 7100,
-
   },{
     'vo' => 'test.vo.2',
     'group' => 'testvodue',
+    'gid' => 8100,
     'pool_name' => 'testdue',
     'pool_size' => 20,
     'pool_base_uid' => 8100,
-    'pool_gid' => 8100,
   }],
 
 ) {
@@ -39,22 +38,29 @@ class storm::gridmap (
   }
 
   $gridmap_data.each | $g | {
+
+    group { $g['group']:
+      ensure => present,
+      gid    => $g['gid'],
+    }
+
     range('1', $g['pool_size']).each | $id | {
 
       $id_str = sprintf('%03d', $id)
       $name = "${g['pool_name']}${id_str}"
 
       user { $name:
-        ensure     => 'present',
+        ensure     => present,
         uid        => $g['pool_base_uid'] + $id,
-        gid        => $g['pool_gid'],
+        gid        => $g['gid'],
         groups     => [$g['group']],
         comment    => "Mapped user for ${g['vo']}",
         managehome => true,
+        require    => [Group[$g['group']]],
       }
 
       file { "${gridmap_dir}/${name}":
-        ensure  => 'present',
+        ensure  => present,
         require => File[$gridmap_dir],
         owner   => $gridmapdir_owner,
         group   => $gridmapdir_group,
