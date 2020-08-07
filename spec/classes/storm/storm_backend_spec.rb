@@ -123,7 +123,7 @@ describe 'storm::backend', :type => :class do
           is_expected.to contain_file(title).with( :content => /transit.interval=300/ )
           is_expected.to contain_file(title).with( :content => /transit.delay=10/ )
           is_expected.to contain_file(title).with( :content => /extraslashes.file=/ )
-          is_expected.to contain_file(title).with( :content => /extraslashes.root=/ )
+          is_expected.to contain_file(title).with( :content => /extraslashes.root=\// )
           is_expected.to contain_file(title).with( :content => /extraslashes.gsiftp=\// )
           is_expected.to contain_file(title).with( :content => /persistence.internal-db.connection-pool=true/ )
           is_expected.to contain_file(title).with( :content => /persistence.internal-db.connection-pool.maxActive=200/ )

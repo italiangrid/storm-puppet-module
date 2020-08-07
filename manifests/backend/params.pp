@@ -99,7 +99,7 @@ class storm::backend::params (
 
   # extraslashes
   $extraslashes_file = lookup('storm::backend::extraslashes_file', String, undef, '')
-  $extraslashes_root = lookup('storm::backend::extraslashes_root', String, undef, '')
+  $extraslashes_root = lookup('storm::backend::extraslashes_root', String, undef, '/')
   $extraslashes_gsiftp = lookup('storm::backend::extraslashes_gsiftp', String, undef, '/')
 
   # Db Connection Pool
