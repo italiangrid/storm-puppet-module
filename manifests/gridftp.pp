@@ -46,6 +46,7 @@
 #
 # @param load_storm_dsi_module
 #   Enable/Disable StoRM DSI module. Default: true (enabled)
+#
 class storm::gridftp (
 
   Integer $port = $storm::gridftp::params::port,

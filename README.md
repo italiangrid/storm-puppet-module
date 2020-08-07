@@ -247,8 +247,6 @@ The main StoRM WebDAV configuration parameters are:
 - `hostnames`: the list of hostname and aliases supported for Third-Party-Copy.
 - `http_port` and `https_port`: the service ports. Default: **8085**, **8443**.
 
-Read more about StoRM WebDAV configuration parameters at the [online documentation](https://italiangrid.github.io/storm-puppet-module/puppet_classes/storm_3A_3Awebdav.html).
-
 The [`Storm::Webdav::StorageArea`](https://italiangrid.github.io/storm-puppet-module/puppet_data_type_aliases/Storm_3A_3AWebdav_3A_3AStorageArea.html) type :
 
 - `name`: The name of the storage area. **Required**.
@@ -293,6 +291,22 @@ class { 'storm::webdav':
 Check [here](https://italiangrid.github.io/storm-puppet-module/puppet_classes/storm_3A_3Awebdav.html) for all WebDAV class options.
 
 ### StoRM GridFTP component
+
+The StoRM GridFTP configuration parameters are:
+
+- `port`: the port used by GridFTP server service. Default: **2811**.
+- `port_range`: the range of ports used by transfer sockets; format is 'MIN,MAX'. Default: **'20000,25000'**.
+- `connections_max`: the number of max allowed connections to server. Default: **2000**.
+- `redirect_lcmaps_log`: If true, redirect the LCMAPS log to the file specified by `llgt_log_file`. Default: **false**.
+- `llgt_log_file`: The LCMAPS log file used if `redirect_lcmaps_log` is true. Default: **'/var/log/storm/storm-gridftp-lcmaps.log'**.
+
+Other StoRM GridFTP configuration parameters:
+
+- `log_single`: Session log file path. Default is: **/var/log/storm/storm-gridftp-session.log**.
+- `log_transfer`: Transfer log file path. Default is: **/var/log/storm/storm-globus-gridftp.log**.
+- `lcmaps_debug_level`: The LCMAPS logging level. Values from 0 (ERROR) to 5 (DEBUG). Default: **3** (INFO).
+- `lcas_debug_level`: The LCAS logging level. Values from 0 (ERROR) to 5 (DEBUG). Default: **3** (INFO).
+- `load_storm_dsi_module`: Enable/Disable StoRM DSI module. Default: **true** (enabled).
 
 Example of StoRM Gridftp configuration:
 
