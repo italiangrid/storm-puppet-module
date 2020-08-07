@@ -1608,7 +1608,7 @@ Default value: $storm::frontend::params::db_user
 
 Data type: `String`
 
-Password for database connection. Default is password.
+Password for database connection. Default is storm.
 
 Default value: $storm::frontend::params::db_passwd
 

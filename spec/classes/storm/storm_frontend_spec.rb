@@ -55,7 +55,7 @@ describe 'storm::frontend', :type => :class do
             'security_enable_mapping'   => true,
             'security_enable_vomscheck' => false,
             'be_xmlrpc_host'            => 'storm.example.org',
-            'be_xmlrpc_token'           => 'secret',
+            'be_xmlrpc_token'           => 'token',
             'be_xmlrpc_port'            => 8086,
             'be_xmlrpc_path'            => '/RPC3',
             'be_recalltable_port'       => 9999,
@@ -83,7 +83,7 @@ describe 'storm::frontend', :type => :class do
           is_expected.to contain_file(title).with( :content => /security.enable.mapping=true/ )
           is_expected.to contain_file(title).with( :content => /security.enable.vomscheck=false/ )
           is_expected.to contain_file(title).with( :content => /be.xmlrpc.host=storm.example.org/ )
-          is_expected.to contain_file(title).with( :content => /be.xmlrpc.token=secret/ )
+          is_expected.to contain_file(title).with( :content => /be.xmlrpc.token=token/ )
           is_expected.to contain_file(title).with( :content => /be.xmlrpc.port=8086/ )
           is_expected.to contain_file(title).with( :content => /be.xmlrpc.path=\/RPC3/ )
           is_expected.to contain_file(title).with( :content => /be.recalltable.port=9999/ )
@@ -122,7 +122,7 @@ describe 'storm::frontend', :type => :class do
           is_expected.to contain_file(title).with( :content => /security.enable.mapping=false/ )
           is_expected.to contain_file(title).with( :content => /security.enable.vomscheck=true/ )
           is_expected.to contain_file(title).with( :content => /be.xmlrpc.host=storm.example.org/ )
-          is_expected.to contain_file(title).with( :content => /be.xmlrpc.token=token/ )
+          is_expected.to contain_file(title).with( :content => /be.xmlrpc.token=secret/ )
           is_expected.to contain_file(title).with( :content => /be.xmlrpc.port=8080/ )
           is_expected.to contain_file(title).with( :content => /be.xmlrpc.path=\/RPC2/ )
           is_expected.to contain_file(title).with( :content => /be.recalltable.port=9998/ )

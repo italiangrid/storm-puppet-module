@@ -32,7 +32,7 @@
 #   User for database connection. Default is storm.
 #
 # @param db_passwd
-#   Password for database connection. Default is password.
+#   Password for database connection. Default is storm.
 #
 # @param port
 #   Frontend service port. Default is 8444.
