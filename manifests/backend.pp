@@ -196,7 +196,7 @@
 #   Add extra slashes after the “authority” part of a TURL for file protocol. Defaul: ''
 #
 # @param extraslashes_root
-#   Add extra slashes after the “authority” part of a TURL for xroot protocol. Default: ''
+#   Add extra slashes after the “authority” part of a TURL for xroot protocol. Default: '/'
 #
 # @param extraslashes_gsiftp
 #   Add extra slashes after the “authority” part of a TURL for gsiftp protocol. Default: '/'

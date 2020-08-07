@@ -11,7 +11,7 @@ class storm::frontend::params (
   $threadpool_maxpending = lookup('storm::frontend::threadpool.maxpending', Integer, undef, 200)
   $gsoap_maxpending = lookup('storm::frontend::gsoap_maxpending', Integer, undef, 1000)
 
-  $be_xmlrpc_token = lookup('storm::frontend::be_xmlrpc_token', String, undef, 'token')
+  $be_xmlrpc_token = lookup('storm::frontend::be_xmlrpc_token', String, undef, 'secret')
   $be_xmlrpc_port = lookup('storm::frontend::be_xmlrpc_port', Integer, undef, 8080)
   $be_xmlrpc_path = lookup('storm::frontend::be_xmlrpc_path', String, undef, '/RPC2')
 

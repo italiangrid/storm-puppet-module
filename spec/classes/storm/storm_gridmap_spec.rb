@@ -46,6 +46,11 @@ describe 'storm::gridmap', :type => :class do
 
         it "check test.vo pool account users" do
 
+          is_expected.to contain_group('testvo').with(
+            :ensure => 'present',
+            :gid    => 7100,
+          )
+          
           (1..20).each do | i |
             name=sprintf('tstvo%03d', i)
             is_expected.to contain_user(name).with(
@@ -63,6 +68,11 @@ describe 'storm::gridmap', :type => :class do
         end
 
         it "check test.vo.2 pool account users" do
+
+          is_expected.to contain_group('testvodue').with(
+            :ensure => 'present',
+            :gid    => 8100,
+          )
 
           (1..20).each do | i |
             name=sprintf('testdue%03d', i)

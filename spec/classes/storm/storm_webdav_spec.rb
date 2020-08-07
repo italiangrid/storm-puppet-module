@@ -21,10 +21,7 @@ describe 'storm::webdav', :type => :class do
                 'access_points' => ['/test.vo'],
                 'vos' => ['test.vo', 'test.vo.2'],
                 'authenticated_read_enabled' => true,
-                'anonymous_read_enabled' => false,
                 'vo_map_enabled' => true,
-                'vo_map_grants_write_permission' => false,
-                'orgs_grant_write_permission' => false,
               },
               {
                 'name' => 'atlas',
@@ -32,9 +29,7 @@ describe 'storm::webdav', :type => :class do
                 'access_points' => ['/atlas', '/atlasdisk'],
                 'vos' => ['atlas'],
                 'orgs' => ['atlas'],
-                'authenticated_read_enabled' => false,
                 'anonymous_read_enabled' => true,
-                'vo_map_enabled' => false,
               },
             ],
             'oauth_issuers' => [
@@ -114,7 +109,7 @@ describe 'storm::webdav', :type => :class do
           is_expected.to contain_file(testvo_props).with( :content => /rootPath=\/storage\/test.vo/ )
           is_expected.to contain_file(testvo_props).with( :content => /accessPoints=\/test.vo/ )
           is_expected.to contain_file(testvo_props).with( :content => /vos=test.vo,test.vo.2/ )
-          is_expected.not_to contain_file(testvo_props).with( :content => /orgs=/ )
+          is_expected.to contain_file(testvo_props).with( :content => /orgs=/ )
           is_expected.to contain_file(testvo_props).with( :content => /authenticatedReadEnabled=true/ )
           is_expected.to contain_file(testvo_props).with( :content => /anonymousReadEnabled=false/ )
           is_expected.to contain_file(testvo_props).with( :content => /voMapEnabled=true/ )
@@ -134,8 +129,8 @@ describe 'storm::webdav', :type => :class do
           is_expected.to contain_file(atlas_props).with( :content => /authenticatedReadEnabled=false/ )
           is_expected.to contain_file(atlas_props).with( :content => /anonymousReadEnabled=true/ )
           is_expected.to contain_file(atlas_props).with( :content => /voMapEnabled=false/ )
-          is_expected.not_to contain_file(atlas_props).with( :content => /voMapGrantsWritePermission=/ )
-          is_expected.not_to contain_file(atlas_props).with( :content => /orgsGrantWritePermission=/ )
+          is_expected.to contain_file(atlas_props).with( :content => /voMapGrantsWritePermission=false/ )
+          is_expected.to contain_file(atlas_props).with( :content => /orgsGrantWritePermission=false/ )
           is_expected.to contain_file(atlas_props).that_notifies(['Service[storm-webdav]'])
         end
 
