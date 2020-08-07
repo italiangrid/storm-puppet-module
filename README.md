@@ -12,10 +12,10 @@
 StoRM Puppet module allows administrators to easily configure StoRM services.
 Currently, the supported services are:
 
+- StoRM Backend
+- StoRM Frontend
 - StoRM WebDAV
 - StoRM Globus GridFTP server
-- StoRM Frontend
-- StoRM Backend
 
 ## Setup
 
@@ -36,90 +36,17 @@ puppet module install ./pkg/cnafsd-storm-*.tar.gz
 
 ## Usage
 
-With this Puppet module, administrators can configure StoRM services, users and storage directories if needed.
+With this Puppet module, administrators can configure StoRM services. 
+Some utility classes are also provided to configure users, storage directories and pool accounts, if needed.
 
-### Customize StoRM users
+* [StoRM Backend component](#storm-backend-component)
+* [StoRM Frontend component](#storm-frontend-component)
+* [StoRM WebDAV component](#storm-webdav-component)
+* [StoRM GridFTP component](#storm-gridftp-component)
+* [StoRM users utility class](#storm-users-utility-class)
+* [StoRM storage utility class](#storm-storage-utility-class)
 
-To create the default StoRM users and groups use `storm::users` class.
-
-Use:
-
-```
-class { 'storm::users': }
-```
-
-to create default scenario:
-
-- `storm` group with id 991
-- `edguser` group with id 995
-- `infosys` group with id 996
-- `storm` user with id 991, member of `storm` and `edguser` groups
-- `edguser` user with id 995
-
-Check [here](https://italiangrid.github.io/storm-puppet-module/puppet_classes/storm_3A_3Ausers.html) for all the class options.
-
-### Customize StoRM WebDAV component
-
-Example of StoRM WebDAV configuration:
-
-```
-class { 'storm::webdav':
-  storage_areas => [
-    {
-      name                       => 'test.vo',
-      root_path                  => '/storage/test.vo',
-      access_points              => ['/test.vo'],
-      vos                        => ['test.vo'],
-      authenticated_read_enabled => false,
-      anonymous_read_enabled     => false,
-      vo_map_enabled             => false,
-    },
-    {
-      name                       => 'test.vo.2',
-      root_path                  => '/storage/test.vo.2',
-      access_points              => ['/test.vo.2'],
-      vos                        => ['test.vo.2'],
-      authenticated_read_enabled => true,
-      anonymous_read_enabled     => false,
-      vo_map_enabled             => false,
-    },
-  ],
-  hostnames => ['storm-webdav.example.org', 'alias-for-storm-webdav.example.org'],
-}
-```
-
-Check [here](https://italiangrid.github.io/storm-puppet-module/puppet_classes/storm_3A_3Awebdav.html) for all WebDAV class options.
-
-### Customize StoRM GridFTP component
-
-Example of StoRM Gridftp configuration:
-
-```
-class { 'storm::gridftp':
-  redirect_lcmaps_log => true,
-  llgt_log_file       => '/var/log/storm/storm-gridftp-lcmaps.log',
-}
-```
-
-Check [here](https://italiangrid.github.io/storm-puppet-module/puppet_classes/storm_3A_3Agridftp.html) for all GridFTP class options.
-
-### Customize StoRM Frontend component
-
-Example of StoRM Frontend configuration:
-
-```
-class { 'storm::frontend':
-  be_xmlrpc_host  => 'storm-backend.example',
-  be_xmlrpc_token => 'secret',
-  db_host         => 'storm-backend.example',
-  db_user         => 'storm',
-  db_passwd       => 'secret',
-}
-```
-
-Check [here](https://italiangrid.github.io/storm-puppet-module/puppet_classes/storm_3A_3Afrontend.html) for all Frontend class options.
-
-### Customize StoRM Backend component
+### StoRM Backend component
 
 StoRM Backend class:
 
@@ -238,6 +165,168 @@ class { 'storm::backend':
   ],
 }
 ```
+
+### StoRM Frontend component
+
+Example of StoRM Frontend configuration:
+
+```
+class { 'storm::frontend':
+  be_xmlrpc_host  => 'storm-backend.example',
+  be_xmlrpc_token => 'secret',
+  db_host         => 'storm-backend.example',
+  db_user         => 'storm',
+  db_passwd       => 'secret',
+}
+```
+
+Check [here](https://italiangrid.github.io/storm-puppet-module/puppet_classes/storm_3A_3Afrontend.html) for all Frontend class options.
+
+### StoRM WebDAV component
+
+The main StoRM WebDAV configuration parameters are:
+
+- `storage_areas`: the list of `Storm::Webdav::StorageArea` elements (more info below).
+- `oauth_issuers`: the list of `Storm::Webdav::OAuthIssuer` elements that means the supported OAuth providers (more info below).
+- `hostnames`: the list of hostname and aliases supported for Third-Party-Copy.
+- `http_port` and `https_port`: the service ports. Default: **8085**, **8443**.
+
+Read more about StoRM WebDAV configuration parameters at the [online documentation](https://italiangrid.github.io/storm-puppet-module/puppet_classes/storm_3A_3Awebdav.html).
+
+The [`Storm::Webdav::StorageArea`](https://italiangrid.github.io/storm-puppet-module/puppet_data_type_aliases/Storm_3A_3AWebdav_3A_3AStorageArea.html) type :
+
+- `name`: The name of the storage area. **Required**.
+- `root_path`: The path of the storage area root directory. **Required**.
+- `access_points`: A list of logic path used to access storage area's root. **Required**.
+- `vos`: A list of one or more Virtual Organization names of the users allowed to read/write into the storage area. **Required**.
+- `orgs`: A list of one or more Organizations. Optional. Default: ''.
+- `authenticated_read_enabled`: A boolean value used to enable the read of the storage area content to authenticated users. Optional. Default: `false`.
+- `anonymous_read_enabled`: A boolean value used to enable anonymous read access to storage area content. Optional. Default: `false`.
+- `vo_map_enabled`: A boolean value used to enable the use of the VO gridmap files. Optional. Default: `false`.
+- `vo_map_grants_write_access`: A boolean value used to grant write access to the VO users read from gridmap file. Optional. Default: `false`.
+- `orgs_grant_write_permission`: A boolean value used to grant write access to the members of the organizations defined with `orgs`. Optional. Default: `false`.
+
+The [`Storm::Webdav::OAuthIssuer`](https://italiangrid.github.io/storm-puppet-module/puppet_data_type_aliases/Storm_3A_3AWebdav_3A_3AOAuthIssuer.html) type:
+
+- `name`: the organization name. **Required**.
+- `issuer`: the issuer URL. **Required**.
+
+Example of StoRM WebDAV configuration:
+
+```
+class { 'storm::webdav':
+  storage_areas => [
+    {
+      name                       => 'test.vo',
+      root_path                  => '/storage/test.vo',
+      access_points              => ['/test.vo'],
+      vos                        => ['test.vo'],
+    },
+    {
+      name                       => 'test.vo.2',
+      root_path                  => '/storage/test.vo.2',
+      access_points              => ['/test.vo.2'],
+      vos                        => ['test.vo.2'],
+      authenticated_read_enabled => true,
+    },
+  ],
+  hostnames => ['storm-webdav.example.org', 'alias-for-storm-webdav.example.org'],
+}
+```
+
+Check [here](https://italiangrid.github.io/storm-puppet-module/puppet_classes/storm_3A_3Awebdav.html) for all WebDAV class options.
+
+### StoRM GridFTP component
+
+Example of StoRM Gridftp configuration:
+
+```
+class { 'storm::gridftp':
+  redirect_lcmaps_log => true,
+  llgt_log_file       => '/var/log/storm/storm-gridftp-lcmaps.log',
+}
+```
+
+Check [here](https://italiangrid.github.io/storm-puppet-module/puppet_classes/storm_3A_3Agridftp.html) for all GridFTP class options.
+
+### StoRM users utility class
+
+To create the default StoRM users and groups you can use the `storm::users` utility class.
+
+Use:
+
+```
+include storm::users
+```
+
+to create default scenario:
+
+- `storm` group with id 1100
+- `edguser` group with id 1101
+- `storm` user with id 1100, member of `storm` and `edguser` groups
+- `edguser` user with id 1101, member of `edguser` and `storm` groups
+
+You can also customize and create your own users and groups as follow:
+
+```
+class { 'storm::users':
+  groups => {
+    infosys => {
+      gid => '996',
+    },
+  },
+  users  => {
+    edguser => {
+      comment => 'Edguser user',
+      groups  => [ edguser, infosys, storm, ],
+      uid     => '995',
+      gid     => '995',
+      home    => '/home/edguser',
+    },
+    storm   => {
+      comment => 'StoRM user',
+      groups  => [ storm, edguser, ],
+      uid     => '991',
+      gid     => '991',
+      home    => '/home/storm',
+    },
+  },
+}
+```
+
+Check [here](https://italiangrid.github.io/storm-puppet-module/puppet_classes/storm_3A_3Ausers.html) for all the class options.
+
+### StoRM storage utility class
+
+To create the root directories of your storage areas, you can use the `storm::storage` utility class.
+It's mainly used for test purposes. We expected not to use this class on production.
+
+Use:
+
+```
+include storm::storage
+```
+
+to create `/storage` directory owned by 'storm' user and '755' as permissions.
+You can specify a different list of directories as follow:
+
+```
+class { 'storm::storage':
+  root_directories => [
+    '/storage',
+    '/storage/test.vo',
+    '/storage/dteam',
+  ],
+}
+```
+
+Check [here](https://italiangrid.github.io/storm-puppet-module/puppet_classes/storm_3A_3Astorage.html) for all the class options.
+
+
+
+
+
+
 
 ## Documentation
 

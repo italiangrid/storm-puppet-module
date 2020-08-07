@@ -502,7 +502,7 @@ Default value: $storm::backend::params::extraslashes_file
 
 Data type: `String`
 
-Add extra slashes after the “authority” part of a TURL for xroot protocol. Default: ''
+Add extra slashes after the “authority” part of a TURL for xroot protocol. Default: '/'
 
 Default value: $storm::backend::params::extraslashes_root
 
@@ -2168,18 +2168,17 @@ Data type: `Array[Data]`
 Default value: [{
     'vo' => 'test.vo',
     'group' => 'testvo',
+    'gid' => 7100,
     'pool_name' => 'tstvo',
     'pool_size' => 20,
     'pool_base_uid' => 7100,
-    'pool_gid' => 7100,
-
   },{
     'vo' => 'test.vo.2',
     'group' => 'testvodue',
+    'gid' => 8100,
     'pool_name' => 'testdue',
     'pool_size' => 20,
     'pool_base_uid' => 8100,
-    'pool_gid' => 8100,
   }]
 
 ### storm::params
