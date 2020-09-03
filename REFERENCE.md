@@ -2400,11 +2400,27 @@ class { 'storm::webdav':
 
 The following parameters are available in the `storm::webdav` class.
 
+##### `application_file`
+
+Data type: `String`
+
+If defined, the application.yml file is copied from this path and oauth_issuers is ignored.
+
+Default value: $storm::webdav::params::application_file
+
+##### `storage_areas_directory`
+
+Data type: `String`
+
+If defined, the properties files of the storage areas are copied and storage_areas parameter is ignored.
+
+Default value: $storm::webdav::params::storage_areas_directory
+
 ##### `storage_areas`
 
 Data type: `Array[Storm::Webdav::StorageArea]`
 
-List of storage area's configuration.
+List of storage area's configuration. Ignored if storage_areas_directory is defined.
 
 Default value: $storm::webdav::params::storage_areas
 
@@ -2412,7 +2428,7 @@ Default value: $storm::webdav::params::storage_areas
 
 Data type: `Array[Storm::Webdav::OAuthIssuer]`
 
-
+List of OAuth issuers stored into application.yml. Ignored if application_file is defined.
 
 Default value: $storm::webdav::params::oauth_issuers
 
@@ -2623,6 +2639,22 @@ StoRM WebDAV config class
 #### Parameters
 
 The following parameters are available in the `storm::webdav::config` class.
+
+##### `application_file`
+
+Data type: `Any`
+
+
+
+Default value: $storm::webdav::application_file
+
+##### `storage_areas_directory`
+
+Data type: `Any`
+
+
+
+Default value: $storm::webdav::storage_areas_directory
 
 ##### `storage_areas`
 
@@ -3099,6 +3131,9 @@ Alias of `Struct[{
   anonymous_read_enabled         => Optional[Boolean],
   vo_map_enabled                 => Optional[Boolean],
   vo_map_grants_write_permission => Optional[Boolean],
+  orgs_grant_read_permission     => Optional[Boolean],
   orgs_grant_write_permission    => Optional[Boolean],
+  wlcg_scope_authz_enabled       => Optional[Boolean],
+  fine_grained_authz_enabled     => Optional[Boolean],
 }]`
 
