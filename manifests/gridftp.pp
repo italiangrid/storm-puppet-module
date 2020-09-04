@@ -47,6 +47,18 @@
 # @param load_storm_dsi_module
 #   Enable/Disable StoRM DSI module. Default: true (enabled)
 #
+# @param lcmaps_db_file
+#   Custom lcmaps db file path
+#
+# @param lcas_db_file
+#   Custom lcas db file path
+#
+# @param lcas_ban_users_file
+#   Custom lcas banned users file path
+#
+# @param gsi_authz_file
+#   Custom gsi authz file path
+#
 class storm::gridftp (
 
   Integer $port = $storm::gridftp::params::port,
@@ -63,6 +75,11 @@ class storm::gridftp (
   Integer $lcas_debug_level = $storm::gridftp::params::lcas_debug_level,
 
   Boolean $load_storm_dsi_module = $storm::gridftp::params::load_storm_dsi_module,
+
+  String $lcmaps_db_file = $storm::gridftp::params::lcmaps_db_file,
+  String $lcas_db_file = $storm::gridftp::params::lcas_db_file,
+  String $lcas_ban_users_file = $storm::gridftp::params::lcas_ban_users_file,
+  String $gsi_authz_file = $storm::gridftp::params::gsi_authz_file,
 
 ) inherits storm::gridftp::params {
 
