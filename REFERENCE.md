@@ -2027,6 +2027,38 @@ Enable/Disable StoRM DSI module. Default: true (enabled)
 
 Default value: $storm::gridftp::params::load_storm_dsi_module
 
+##### `lcmaps_db_file`
+
+Data type: `String`
+
+Custom lcmaps db file path
+
+Default value: $storm::gridftp::params::lcmaps_db_file
+
+##### `lcas_db_file`
+
+Data type: `String`
+
+Custom lcas db file path
+
+Default value: $storm::gridftp::params::lcas_db_file
+
+##### `lcas_ban_users_file`
+
+Data type: `String`
+
+Custom lcas banned users file path
+
+Default value: $storm::gridftp::params::lcas_ban_users_file
+
+##### `gsi_authz_file`
+
+Data type: `String`
+
+Custom gsi authz file path
+
+Default value: $storm::gridftp::params::gsi_authz_file
+
 ### storm::gridftp::config
 
 StoRM GridFTP config class
@@ -2114,6 +2146,38 @@ Data type: `Any`
 
 
 Default value: $storm::gridftp::load_storm_dsi_module
+
+##### `lcmaps_db_file`
+
+Data type: `Any`
+
+
+
+Default value: $storm::gridftp::lcmaps_db_file
+
+##### `lcas_db_file`
+
+Data type: `Any`
+
+
+
+Default value: $storm::gridftp::lcas_db_file
+
+##### `lcas_ban_users_file`
+
+Data type: `Any`
+
+
+
+Default value: $storm::gridftp::lcas_ban_users_file
+
+##### `gsi_authz_file`
+
+Data type: `Any`
+
+
+
+Default value: $storm::gridftp::gsi_authz_file
 
 ### storm::gridftp::install
 
@@ -2372,17 +2436,14 @@ class { 'storm::webdav':
       root_path                  => '/storage/test.vo',
       access_points              => ['/test.vo'],
       vos                        => ['test.vo', 'test.vo.2'],
-      authenticated_read_enabled => false,
-      anonymous_read_enabled     => false,
-      vo_map_enabled             => false,
     },
     {
       name                       => 'test.vo.2',
       root_path                  => '/storage/test.vo.2',
       access_points              => ['/test.vo.2'],
       vos                        => ['test.vo.2'],
-      authenticated_read_enabled => false,
-      anonymous_read_enabled     => false,
+      authenticated_read_enabled => true,
+      anonymous_read_enabled     => true,
       vo_map_enabled             => false,
     },
   ],
