@@ -59,6 +59,9 @@ STORM_WEBDAV_POOL_LIST=<%= @webdav_pool_list.join(',') %>
   @sa_low=sa['name'].downcase
   @sa_fs_space_token=sa['space_token'] ? sa['space_token'] : "#{@sa_upp}-TOKEN"
   @sa_vos=sa['vos']
+  if @sa_vos.length == 0
+    @sa_vos=['*']
+  end
   @sa_root=sa['root_path']
   @sa_storage_class=sa['storage_class'] ? sa['storage_class'] : "T0D1"
   @sa_accesspoints=sa['access_points']

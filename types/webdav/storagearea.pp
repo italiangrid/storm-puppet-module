@@ -9,5 +9,8 @@ type Storm::Webdav::StorageArea = Struct[{
   anonymous_read_enabled         => Optional[Boolean],
   vo_map_enabled                 => Optional[Boolean],
   vo_map_grants_write_permission => Optional[Boolean],
+  orgs_grant_read_permission     => Optional[Boolean],
   orgs_grant_write_permission    => Optional[Boolean],
+  wlcg_scope_authz_enabled       => Optional[Boolean],
+  fine_grained_authz_enabled     => Optional[Boolean],
 }]

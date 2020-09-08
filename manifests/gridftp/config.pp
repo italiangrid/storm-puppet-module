@@ -16,6 +16,7 @@ class storm::gridftp::config (
   $lcas_debug_level = $storm::gridftp::lcas_debug_level,
 
   $load_storm_dsi_module = $storm::gridftp::load_storm_dsi_module,
+
 ) {
 
   $conf_file='/etc/gridftp.conf'
@@ -37,42 +38,5 @@ class storm::gridftp::config (
     content => template($sysconfig_template_file),
     notify  => Service['storm-globus-gridftp'],
     require => Package['storm-globus-gridftp-mp'],
-  }
-
-  file { '/etc/grid-security/gsi-authz.conf':
-    ensure  => present,
-    source  => 'puppet:///modules/storm/etc/grid-security/gsi-authz.conf',
-    notify  => Service['storm-globus-gridftp'],
-    require => Package['storm-globus-gridftp-mp'],
-    mode    => '0644',
-    owner   => 'root',
-    group   => 'root',
-  }
-
-  file { '/etc/lcmaps/lcmaps.db':
-    ensure => present,
-    source => 'puppet:///modules/storm/etc/lcmaps/lcmaps.db',
-    mode   => '0644',
-    owner  => 'root',
-    group  => 'root',
-    notify => Service['storm-globus-gridftp'],
-  }
-
-  file { '/etc/lcas/lcas.db':
-    ensure => present,
-    source => 'puppet:///modules/storm/etc/lcas/lcas.db',
-    mode   => '0644',
-    owner  => 'root',
-    group  => 'root',
-    notify => Service['storm-globus-gridftp'],
-  }
-
-  file { '/etc/lcas/ban_users.db':
-    ensure => present,
-    source => 'puppet:///modules/storm/etc/lcas/ban_users.db',
-    mode   => '0644',
-    owner  => 'root',
-    group  => 'root',
-    notify => Service['storm-globus-gridftp'],
   }
 }

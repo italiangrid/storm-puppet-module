@@ -151,7 +151,7 @@ describe 'storm::frontend', :type => :class do
             :ensure => 'directory',
             :owner  => 'storm',
             :group  => 'storm',
-            :mode   => '0755',
+            :mode   => '0750',
           )
         end
       end

@@ -39,17 +39,14 @@
 #          root_path                  => '/storage/test.vo',
 #          access_points              => ['/test.vo'],
 #          vos                        => ['test.vo', 'test.vo.2'],
-#          authenticated_read_enabled => false,
-#          anonymous_read_enabled     => false,
-#          vo_map_enabled             => false,
 #        },
 #        {
 #          name                       => 'test.vo.2',
 #          root_path                  => '/storage/test.vo.2',
 #          access_points              => ['/test.vo.2'],
 #          vos                        => ['test.vo.2'],
-#          authenticated_read_enabled => false,
-#          anonymous_read_enabled     => false,
+#          authenticated_read_enabled => true,
+#          anonymous_read_enabled     => true,
 #          vo_map_enabled             => false,
 #        },  
 #      ],
@@ -62,10 +59,17 @@
 #      hostnames => ['localhost', 'alias.for.localhost'],
 #    }
 #
+# @param application_file
+#  If defined, the application.yml file is copied from this path and oauth_issuers is ignored.
+#
+# @param storage_areas_directory
+#  If defined, the properties files of the storage areas are copied and storage_areas parameter is ignored.
+#
 # @param storage_areas
-#   List of storage area's configuration.
+#   List of storage area's configuration. Ignored if storage_areas_directory is defined.
 #
 # @param oauth_issuers
+#   List of OAuth issuers stored into application.yml. Ignored if application_file is defined.
 #
 # @param hostnames
 #
@@ -118,6 +122,9 @@
 # @param storm_limit_nofile
 #
 class storm::webdav (
+
+  String $application_file = $storm::webdav::params::application_file,
+  String $storage_areas_directory = $storm::webdav::params::storage_areas_directory,
 
   Array[Storm::Webdav::StorageArea] $storage_areas = $storm::webdav::params::storage_areas,
 

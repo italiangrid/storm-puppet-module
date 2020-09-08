@@ -21,7 +21,7 @@ describe 'storm::webdav', :type => :class do
                 'access_points' => ['/test.vo'],
                 'vos' => ['test.vo', 'test.vo.2'],
                 'authenticated_read_enabled' => true,
-                'vo_map_enabled' => true,
+                'vo_map_enabled' => false,
               },
               {
                 'name' => 'atlas',
@@ -30,6 +30,9 @@ describe 'storm::webdav', :type => :class do
                 'vos' => ['atlas'],
                 'orgs' => ['atlas'],
                 'anonymous_read_enabled' => true,
+                'orgs_grant_read_permission' => false,
+                'wlcg_scope_authz_enabled' => true,
+                'fine_grained_authz_enabled' => true,
               },
             ],
             'oauth_issuers' => [
@@ -112,9 +115,12 @@ describe 'storm::webdav', :type => :class do
           is_expected.to contain_file(testvo_props).with( :content => /orgs=/ )
           is_expected.to contain_file(testvo_props).with( :content => /authenticatedReadEnabled=true/ )
           is_expected.to contain_file(testvo_props).with( :content => /anonymousReadEnabled=false/ )
-          is_expected.to contain_file(testvo_props).with( :content => /voMapEnabled=true/ )
+          is_expected.to contain_file(testvo_props).with( :content => /voMapEnabled=false/ )
           is_expected.to contain_file(testvo_props).with( :content => /voMapGrantsWritePermission=false/ )
+          is_expected.to contain_file(testvo_props).with( :content => /orgsGrantReadPermission=true/ )
           is_expected.to contain_file(testvo_props).with( :content => /orgsGrantWritePermission=false/ )
+          is_expected.to contain_file(testvo_props).with( :content => /wlcgScopeAuthzEnabled=false/ )
+          is_expected.to contain_file(testvo_props).with( :content => /fineGrainedAuthzEnabled=false/ )
           is_expected.to contain_file(testvo_props).that_notifies(['Service[storm-webdav]'])
           # atlas properties
           atlas_props='/etc/storm/webdav/sa.d/atlas.properties'
@@ -128,9 +134,12 @@ describe 'storm::webdav', :type => :class do
           is_expected.to contain_file(atlas_props).with( :content => /orgs=atlas/ )
           is_expected.to contain_file(atlas_props).with( :content => /authenticatedReadEnabled=false/ )
           is_expected.to contain_file(atlas_props).with( :content => /anonymousReadEnabled=true/ )
-          is_expected.to contain_file(atlas_props).with( :content => /voMapEnabled=false/ )
+          is_expected.to contain_file(atlas_props).with( :content => /voMapEnabled=true/ )
           is_expected.to contain_file(atlas_props).with( :content => /voMapGrantsWritePermission=false/ )
+          is_expected.to contain_file(atlas_props).with( :content => /orgsGrantReadPermission=false/ )
           is_expected.to contain_file(atlas_props).with( :content => /orgsGrantWritePermission=false/ )
+          is_expected.to contain_file(atlas_props).with( :content => /wlcgScopeAuthzEnabled=true/ )
+          is_expected.to contain_file(atlas_props).with( :content => /fineGrainedAuthzEnabled=true/ )
           is_expected.to contain_file(atlas_props).that_notifies(['Service[storm-webdav]'])
         end
 
@@ -221,7 +230,7 @@ describe 'storm::webdav', :type => :class do
             :ensure => 'directory',
             :owner  => 'storm',
             :group  => 'storm',
-            :mode   => '0755',
+            :mode   => '0750',
           )
         end
 
@@ -295,6 +304,22 @@ describe 'storm::webdav', :type => :class do
           is_expected.to contain_file(service_file).with( :content => /^Environment="STORM_WEBDAV_JVM_OPTS=-Xms256m -Xmx512m -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=1044,suspend=y"/ )
         end
       end
+
+      context 'Check application.xml configured via source path' do
+        let(:params) do
+          {
+            'application_file' => 'application-0.yml',
+          }
+        end
+        it "check application.yml file content" do
+          title='/etc/storm/webdav/config/application.yml'
+          is_expected.to contain_file(title).with(
+            :ensure  => 'present',
+            :source => 'application-0.yml',
+          )
+        end
+      end
+
     end
   end
 end

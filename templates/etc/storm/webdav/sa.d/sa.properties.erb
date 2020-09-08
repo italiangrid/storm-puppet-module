@@ -5,30 +5,45 @@ vos=<%=@vos.join(',')%>
 <%- if defined?(@orgs) -%>
 orgs=<%=@orgs.join(',')%>
 <%- else -%>
-orgs=
+orgs=<%=@sa_defaults['orgs']%>
 <%- end -%>
 <%- if defined?(@authenticated_read_enabled) -%>
 authenticatedReadEnabled=<%=@authenticated_read_enabled%>
 <%- else -%>
-authenticatedReadEnabled=false
+authenticatedReadEnabled=<%=@sa_defaults['authenticated_read_enabled']%>
 <%- end -%>
 <%- if defined?(@anonymous_read_enabled)-%>
 anonymousReadEnabled=<%= @anonymous_read_enabled%>
 <%- else -%>
-anonymousReadEnabled=false
+anonymousReadEnabled=<%=@sa_defaults['anonymous_read_enabled']%>
 <%- end -%>
 <%- if defined?(@vo_map_enabled) -%>
 voMapEnabled=<%= @vo_map_enabled %>
 <%- else -%>
-voMapEnabled=false
+voMapEnabled=<%=@sa_defaults['vo_map_enabled']%>
 <%- end -%>
 <%- if defined?(@vo_map_grants_write_permission) -%>
 voMapGrantsWritePermission=<%= @vo_map_grants_write_permission %>
 <%- else -%>
-voMapGrantsWritePermission=false
+voMapGrantsWritePermission=<%=@sa_defaults['vo_map_grants_write_permission']%>
+<%- end -%>
+<%- if defined?(@orgs_grant_read_permission) -%>
+orgsGrantReadPermission=<%= @orgs_grant_read_permission %>
+<%- else -%>
+orgsGrantReadPermission=<%=@sa_defaults['orgs_grant_read_permission']%>
 <%- end -%>
 <%- if defined?(@orgs_grant_write_permission) -%>
 orgsGrantWritePermission=<%= @orgs_grant_write_permission %>
 <%- else -%>
-orgsGrantWritePermission=false
+orgsGrantWritePermission=<%=@sa_defaults['orgs_grant_write_permission']%>
+<%- end -%>
+<%- if defined?(@wlcg_scope_authz_enabled) -%>
+wlcgScopeAuthzEnabled=<%= @wlcg_scope_authz_enabled %>
+<%- else -%>
+wlcgScopeAuthzEnabled=<%=@sa_defaults['wlcg_scope_authz_enabled']%>
+<%- end -%>
+<%- if defined?(@fine_grained_authz_enabled) -%>
+fineGrainedAuthzEnabled=<%= @fine_grained_authz_enabled %>
+<%- else -%>
+fineGrainedAuthzEnabled=<%=@sa_defaults['fine_grained_authz_enabled']%>
 <%- end -%>

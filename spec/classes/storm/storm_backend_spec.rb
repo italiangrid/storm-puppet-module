@@ -76,6 +76,13 @@ describe 'storm::backend', :type => :class do
                   }
                 ],
               },
+              {
+                'name' => 'novos',
+                'root_path' => '/storage/novos',
+                'access_points' => ['/novos'],
+                'vos' => [],
+                'online_size' => 4,
+              }
             ],
             'info_sitename' => 'test',
             'info_storage_default_root' => '/another-storage',
@@ -200,7 +207,14 @@ describe 'storm::backend', :type => :class do
           is_expected.to contain_file(title).with( :content => /STORM_ATLAS_STORAGECLASS=T1D0/ )
           is_expected.to contain_file(title).with( :content => /STORM_ATLAS_ACCESSPOINT='\/atlas \/atlasdisk'/ )
 
-          is_expected.to contain_file(title).with( :content => /STORM_STORAGEAREA_LIST='test.vo atlas'/ )
+          is_expected.to contain_file(title).with( :content => /STORM_NOVOS_VONAME='*'/ )
+          is_expected.to contain_file(title).with( :content => /STORM_NOVOS_ONLINE_SIZE=4/ )
+          is_expected.to contain_file(title).with( :content => /STORM_NOVOS_TOKEN=NOVOS-TOKEN/ )
+          is_expected.to contain_file(title).with( :content => /STORM_NOVOS_ROOT=\/storage\/novos/ )
+          is_expected.to contain_file(title).with( :content => /STORM_NOVOS_STORAGECLASS=T0D1/ )
+          is_expected.to contain_file(title).with( :content => /STORM_NOVOS_ACCESSPOINT='\/novos'/ )
+
+          is_expected.to contain_file(title).with( :content => /STORM_STORAGEAREA_LIST='test.vo atlas novos'/ )
           is_expected.to contain_file(title).with( :content => /VOS='test.vo test.vo.2 atlas'/ )
         end
 
@@ -239,7 +253,7 @@ describe 'storm::backend', :type => :class do
             :ensure => 'directory',
             :owner  => 'storm',
             :group  => 'storm',
-            :mode   => '0755',
+            :mode   => '0750',
           )
         end
 

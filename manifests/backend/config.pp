@@ -150,8 +150,8 @@ class storm::backend::config (
       ensure  => directory,
       owner   => 'storm',
       group   => 'storm',
-      mode    => '0755',
-      recurse => true,
+      mode    => '0750',
+      recurse => false,
     }
   }
 

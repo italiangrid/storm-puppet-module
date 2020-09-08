@@ -242,9 +242,11 @@ Check [here](https://italiangrid.github.io/storm-puppet-module/puppet_classes/st
 
 The main StoRM WebDAV configuration parameters are:
 
-- `storage_areas`: the list of `Storm::Webdav::StorageArea` elements (more info below).
-- `oauth_issuers`: the list of `Storm::Webdav::OAuthIssuer` elements that means the supported OAuth providers (more info below).
-- `hostnames`: the list of hostname and aliases supported for Third-Party-Copy.
+- `storage_areas`: the list of `Storm::Webdav::StorageArea` elements (more info below). Ignored if `storage_areas_directory` is defined;
+- ``storage_areas_directory`: the path of a directory that will be copied to `/etc/storm/webdav/sa.d`. If defined, the value of `storage_areas` is ignored;
+- `oauth_issuers`: the list of `Storm::Webdav::OAuthIssuer` elements that means the supported OAuth providers (more info below). Ignored if `application_file` is defined;
+- `application_file`: the path of a valid YAML file whose content will be copied into `/etc/storm/webdav/config/application.yml` file. If defined, the value of `oauth_issuers` is ignored;
+- `hostnames`: the list of hostname and aliases supported for Third-Party-Copy;
 - `http_port` and `https_port`: the service ports. Default: **8085**, **8443**.
 
 The [`Storm::Webdav::StorageArea`](https://italiangrid.github.io/storm-puppet-module/puppet_data_type_aliases/Storm_3A_3AWebdav_3A_3AStorageArea.html) type :
@@ -265,7 +267,10 @@ The [`Storm::Webdav::OAuthIssuer`](https://italiangrid.github.io/storm-puppet-mo
 - `name`: the organization name. **Required**.
 - `issuer`: the issuer URL. **Required**.
 
-Example of StoRM WebDAV configuration:
+Administrators can provide a their own `application.yml` file by specifying its absolute path with `application_file` parameter. In this case, even if it's set, the value of `oauth_issuers` is ignored.
+They can provide the `.properties` files of each storage area by storing them into a personal directory and specifying that absolute path with `storage_areas_directory` parameter. Each files within this path will be copied into `/etc/storm/webdav/sa.d` directory.
+
+Examples of StoRM WebDAV configuration:
 
 ```
 class { 'storm::webdav':
@@ -285,6 +290,14 @@ class { 'storm::webdav':
     },
   ],
   hostnames => ['storm-webdav.example.org', 'alias-for-storm-webdav.example.org'],
+}
+```
+
+```
+class { 'storm::webdav':
+  application_file        => '/root/storm/webdav/application.yml',
+  storage_areas_directory => '/root/storm/webdav/sa.d',
+  hostnames               => ['storm-webdav.example.org'],
 }
 ```
 
@@ -308,12 +321,25 @@ Other StoRM GridFTP configuration parameters:
 - `lcas_debug_level`: The LCAS logging level. Values from 0 (ERROR) to 5 (DEBUG). Default: **3** (INFO).
 - `load_storm_dsi_module`: Enable/Disable StoRM DSI module. Default: **true** (enabled).
 
-Example of StoRM Gridftp configuration:
+Administrators can provide a their own `lcamps.db`, `lcas.db`, `ban_users.db` and `gsi-authz.conf` files by specifying their absolute paths with the proper parameter:
+
+- `lcmaps_db_file`
+- `lcas_db_file`
+- `lcas_ban_users_file`
+- `gsi_authz_file`
+
+Examples of StoRM Gridftp configuration:
 
 ```
 class { 'storm::gridftp':
   redirect_lcmaps_log => true,
   llgt_log_file       => '/var/log/storm/storm-gridftp-lcmaps.log',
+}
+```
+
+```
+class { 'storm::gridftp':
+  lcmaps_db_file => '/root/storm/gridftp/lcamps.db',
 }
 ```
 

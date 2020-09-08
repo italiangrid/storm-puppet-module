@@ -250,34 +250,55 @@
   <%- end -%>
   </filesystems>
   <mapping-rules>
-    <%- @storage_areas.each do | sa | -%>
-      <%- @sa_upp=sa['name'].upcase.gsub("-", "").gsub(".","") -%>
-      <%- @sa_low=sa['name'].downcase -%>
-      <%- @sa_accesspoints=sa['access_points'] -%>
-      <%- @counter=0 -%>
-      <%- @sa_accesspoints.each do | ap | -%>
-        <%- @maprule_name="#{@sa_low}-maprule-#{@counter}" -%>
-      <map-rule name="<%= @maprule_name %>">
-        <stfn-root><%= ap %></stfn-root>
-        <mapped-fs><%= @sa_upp %>-FS</mapped-fs>
-      </map-rule>
-        <%- @counter+=1 -%>
-      <%- end -%>
-    <%- end -%>
+<%-
+  @storage_areas.each do | sa |
+    @sa_upp=sa['name'].upcase.gsub("-", "").gsub(".","")
+    @sa_low=sa['name'].downcase
+    @sa_accesspoints=sa['access_points']
+    @counter=0
+    @sa_accesspoints.each do | ap |
+      @maprule_name="#{@sa_low}-maprule-#{@counter}"
+-%>
+    <map-rule name="<%= @maprule_name %>">
+      <stfn-root><%= ap %></stfn-root>
+      <mapped-fs><%= @sa_upp %>-FS</mapped-fs>
+    </map-rule>
+<%-   @counter+=1
+    end
+  end
+-%>
   </mapping-rules>
   <approachable-rules>
-    <%- @storage_areas.each do | sa | -%>
-      <%- @sa_upp=sa['name'].upcase.gsub("-", "").gsub(".","") -%>
-      <%- @sa_low=sa['name'].downcase -%>
-      <%- @sa_vos=sa['vos'] -%>
-      <%- @sa_dn_regex=sa['dn_regex'] -%>
-      <%- if @sa_dn_regex == nil -%>
-        <%- @sa_dn_regex="*" -%>
-      <%- end -%>
-      <%- @sa_anonymous_http_read=sa['anonymous_http_read'].nil? ? false : sa['anonymous_http_read'] -%>
-      <%- @counter=0 -%>
-      <%- @sa_vos.each do | vo | -%>
-        <%- @apprule_name="#{@sa_low}-rule-#{@counter}" -%>
+<%-
+  @storage_areas.each do | sa |
+    @sa_upp=sa['name'].upcase.gsub("-", "").gsub(".","")
+    @sa_low=sa['name'].downcase
+    @sa_vos=sa['vos']
+    @sa_dn_regex=sa['dn_regex']
+
+    if @sa_dn_regex == nil
+      @sa_dn_regex="*"
+    end
+
+    @sa_anonymous_http_read=sa['anonymous_http_read'].nil? ? false : sa['anonymous_http_read']
+    @counter=0
+
+    if @sa_vos.length == 0
+      @apprule_name="#{@sa_low}-rule-#{@counter}"
+-%>
+    <app-rule name="<%= @apprule_name %>">
+      <subjects>
+        <dn><%= @sa_dn_regex %></dn>
+        <vo-name>*</vo-name>
+      </subjects>
+      <approachable-fs><%= @sa_upp %>-FS</approachable-fs>
+      <anonymous-http-read><%= @sa_anonymous_http_read %></anonymous-http-read>
+    </app-rule>
+<%-
+    else
+      @sa_vos.each do | vo |
+        @apprule_name="#{@sa_low}-rule-#{@counter}"
+-%>
     <app-rule name="<%= @apprule_name %>">
       <subjects>
         <dn><%= @sa_dn_regex %></dn>
@@ -286,8 +307,11 @@
       <approachable-fs><%= @sa_upp %>-FS</approachable-fs>
       <anonymous-http-read><%= @sa_anonymous_http_read %></anonymous-http-read>
     </app-rule>
-        <%- @counter+=1 -%>
-      <%- end -%>
-    <%- end -%>
+<%-
+        @counter+=1
+      end
+    end
+  end
+-%>
   </approachable-rules>
 </namespace>

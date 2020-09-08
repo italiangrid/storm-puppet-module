@@ -3,6 +3,9 @@
 class storm::webdav::params (
 ) inherits storm::params {
 
+  $application_file = lookup('storm::webdav::application_file', String, undef, '')
+  $storage_areas_directory = lookup('storm::webdav::storage_areas_directory', String, undef, '')
+
   $storage_areas = lookup('storm::webdav::storage_areas', Array[Storm::Webdav::StorageArea], undef, [])
 
   $oauth_issuers = lookup('storm::webdav::oauth_issuers', Array[Storm::Webdav::OAuthIssuer], undef, [])

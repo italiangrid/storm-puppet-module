@@ -153,20 +153,94 @@
         </pool>
       </capabilities>
     </filesystem>
+    <filesystem name="NOVOS-FS" fs_type="ext3">
+      <space-token-description>NOVOS_TOKEN</space-token-description>
+      <storage-class>T0D1</storage-class>
+      <root>/storage/novos</root>
+      <filesystem-driver>it.grid.storm.filesystem.swig.posixfs</filesystem-driver>
+      <spacesystem-driver>it.grid.storm.filesystem.MockSpaceSystem</spacesystem-driver>
+      <storage-area-authz>
+        <fixed>permit-all</fixed>
+      </storage-area-authz>
+      <properties>
+        <RetentionPolicy>replica</RetentionPolicy>
+        <AccessLatency>online</AccessLatency>
+        <ExpirationMode>neverExpire</ExpirationMode>
+        <TotalOnlineSize unit="Byte" limited-size="true">4000000000</TotalOnlineSize>
+        <TotalNearlineSize unit="Byte">0</TotalNearlineSize>
+      </properties>
+      <capabilities>
+        <aclMode>AoT</aclMode>
+        <trans-prot>
+          <prot name="file">
+            <schema>file</schema>
+          </prot>
+          <prot name="gsiftp">
+            <id>0</id>
+            <schema>gsiftp</schema>
+            <host>gridftp-0.example.org</host>
+            <port>2811</port>
+          </prot>
+          <prot name="gsiftp">
+            <id>1</id>
+            <schema>gsiftp</schema>
+            <host>gridftp-1.example.org</host>
+            <port>2811</port>
+          </prot>
+          <prot name="https">
+            <id>2</id>
+            <schema>https</schema>
+            <host>webdav-0.example.org</host>
+            <port>8443</port>
+          </prot>
+          <prot name="http">
+            <id>3</id>
+            <schema>http</schema>
+            <host>webdav-0.example.org</host>
+            <port>8085</port>
+          </prot>
+          <prot name="https">
+            <id>4</id>
+            <schema>https</schema>
+            <host>webdav-1.example.org</host>
+            <port>8443</port>
+          </prot>
+          <prot name="http">
+            <id>5</id>
+            <schema>http</schema>
+            <host>webdav-1.example.org</host>
+            <port>8085</port>
+          </prot>
+        </trans-prot>
+        <pool>
+          <balance-strategy>round-robin</balance-strategy>
+          <members>
+            <member member-id="0">
+            </member>
+            <member member-id="1">
+            </member>
+          </members>
+        </pool>
+      </capabilities>
+    </filesystem>
   </filesystems>
   <mapping-rules>
-      <map-rule name="test.vo-maprule-0">
-        <stfn-root>/test.vo</stfn-root>
-        <mapped-fs>TESTVO-FS</mapped-fs>
-      </map-rule>
-      <map-rule name="atlas-maprule-0">
-        <stfn-root>/atlas</stfn-root>
-        <mapped-fs>ATLAS-FS</mapped-fs>
-      </map-rule>
-      <map-rule name="atlas-maprule-1">
-        <stfn-root>/atlasdisk</stfn-root>
-        <mapped-fs>ATLAS-FS</mapped-fs>
-      </map-rule>
+    <map-rule name="test.vo-maprule-0">
+      <stfn-root>/test.vo</stfn-root>
+      <mapped-fs>TESTVO-FS</mapped-fs>
+    </map-rule>
+    <map-rule name="atlas-maprule-0">
+      <stfn-root>/atlas</stfn-root>
+      <mapped-fs>ATLAS-FS</mapped-fs>
+    </map-rule>
+    <map-rule name="atlas-maprule-1">
+      <stfn-root>/atlasdisk</stfn-root>
+      <mapped-fs>ATLAS-FS</mapped-fs>
+    </map-rule>
+    <map-rule name="novos-maprule-0">
+      <stfn-root>/novos</stfn-root>
+      <mapped-fs>NOVOS-FS</mapped-fs>
+    </map-rule>
   </mapping-rules>
   <approachable-rules>
     <app-rule name="test.vo-rule-0">
@@ -191,6 +265,14 @@
         <vo-name>atlas</vo-name>
       </subjects>
       <approachable-fs>ATLAS-FS</approachable-fs>
+      <anonymous-http-read>false</anonymous-http-read>
+    </app-rule>
+    <app-rule name="novos-rule-0">
+      <subjects>
+        <dn>*</dn>
+        <vo-name>*</vo-name>
+      </subjects>
+      <approachable-fs>NOVOS-FS</approachable-fs>
       <anonymous-http-read>false</anonymous-http-read>
     </app-rule>
   </approachable-rules>
