@@ -321,25 +321,12 @@ Other StoRM GridFTP configuration parameters:
 - `lcas_debug_level`: The LCAS logging level. Values from 0 (ERROR) to 5 (DEBUG). Default: **3** (INFO).
 - `load_storm_dsi_module`: Enable/Disable StoRM DSI module. Default: **true** (enabled).
 
-Administrators can provide a their own `lcamps.db`, `lcas.db`, `ban_users.db` and `gsi-authz.conf` files by specifying their absolute paths with the proper parameter:
-
-- `lcmaps_db_file`
-- `lcas_db_file`
-- `lcas_ban_users_file`
-- `gsi_authz_file`
-
 Examples of StoRM Gridftp configuration:
 
 ```
 class { 'storm::gridftp':
   redirect_lcmaps_log => true,
   llgt_log_file       => '/var/log/storm/storm-gridftp-lcmaps.log',
-}
-```
-
-```
-class { 'storm::gridftp':
-  lcmaps_db_file => '/root/storm/gridftp/lcamps.db',
 }
 ```
 
