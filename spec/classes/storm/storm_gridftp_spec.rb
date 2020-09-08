@@ -22,10 +22,6 @@ describe 'storm::gridftp', :type => :class do
             'lcmaps_debug_level'    => 0,
             'lcas_debug_level'      => 0,
             'load_storm_dsi_module' => false,
-            'lcmaps_db_file'        => '/path/to/my/lcmaps.db',
-            'lcas_db_file'          => '/path/to/my/lcas.db',
-            'lcas_ban_users_file'   => '/path/to/my/ban_users.db',
-            'gsi_authz_file'        => '/path/to/my/gsi-authz.conf',
           }
         end
 
@@ -49,38 +45,6 @@ describe 'storm::gridftp', :type => :class do
           is_expected.to contain_file(title).with( :content => /LLGT_LOG_FILE=\/var\/log\/storm\/lcmaps.log/ )
           is_expected.to contain_file(title).with( :content => /LCMAPS_DEBUG_LEVEL=0/ )
           is_expected.to contain_file(title).with( :content => /LCAS_DEBUG_LEVEL=0/ )
-        end
-
-        it "check gridftp gsi-authz file" do
-          title='/etc/grid-security/gsi-authz.conf'
-          is_expected.to contain_file(title).with( 
-            :ensure => 'present',
-            :source => '/path/to/my/gsi-authz.conf',
-          )
-        end
-
-        it "check gridftp lcmaps db file" do
-          title='/etc/lcmaps/lcmaps.db'
-          is_expected.to contain_file(title).with( 
-            :ensure => 'present',
-            :source => '/path/to/my/lcmaps.db',
-          )
-        end
-
-        it "check gridftp lcas db file" do
-          title='/etc/lcas/lcas.db'
-          is_expected.to contain_file(title).with( 
-            :ensure => 'present',
-            :source => '/path/to/my/lcas.db',
-          )
-        end
-
-        it "check gridftp lcas banned users file" do
-          title='/etc/lcas/ban_users.db'
-          is_expected.to contain_file(title).with( 
-            :ensure => 'present',
-            :source => '/path/to/my/ban_users.db',
-          )
         end
       end
 
@@ -107,39 +71,6 @@ describe 'storm::gridftp', :type => :class do
           is_expected.to contain_file(title).with( :content => /LCMAPS_DEBUG_LEVEL=3/ )
           is_expected.to contain_file(title).with( :content => /LCAS_DEBUG_LEVEL=3/ )
         end
-
-        it "check gridftp gsi-authz file" do
-          title='/etc/grid-security/gsi-authz.conf'
-          is_expected.to contain_file(title).with( 
-            :ensure => 'present',
-            :source => 'puppet:///modules/storm/etc/grid-security/gsi-authz.conf',
-          )
-        end
-
-        it "check gridftp lcmaps db file" do
-          title='/etc/lcmaps/lcmaps.db'
-          is_expected.to contain_file(title).with( 
-            :ensure => 'present',
-            :source => 'puppet:///modules/storm/etc/lcmaps/lcmaps.db',
-          )
-        end
-
-        it "check gridftp lcas db file" do
-          title='/etc/lcas/lcas.db'
-          is_expected.to contain_file(title).with( 
-            :ensure => 'present',
-            :source => 'puppet:///modules/storm/etc/lcas/lcas.db',
-          )
-        end
-
-        it "check gridftp lcas banned users file" do
-          title='/etc/lcas/ban_users.db'
-          is_expected.to contain_file(title).with( 
-            :ensure => 'present',
-            :source => 'puppet:///modules/storm/etc/lcas/ban_users.db',
-          )
-        end
-
       end
     end
   end

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'storm::gridmap', :type => :class do
+describe 'storm::mapping', :type => :class do
 
   on_supported_os.each do |os, facts|
 
@@ -19,7 +19,7 @@ describe 'storm::gridmap', :type => :class do
       groupmapfile='/etc/grid-security/groupmapfile'
       gridmapfile='/etc/grid-security/grid-mapfile'
 
-      context 'with default storm::gridmap' do
+      context 'with default storm::mapping' do
 
         it "check gridmap dir" do
           is_expected.to contain_file(gridmapdir).with( 

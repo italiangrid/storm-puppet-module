@@ -17,9 +17,4 @@ class storm::gridftp::params (
   $lcas_debug_level = lookup('storm::gridftp::lcas_debug_level', Integer, undef, 3)
 
   $load_storm_dsi_module = lookup('storm::gridftp::load_storm_dsi_module', Boolean, undef, true)
-
-  $lcmaps_db_file = lookup('storm::gridftp::lcmaps_db_file', String, undef, 'puppet:///modules/storm/etc/lcmaps/lcmaps.db')
-  $lcas_db_file = lookup('storm::gridftp::lcas_db_file', String, undef, 'puppet:///modules/storm/etc/lcas/lcas.db')
-  $lcas_ban_users_file = lookup('storm::gridftp::lcas_ban_users_file', String, undef, 'puppet:///modules/storm/etc/lcas/ban_users.db')
-  $gsi_authz_file = lookup('storm::gridftp::gsi_authz_file', String, undef, 'puppet:///modules/storm/etc/grid-security/gsi-authz.conf')
 }

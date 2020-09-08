@@ -21,10 +21,12 @@
 * [`storm::gridftp::install`](#stormgridftpinstall): StoRM GridFTP install class
 * [`storm::gridftp::params`](#stormgridftpparams): StoRM GridFTP params class
 * [`storm::gridftp::service`](#stormgridftpservice): StoRM GridFTP service class
-* [`storm::gridmap`](#stormgridmap): Utility class used to create gridmap dir, grid-mapfile, groupmapfile and pool accounts
+* [`storm::mapping`](#stormmapping): Utility class used to install LCMAPS and LCAS and configure mapping software and files.
 * [`storm::params`](#stormparams): StoRM params class
 * [`storm::repo`](#stormrepo): Choose which StoRM repository you want to intall and enable. Also a custom list of repository URL can be specified.
 * [`storm::storage`](#stormstorage): Init testbed storage area's directories
+* [`storm::testca`](#stormtestca): Utility class for internal test purpose. Install test ca repo and package.
+* [`storm::testvos`](#stormtestvos): Utility class for internal purpose. Configure all the test VOs used into our testbeds.
 * [`storm::users`](#stormusers): StoRM accounts configuration
 * [`storm::webdav`](#stormwebdav): StoRM WebDAV puppet module
 * [`storm::webdav::config`](#stormwebdavconfig): StoRM WebDAV config class
@@ -2027,38 +2029,6 @@ Enable/Disable StoRM DSI module. Default: true (enabled)
 
 Default value: $storm::gridftp::params::load_storm_dsi_module
 
-##### `lcmaps_db_file`
-
-Data type: `String`
-
-Custom lcmaps db file path
-
-Default value: $storm::gridftp::params::lcmaps_db_file
-
-##### `lcas_db_file`
-
-Data type: `String`
-
-Custom lcas db file path
-
-Default value: $storm::gridftp::params::lcas_db_file
-
-##### `lcas_ban_users_file`
-
-Data type: `String`
-
-Custom lcas banned users file path
-
-Default value: $storm::gridftp::params::lcas_ban_users_file
-
-##### `gsi_authz_file`
-
-Data type: `String`
-
-Custom gsi authz file path
-
-Default value: $storm::gridftp::params::gsi_authz_file
-
 ### storm::gridftp::config
 
 StoRM GridFTP config class
@@ -2147,38 +2117,6 @@ Data type: `Any`
 
 Default value: $storm::gridftp::load_storm_dsi_module
 
-##### `lcmaps_db_file`
-
-Data type: `Any`
-
-
-
-Default value: $storm::gridftp::lcmaps_db_file
-
-##### `lcas_db_file`
-
-Data type: `Any`
-
-
-
-Default value: $storm::gridftp::lcas_db_file
-
-##### `lcas_ban_users_file`
-
-Data type: `Any`
-
-
-
-Default value: $storm::gridftp::lcas_ban_users_file
-
-##### `gsi_authz_file`
-
-Data type: `Any`
-
-
-
-Default value: $storm::gridftp::gsi_authz_file
-
 ### storm::gridftp::install
 
 StoRM GridFTP install class
@@ -2191,13 +2129,57 @@ StoRM GridFTP params class
 
 StoRM GridFTP service class
 
-### storm::gridmap
+### storm::mapping
 
-Utility class used to create gridmap dir, grid-mapfile, groupmapfile and pool accounts
+The owner of /etc/grid-security/gridmapdir
+
+The group of /etc/grid-security/gridmapdir
+
+The permissions on /etc/grid-security/gridmapdir
+
+The Array of pool accounts.
+
+If true (default) use as /etc/lcmaps/lcmaps.db the file specified with lcmaps_db_file.
+If false, file is not managed by this class.
+
+The path of the lcmaps.db to copy into /etc/lcmaps/lcmaps.db. Default: puppet:///modules/storm/etc/lcmaps/lcmaps.db
+
+If true (default) use as /etc/lcas/lcas.db the file specified with lcas_db_file.
+If false, file is not managed by this class.
+
+The path of the lcas.db to copy into /etc/lcas/lcas.db. Default: puppet:///modules/storm/etc/lcas/lcas.db
+
+If true (default) use as /etc/lcas/ban_users.db the file specified with lcas_ban_users_file.
+If false, file is not managed by this class.
+
+The path of the ban_users.db to copy into /etc/lcas/ban_users.db. Default: puppet:///modules/storm/etc/lcas/ban_users.db
+
+If true (default) use as /etc/grid-security/gsi-authz.conf the file specified with gsi_authz_file.
+If false, file is not managed by this class.
+
+The path of the gsi-authz.conf to copy into /etc/grid-security/gsi-authz.conf. Default: puppet:///modules/storm/etc/grid-security/gsi-authz.conf
+
+#### Examples
+
+##### Example of usage
+
+```puppet
+class { 'storm::mapping':
+  pools => [{
+    'name' => 'dteam',
+    'size' => 20,
+    'base_uid' => 7100,
+    'group' => 'dteam',
+    'gid' => 7100,
+    'vo' => 'dteam',
+  }],
+  manage_lcas_ban_users_file => false,
+}
+```
 
 #### Parameters
 
-The following parameters are available in the `storm::gridmap` class.
+The following parameters are available in the `storm::mapping` class.
 
 ##### `gridmapdir_owner`
 
@@ -2223,27 +2205,91 @@ Data type: `String`
 
 Default value: '0770'
 
-##### `gridmap_data`
+##### `pools`
 
 Data type: `Array[Data]`
 
 
 
 Default value: [{
-    'vo' => 'test.vo',
+    'name' => 'tstvo',
+    'size' => 20,
+    'base_uid' => 7100,
     'group' => 'testvo',
     'gid' => 7100,
-    'pool_name' => 'tstvo',
-    'pool_size' => 20,
-    'pool_base_uid' => 7100,
+    'vo' => 'test.vo',
   },{
-    'vo' => 'test.vo.2',
+    'name' => 'testdue',
+    'size' => 20,
+    'base_uid' => 8100,
     'group' => 'testvodue',
     'gid' => 8100,
-    'pool_name' => 'testdue',
-    'pool_size' => 20,
-    'pool_base_uid' => 8100,
+    'vo' => 'test.vo.2',
   }]
+
+##### `manage_lcmaps_db_file`
+
+Data type: `Boolean`
+
+
+
+Default value: `true`
+
+##### `lcmaps_db_file`
+
+Data type: `String`
+
+
+
+Default value: 'puppet:///modules/storm/etc/lcmaps/lcmaps.db'
+
+##### `manage_lcas_db_file`
+
+Data type: `Boolean`
+
+
+
+Default value: `true`
+
+##### `lcas_db_file`
+
+Data type: `String`
+
+
+
+Default value: 'puppet:///modules/storm/etc/lcas/lcas.db'
+
+##### `manage_lcas_ban_users_file`
+
+Data type: `Boolean`
+
+
+
+Default value: `true`
+
+##### `lcas_ban_users_file`
+
+Data type: `String`
+
+
+
+Default value: 'puppet:///modules/storm/etc/lcas/ban_users.db'
+
+##### `manage_gsi_authz_file`
+
+Data type: `Boolean`
+
+
+
+Default value: `true`
+
+##### `gsi_authz_file`
+
+Data type: `String`
+
+
+
+Default value: 'puppet:///modules/storm/etc/grid-security/gsi-authz.conf'
 
 ### storm::params
 
@@ -2259,7 +2305,7 @@ Choose which StoRM repository you want to intall and enable. Also a custom list 
 
 ```puppet
 class { 'storm::repo':
-  enabled => ['nightly'],
+  enabled => ['stable'],
 }
 ```
 
@@ -2291,6 +2337,22 @@ A list of repository that have to be created. Optional.
 
 Default value: []
 
+##### `install_umd`
+
+Data type: `Boolean`
+
+Install UMD4 repositories. Default: false.
+
+Default value: `false`
+
+##### `install_epel`
+
+Data type: `Boolean`
+
+Install EPEL repositories. Default: false.
+
+Default value: `false`
+
 ### storm::storage
 
 Init testbed storage area's directories
@@ -2320,6 +2382,14 @@ Data type: `Array[String]`
 A list of all storage root directories owned by storm user. You must add also all parent directories.
 
 Default value: ['/storage']
+
+### storm::testca
+
+Utility class for internal test purpose. Install test ca repo and package.
+
+### storm::testvos
+
+Utility class for internal purpose. Configure all the test VOs used into our testbeds.
 
 ### storm::users
 

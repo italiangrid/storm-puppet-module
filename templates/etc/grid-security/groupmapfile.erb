@@ -1,7 +1,7 @@
 <%-
-@gridmap_data.each do | data |
-  @vo_name=data['vo']
-  @group=data['group']
+@pools.each do | pool |
+  @vo_name=pool['vo']
+  @group=pool['group']
 -%>
 "/<%=@vo_name%>/Role=NULL/Capability=NULL" <%=@group%>
 "/<%=@vo_name%>" <%=@group%>
