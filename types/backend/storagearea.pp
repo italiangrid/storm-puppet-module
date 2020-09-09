@@ -1,17 +1,5 @@
 # @summary The storage area type for storm-backend-server
-# Mandatory fields:
-# <ul><li>name</li><li>root_path</li><li>online_size</li></ul>
 #
-# <table>
-#   <thead>
-#     <tr><th>Property Name</th><th>Description</th></tr>
-#   </thead>
-#   <tbody>
-#     <tr><td>name</td><td>The name of the storage area. Mandatory.</td></tr>
-#     <tr><td>root_path</td><td>The absolute real path of the storage area parent directory. Mandatory.</td></tr>
-#     <tr><td>access_points</td><td>List of relative logical paths used to access storage area. Optional variable. Default value: /{name}.</td></tr>
-#   </tbody>
-# </table>
 type Storm::Backend::StorageArea = Struct[{
   name                         => String,
   root_path                    => String,

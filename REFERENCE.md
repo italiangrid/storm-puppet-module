@@ -2131,33 +2131,7 @@ StoRM GridFTP service class
 
 ### storm::mapping
 
-The owner of /etc/grid-security/gridmapdir
-
-The group of /etc/grid-security/gridmapdir
-
-The permissions on /etc/grid-security/gridmapdir
-
-The Array of pool accounts.
-
-If true (default) use as /etc/lcmaps/lcmaps.db the file specified with lcmaps_db_file.
-If false, file is not managed by this class.
-
-The path of the lcmaps.db to copy into /etc/lcmaps/lcmaps.db. Default: puppet:///modules/storm/etc/lcmaps/lcmaps.db
-
-If true (default) use as /etc/lcas/lcas.db the file specified with lcas_db_file.
-If false, file is not managed by this class.
-
-The path of the lcas.db to copy into /etc/lcas/lcas.db. Default: puppet:///modules/storm/etc/lcas/lcas.db
-
-If true (default) use as /etc/lcas/ban_users.db the file specified with lcas_ban_users_file.
-If false, file is not managed by this class.
-
-The path of the ban_users.db to copy into /etc/lcas/ban_users.db. Default: puppet:///modules/storm/etc/lcas/ban_users.db
-
-If true (default) use as /etc/grid-security/gsi-authz.conf the file specified with gsi_authz_file.
-If false, file is not managed by this class.
-
-The path of the gsi-authz.conf to copy into /etc/grid-security/gsi-authz.conf. Default: puppet:///modules/storm/etc/grid-security/gsi-authz.conf
+Utility class used to install LCMAPS and LCAS and configure mapping software and files.
 
 #### Examples
 
@@ -2185,7 +2159,7 @@ The following parameters are available in the `storm::mapping` class.
 
 Data type: `String`
 
-
+The owner of /etc/grid-security/gridmapdir
 
 Default value: 'storm'
 
@@ -2193,7 +2167,7 @@ Default value: 'storm'
 
 Data type: `String`
 
-
+The group of /etc/grid-security/gridmapdir
 
 Default value: 'storm'
 
@@ -2201,7 +2175,7 @@ Default value: 'storm'
 
 Data type: `String`
 
-
+The permissions on /etc/grid-security/gridmapdir
 
 Default value: '0770'
 
@@ -2209,7 +2183,7 @@ Default value: '0770'
 
 Data type: `Array[Data]`
 
-
+The Array of pool accounts.
 
 Default value: [{
     'name' => 'tstvo',
@@ -2231,7 +2205,8 @@ Default value: [{
 
 Data type: `Boolean`
 
-
+If true (default) use as /etc/lcmaps/lcmaps.db the file specified with lcmaps_db_file.
+If false, file is not managed by this class.
 
 Default value: `true`
 
@@ -2239,7 +2214,7 @@ Default value: `true`
 
 Data type: `String`
 
-
+The path of the lcmaps.db to copy into /etc/lcmaps/lcmaps.db. Default: puppet:///modules/storm/etc/lcmaps/lcmaps.db
 
 Default value: 'puppet:///modules/storm/etc/lcmaps/lcmaps.db'
 
@@ -2247,7 +2222,8 @@ Default value: 'puppet:///modules/storm/etc/lcmaps/lcmaps.db'
 
 Data type: `Boolean`
 
-
+If true (default) use as /etc/lcas/lcas.db the file specified with lcas_db_file.
+If false, file is not managed by this class.
 
 Default value: `true`
 
@@ -2255,7 +2231,7 @@ Default value: `true`
 
 Data type: `String`
 
-
+The path of the lcas.db to copy into /etc/lcas/lcas.db. Default: puppet:///modules/storm/etc/lcas/lcas.db
 
 Default value: 'puppet:///modules/storm/etc/lcas/lcas.db'
 
@@ -2263,7 +2239,8 @@ Default value: 'puppet:///modules/storm/etc/lcas/lcas.db'
 
 Data type: `Boolean`
 
-
+If true (default) use as /etc/lcas/ban_users.db the file specified with lcas_ban_users_file.
+If false, file is not managed by this class.
 
 Default value: `true`
 
@@ -2271,7 +2248,7 @@ Default value: `true`
 
 Data type: `String`
 
-
+The path of the ban_users.db to copy into /etc/lcas/ban_users.db. Default: puppet:///modules/storm/etc/lcas/ban_users.db
 
 Default value: 'puppet:///modules/storm/etc/lcas/ban_users.db'
 
@@ -2279,7 +2256,8 @@ Default value: 'puppet:///modules/storm/etc/lcas/ban_users.db'
 
 Data type: `Boolean`
 
-
+If true (default) use as /etc/grid-security/gsi-authz.conf the file specified with gsi_authz_file.
+If false, file is not managed by this class.
 
 Default value: `true`
 
@@ -2287,7 +2265,7 @@ Default value: `true`
 
 Data type: `String`
 
-
+The path of the gsi-authz.conf to copy into /etc/grid-security/gsi-authz.conf. Default: puppet:///modules/storm/etc/grid-security/gsi-authz.conf
 
 Default value: 'puppet:///modules/storm/etc/grid-security/gsi-authz.conf'
 
@@ -3148,19 +3126,7 @@ Alias of `Struct[{
 
 ### Storm::Backend::StorageArea
 
-Mandatory fields:
-<ul><li>name</li><li>root_path</li><li>online_size</li></ul>
-
-<table>
-  <thead>
-    <tr><th>Property Name</th><th>Description</th></tr>
-  </thead>
-  <tbody>
-    <tr><td>name</td><td>The name of the storage area. Mandatory.</td></tr>
-    <tr><td>root_path</td><td>The absolute real path of the storage area parent directory. Mandatory.</td></tr>
-    <tr><td>access_points</td><td>List of relative logical paths used to access storage area. Optional variable. Default value: /{name}.</td></tr>
-  </tbody>
-</table>
+The storage area type for storm-backend-server
 
 Alias of `Struct[{
   name                         => String,

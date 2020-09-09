@@ -1,44 +1,44 @@
 # @summary Utility class used to install LCMAPS and LCAS and configure mapping software and files. 
 #
 # @param gridmapdir_owner
-# The owner of /etc/grid-security/gridmapdir
+#   The owner of /etc/grid-security/gridmapdir
 #
 # @param gridmapdir_group
-# The group of /etc/grid-security/gridmapdir
+#   The group of /etc/grid-security/gridmapdir
 #
 # @param gridmapdir_mode
-# The permissions on /etc/grid-security/gridmapdir
+#   The permissions on /etc/grid-security/gridmapdir
 #
 # @param pools
-# The Array of pool accounts.
+#   The Array of pool accounts.
 #
 # @param manage_lcmaps_db_file
-# If true (default) use as /etc/lcmaps/lcmaps.db the file specified with lcmaps_db_file.
-# If false, file is not managed by this class.
+#   If true (default) use as /etc/lcmaps/lcmaps.db the file specified with lcmaps_db_file.
+#   If false, file is not managed by this class.
 #
 # @param lcmaps_db_file
-# The path of the lcmaps.db to copy into /etc/lcmaps/lcmaps.db. Default: puppet:///modules/storm/etc/lcmaps/lcmaps.db
+#   The path of the lcmaps.db to copy into /etc/lcmaps/lcmaps.db. Default: puppet:///modules/storm/etc/lcmaps/lcmaps.db
 #
 # @param manage_lcas_db_file
-# If true (default) use as /etc/lcas/lcas.db the file specified with lcas_db_file.
-# If false, file is not managed by this class.
+#   If true (default) use as /etc/lcas/lcas.db the file specified with lcas_db_file.
+#   If false, file is not managed by this class.
 #
 # @param lcas_db_file
-# The path of the lcas.db to copy into /etc/lcas/lcas.db. Default: puppet:///modules/storm/etc/lcas/lcas.db
+#   The path of the lcas.db to copy into /etc/lcas/lcas.db. Default: puppet:///modules/storm/etc/lcas/lcas.db
 #
 # @param manage_lcas_ban_users_file
-# If true (default) use as /etc/lcas/ban_users.db the file specified with lcas_ban_users_file.
-# If false, file is not managed by this class.
+#   If true (default) use as /etc/lcas/ban_users.db the file specified with lcas_ban_users_file.
+#   If false, file is not managed by this class.
 #
 # @param lcas_ban_users_file
-# The path of the ban_users.db to copy into /etc/lcas/ban_users.db. Default: puppet:///modules/storm/etc/lcas/ban_users.db
+#   The path of the ban_users.db to copy into /etc/lcas/ban_users.db. Default: puppet:///modules/storm/etc/lcas/ban_users.db
 #
 # @param manage_gsi_authz_file
-# If true (default) use as /etc/grid-security/gsi-authz.conf the file specified with gsi_authz_file.
-# If false, file is not managed by this class.
+#   If true (default) use as /etc/grid-security/gsi-authz.conf the file specified with gsi_authz_file.
+#   If false, file is not managed by this class.
 #
 # @param gsi_authz_file
-# The path of the gsi-authz.conf to copy into /etc/grid-security/gsi-authz.conf. Default: puppet:///modules/storm/etc/grid-security/gsi-authz.conf
+#   The path of the gsi-authz.conf to copy into /etc/grid-security/gsi-authz.conf. Default: puppet:///modules/storm/etc/grid-security/gsi-authz.conf
 #
 # @example Example of usage
 #    class { 'storm::mapping':
