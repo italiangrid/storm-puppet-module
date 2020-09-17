@@ -24,6 +24,11 @@ RUN wget https://repo1.maven.org/maven2/org/codehaus/sonar/runner/sonar-runner-d
     chmod +x /opt/sonar-runner/sonar-runner-2.4/bin/sonar-runner && \
     rm -rf sonar-runner-dist-2.4.zip
 
+RUN wget https://apt.puppet.com/puppet-tools-release-stretch.deb && \
+    dpkg -i puppet-tools-release-stretch.deb && \
+    apt-get update && \
+    apt-get install pdk -y
+
 ENV PATH $PATH:/opt/sonar-runner/sonar-runner-2.4/bin
 ENV SONAR_RUNNER_HOME /opt/sonar-runner/sonar-runner-2.4
 
@@ -31,3 +36,4 @@ RUN env
 
 RUN java -version
 RUN sonar-runner -v
+RUN pdk --version
