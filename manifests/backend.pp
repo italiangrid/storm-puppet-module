@@ -40,14 +40,8 @@
 # @param install_native_libs_gpfs
 #   Set this if you need to install storm-native-libs-gpfs. Default: false.
 #
-# @param mysql_server_install
-#   Install MySQL server on the same host. Default: false.
-#
-# @param mysql_server_root_password
-#   Used to configure MySQL server in case mysql_server_install is true. Default: 'storm'.
-#
-# @param mysql_server_override_options
-#   Used to configure MySQL server in case mysql_server_install is true. 
+# @param db_hostname
+#   Fully Qualified Domain Name of database hostname. Default value: `hostname`.
 #
 # @param db_username
 #   The name of user used to connect to local database. Default: storm
@@ -298,21 +292,20 @@
 #
 # @param http_turl_prefix
 #
+# @param storm_limit_nofile
+#   Sets LimitNOFILE value.
+#
 class storm::backend (
 
-  String $hostname,
+  String $hostname = lookup('storm::backend::hostname', String, undef, $::fqdn),
 
   # Install native libs gpfs
   Boolean $install_native_libs_gpfs = $storm::backend::params::install_native_libs_gpfs,
 
   # Db connection
+  String $db_hostname = lookup('storm::backend::db_hostname', String, undef, $hostname),
   String $db_username = $storm::backend::params::db_username,
   String $db_password = $storm::backend::params::db_password,
-
-  # MySQL Server options
-  Boolean $mysql_server_install = $storm::backend::params::mysql_server_install,
-  String $mysql_server_root_password = $storm::backend::params::mysql_server_root_password,
-  Data $mysql_server_override_options = $storm::backend::params::mysql_server_override_options,
 
   ### Default values for Storage Areas
   # 1. xroot
@@ -445,6 +438,9 @@ class storm::backend (
 
   # HTTP TURL prefix
   String $http_turl_prefix = $storm::backend::params::http_turl_prefix,
+
+  # LimitNOFILE
+  Integer $storm_limit_nofile = $storm::backend::params::storm_limit_nofile,
 
 ) inherits storm::backend::params {
 

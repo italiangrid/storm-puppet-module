@@ -6,12 +6,9 @@ class storm::backend::config (
 
   $install_native_libs_gpfs = $storm::backend::install_native_libs_gpfs,
 
+  $db_hostname = $storm::backend::db_hostname,
   $db_username = $storm::backend::db_username,
   $db_password = $storm::backend::db_password,
-
-  $mysql_server_install = $storm::backend::mysql_server_install,
-  $mysql_server_root_password = $storm::backend::mysql_server_root_password,
-  $mysql_server_override_options = $storm::backend::mysql_server_override_options,
 
   $xroot_hostname = $storm::backend::xroot_hostname,
   $xroot_port = $storm::backend::xroot_port,
@@ -113,6 +110,8 @@ class storm::backend::config (
 
   $http_turl_prefix = $storm::backend::http_turl_prefix,
 
+  $storm_limit_nofile = $storm::backend::storm_limit_nofile,
+
 ) {
 
   # Service's host credentials directory
@@ -193,6 +192,19 @@ class storm::backend::config (
   file { $service_file:
     ensure  => present,
     content => template($service_template_file),
+    mode    => '0644',
+    owner   => 'root',
+    group   => 'root',
+    notify  => [Exec['backend-daemon-reload'], Service['storm-backend-server']],
+    require => [File[$service_dir]],
+  }
+
+  $limit_file='/etc/systemd/system/storm-backend-server.service.d/filelimit.conf'
+  $limit_template_file='storm/etc/systemd/system/storm-backend-server.service.d/filelimit.conf.erb'
+
+  file { $limit_file:
+    ensure  => present,
+    content => template($limit_template_file),
     mode    => '0644',
     owner   => 'root',
     group   => 'root',

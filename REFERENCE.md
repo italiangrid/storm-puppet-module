@@ -11,6 +11,8 @@
 * [`storm::backend::install`](#stormbackendinstall): StoRM Backend install class
 * [`storm::backend::params`](#stormbackendparams): StoRM Frontend params class
 * [`storm::backend::service`](#stormbackendservice): StoRM Backend service class
+* [`storm::db`](#stormdb): Install MariaDB server and client, create empty databases 'storm_db' and 'storm_be_ISAM',
+add storm user and all the necessary grants.
 * [`storm::frontend`](#stormfrontend): StoRM Frontend puppet module
 * [`storm::frontend::config`](#stormfrontendconfig): StoRM Frontend config class
 * [`storm::frontend::install`](#stormfrontendinstall): StoRM Frontend install class
@@ -25,8 +27,6 @@
 * [`storm::params`](#stormparams): StoRM params class
 * [`storm::repo`](#stormrepo): Choose which StoRM repository you want to intall and enable. Also a custom list of repository URL can be specified.
 * [`storm::storage`](#stormstorage): Init testbed storage area's directories
-* [`storm::testca`](#stormtestca): Utility class for internal test purpose. Install test ca repo and package.
-* [`storm::testvos`](#stormtestvos): Utility class for internal purpose. Configure all the test VOs used into our testbeds.
 * [`storm::users`](#stormusers): StoRM accounts configuration
 * [`storm::webdav`](#stormwebdav): StoRM WebDAV puppet module
 * [`storm::webdav::config`](#stormwebdavconfig): StoRM WebDAV config class
@@ -61,7 +61,7 @@
 * [`Storm::Backend::Xroot`](#stormbackendxroot): The Xroot type for storm-backend-server
 * [`Storm::CustomRepo`](#stormcustomrepo): The storage area type for storm-webdav
 * [`Storm::Webdav::OAuthIssuer`](#stormwebdavoauthissuer): The OAuthIssuer type for storm-webdav
-* [`Storm::Webdav::StorageArea`](#stormwebdavstoragearea): The storage area type for storm-webdav
+* [`Storm::Webdav::StorageArea`](#stormwebdavstoragearea): The storage area type for storm-webdav.
 
 ## Classes
 
@@ -117,6 +117,8 @@ Data type: `String`
 
 StoRM Backend Fully Qualified Domain Name
 
+Default value: lookup('storm::backend::hostname', String, undef, $::fqdn)
+
 ##### `install_native_libs_gpfs`
 
 Data type: `Boolean`
@@ -125,29 +127,13 @@ Set this if you need to install storm-native-libs-gpfs. Default: false.
 
 Default value: $storm::backend::params::install_native_libs_gpfs
 
-##### `mysql_server_install`
-
-Data type: `Boolean`
-
-Install MySQL server on the same host. Default: false.
-
-Default value: $storm::backend::params::mysql_server_install
-
-##### `mysql_server_root_password`
+##### `db_hostname`
 
 Data type: `String`
 
-Used to configure MySQL server in case mysql_server_install is true. Default: 'storm'.
+Fully Qualified Domain Name of database hostname. Default value: `hostname`.
 
-Default value: $storm::backend::params::mysql_server_root_password
-
-##### `mysql_server_override_options`
-
-Data type: `Data`
-
-Used to configure MySQL server in case mysql_server_install is true.
-
-Default value: $storm::backend::params::mysql_server_override_options
+Default value: lookup('storm::backend::db_hostname', String, undef, $hostname)
 
 ##### `db_username`
 
@@ -806,6 +792,14 @@ Data type: `String`
 
 Default value: $storm::backend::params::http_turl_prefix
 
+##### `storm_limit_nofile`
+
+Data type: `Integer`
+
+Sets LimitNOFILE value.
+
+Default value: $storm::backend::params::storm_limit_nofile
+
 ##### `info_config_file`
 
 Data type: `String`
@@ -838,6 +832,14 @@ Data type: `Any`
 
 Default value: $storm::backend::install_native_libs_gpfs
 
+##### `db_hostname`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::db_hostname
+
 ##### `db_username`
 
 Data type: `Any`
@@ -853,30 +855,6 @@ Data type: `Any`
 
 
 Default value: $storm::backend::db_password
-
-##### `mysql_server_install`
-
-Data type: `Any`
-
-
-
-Default value: $storm::backend::mysql_server_install
-
-##### `mysql_server_root_password`
-
-Data type: `Any`
-
-
-
-Default value: $storm::backend::mysql_server_root_password
-
-##### `mysql_server_override_options`
-
-Data type: `Any`
-
-
-
-Default value: $storm::backend::mysql_server_override_options
 
 ##### `xroot_hostname`
 
@@ -1486,6 +1464,14 @@ Data type: `Any`
 
 Default value: $storm::backend::http_turl_prefix
 
+##### `storm_limit_nofile`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::storm_limit_nofile
+
 ### storm::backend::configdb
 
 StoRM Backend DB config class
@@ -1494,15 +1480,15 @@ StoRM Backend DB config class
 
 The following parameters are available in the `storm::backend::configdb` class.
 
-##### `fqdn_hostname`
+##### `db_hostname`
 
 Data type: `Any`
 
 
 
-Default value: $storm::backend::hostname
+Default value: $storm::backend::db_hostname
 
-##### `storm_username`
+##### `db_username`
 
 Data type: `Any`
 
@@ -1510,7 +1496,7 @@ Data type: `Any`
 
 Default value: $storm::backend::db_username
 
-##### `storm_password`
+##### `db_password`
 
 Data type: `Any`
 
@@ -1529,6 +1515,68 @@ StoRM Frontend params class
 ### storm::backend::service
 
 StoRM Backend service class
+
+### storm::db
+
+Install MariaDB server and client, create empty databases 'storm_db' and 'storm_be_ISAM',
+add storm user and all the necessary grants.
+
+#### Examples
+
+##### Basic usage:
+
+```puppet
+include storm::db
+```
+
+#### Parameters
+
+The following parameters are available in the `storm::db` class.
+
+##### `fqdn_hostname`
+
+Data type: `String`
+
+The Fully Qualified Domain Name of the host. Default value got from Puppet fact `fqdn`.
+
+Default value: $::fqdn
+
+##### `root_password`
+
+Data type: `String`
+
+MySQL root password. Default: 'storm'.
+
+Default value: 'storm'
+
+##### `storm_username`
+
+Data type: `String`
+
+The username of the user used by storm services to query the databases. Default 'storm'.
+
+Default value: 'storm'
+
+##### `storm_password`
+
+Data type: `String`
+
+The password of 'storm' username used by storm services to access the databases. Default: 'storm'.
+
+Default value: 'storm'
+
+##### `override_options`
+
+Data type: `Data`
+
+MySQL server override options. Read more about this at https://forge.puppet.com/puppetlabs/mysql/reference#override_options.
+
+Default value: {
+    'mysqld' => {
+      'bind-address'    => '0.0.0.0',
+      'max_connections' => 2048,
+    },
+  }
 
 ### storm::frontend
 
@@ -2190,15 +2238,19 @@ Default value: [{
     'size' => 20,
     'base_uid' => 7100,
     'group' => 'testvo',
+    'groups' => ['testvo'],
     'gid' => 7100,
     'vo' => 'test.vo',
+    'role' => 'NULL',
   },{
     'name' => 'testdue',
     'size' => 20,
     'base_uid' => 8100,
     'group' => 'testvodue',
+    'groups' => ['testvodue'],
     'gid' => 8100,
     'vo' => 'test.vo.2',
+    'role' => 'NULL',
   }]
 
 ##### `manage_lcmaps_db_file`
@@ -2315,22 +2367,6 @@ A list of repository that have to be created. Optional.
 
 Default value: []
 
-##### `install_umd`
-
-Data type: `Boolean`
-
-Install UMD4 repositories. Default: false.
-
-Default value: `false`
-
-##### `install_epel`
-
-Data type: `Boolean`
-
-Install EPEL repositories. Default: false.
-
-Default value: `false`
-
 ### storm::storage
 
 Init testbed storage area's directories
@@ -2360,14 +2396,6 @@ Data type: `Array[String]`
 A list of all storage root directories owned by storm user. You must add also all parent directories.
 
 Default value: ['/storage']
-
-### storm::testca
-
-Utility class for internal test purpose. Install test ca repo and package.
-
-### storm::testvos
-
-Utility class for internal purpose. Configure all the test VOs used into our testbeds.
 
 ### storm::users
 
@@ -2442,41 +2470,14 @@ Default value: {
 
 ### storm::webdav
 
-Parameters
-----------
-
-The main StoRM WebDAV configuration parameters are:
-
-* `user_name`: the Unix user that runs storm-webdav service;
-* `storage_areas`: the list of Storm::Webdav::StorageArea elements (more info below);
-* `oauth_issuers`: the list of Storm::Webdav::OAuthIssuer elements that means the supported OAuth providers;
-* `hostnames`: the list of hostname and aliases supported for Third-Party-Copy;
-* `http_port` and `https_port`: the service ports;
-
-The Storm::Webdav::StorageArea type
---------------------
-
-* `name`: The name of the storage area. Required.
-* `root_path`: The path of the storage area root directory. Required.
-* `access_points`: A list of logic path used to access storage area's root. Required.
-* `vos`: A list of one or more Virtual Organization names of the users allowed to read/write into the storage area. Required.
-* `orgs`: A list of one or more Organizations. Optional.
-* `authenticated_read_enabled`: A boolean value used to enable the read of the storage area content to authenticated users. Required.
-* `anonymous_read_enabled`:  A boolean value used to enable anonymous read access to storage area content. Required.
-* `vo_map_enabled`: A boolean value used to enable the use of the VO gridmap files. Required.
-* `vo_map_grants_write_access`: A boolean value used to grant write access to the VO users read from grifmap file. Optional,
-
-The Storm::Webdav::OAuthIssuer type
---------------------
-
-* `name`: the organization name. Rerquired.
-* `issuer`: the issuer URL. Required.
+StoRM WebDAV puppet module
 
 #### Examples
 
-##### Example of usage
+##### Basic usage
 
 ```puppet
+
 class { 'storm::webdav':
   storage_areas => [
     {
@@ -2495,13 +2496,21 @@ class { 'storm::webdav':
       vo_map_enabled             => false,
     },
   ],
+  manage_application_file => true,
   oauth_issuers => [
     {
       name   => 'indigo-dc',
       issuer => 'https://iam-test.indigo-datacloud.eu/',
     },
   ],
-  hostnames => ['localhost', 'alias.for.localhost'],
+  hostnames => ['webdav.example.org', 'storm-webdav.example.org'],
+}
+
+class { 'storm::webdav':
+  manage_application_file => true,
+  application_file        => '/root/storm/webdav/application.yml',
+  storage_areas_directory => '/root/storm/webdav/sa.d',
+  hostnames               => ['storm-webdav.example.org'],
 }
 ```
 
@@ -2509,19 +2518,36 @@ class { 'storm::webdav':
 
 The following parameters are available in the `storm::webdav` class.
 
+##### `manage_application_file`
+
+Data type: `Boolean`
+
+Set to True if you want to manage application.yml configuration. Default: false (application.yml file configuration is ignored).
+
+Default value: $storm::webdav::params::manage_application_file
+
 ##### `application_file`
 
 Data type: `String`
 
-If defined, the application.yml file is copied from this path and oauth_issuers is ignored.
+If defined, the application.yml file is copied from this path and oauth_issuers is ignored. Ignored if manage_application_file is false.
 
 Default value: $storm::webdav::params::application_file
+
+##### `manage_storage_areas`
+
+Data type: `Boolean`
+
+Set to True if you want to manage storage areas configuration. Default: true.
+
+Default value: $storm::webdav::params::manage_storage_areas
 
 ##### `storage_areas_directory`
 
 Data type: `String`
 
 If defined, the properties files of the storage areas are copied and storage_areas parameter is ignored.
+Ignored if manage_storage_areas is false.
 
 Default value: $storm::webdav::params::storage_areas_directory
 
@@ -2530,6 +2556,7 @@ Default value: $storm::webdav::params::storage_areas_directory
 Data type: `Array[Storm::Webdav::StorageArea]`
 
 List of storage area's configuration. Ignored if storage_areas_directory is defined.
+Ignored if manage_storage_areas is false.
 
 Default value: $storm::webdav::params::storage_areas
 
@@ -2545,7 +2572,7 @@ Default value: $storm::webdav::params::oauth_issuers
 
 Data type: `Array[String]`
 
-
+Sets STORM_WEBDAV_HOSTNAME_{n} environment variables.
 
 Default value: $storm::webdav::params::hostnames
 
@@ -2553,7 +2580,7 @@ Default value: $storm::webdav::params::hostnames
 
 Data type: `Integer`
 
-
+Sets STORM_WEBDAV_HTTP_PORT environment variable.
 
 Default value: $storm::webdav::params::http_port
 
@@ -2561,7 +2588,7 @@ Default value: $storm::webdav::params::http_port
 
 Data type: `Integer`
 
-
+Sets STORM_WEBDAV_HTTPS_PORT environment variable.
 
 Default value: $storm::webdav::params::https_port
 
@@ -2569,7 +2596,7 @@ Default value: $storm::webdav::params::https_port
 
 Data type: `Integer`
 
-
+Sets STORM_WEBDAV_TRUST_ANCHORS_REFRESH_INTERVAL environment variable.
 
 Default value: $storm::webdav::params::trust_anchors_refresh_interval
 
@@ -2577,7 +2604,7 @@ Default value: $storm::webdav::params::trust_anchors_refresh_interval
 
 Data type: `Integer`
 
-
+Sets STORM_WEBDAV_MAX_CONNECTIONS environment variable.
 
 Default value: $storm::webdav::params::max_concurrent_connections
 
@@ -2585,7 +2612,7 @@ Default value: $storm::webdav::params::max_concurrent_connections
 
 Data type: `Integer`
 
-
+Sets STORM_WEBDAV_MAX_QUEUE_SIZE environment variable.
 
 Default value: $storm::webdav::params::max_queue_size
 
@@ -2593,7 +2620,7 @@ Default value: $storm::webdav::params::max_queue_size
 
 Data type: `Integer`
 
-
+Sets STORM_WEBDAV_CONNECTOR_MAX_IDLE_TIME environment variable.
 
 Default value: $storm::webdav::params::connector_max_idle_time
 
@@ -2601,7 +2628,7 @@ Default value: $storm::webdav::params::connector_max_idle_time
 
 Data type: `Boolean`
 
-
+Sets STORM_WEBDAV_VO_MAP_FILES_ENABLE environment variable.
 
 Default value: $storm::webdav::params::vo_map_files_enable
 
@@ -2609,7 +2636,7 @@ Default value: $storm::webdav::params::vo_map_files_enable
 
 Data type: `String`
 
-
+Sets STORM_WEBDAV_VO_MAP_FILES_CONFIG_DIR environment variable.
 
 Default value: $storm::webdav::params::vo_map_files_config_dir
 
@@ -2617,7 +2644,7 @@ Default value: $storm::webdav::params::vo_map_files_config_dir
 
 Data type: `Integer`
 
-
+Sets STORM_WEBDAV_VO_MAP_FILES_REFRESH_INTERVAL environment variable.
 
 Default value: $storm::webdav::params::vo_map_files_refresh_interval
 
@@ -2625,7 +2652,7 @@ Default value: $storm::webdav::params::vo_map_files_refresh_interval
 
 Data type: `Integer`
 
-
+Sets STORM_WEBDAV_TPC_MAX_CONNECTIONS environment variable.
 
 Default value: $storm::webdav::params::tpc_max_connections
 
@@ -2633,7 +2660,7 @@ Default value: $storm::webdav::params::tpc_max_connections
 
 Data type: `Boolean`
 
-
+Sets STORM_WEBDAV_TPC_VERIFY_CHECKSUM environment variable.
 
 Default value: $storm::webdav::params::tpc_verify_checksum
 
@@ -2641,7 +2668,7 @@ Default value: $storm::webdav::params::tpc_verify_checksum
 
 Data type: `String`
 
-
+Sets part of STORM_WEBDAV_JVM_OPTS environment variable.
 
 Default value: $storm::webdav::params::jvm_opts
 
@@ -2649,7 +2676,7 @@ Default value: $storm::webdav::params::jvm_opts
 
 Data type: `Boolean`
 
-
+Sets STORM_WEBDAV_AUTHZ_SERVER_ENABLE environment variable.
 
 Default value: $storm::webdav::params::authz_server_enable
 
@@ -2657,7 +2684,7 @@ Default value: $storm::webdav::params::authz_server_enable
 
 Data type: `String`
 
-
+Sets STORM_WEBDAV_AUTHZ_SERVER_ISSUER environment variable.
 
 Default value: $storm::webdav::params::authz_server_issuer
 
@@ -2665,7 +2692,7 @@ Default value: $storm::webdav::params::authz_server_issuer
 
 Data type: `Integer`
 
-
+Sets STORM_WEBDAV_AUTHZ_SERVER_MAX_TOKEN_LIFETIME_SEC environment variable.
 
 Default value: $storm::webdav::params::authz_server_max_token_lifetime_sec
 
@@ -2673,7 +2700,7 @@ Default value: $storm::webdav::params::authz_server_max_token_lifetime_sec
 
 Data type: `String`
 
-
+Sets STORM_WEBDAV_AUTHZ_SERVER_SECRET environment variable.
 
 Default value: $storm::webdav::params::authz_server_secret
 
@@ -2681,7 +2708,7 @@ Default value: $storm::webdav::params::authz_server_secret
 
 Data type: `Boolean`
 
-
+Sets STORM_WEBDAV_REQUIRE_CLIENT_CERT environment variable.
 
 Default value: $storm::webdav::params::require_client_cert
 
@@ -2689,7 +2716,7 @@ Default value: $storm::webdav::params::require_client_cert
 
 Data type: `Boolean`
 
-
+Sets STORM_WEBDAV_USE_CONSCRYPT environment variable.
 
 Default value: $storm::webdav::params::use_conscrypt
 
@@ -2697,7 +2724,7 @@ Default value: $storm::webdav::params::use_conscrypt
 
 Data type: `Boolean`
 
-
+Sets STORM_WEBDAV_TPC_USE_CONSCRYPT environment variable.
 
 Default value: $storm::webdav::params::tpc_use_conscrypt
 
@@ -2705,7 +2732,7 @@ Default value: $storm::webdav::params::tpc_use_conscrypt
 
 Data type: `Boolean`
 
-
+Sets STORM_WEBDAV_ENABLE_HTTP2 environment variable.
 
 Default value: $storm::webdav::params::enable_http2
 
@@ -2713,7 +2740,7 @@ Default value: $storm::webdav::params::enable_http2
 
 Data type: `Boolean`
 
-
+Sets part of STORM_WEBDAV_JVM_OPTS environment variable. It enables remote debug.
 
 Default value: $storm::webdav::params::debug
 
@@ -2721,7 +2748,7 @@ Default value: $storm::webdav::params::debug
 
 Data type: `Integer`
 
-
+Sets part of STORM_WEBDAV_JVM_OPTS environment variable. It sets the remote debug port if remote debug is enabled.
 
 Default value: $storm::webdav::params::debug_port
 
@@ -2729,7 +2756,7 @@ Default value: $storm::webdav::params::debug_port
 
 Data type: `Boolean`
 
-
+Sets part of STORM_WEBDAV_JVM_OPTS environment variable. It sets debug suspend value in case remote debug is enabled.
 
 Default value: $storm::webdav::params::debug_suspend
 
@@ -2737,7 +2764,7 @@ Default value: $storm::webdav::params::debug_suspend
 
 Data type: `Integer`
 
-
+Sets LimitNOFILE value.
 
 Default value: $storm::webdav::params::storm_limit_nofile
 
@@ -2749,6 +2776,14 @@ StoRM WebDAV config class
 
 The following parameters are available in the `storm::webdav::config` class.
 
+##### `manage_application_file`
+
+Data type: `Any`
+
+
+
+Default value: $storm::webdav::manage_application_file
+
 ##### `application_file`
 
 Data type: `Any`
@@ -2756,6 +2791,22 @@ Data type: `Any`
 
 
 Default value: $storm::webdav::application_file
+
+##### `oauth_issuers`
+
+Data type: `Any`
+
+
+
+Default value: $storm::webdav::oauth_issuers
+
+##### `manage_storage_areas`
+
+Data type: `Any`
+
+
+
+Default value: $storm::webdav::manage_storage_areas
 
 ##### `storage_areas_directory`
 
@@ -2772,14 +2823,6 @@ Data type: `Any`
 
 
 Default value: $storm::webdav::storage_areas
-
-##### `oauth_issuers`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::oauth_issuers
 
 ##### `hostnames`
 
@@ -3216,7 +3259,7 @@ Alias of `Struct[{
 
 ### Storm::Webdav::StorageArea
 
-The storage area type for storm-webdav
+The storage area type for storm-webdav.
 
 Alias of `Struct[{
   name                           => String,

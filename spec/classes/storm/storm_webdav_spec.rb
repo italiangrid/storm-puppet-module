@@ -35,6 +35,7 @@ describe 'storm::webdav', :type => :class do
                 'fine_grained_authz_enabled' => true,
               },
             ],
+            'manage_application_file' => true,
             'oauth_issuers' => [
               {
                 'name' => 'iam-virgo',
@@ -308,6 +309,7 @@ describe 'storm::webdav', :type => :class do
       context 'Check application.xml configured via source path' do
         let(:params) do
           {
+            'manage_application_file' => true,
             'application_file' => 'application-0.yml',
           }
         end

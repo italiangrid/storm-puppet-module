@@ -1,6 +1,6 @@
 {
   "name": "cnafsd-storm",
-  "version": "0.4.4",
+  "version": "1.0.0",
   "author": "storm",
   "summary": "StoRM Puppet module",
   "license": "Apache-2.0",
@@ -15,6 +15,10 @@
     {
       "name": "puppetlabs/mysql",
       "version_requirement": ">= 10.4.0"
+    },
+    {
+      "name": "puppetlabs-stdlib",
+      "version_requirement": ">= 1.0.0"
     }
   ],
   "requirements": [
@@ -27,7 +31,6 @@
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
-        "6",
         "7"
       ]
     }

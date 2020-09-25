@@ -2,14 +2,11 @@
 #
 class storm::backend::configdb (
 
-  $fqdn_hostname = $storm::backend::hostname,
-  $storm_username = $storm::backend::db_username,
-  $storm_password = $storm::backend::db_password,
+  $db_hostname = $storm::backend::db_hostname,
+  $db_username = $storm::backend::db_username,
+  $db_password = $storm::backend::db_password,
 
 ) {
-
-  $short_hostname = regsubst($fqdn_hostname, '^([^.]*).*$', '\1')
-  notice("Computed short hostname for ${fqdn_hostname} => ${short_hostname}")
 
   file { '/tmp/storm_db.sql':
     ensure => present,
@@ -21,82 +18,27 @@ class storm::backend::configdb (
     source => 'puppet:///modules/storm/storm_be_ISAM.sql',
   }
 
-  mysql::db { 'storm_db':
-    user     => $storm_username,
-    password => $storm_password,
-    host     => $fqdn_hostname,
-    grant    => 'ALL',
-    sql      => '/tmp/storm_db.sql',
-    require  => File['/tmp/storm_db.sql'],
+  $paths = ['/bin', '/usr/bin', '/sbin', '/usr/sbin', '/usr/local/bin']
+  $storm_db_query = 'use storm_db;select major from db_version;'
+  $check_storm_db = "! mysql -h ${db_hostname} -u${db_username} -p${db_password} -e \"${storm_db_query}\""
+  exec{ 'storm_db-import':
+    command     => 'mysql storm_db < /tmp/storm_db.sql',
+    onlyif      => $check_storm_db,
+    logoutput   => true,
+    environment => "HOME=${::root_home}",
+    path        => $paths,
+    provider    => 'shell',
+    require     => [File['/tmp/storm_db.sql']],
   }
-
-  mysql::db { 'storm_be_ISAM':
-    user     => $storm_username,
-    password => $storm_password,
-    host     => $fqdn_hostname,
-    grant    => 'ALL',
-    sql      => '/tmp/storm_be_ISAM.sql',
-    require  => File['/tmp/storm_be_ISAM.sql'],
+  $storm_be_isam_query = 'use storm_be_ISAM;select major from db_version;'
+  $check_storm_be_isam = "! mysql -h ${db_hostname} -u${db_username} -p${db_password} -e \"${storm_be_isam_query}\""
+  exec{ 'storm_be_ISAM-import':
+    command     => 'mysql storm_be_ISAM < /tmp/storm_be_ISAM.sql',
+    onlyif      => $check_storm_be_isam,
+    logoutput   => true,
+    environment => "HOME=${::root_home}",
+    path        => $paths,
+    provider    => 'shell',
+    require     => [File['/tmp/storm_be_ISAM.sql']],
   }
-
-  mysql_user { "${storm_username}@${short_hostname}":
-    ensure        => 'present',
-    password_hash => mysql::password($storm_password),
-    require       => [Mysql::Db['storm_db'], Mysql::Db['storm_be_ISAM']],
-  }
-  mysql_grant { "${storm_username}@${short_hostname}/storm_db.*":
-    privileges => 'ALL',
-    provider   => 'mysql',
-    user       => "${storm_username}@${short_hostname}",
-    table      => 'storm_db.*',
-    require    => [Mysql::Db['storm_db'], Mysql_user["${storm_username}@${short_hostname}"]],
-  }
-  mysql_grant { "${storm_username}@${short_hostname}/storm_be_ISAM.*":
-    privileges => 'ALL',
-    provider   => 'mysql',
-    user       => "${storm_username}@${short_hostname}",
-    table      => 'storm_be_ISAM.*',
-    require    => [Mysql::Db['storm_be_ISAM'], Mysql_user["${storm_username}@${short_hostname}"]],
-  }
-
-  mysql_user { "${storm_username}@%":
-    ensure        => 'present',
-    password_hash => mysql::password($storm_password),
-    require       => [Mysql::Db['storm_db'], Mysql::Db['storm_be_ISAM']],
-  }
-  mysql_grant { "${storm_username}@%/storm_db.*":
-    privileges => 'ALL',
-    provider   => 'mysql',
-    user       => "${storm_username}@%",
-    table      => 'storm_db.*',
-    require    => [Mysql::Db['storm_db'], Mysql_user["${storm_username}@%"]],
-  }
-  mysql_grant { "${storm_username}@%/storm_be_ISAM.*":
-    privileges => 'ALL',
-    provider   => 'mysql',
-    user       => "${storm_username}@%",
-    table      => 'storm_be_ISAM.*',
-    require    => [Mysql::Db['storm_be_ISAM'], Mysql_user["${storm_username}@%"]],
-  }
-
-  mysql_user { "${storm_username}@localhost":
-    ensure        => 'present',
-    password_hash => mysql::password($storm_password),
-    require       => [Mysql::Db['storm_db'], Mysql::Db['storm_be_ISAM']],
-  }
-  mysql_grant { "${storm_username}@localhost/storm_db.*":
-    privileges => 'ALL',
-    provider   => 'mysql',
-    user       => "${storm_username}@localhost",
-    table      => 'storm_db.*',
-    require    => [Mysql::Db['storm_db'], Mysql_user["${storm_username}@localhost"]],
-  }
-  mysql_grant { "${storm_username}@localhost/storm_be_ISAM.*":
-    privileges => 'ALL',
-    provider   => 'mysql',
-    user       => "${storm_username}@localhost",
-    table      => 'storm_be_ISAM.*',
-    require    => [Mysql::Db['storm_be_ISAM'], Mysql_user["${storm_username}@localhost"]],
-  }
-
 }

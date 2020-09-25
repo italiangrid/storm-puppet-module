@@ -6,14 +6,6 @@ describe 'storm::backend::service' do
 
     context "on #{os}" do
 
-      let(:pre_condition) {
-      <<-EOF
-        class { 'storm::backend':
-          hostname => 'storm.example.org',
-        }
-      EOF
-      }
-
       let(:facts) do
         facts
       end

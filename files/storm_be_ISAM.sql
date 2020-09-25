@@ -69,5 +69,5 @@ CREATE TABLE IF NOT EXISTS tape_recall (
   primary key (taskId , requestToken)) ENGINE=InnoDB;
 
 ALTER TABLE tape_recall 
-  ADD INDEX deferredStartTime (deferredStartTime),
+  ADD INDEX deferredStartTime_index (deferredStartTime),
   ADD INDEX groupTaskId_index (groupTaskId);

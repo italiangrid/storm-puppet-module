@@ -2,8 +2,9 @@
 @pools.each do | pool |
   @vo_name=pool['vo']
   @group=pool['group']
+  @voms_role=pool['role']
 -%>
-"/<%=@vo_name%>/Role=NULL/Capability=NULL" <%=@group%>
+"/<%=@vo_name%>/Role=<%=@voms_role%>/Capability=NULL" <%=@group%>
 "/<%=@vo_name%>" <%=@group%>
 <%- 
 end

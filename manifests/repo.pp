@@ -9,12 +9,6 @@
 # @param extra
 #   A list of repository that have to be created. Optional.
 #
-# @param install_umd
-#   Install UMD4 repositories. Default: false.
-#
-# @param install_epel
-#   Install EPEL repositories. Default: false.
-#
 # @example Install all the repositories and enable only nightly repo as follow:
 #   class { 'storm::repo':
 #     enabled => ['stable'],
@@ -25,9 +19,6 @@ class storm::repo (
   Array[Enum['stable', 'beta', 'nightly']] $enabled = ['stable'],
 
   Array[Storm::CustomRepo] $extra = [],
-
-  Boolean $install_umd = false,
-  Boolean $install_epel = false,
 
 ) {
 
@@ -67,31 +58,4 @@ class storm::repo (
     }
   }
 
-  if $install_umd {
-
-    $platform = $::operatingsystemmajrelease
-    case $platform {
-      '6' : {
-        $umd_repo = 'http://repository.egi.eu/sw/production/umd/4/sl6/x86_64/updates/umd-release-4.1.3-1.el6.noarch.rpm'
-      }
-      '7' : {
-        $umd_repo = 'http://repository.egi.eu/sw/production/umd/4/centos7/x86_64/updates/umd-release-4.1.3-1.el7.centos.noarch.rpm'
-      }
-      default : {
-        fail('Unsupported platform for UMD-4')
-      }
-    }
-    package { 'umd-release':
-      ensure => installed,
-      source => $umd_repo,
-    }
-  }
-
-  if $install_epel {
-
-    package { 'epel-release':
-      ensure => latest,
-    }
-
-  }
 }

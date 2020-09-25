@@ -64,15 +64,19 @@ class storm::mapping (
     'size' => 20,
     'base_uid' => 7100,
     'group' => 'testvo',
+    'groups' => ['testvo'],
     'gid' => 7100,
     'vo' => 'test.vo',
+    'role' => 'NULL',
   },{
     'name' => 'testdue',
     'size' => 20,
     'base_uid' => 8100,
     'group' => 'testvodue',
+    'groups' => ['testvodue'],
     'gid' => 8100,
     'vo' => 'test.vo.2',
+    'role' => 'NULL',
   }],
 
   Boolean $manage_lcmaps_db_file = true,
@@ -118,6 +122,13 @@ class storm::mapping (
       ensure => present,
       gid    => $pool['gid'],
     }
+    $pool['groups'].each | $g | {
+      if !defined(Group[$g]) {
+        group { $g:
+          ensure => present,
+        }
+      }
+    }
 
     range('1', $pool['size']).each | $id | {
 
@@ -128,7 +139,7 @@ class storm::mapping (
         ensure     => present,
         uid        => $pool['base_uid'] + $id,
         gid        => $pool['gid'],
-        groups     => [$pool['group']],
+        groups     => $pool['groups'],
         comment    => "Mapped user for ${pool['vo']}",
         managehome => true,
         require    => [Group[$pool['group']]],
