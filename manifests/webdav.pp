@@ -59,7 +59,7 @@
 #   List of OAuth issuers stored into application.yml. Ignored if application_file is defined.
 #
 # @param hostnames
-#   Sets STORM_WEBDAV_HOSTNAME_{n} environment variables.
+#   Sets STORM_WEBDAV_HOSTNAME_(N) environment variables.
 #
 # @param http_port
 #   Sets STORM_WEBDAV_HTTP_PORT environment variable.
