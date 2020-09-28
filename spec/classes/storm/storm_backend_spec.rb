@@ -256,10 +256,6 @@ describe 'storm::backend', :type => :class do
           )
         end
 
-        it "check backend reload" do
-          is_expected.to contain_exec('backend-daemon-reload')
-        end
-
         it "check db scripts exist" do
           storm_db='/tmp/storm_db.sql'
           is_expected.to contain_file(storm_db).with( 

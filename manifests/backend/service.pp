@@ -2,15 +2,16 @@
 #
 class storm::backend::service {
 
-  exec { 'backend-daemon-reload':
-    command     => '/usr/bin/systemctl daemon-reload',
-    refreshonly => true,
+  if defined(Service['mysqld']) {
+    $subscribed_to = [Service['mysqld']]
+  } else {
+    $subscribed_to = []
   }
   service { 'storm-backend-server':
     ensure    => running,
     enable    => true,
-    require   => Exec['backend-daemon-reload'],
-    subscribe => Service['mysqld'],
+    start     => '/usr/bin/systemctl daemon-reload; /usr/bin/systemctl start storm-backend-server',
+    subscribe => $subscribed_to,
   }
   exec { 'configure-info-provider':
     command     => '/usr/libexec/storm-info-provider configure',

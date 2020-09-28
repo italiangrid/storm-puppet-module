@@ -195,7 +195,7 @@ class storm::backend::config (
     mode    => '0644',
     owner   => 'root',
     group   => 'root',
-    notify  => [Exec['backend-daemon-reload'], Service['storm-backend-server']],
+    notify  => [Service['storm-backend-server']],
     require => [File[$service_dir]],
   }
 
@@ -208,7 +208,7 @@ class storm::backend::config (
     mode    => '0644',
     owner   => 'root',
     group   => 'root',
-    notify  => [Exec['backend-daemon-reload'], Service['storm-backend-server']],
+    notify  => [Service['storm-backend-server']],
     require => [File[$service_dir]],
   }
 

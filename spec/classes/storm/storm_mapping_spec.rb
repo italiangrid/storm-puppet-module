@@ -21,6 +21,17 @@ describe 'storm::mapping', :type => :class do
 
       context 'with default storm::mapping' do
 
+        it "check installed packages" do
+          is_expected.to contain_package('lcas-lcmaps-gt4-interface').with( :ensure => 'latest' )
+          is_expected.to contain_package('lcas-plugins-basic').with( :ensure => 'latest' )
+          is_expected.to contain_package('lcas-plugins-voms').with( :ensure => 'latest' )
+          is_expected.to contain_package('lcas').with( :ensure => 'latest' )
+          is_expected.to contain_package('lcmaps-plugins-basic').with( :ensure => 'latest' )
+          is_expected.to contain_package('lcmaps-plugins-voms').with( :ensure => 'latest' )
+          is_expected.to contain_package('lcmaps-without-gsi').with( :ensure => 'latest' )
+          is_expected.to contain_package('lcmaps').with( :ensure => 'latest' )
+        end
+
         it "check gridmap dir" do
           is_expected.to contain_file(gridmapdir).with( 
             :ensure => 'directory',
