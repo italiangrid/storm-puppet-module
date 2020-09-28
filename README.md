@@ -206,7 +206,7 @@ class { 'storm::gridftp':
 The StoRM database utility class installs `mariadb` server and releated rpms and configures `mysql` service by managing the following files:
 
 - `/etc/my.cnf.d/server.cnf`;
-- `/etc/systemd/system/mysqld.service.d/override.conf`.
+- `/etc/systemd/system/mariadb.service.d/limits.conf`.
 
 The whole list of StoRM Database class parameters can be found [here](https://italiangrid.github.io/storm-puppet-module/puppet_classes/storm_3A_3Adb.html).
 
