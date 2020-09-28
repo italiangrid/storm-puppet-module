@@ -19,6 +19,9 @@
 # @param override_options
 #     MySQL server override options. Read more about this at https://forge.puppet.com/puppetlabs/mysql/reference#override_options.
 #
+# @param limit_no_file
+#     MariaDB setting for limitNoFile
+#
 class storm::db (
 
   String $fqdn_hostname = $::fqdn,
@@ -31,13 +34,14 @@ class storm::db (
       'max_connections' => 2048,
     },
   },
+  Integer $limit_no_file = 65535,
 
 ) {
 
   ## MySQL Client
   include 'mysql::client'
 
-  $service_dir='/etc/systemd/system/mysqld.service.d'
+  $service_dir='/etc/systemd/system/mariadb.service.d'
 
   file { $service_dir:
     ensure => directory,
@@ -46,8 +50,8 @@ class storm::db (
     mode   => '0644',
   }
 
-  $service_file='/etc/systemd/system/mysqld.service.d/override.conf'
-  $service_template_file='storm/etc/systemd/system/mysqld.service.d/override.conf.erb'
+  $service_file='/etc/systemd/system/mariadb.service.d/limits.conf'
+  $service_template_file='storm/etc/systemd/system/mariadb.service.d/limits.conf.erb'
 
   file { $service_file:
     ensure  => present,

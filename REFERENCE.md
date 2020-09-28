@@ -41,23 +41,23 @@ add storm user and all the necessary grants.
 **Data types**
 
 * [`Storm::Backend::Acl`](#stormbackendacl): The ACL type for storm-backend-server
-* [`Storm::Backend::AclMode`](#stormbackendaclmode): 
-* [`Storm::Backend::BalanceStrategy`](#stormbackendbalancestrategy): 
+* [`Storm::Backend::AclMode`](#stormbackendaclmode): The AclMode type for storm-backend-server
+* [`Storm::Backend::BalanceStrategy`](#stormbackendbalancestrategy): The BalanceStrategy type for storm-backend-server
 * [`Storm::Backend::Endpoint`](#stormbackendendpoint): The Endpoint type for storm-backend-server
 * [`Storm::Backend::FileSystem`](#stormbackendfilesystem): The FileSystem type for storm-backend-server
-* [`Storm::Backend::FsDriver`](#stormbackendfsdriver): 
-* [`Storm::Backend::FsType`](#stormbackendfstype): 
+* [`Storm::Backend::FsDriver`](#stormbackendfsdriver): The FsDriver type for storm-backend-server
+* [`Storm::Backend::FsType`](#stormbackendfstype): The FsType type for storm-backend-server
 * [`Storm::Backend::Gsiftp`](#stormbackendgsiftp): The Gsiftp type for storm-backend-server
-* [`Storm::Backend::GsiftpPoolMember`](#stormbackendgsiftppoolmember): 
+* [`Storm::Backend::GsiftpPoolMember`](#stormbackendgsiftppoolmember): The GsiftpPoolMember type for storm-backend-server
 * [`Storm::Backend::Pool`](#stormbackendpool): The Pool type for storm-backend-server
 * [`Storm::Backend::Quota`](#stormbackendquota): The Quota type for storm-backend-server
 * [`Storm::Backend::Rfio`](#stormbackendrfio): The Rfio type for storm-backend-server
-* [`Storm::Backend::SrmPoolMember`](#stormbackendsrmpoolmember): 
+* [`Storm::Backend::SrmPoolMember`](#stormbackendsrmpoolmember): The SrmPoolMember type for storm-backend-server
 * [`Storm::Backend::StorageArea`](#stormbackendstoragearea): The storage area type for storm-backend-server
-* [`Storm::Backend::StorageClass`](#stormbackendstorageclass): 
+* [`Storm::Backend::StorageClass`](#stormbackendstorageclass): The StorageClass type for storm-backend-server
 * [`Storm::Backend::TransferProtocol`](#stormbackendtransferprotocol): The TransferProtocol type for storm-backend-server
 * [`Storm::Backend::Webdav`](#stormbackendwebdav): The WebDAV type for storm-backend-server
-* [`Storm::Backend::WebdavPoolMember`](#stormbackendwebdavpoolmember): 
+* [`Storm::Backend::WebdavPoolMember`](#stormbackendwebdavpoolmember): The WebdavPoolMember type for storm-backend-server
 * [`Storm::Backend::Xroot`](#stormbackendxroot): The Xroot type for storm-backend-server
 * [`Storm::CustomRepo`](#stormcustomrepo): The storage area type for storm-webdav
 * [`Storm::Webdav::OAuthIssuer`](#stormwebdavoauthissuer): The OAuthIssuer type for storm-webdav
@@ -1578,6 +1578,14 @@ Default value: {
     },
   }
 
+##### `limit_no_file`
+
+Data type: `Integer`
+
+MariaDB setting for limitNoFile
+
+Default value: 65535
+
 ### storm::frontend
 
 StoRM Frontend puppet module
@@ -2572,7 +2580,7 @@ Default value: $storm::webdav::params::oauth_issuers
 
 Data type: `Array[String]`
 
-Sets STORM_WEBDAV_HOSTNAME_{n} environment variables.
+Sets STORM_WEBDAV_HOSTNAME_(N) environment variables.
 
 Default value: $storm::webdav::params::hostnames
 
@@ -3065,13 +3073,13 @@ Alias of `Struct[{
 
 ### Storm::Backend::AclMode
 
-The Storm::Backend::AclMode data type.
+The AclMode type for storm-backend-server
 
 Alias of `Enum['AoT', 'JiT']`
 
 ### Storm::Backend::BalanceStrategy
 
-The Storm::Backend::BalanceStrategy data type.
+The BalanceStrategy type for storm-backend-server
 
 Alias of `Enum['round-robin', 'smart-rr', 'random', 'weight']`
 
@@ -3098,13 +3106,13 @@ Alias of `Struct[{
 
 ### Storm::Backend::FsDriver
 
-The Storm::Backend::FsDriver data type.
+The FsDriver type for storm-backend-server
 
 Alias of `Enum['posixfs', 'gpfs', 'test']`
 
 ### Storm::Backend::FsType
 
-The Storm::Backend::FsType data type.
+The FsType type for storm-backend-server
 
 Alias of `Enum['posixfs', 'gpfs', 'test']`
 
@@ -3118,7 +3126,7 @@ Alias of `Struct[{
 
 ### Storm::Backend::GsiftpPoolMember
 
-The Storm::Backend::GsiftpPoolMember data type.
+The GsiftpPoolMember type for storm-backend-server
 
 Alias of `Struct[{
   hostname => String,
@@ -3160,7 +3168,7 @@ Alias of `Struct[{
 
 ### Storm::Backend::SrmPoolMember
 
-The Storm::Backend::SrmPoolMember data type.
+The SrmPoolMember type for storm-backend-server
 
 Alias of `Struct[{
   hostname => String,
@@ -3199,7 +3207,7 @@ Alias of `Struct[{
 
 ### Storm::Backend::StorageClass
 
-The Storm::Backend::StorageClass data type.
+The StorageClass type for storm-backend-server
 
 Alias of `Enum['T0D1', 'T1D0', 'T1D1']`
 
@@ -3222,7 +3230,7 @@ Alias of `Struct[{
 
 ### Storm::Backend::WebdavPoolMember
 
-The Storm::Backend::WebdavPoolMember data type.
+The WebdavPoolMember type for storm-backend-server
 
 Alias of `Struct[{
   hostname => String,

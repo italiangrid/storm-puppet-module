@@ -50,8 +50,8 @@ describe 'storm::db', :type => :class do
           )
         end
 
-        service_dir='/etc/systemd/system/mysqld.service.d'
-        service_file='/etc/systemd/system/mysqld.service.d/override.conf'
+        service_dir='/etc/systemd/system/mariadb.service.d'
+        service_file='/etc/systemd/system/mariadb.service.d/limits.conf'
         it 'check mysql service dir and override file exist' do
           is_expected.to contain_file(service_dir).with( 
             :ensure => 'directory',
