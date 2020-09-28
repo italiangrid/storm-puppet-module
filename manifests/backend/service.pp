@@ -7,9 +7,10 @@ class storm::backend::service {
     refreshonly => true,
   }
   service { 'storm-backend-server':
-    ensure  => running,
-    enable  => true,
-    require => Exec['backend-daemon-reload'],
+    ensure    => running,
+    enable    => true,
+    require   => Exec['backend-daemon-reload'],
+    subscribe => Service['mysqld'],
   }
   exec { 'configure-info-provider':
     command     => '/usr/libexec/storm-info-provider configure',

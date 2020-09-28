@@ -60,6 +60,7 @@ class storm::db (
     owner   => 'root',
     group   => 'root',
     require => [File[$service_dir]],
+    notify  => Service['mysqld'],
   }
 
   ## MySQL Server
