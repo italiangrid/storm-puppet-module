@@ -252,7 +252,7 @@
   <mapping-rules>
 <%-
   @storage_areas.each do | sa |
-    @sa_upp=sa['name'].upcase.gsub("-", "").gsub(".","")
+    @sa_upp=sa['name'].upcase.gsub("-", "").gsub(".","").gsub("_","")
     @sa_low=sa['name'].downcase
     @sa_accesspoints=sa['access_points']
     @counter=0
@@ -271,7 +271,7 @@
   <approachable-rules>
 <%-
   @storage_areas.each do | sa |
-    @sa_upp=sa['name'].upcase.gsub("-", "").gsub(".","")
+    @sa_upp=sa['name'].upcase.gsub("-", "").gsub(".","").gsub("_","")
     @sa_low=sa['name'].downcase
     @sa_vos=sa['vos']
     @sa_dn_regex=sa['dn_regex']
