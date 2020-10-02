@@ -800,6 +800,22 @@ Sets LimitNOFILE value.
 
 Default value: $storm::backend::params::storm_limit_nofile
 
+##### `manage_path_authz_db`
+
+Data type: `Any`
+
+If true, allows to set content of path-authz.db file.
+
+Default value: $storm::backend::params::manage_path_authz_db
+
+##### `path_authz_db_file`
+
+Data type: `Any`
+
+If manage_path_authz_db is true, set the content from this source path
+
+Default value: $storm::backend::params::path_authz_db_file
+
 ##### `info_config_file`
 
 Data type: `String`
@@ -1471,6 +1487,22 @@ Data type: `Any`
 
 
 Default value: $storm::backend::storm_limit_nofile
+
+##### `manage_path_authz_db`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::manage_path_authz_db
+
+##### `path_authz_db_file`
+
+Data type: `Any`
+
+
+
+Default value: $storm::backend::path_authz_db_file
 
 ### storm::backend::configdb
 

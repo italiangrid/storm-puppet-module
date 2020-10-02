@@ -275,8 +275,30 @@ describe 'storm::backend', :type => :class do
           is_expected.to contain_exec('storm_be_ISAM-import')
         end
 
+        it "check path-authz.db file not initialized" do
+          is_expected.not_to contain_file('/etc/storm/backend-server/path-authz.db')
+        end
+
+        context 'test path authz db' do
+
+          let(:params) do
+            super().merge({
+              'manage_path_authz_db' => true,
+            })
+          end
+  
+          it "check path-authz.db file" do
+            is_expected.to contain_file('/etc/storm/backend-server/path-authz.db').with(
+              :ensure => 'present',
+              :owner  => 'root',
+              :group  => 'storm',
+              :mode   => '0644',
+            )
+          end
+        end
+
       end
-        
+
     end
   end
 end

@@ -145,4 +145,7 @@ class storm::backend::params (
   # Set LimitNOFILE
   $storm_limit_nofile = lookup('storm::backend::storm_limit_nofile', Integer, undef, 65535)
 
+  # manage path-authz.db
+  $manage_path_authz_db = lookup('storm::backend::manage_path_authz_db', Boolean, undef, false)
+  $path_authz_db_file = lookup('storm::backend::path_authz_db_file', String, undef, 'puppet:///modules/storm/etc/storm/backend/path-authz.db')
 }

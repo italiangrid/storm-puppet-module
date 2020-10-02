@@ -295,6 +295,12 @@
 # @param storm_limit_nofile
 #   Sets LimitNOFILE value.
 #
+# @param manage_path_authz_db
+#   If true, allows to set content of path-authz.db file.
+#
+# @param path_authz_db_file
+#   If manage_path_authz_db is true, set the content from this source path
+#
 class storm::backend (
 
   String $hostname = lookup('storm::backend::hostname', String, undef, $::fqdn),
@@ -441,6 +447,10 @@ class storm::backend (
 
   # LimitNOFILE
   Integer $storm_limit_nofile = $storm::backend::params::storm_limit_nofile,
+
+  # manage path-authz.db
+  $manage_path_authz_db = $storm::backend::params::manage_path_authz_db,
+  $path_authz_db_file = $storm::backend::params::path_authz_db_file,
 
 ) inherits storm::backend::params {
 

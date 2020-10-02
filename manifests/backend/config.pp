@@ -112,6 +112,9 @@ class storm::backend::config (
 
   $storm_limit_nofile = $storm::backend::storm_limit_nofile,
 
+  $manage_path_authz_db = $storm::backend::manage_path_authz_db,
+  $path_authz_db_file = $storm::backend::path_authz_db_file,
+
 ) {
 
   # Service's host credentials directory
@@ -222,4 +225,15 @@ class storm::backend::config (
     notify  => [Exec['configure-info-provider']],
   }
 
+  if $manage_path_authz_db {
+    # StoRM Backend's path-authz.db file
+    file { '/etc/storm/backend-server/path-authz.db':
+      ensure => present,
+      mode   => '0644',
+      owner  => 'root',
+      group  => 'storm',
+      source => $path_authz_db_file,
+      notify => [Service['storm-backend-server']],
+    }
+  }
 }
