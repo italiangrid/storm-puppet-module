@@ -65,17 +65,6 @@ class storm::frontend::config (
     }
   }
 
-  # Service's log directory
-  if !defined(File['/var/log/storm']) {
-    file { '/var/log/storm':
-      ensure  => directory,
-      owner   => 'storm',
-      group   => 'storm',
-      mode    => '0750',
-      recurse => false,
-    }
-  }
-
   $conf_file='/etc/storm/frontend-server/storm-frontend-server.conf'
   $conf_template_file='storm/etc/storm/frontend-server/storm-frontend-server.conf.erb'
 

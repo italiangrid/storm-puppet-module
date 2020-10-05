@@ -94,6 +94,7 @@ describe 'storm::backend', :type => :class do
             'info_storage_default_root' => '/another-storage',
             'info_endpoint_quality_level' => 1,
             'jvm_options' => '-Xms512m -Xmx1024m',
+            'storm_limit_nofile' => 15535,
           })
         end
 
@@ -251,16 +252,14 @@ describe 'storm::backend', :type => :class do
           is_expected.to contain_file(title).with( :content => /^Environment="LCMAPS_POLICY_NAME=standard"/ )
           is_expected.to contain_file(title).with( :content => /^Environment="LCMAPS_LOG_FILE=\/var\/log\/storm\/lcmaps.log"/ )
           is_expected.to contain_file(title).with( :content => /^Environment="LCMAPS_DEBUG_LEVEL=0"/ )
-  
         end
 
-        it "check log directory" do
-          is_expected.to contain_file('/var/log/storm').with( 
-            :ensure => 'directory',
-            :owner  => 'storm',
-            :group  => 'storm',
-            :mode   => '0750',
+        it "check service file limit content" do
+          title='/etc/systemd/system/storm-backend-server.service.d/filelimit.conf'
+          is_expected.to contain_file(title).with(
+            :ensure => 'present',
           )
+          is_expected.to contain_file(title).with( :content => /^LimitNOFILE=15535/ )
         end
 
         it "check db scripts exist" do

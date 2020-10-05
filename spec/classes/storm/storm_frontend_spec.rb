@@ -146,14 +146,6 @@ describe 'storm::frontend', :type => :class do
           is_expected.to contain_file(sysconfig_file).with( :content => /STORM_FE_USER=storm/ )
         end
 
-        it "check log directory" do
-          is_expected.to contain_file('/var/log/storm').with( 
-            :ensure => 'directory',
-            :owner  => 'storm',
-            :group  => 'storm',
-            :mode   => '0750',
-          )
-        end
       end
 
     end

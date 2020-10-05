@@ -226,15 +226,6 @@ describe 'storm::webdav', :type => :class do
           )
         end
 
-        it "check log directory" do
-          is_expected.to contain_file('/var/log/storm').with( 
-            :ensure => 'directory',
-            :owner  => 'storm',
-            :group  => 'storm',
-            :mode   => '0750',
-          )
-        end
-
         it "check webdav reload" do
           is_expected.to contain_exec('webdav-daemon-reload')
         end

@@ -56,25 +56,6 @@ class storm::webdav::config (
     recurse => true,
   }
 
-  # Service's log directories
-  if !defined(File['/var/log/storm']) {
-    file { '/var/log/storm':
-      ensure  => directory,
-      owner   => 'storm',
-      group   => 'storm',
-      mode    => '0750',
-      recurse => false,
-    }
-  }
-  file { '/var/log/storm/webdav':
-    ensure  => directory,
-    owner   => 'storm',
-    group   => 'storm',
-    mode    => '0750',
-    recurse => false,
-    require => File['/var/log/storm'],
-  }
-
   # Service's host credentials directory
   file { '/etc/grid-security/storm-webdav':
     ensure  => directory,
