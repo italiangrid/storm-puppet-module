@@ -55,6 +55,13 @@ describe 'storm::backend', :type => :class do
                 'storage_class' => 'T0D1',
                 'online_size' => 4,
                 'transfer_protocols' => ['file','gsiftp','webdav','xroot'],
+                'default_acl_list' => [
+                  {
+                    'group'      => 'test.vo',
+                    'permission' => 'R',
+                  },
+                ],
+        
               },
               {
                 'name' => 'atlas',

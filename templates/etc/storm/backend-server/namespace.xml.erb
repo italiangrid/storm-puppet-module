@@ -128,13 +128,13 @@
       </properties>
       <capabilities>
         <aclMode><%= @sa_acl_mode %></aclMode>
-        <%- if @sa_default_acl_list != nil -%>
+        <%- if @sa_default_acl_list != nil && @sa_default_acl_list.length > 0 -%>
         <default-acl>
           <%- @sa_default_acl_list.each do | acl | -%>
-            <acl-entry>
-              <groupName><%= acl['group'] %></groupName>
-              <permissions><%= acl['permission'] %></permissions>
-            </acl-entry>
+          <acl-entry>
+            <groupName><%= acl['group'] %></groupName>
+            <permissions><%= acl['permission'] %></permissions>
+          </acl-entry>
           <%- end -%>
         </default-acl>
         <%- end -%>

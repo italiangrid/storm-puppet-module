@@ -18,6 +18,12 @@
       </properties>
       <capabilities>
         <aclMode>AoT</aclMode>
+        <default-acl>
+          <acl-entry>
+            <groupName>test.vo</groupName>
+            <permissions>R</permissions>
+          </acl-entry>
+        </default-acl>
         <trans-prot>
           <prot name="file">
             <schema>file</schema>

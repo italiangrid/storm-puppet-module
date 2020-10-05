@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0] - 2020-10-05
+
+- Removed storm::mapping class
+
 ## [1.0.5] - 2020-10-02
 
 - Added path-authz.db support to StoRM Backend
