@@ -3,18 +3,9 @@
 class storm::webdav::params (
 ) inherits storm::params {
 
-  # application.yml file management
-  $manage_application_file = lookup('storm::webdav::manage_application_file', Boolean, undef, false)
-  # if manage_application_file is set to true, init application_file with a concrete resource file ...
-  $application_file = lookup('storm::webdav::application_file', String, undef, '')
-  # ... or init it through variables
-  $oauth_issuers = lookup('storm::webdav::oauth_issuers', Array[Storm::Webdav::OAuthIssuer], undef, [])
-
   # storage areas management
   $manage_storage_areas = lookup('storm::webdav::manage_storage_areas', Boolean, undef, true)
-  # if manage_storage_areas is set to true, init storage areas reading property files from a concrete resource directory ...
-  $storage_areas_directory = lookup('storm::webdav::storage_areas_directory', String, undef, '')
-  # ... or init them through variables
+  # init them through variables
   $storage_areas = lookup('storm::webdav::storage_areas', Array[Storm::Webdav::StorageArea], undef, [])
 
   # SystemD override file '/etc/systemd/system/storm-webdav.service.d/storm-webdav.conf' variables:

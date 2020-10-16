@@ -2,10 +2,18 @@
 
 #### Table of Contents
 
-1. [Description](#description)
-1. [Setup](#setup)
-1. [Usage](#usage)
-1. [Limitations - OS compatibility](#limitations)
+* [Description](#description)
+* [Setup](#setup)
+* [Usage](#usage)
+  * [StoRM Backend class](#storm-backend-class)
+  * [StoRM Frontend class](#storm-frontend-class)
+  * [StoRM WebDAV class](#storm-webdav-class)
+  * [StoRM GridFTP class](#storm-gridftp-class)
+  * [StoRM database class](#storm-database-class)
+  * [StoRM repo class](#storm-repo-class)
+  * [StoRM users class](#storm-users-class)
+  * [StoRM storage class](#storm-storage-class)
+* [Limitations - OS compatibility](#limitations)
 
 ## Description
 
@@ -22,13 +30,13 @@ The supported services are:
 
 StoRM Puppet module is available on puppet forge:
 
-```
+```shell
 puppet module install cnafsd-storm
 ```
 
 You can also build and install module from source code as follow:
 
-```
+```shell
 git clone https://github.com/italiangrid/storm-puppet-module.git
 cd storm-puppet-module
 puppet module build
@@ -52,7 +60,6 @@ Utility classes:
 * [StoRM database class](#storm-database-class)
 * [StoRM repo class](#storm-repo-class)
 * [StoRM users class](#storm-users-class)
-* [StoRM mapping class](#storm-mapping-class)
 * [StoRM storage class](#storm-storage-class)
 
 ### StoRM Backend class
@@ -134,7 +141,7 @@ The whole list of StoRM Frontend class parameters can be found [here](https://it
 
 Example of StoRM Frontend configuration:
 
-```
+```Puppet
 class { 'storm::frontend':
   be_xmlrpc_host  => 'backend.test.example',
   be_xmlrpc_token => 'NS4kYAZuR65XJCq',
@@ -150,13 +157,12 @@ The StoRM WebDAV class installs `storm-webdav` rpm and configures `storm-webdav`
 
 - the systemd override files `filelimit.conf` and `storm-webdav.conf` stored into `/etc/systemd/system/storm-webdav.service.d`;
 - the storage areas property files stored into `/etc/storm/webdav/sa.d` (optional);
-- the `application.yml` file in `/etc/storm/webdav/comfig` (optional).
 
 The whole list of StoRM Webdav class parameters can be found [here](https://italiangrid.github.io/storm-puppet-module/puppet_classes/storm_3A_3Awebdav.html).
 
 Example of StoRM WebDAV configuration:
 
-```
+```Puppet
 class { 'storm::webdav':
   storage_areas => [
     {
@@ -173,15 +179,46 @@ class { 'storm::webdav':
       authenticated_read_enabled => true,
     },
   ],
-  oauth_issuers => [
-    {
-      name   => 'indigo-dc',
-      issuer => 'https://iam-test.indigo-datacloud.eu/',
-    },
-  ],
   hostnames => ['storm-webdav.test.example', 'alias-for-storm-webdav.test.example'],
 }
 ```
+
+Storage Areas can also be configured singularly by using the defined type `storm::webdav::storage_area_file`. This strategy allows site administrators to keep their manifests unaware of the improvements on StoRM WebDAV code. For example, if a new property is added into Storage Area configuration files, you haven't to update your Puppet module and all the service configuration will continue working.
+
+Example of Storage Areas configuration done with `storm::webdav::storage_area_file`:
+
+```Puppet
+class { 'storm::webdav':
+  hostnames => ['storm-webdav.test.example', 'alias-for-storm-webdav.test.example'],
+}
+
+storm::webdav::storage_area_file { 'test.vo.properties':
+  source => '/path/to/my/test.vo.properties',
+}
+
+storm::webdav::storage_area_file { 'test.vo.2.properties':
+  source => '/path/to/my/test.vo.2.properties',
+}
+```
+
+Starting from Puppet module v2.0.0, the management of application.yml file has been removed from storm::webdav class.
+Site administrators can edit their own configuration files or use a defined type `storm::webdav::application_file` to inject also one or more YAML files into the proper directory.
+For example:
+
+```Puppet
+class { 'storm::webdav':
+  hostnames => ['storm-webdav.test.example', 'alias-for-storm-webdav.test.example'],
+}
+
+storm::webdav::application_file { 'application.yml':
+  source => '/path/to/my/application.yml',
+}
+
+storm::webdav::application_file { 'application-wlcg.yml':
+  source => '/path/to/my/application-wlcg.yml',
+}
+```
+
 
 ### StoRM GridFTP class
 
@@ -194,7 +231,7 @@ The whole list of StoRM GridFTP class parameters can be found [here](https://ita
 
 Examples of StoRM Gridftp configuration:
 
-```
+```Puppet
 class { 'storm::gridftp':
   redirect_lcmaps_log => true,
   llgt_log_file       => '/var/log/storm/storm-gridftp-lcmaps.log',
@@ -212,7 +249,7 @@ The whole list of StoRM Database class parameters can be found [here](https://it
 
 Examples of StoRM Database usage:
 
-```
+```Puppet
 class { 'storm::db':
   root_password => 'supersupersecretword',
   storm_password => 'supersecretword',
@@ -228,7 +265,7 @@ The whole list of StoRM repo class parameters can be found [here](https://italia
 
 Examples of StoRM Repo usage:
 
-```
+```Puppet
 class { 'storm::repo':
   enabled => ['stable', 'beta'],
 }
@@ -240,7 +277,7 @@ The StoRM users utility class creates the default StoRM users and groups.
 
 Use:
 
-```
+```Puppet
 include storm::users
 ```
 
@@ -253,7 +290,7 @@ to create default scenario:
 
 You can also customize and create your own users and groups as follow:
 
-```
+```Puppet
 class { 'storm::users':
   groups => {
     infosys => {
@@ -290,7 +327,7 @@ The whole list of StoRM storage class parameters can be found [here](https://ita
 
 Example of StoRM storage usage on our testbed:
 
-```
+```Puppet
 file { '/storage':
   ensure  => directory,
   mode    => '0755',
@@ -307,65 +344,6 @@ file { '/storage':
 }
 ```
 
-### StoRM mapping class
-
-The StoRM mapping utility class installs the following rpms:
-
-- `lcmaps`
-- `lcmaps-without-gsi`
-- `lcmaps-plugins-basic`
-- `lcmaps-plugins-voms`
-- `lcas`
-- `lcas-lcmaps-gt4-interface`
-- `lcas-plugins-basic`
-- `lcas-plugins-voms`
-
-Then, it creates the following directories/files:
-
-- `/etc/grid-security/gridmapdir`
-- `/etc/grid-security/grid-mapfile`
-- `/etc/grid-security/groupmapfile`
-- `/etc/grid-security/gsi-authz.conf` (optional)
-- `/etc/lcmaps/lcmaps.db` (optional)
-- `/etc/lcas/lcas.db` (optional)
-- `/etc/lcas/ban_users.db` (optional)
-
-The content of grid-mapfile and groupmapfile and the content of gridmapdir directory depends on the pool accounts defined.
-
-By default, the pool accounts needed by our testbed are created though the parameter `pools`:
-
-```puppet
-
-  $pools = [{
-    'name' => 'tstvo',
-    'size' => 20,
-    'base_uid' => 7100,
-    'group' => 'testvo',
-    'groups' => ['testvo'],
-    'gid' => 7100,
-    'vo' => 'test.vo',
-    'role' => 'NULL',
-  },{
-    'name' => 'testdue',
-    'size' => 20,
-    'base_uid' => 8100,
-    'group' => 'testvodue',
-    'groups' => ['testvodue'],
-    'gid' => 8100,
-    'vo' => 'test.vo.2',
-    'role' => 'NULL',
-  }],
-
-```
-
-The whole list of StoRM Mapping class parameters can be found [here](https://italiangrid.github.io/storm-puppet-module/puppet_classes/storm_3A_3Amapping.html).
-
-Examples of StoRM Mapping usage:
-
-```
-include 'storm::mapping'
-```
-
 ## Documentation
 
 You can find all the info about module classes and parameters at:
@@ -373,19 +351,6 @@ You can find all the info about module classes and parameters at:
 - [StoRM Puppet module main site doc](https://italiangrid.github.io/storm-puppet-module)
 - [REFERENCE.md](https://github.com/italiangrid/storm-puppet-module/blob/master/REFERENCE.md)
 
-### How to update doc (for developers)
-
-Update `REFERENCE.md` file as follow:
-
-```
-puppet strings generate --format markdown
-```
-
-Update `gh-pages` branch as follow:
-
-```
-bundle exec rake strings:gh_pages:update
-```
 
 ## Limitations
 

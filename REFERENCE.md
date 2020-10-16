@@ -35,7 +35,10 @@ add storm user and all the necessary grants.
 
 **Defined types**
 
+* [`storm::backend::service_conf_file`](#stormbackendservice_conf_file): 
 * [`storm::rootdir`](#stormrootdir): StoRM root directory defined resource
+* [`storm::webdav::application_file`](#stormwebdavapplication_file): 
+* [`storm::webdav::storage_area_file`](#stormwebdavstorage_area_file): 
 
 **Data types**
 
@@ -59,7 +62,6 @@ add storm user and all the necessary grants.
 * [`Storm::Backend::WebdavPoolMember`](#stormbackendwebdavpoolmember): The WebdavPoolMember type for storm-backend-server
 * [`Storm::Backend::Xroot`](#stormbackendxroot): The Xroot type for storm-backend-server
 * [`Storm::CustomRepo`](#stormcustomrepo): The storage area type for storm-webdav
-* [`Storm::Webdav::OAuthIssuer`](#stormwebdavoauthissuer): The OAuthIssuer type for storm-webdav
 * [`Storm::Webdav::StorageArea`](#stormwebdavstoragearea): The storage area type for storm-webdav.
 
 ## Classes
@@ -2391,43 +2393,13 @@ class { 'storm::webdav':
       vo_map_enabled             => false,
     },
   ],
-  manage_application_file => true,
-  oauth_issuers => [
-    {
-      name   => 'indigo-dc',
-      issuer => 'https://iam-test.indigo-datacloud.eu/',
-    },
-  ],
   hostnames => ['webdav.example.org', 'storm-webdav.example.org'],
-}
-
-class { 'storm::webdav':
-  manage_application_file => true,
-  application_file        => '/root/storm/webdav/application.yml',
-  storage_areas_directory => '/root/storm/webdav/sa.d',
-  hostnames               => ['storm-webdav.example.org'],
 }
 ```
 
 #### Parameters
 
 The following parameters are available in the `storm::webdav` class.
-
-##### `manage_application_file`
-
-Data type: `Boolean`
-
-Set to True if you want to manage application.yml configuration. Default: false (application.yml file configuration is ignored).
-
-Default value: $storm::webdav::params::manage_application_file
-
-##### `application_file`
-
-Data type: `String`
-
-If defined, the application.yml file is copied from this path and oauth_issuers is ignored. Ignored if manage_application_file is false.
-
-Default value: $storm::webdav::params::application_file
 
 ##### `manage_storage_areas`
 
@@ -2437,15 +2409,6 @@ Set to True if you want to manage storage areas configuration. Default: true.
 
 Default value: $storm::webdav::params::manage_storage_areas
 
-##### `storage_areas_directory`
-
-Data type: `String`
-
-If defined, the properties files of the storage areas are copied and storage_areas parameter is ignored.
-Ignored if manage_storage_areas is false.
-
-Default value: $storm::webdav::params::storage_areas_directory
-
 ##### `storage_areas`
 
 Data type: `Array[Storm::Webdav::StorageArea]`
@@ -2454,14 +2417,6 @@ List of storage area's configuration. Ignored if storage_areas_directory is defi
 Ignored if manage_storage_areas is false.
 
 Default value: $storm::webdav::params::storage_areas
-
-##### `oauth_issuers`
-
-Data type: `Array[Storm::Webdav::OAuthIssuer]`
-
-List of OAuth issuers stored into application.yml. Ignored if application_file is defined.
-
-Default value: $storm::webdav::params::oauth_issuers
 
 ##### `hostnames`
 
@@ -2671,30 +2626,6 @@ StoRM WebDAV config class
 
 The following parameters are available in the `storm::webdav::config` class.
 
-##### `manage_application_file`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::manage_application_file
-
-##### `application_file`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::application_file
-
-##### `oauth_issuers`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::oauth_issuers
-
 ##### `manage_storage_areas`
 
 Data type: `Any`
@@ -2702,14 +2633,6 @@ Data type: `Any`
 
 
 Default value: $storm::webdav::manage_storage_areas
-
-##### `storage_areas_directory`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::storage_areas_directory
 
 ##### `storage_areas`
 
@@ -2933,6 +2856,20 @@ StoRM WebDAV service class
 
 ## Defined types
 
+### storm::backend::service_conf_file
+
+The storm::backend::service_conf_file class.
+
+#### Parameters
+
+The following parameters are available in the `storm::backend::service_conf_file` defined type.
+
+##### `source`
+
+Data type: `Any`
+
+
+
 ### storm::rootdir
 
 StoRM root directory defined resource
@@ -2944,6 +2881,34 @@ The following parameters are available in the `storm::rootdir` defined type.
 ##### `path`
 
 Data type: `String`
+
+
+
+### storm::webdav::application_file
+
+The storm::webdav::application_file class.
+
+#### Parameters
+
+The following parameters are available in the `storm::webdav::application_file` defined type.
+
+##### `source`
+
+Data type: `Any`
+
+
+
+### storm::webdav::storage_area_file
+
+The storm::webdav::storage_area_file class.
+
+#### Parameters
+
+The following parameters are available in the `storm::webdav::storage_area_file` defined type.
+
+##### `source`
+
+Data type: `Any`
 
 
 
@@ -3141,15 +3106,6 @@ The storage area type for storm-webdav
 Alias of `Struct[{
   name    => String,
   baseurl => String,
-}]`
-
-### Storm::Webdav::OAuthIssuer
-
-The OAuthIssuer type for storm-webdav
-
-Alias of `Struct[{
-  name   => String,
-  issuer => String,
 }]`
 
 ### Storm::Webdav::StorageArea

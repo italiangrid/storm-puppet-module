@@ -21,42 +21,15 @@
 #          vo_map_enabled             => false,
 #        },  
 #      ],
-#      manage_application_file => true,
-#      oauth_issuers => [
-#        {
-#          name   => 'indigo-dc',
-#          issuer => 'https://iam-test.indigo-datacloud.eu/',
-#        },
-#      ],
 #      hostnames => ['webdav.example.org', 'storm-webdav.example.org'],
 #    }
-#
-#    class { 'storm::webdav':
-#      manage_application_file => true,
-#      application_file        => '/root/storm/webdav/application.yml',
-#      storage_areas_directory => '/root/storm/webdav/sa.d',
-#      hostnames               => ['storm-webdav.example.org'],
-#    }
-#
-# @param manage_application_file
-#   Set to True if you want to manage application.yml configuration. Default: false (application.yml file configuration is ignored). 
-#
-# @param application_file
-#   If defined, the application.yml file is copied from this path and oauth_issuers is ignored. Ignored if manage_application_file is false.
 #
 # @param manage_storage_areas
 #   Set to True if you want to manage storage areas configuration. Default: true.
 #
-# @param storage_areas_directory
-#   If defined, the properties files of the storage areas are copied and storage_areas parameter is ignored.
-#   Ignored if manage_storage_areas is false.
-#
 # @param storage_areas
 #   List of storage area's configuration. Ignored if storage_areas_directory is defined.
 #   Ignored if manage_storage_areas is false.
-#
-# @param oauth_issuers
-#   List of OAuth issuers stored into application.yml. Ignored if application_file is defined.
 #
 # @param hostnames
 #   Sets STORM_WEBDAV_HOSTNAME_(N) environment variables.
@@ -135,12 +108,7 @@
 #
 class storm::webdav (
 
-  Boolean $manage_application_file = $storm::webdav::params::manage_application_file,
-  String $application_file = $storm::webdav::params::application_file,
-  Array[Storm::Webdav::OAuthIssuer] $oauth_issuers = $storm::webdav::params::oauth_issuers,
-
   Boolean $manage_storage_areas = $storm::webdav::params::manage_storage_areas,
-  String $storage_areas_directory = $storm::webdav::params::storage_areas_directory,
   Array[Storm::Webdav::StorageArea] $storage_areas = $storm::webdav::params::storage_areas,
 
   Array[String] $hostnames = $storm::webdav::params::hostnames,

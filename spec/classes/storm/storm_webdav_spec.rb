@@ -35,17 +35,6 @@ describe 'storm::webdav', :type => :class do
                 'fine_grained_authz_enabled' => true,
               },
             ],
-            'manage_application_file' => true,
-            'oauth_issuers' => [
-              {
-                'name' => 'iam-virgo',
-                'issuer' => 'https://iam-virgo.cloud.cnaf.infn.it/',
-              },
-              {
-                'name' => 'indigo-dc',
-                'issuer' => 'https://iam-test.indigo-datacloud.eu/',
-              },
-            ],
             'hostnames' => ['storm-w1.example', 'storm-w2.example'],
             'http_port' => 8080,
             'https_port' => 9443,
@@ -144,29 +133,6 @@ describe 'storm::webdav', :type => :class do
           is_expected.to contain_file(atlas_props).that_notifies(['Service[storm-webdav]'])
         end
 
-        it "check application.yml" do
-        
-          app_title='/etc/storm/webdav/config/application.yml'
-
-          is_expected.to contain_file(app_title).with({
-            :ensure => 'present',
-          })
-          is_expected.to contain_file(app_title).with({
-            :content => /iam-virgo/,
-          })
-          is_expected.to contain_file(app_title).with({
-            :content => /https:\/\/iam-virgo.cloud.cnaf.infn.it\//,
-          })
-          is_expected.to contain_file(app_title).with({
-            :content => /indigo-dc/,
-          })
-          is_expected.to contain_file(app_title).with({
-            :content => /https:\/\/iam-test.indigo-datacloud.eu\//,
-          })
-          is_expected.to contain_file(app_title).that_notifies(['Service[storm-webdav]'])
-          
-        end
-
         it "check environment file" do
           service_file='/etc/systemd/system/storm-webdav.service.d/storm-webdav.conf'
           is_expected.to contain_file(service_file).with(
@@ -206,15 +172,6 @@ describe 'storm::webdav', :type => :class do
 
         end
 
-        it "check storm-webdav.service.d exists" do
-          is_expected.to contain_file('/etc/systemd/system/storm-webdav.service.d').with(
-            :ensure => 'directory',
-            :owner  => 'root',
-            :group  => 'root',
-            :mode   => '0644',
-          )
-        end
-
         it "check storm-webdav.service.d/filelimit.conf exists" do
           limit_file='/etc/systemd/system/storm-webdav.service.d/filelimit.conf'
           is_expected.to contain_file(limit_file).with(
@@ -224,10 +181,6 @@ describe 'storm::webdav', :type => :class do
             :mode    => '0644',
             :content => /^LimitNOFILE=1046/,
           )
-        end
-
-        it "check webdav reload" do
-          is_expected.to contain_exec('webdav-daemon-reload')
         end
 
       end
@@ -296,23 +249,6 @@ describe 'storm::webdav', :type => :class do
           is_expected.to contain_file(service_file).with( :content => /^Environment="STORM_WEBDAV_JVM_OPTS=-Xms256m -Xmx512m -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=1044,suspend=y"/ )
         end
       end
-
-      context 'Check application.xml configured via source path' do
-        let(:params) do
-          {
-            'manage_application_file' => true,
-            'application_file' => 'application-0.yml',
-          }
-        end
-        it "check application.yml file content" do
-          title='/etc/storm/webdav/config/application.yml'
-          is_expected.to contain_file(title).with(
-            :ensure  => 'present',
-            :source => 'application-0.yml',
-          )
-        end
-      end
-
     end
   end
 end

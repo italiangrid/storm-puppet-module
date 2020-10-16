@@ -81,6 +81,16 @@ describe 'storm::backend', :type => :class do
                     'hostname' => 'gridftp-1.example.org',
                   }
                 ],
+                'default_acl_list'   => [
+                  {
+                    'group'      => 'atlasusers',
+                    'permission' => 'RW',
+                  },
+                  {
+                    'group'      => 'atlasprod',
+                    'permission' => 'RW',
+                  },
+                ],
               },
               {
                 'name' => 'novos',
@@ -231,15 +241,6 @@ describe 'storm::backend', :type => :class do
   
         it "check if exec of storm-info-provider configure has been run" do
           is_expected.to contain_exec('configure-info-provider')
-        end
-
-        it "check service directory" do
-          is_expected.to contain_file('/etc/systemd/system/storm-backend-server.service.d').with(
-            :ensure => 'directory',
-            :owner  => 'root',
-            :group  => 'root',
-            :mode   => '0644',
-          )
         end
 
         it "check service file content" do

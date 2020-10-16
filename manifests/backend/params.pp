@@ -125,7 +125,10 @@ class storm::backend::params (
 
   # JMX options
   $jmx = lookup('storm::backend::jmx', Boolean, undef, false)
-  $jmx_options = lookup('storm::backend::jmx_options', String, undef, '-Dcom.sun.management.jmxremote.port=8501 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false')
+  $jmx_remote_port = '-Dcom.sun.management.jmxremote.port=8501'
+  $jmx_remote_ssl = '-Dcom.sun.management.jmxremote.ssl=false'
+  $jmx_remote_authenticate = '-Dcom.sun.management.jmxremote.authenticate=false'
+  $jmx_options = lookup('storm::backend::jmx_options', String, undef, "${jmx_remote_port} ${jmx_remote_ssl} ${jmx_remote_authenticate}")
 
   # Debug options
   $debug = lookup('storm::backend::debug', Boolean, undef, false)

@@ -169,16 +169,11 @@ class storm::backend::config (
     notify  => [Service['storm-backend-server']],
   }
 
+  # Directory '/etc/systemd/system/storm-backend-server.service.d' is created by rpm
   $service_dir='/etc/systemd/system/storm-backend-server.service.d'
 
-  file { $service_dir:
-    ensure => directory,
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0644',
-  }
-
-  $service_file='/etc/systemd/system/storm-backend-server.service.d/storm-backend-server.conf'
+  # service conf file
+  $service_file="${service_dir}/storm-backend-server.conf"
   $service_template_file='storm/etc/systemd/system/storm-backend-server.service.d/storm-backend-server.conf.erb'
 
   file { $service_file:
@@ -188,10 +183,10 @@ class storm::backend::config (
     owner   => 'root',
     group   => 'root',
     notify  => [Service['storm-backend-server']],
-    require => [File[$service_dir]],
   }
 
-  $limit_file='/etc/systemd/system/storm-backend-server.service.d/filelimit.conf'
+  # limit conf file
+  $limit_file="${service_dir}/filelimit.conf"
   $limit_template_file='storm/etc/systemd/system/storm-backend-server.service.d/filelimit.conf.erb'
 
   file { $limit_file:
@@ -201,7 +196,6 @@ class storm::backend::config (
     owner   => 'root',
     group   => 'root',
     notify  => [Service['storm-backend-server']],
-    require => [File[$service_dir]],
   }
 
   $info_yaim_template_file='storm/etc/storm/info-provider/storm-yaim-variables.conf.erb'

@@ -2,12 +2,7 @@
 #
 class storm::webdav::config (
 
-  $manage_application_file = $storm::webdav::manage_application_file,
-  $application_file = $storm::webdav::application_file,
-  $oauth_issuers = $storm::webdav::oauth_issuers,
-
   $manage_storage_areas = $storm::webdav::manage_storage_areas,
-  $storage_areas_directory = $storm::webdav::storage_areas_directory,
   $storage_areas = $storm::webdav::storage_areas,
 
   $hostnames = $storm::webdav::hostnames,
@@ -85,98 +80,43 @@ class storm::webdav::config (
 
   if $manage_storage_areas {
 
-    if $storage_areas_directory.length() > 0 {
-
-      ## Configure storage areas property files from source directory
-      file { '/etc/storm/webdav/sa.d':
-        ensure  => directory,
-        source  => $storage_areas_directory,
-        recurse => 'remote',
-        owner   => 'root',
-        group   => 'storm',
-        notify  => Service['storm-webdav'],
-      }
-
-    } else {
-
-      ## Use class variables to configure storage areas
-      if $storage_areas {
-        $sa_properties_template_file='storm/etc/storm/webdav/sa.d/sa.properties.erb'
-        $storage_areas.each | $sa | {
-          # define template variables
-          # mandatory fields
-          $name = $sa[name]
-          $root_path = $sa[root_path]
-          $access_points = $sa[access_points]
-          $vos = $sa[vos]
-          # optional fileds
-          $orgs = $sa[orgs]
-          $authenticated_read_enabled = $sa[authenticated_read_enabled]
-          $anonymous_read_enabled = $sa[anonymous_read_enabled]
-          $vo_map_enabled = $sa[vo_map_enabled]
-          $vo_map_grants_write_permission = $sa[vo_map_grants_write_permission]
-          $orgs_grant_read_permission = $sa[orgs_grant_read_permission]
-          $orgs_grant_write_permission = $sa[orgs_grant_write_permission]
-          $wlcg_scope_authz_enabled = $sa[wlcg_scope_authz_enabled]
-          $fine_grained_authz_enabled = $sa[fine_grained_authz_enabled]
-          # use template
-          file { "/etc/storm/webdav/sa.d/${name}.properties":
-            ensure  => present,
-            content => template($sa_properties_template_file),
-            owner   => 'root',
-            group   => 'storm',
-            notify  => Service['storm-webdav'],
-          }
+    ## Use class variables to configure storage areas
+    if $storage_areas {
+      $sa_properties_template_file='storm/etc/storm/webdav/sa.d/sa.properties.erb'
+      $storage_areas.each | $sa | {
+        # define template variables
+        # mandatory fields
+        $name = $sa[name]
+        $root_path = $sa[root_path]
+        $access_points = $sa[access_points]
+        $vos = $sa[vos]
+        # optional fileds
+        $orgs = $sa[orgs]
+        $authenticated_read_enabled = $sa[authenticated_read_enabled]
+        $anonymous_read_enabled = $sa[anonymous_read_enabled]
+        $vo_map_enabled = $sa[vo_map_enabled]
+        $vo_map_grants_write_permission = $sa[vo_map_grants_write_permission]
+        $orgs_grant_read_permission = $sa[orgs_grant_read_permission]
+        $orgs_grant_write_permission = $sa[orgs_grant_write_permission]
+        $wlcg_scope_authz_enabled = $sa[wlcg_scope_authz_enabled]
+        $fine_grained_authz_enabled = $sa[fine_grained_authz_enabled]
+        # use template
+        file { "/etc/storm/webdav/sa.d/${name}.properties":
+          ensure  => present,
+          content => template($sa_properties_template_file),
+          owner   => 'root',
+          group   => 'storm',
+          notify  => Service['storm-webdav'],
         }
       }
     }
   }
 
-  if $manage_application_file {
-
-    $target_application_file='/etc/storm/webdav/config/application.yml'
-
-    if $application_file.length() > 0 {
-
-      ## copy application.yml from source file
-
-      # configuration of application.yml
-      file { $target_application_file:
-        ensure => present,
-        source => $application_file,
-        owner  => 'root',
-        group  => 'storm',
-        mode   => '0644',
-        notify => Service['storm-webdav'],
-      }
-
-    } else {
-
-      ## generate application.yml from variables
-      $application_template_file='storm/etc/storm/webdav/config/application.yml.erb'
-
-      # configuration of application.yml
-      file { $target_application_file:
-        ensure  => present,
-        content => template($application_template_file),
-        owner   => 'root',
-        group   => 'storm',
-        mode    => '0644',
-        notify  => Service['storm-webdav'],
-      }
-    }
-  }
-
+  # Directory '/etc/systemd/system/storm-webdav.service.d' is created by rpm
   $service_dir='/etc/systemd/system/storm-webdav.service.d'
-  file { $service_dir:
-    ensure => directory,
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0644',
-  }
 
   $limit_template_file='storm/etc/systemd/system/storm-webdav.service.d/filelimit.conf.erb'
-  $limit_file='/etc/systemd/system/storm-webdav.service.d/filelimit.conf'
+  $limit_file="${service_dir}/filelimit.conf"
   # configuration of filelimit.conf
   file { $limit_file:
     ensure  => present,
@@ -184,16 +124,14 @@ class storm::webdav::config (
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    notify  => [Exec['webdav-daemon-reload'], Service['storm-webdav']],
-    require => File[$service_dir],
+    notify  => [Service['storm-webdav']],
   }
 
-  $environment_file='/etc/systemd/system/storm-webdav.service.d/storm-webdav.conf'
+  $environment_file="${service_dir}/storm-webdav.conf"
   $environment_template_file='storm/etc/systemd/system/storm-webdav.service.d/storm-webdav.conf.erb'
   file { $environment_file:
     ensure  => present,
     content => template($environment_template_file),
-    notify  => [Exec['webdav-daemon-reload'], Service['storm-webdav']],
-    require => File[$service_dir],
+    notify  => [Service['storm-webdav']],
   }
 }

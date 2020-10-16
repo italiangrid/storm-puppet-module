@@ -105,6 +105,16 @@
       </properties>
       <capabilities>
         <aclMode>AoT</aclMode>
+        <default-acl>
+          <acl-entry>
+            <groupName>atlasusers</groupName>
+            <permissions>RW</permissions>
+          </acl-entry>
+          <acl-entry>
+            <groupName>atlasprod</groupName>
+            <permissions>RW</permissions>
+          </acl-entry>
+        </default-acl>
         <trans-prot>
           <prot name="file">
             <schema>file</schema>

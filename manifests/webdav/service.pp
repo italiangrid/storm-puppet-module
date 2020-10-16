@@ -2,13 +2,9 @@
 #
 class storm::webdav::service {
 
-  exec { 'webdav-daemon-reload':
-    command     => '/usr/bin/systemctl daemon-reload',
-    refreshonly => true,
-  }
   service { 'storm-webdav':
-    ensure  => running,
-    enable  => true,
-    require => Exec['webdav-daemon-reload'],
+    ensure => running,
+    enable => true,
+    start  => '/usr/bin/systemctl daemon-reload; /usr/bin/systemctl start storm-webdav',
   }
 }
