@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.1] - 2020-10-19
+
+- Fixed CHANGELOG
+- Improved documentation.
+
+## [2.0.0] - 2020-10-19
+
+- Added defined types for application-*.yml and storage area files used by WebDAV class.
+- Removed direct support for application.yml template file.
+- Added defined types for service conf files of Backend.
+- Added defined type for storage site reporting.
+- Added tests.
+- Removed docker deploy image.
+
+## [1.1.1] - 2020-10-06
+
+- Removed log directory management
+
 ## [1.1.0] - 2020-10-05
 
 - Removed storm::mapping class

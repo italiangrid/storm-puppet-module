@@ -130,6 +130,17 @@ class { 'storm::backend':
 }
 ```
 
+Starting from Puppet module v2.0.0, the management of Storage Site Report has been improved.
+Site administrators can add script and cron described in the [how-to](http://italiangrid.github.io/storm/documentation/how-to/how-to-publish-json-report/) using a defined type `storm::backend::storage_site_report`.
+For example:
+
+```Puppet
+storm::backend::storage_site_report { 'storage-site-report':
+  report_path => '/storage/info/report.json', # the internal storage area path
+  minute      => '*/20', # set cron's minute
+}
+```
+
 ### StoRM Frontend class
 
 The StoRM Frontend class installs `storm-frontend-mp` and all the releated packages and configures `storm-frontend-server` service by managing the following files:
