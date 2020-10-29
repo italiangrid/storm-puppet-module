@@ -235,7 +235,7 @@ storm::webdav::application_file { 'application-wlcg.yml':
 
 The StoRM GridFTP class installs `storm-globus-gridftp-mp` and configures `storm-globus-gridftp` service by managing the following files:
 
-- `/etc/gridftp.conf`, the main configuration file;
+- `/etc/grid-security/gridftp.conf`, the main configuration file;
 - `/etc/sysconfig/storm-globus-gridftp`, with the environment variables.
 
 The whole list of StoRM GridFTP class parameters can be found [here](https://italiangrid.github.io/storm-puppet-module/puppet_classes/storm_3A_3Agridftp.html).

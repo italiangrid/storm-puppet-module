@@ -19,14 +19,18 @@ class storm::gridftp::config (
 
 ) {
 
-  $conf_file='/etc/gridftp.conf'
-  $conf_template_file='storm/etc/gridftp.conf.erb'
+  $conf_file='/etc/grid-security/gridftp.conf'
+  $conf_template_file='storm/etc/grid-security/gridftp.conf.erb'
 
   file { $conf_file:
     ensure  => present,
     content => template($conf_template_file),
     notify  => Service['storm-globus-gridftp'],
-    require => Package['storm-globus-gridftp-mp'],
+  }
+
+  ## ensure backwards compatibility after moving conf file to /etc/grid-security/gridftp.conf
+  file { '/etc/gridftp.conf':
+    ensure => absent,
   }
 
   $sysconfig_file='/etc/sysconfig/storm-globus-gridftp'
@@ -37,6 +41,5 @@ class storm::gridftp::config (
     path    => $sysconfig_file,
     content => template($sysconfig_template_file),
     notify  => Service['storm-globus-gridftp'],
-    require => Package['storm-globus-gridftp-mp'],
   }
 }

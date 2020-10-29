@@ -26,7 +26,7 @@ describe 'storm::gridftp', :type => :class do
         end
 
         it "check gridftp conf file content" do
-          title='/etc/gridftp.conf'
+          title='/etc/grid-security/gridftp.conf'
           is_expected.to contain_file(title).with( 
             :ensure => 'present',
           )
@@ -51,7 +51,7 @@ describe 'storm::gridftp', :type => :class do
       context 'Use default gridftp params' do
 
         it "check gridftp conf file content" do
-          title='/etc/gridftp.conf'
+          title='/etc/grid-security/gridftp.conf'
           is_expected.to contain_file(title).with( 
             :ensure => 'present',
           )
@@ -60,6 +60,11 @@ describe 'storm::gridftp', :type => :class do
           is_expected.to contain_file(title).with( :content => /connections_max 2000/ )
           is_expected.to contain_file(title).with( :content => /^load_dsi_module StoRM/ )
           is_expected.to contain_file(title).with( :content => /^allowed_modules StoRM/ )
+        end
+
+        it "check previous gridftp conf file not exists" do
+          title='/etc/gridftp.conf'
+          is_expected.to contain_file(title).with( :ensure => 'absent' )
         end
 
         it "check gridftp sysconf file content" do
