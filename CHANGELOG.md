@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.1] - 2020-11-09
+
+- Fixed type into data file
+
 ## [2.2.0] - 2020-11-09
 
 - Moved default parameters into YAML data files

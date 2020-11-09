@@ -1,6 +1,6 @@
 {
   "name": "cnafsd-storm",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "author": "storm",
   "summary": "StoRM Puppet module",
   "license": "Apache-2.0",

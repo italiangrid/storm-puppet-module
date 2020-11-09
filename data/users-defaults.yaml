@@ -2,7 +2,7 @@
 storm::users::groups: {}
 storm::users::users:
   edguser:
-    comment: 'Edguser user',
+    comment: 'Edguser user'
     groups:
       - 'edguser'
       - 'storm'
