@@ -49,22 +49,22 @@
 #
 class storm::gridftp (
 
-  Integer $port = $storm::gridftp::params::port,
-  String $port_range = $storm::gridftp::params::port_range,
-  Integer $connections_max = $storm::gridftp::params::connections_max,
+  Integer $port,
+  String $port_range,
+  Integer $connections_max,
 
-  String $log_single = $storm::gridftp::params::log_single,
-  String $log_transfer = $storm::gridftp::params::log_transfer,
+  String $log_single,
+  String $log_transfer,
 
-  Boolean $redirect_lcmaps_log = $storm::gridftp::params::redirect_lcmaps_log,
-  String $llgt_log_file = $storm::gridftp::params::llgt_log_file,
+  Boolean $redirect_lcmaps_log,
+  String $llgt_log_file,
 
-  Integer $lcmaps_debug_level = $storm::gridftp::params::lcmaps_debug_level,
-  Integer $lcas_debug_level = $storm::gridftp::params::lcas_debug_level,
+  Integer $lcmaps_debug_level,
+  Integer $lcas_debug_level,
 
-  Boolean $load_storm_dsi_module = $storm::gridftp::params::load_storm_dsi_module,
+  Boolean $load_storm_dsi_module,
 
-) inherits storm::gridftp::params {
+) {
 
   contain storm::gridftp::install
   contain storm::gridftp::config

@@ -36,23 +36,8 @@
 #
 class storm::users (
 
-  Accounts::Group::Hash $groups = { },
-  Accounts::User::Hash $users = {
-    'edguser' => {
-      'comment' => 'Edguser user',
-      'groups'  => [ edguser, storm, ],
-      'uid'     => '1101',
-      'gid'     => '1101',
-      'home'    => '/home/edguser',
-    },
-    'storm' => {
-      'comment' => 'StoRM user',
-      'groups'  => [ storm, edguser, ],
-      'uid'     => '1100',
-      'gid'     => '1100',
-      'home'    => '/home/storm',
-    },
-  },
+  Accounts::Group::Hash $groups,
+  Accounts::User::Hash $users,
 
 ) {
 

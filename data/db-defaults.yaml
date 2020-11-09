@@ -1,0 +1,9 @@
+---
+storm::db::root_password: 'storm'
+storm::db::storm_username: 'storm'
+storm::db::storm_password: 'storm'
+storm::db::override_options:
+  mysqld:
+    bind-address: '0.0.0.0'
+    max_connections: 2048
+storm::db::limit_no_file: 65535

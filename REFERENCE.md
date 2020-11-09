@@ -9,19 +9,16 @@
 * [`storm::backend::config`](#stormbackendconfig): StoRM Backend config class
 * [`storm::backend::configdb`](#stormbackendconfigdb): StoRM Backend DB config class
 * [`storm::backend::install`](#stormbackendinstall): StoRM Backend install class
-* [`storm::backend::params`](#stormbackendparams): StoRM Frontend params class
 * [`storm::backend::service`](#stormbackendservice): StoRM Backend service class
 * [`storm::db`](#stormdb): Install MariaDB server and client, create empty databases 'storm_db' and 'storm_be_ISAM',
 add storm user and all the necessary grants.
 * [`storm::frontend`](#stormfrontend): StoRM Frontend puppet module
 * [`storm::frontend::config`](#stormfrontendconfig): StoRM Frontend config class
 * [`storm::frontend::install`](#stormfrontendinstall): StoRM Frontend install class
-* [`storm::frontend::params`](#stormfrontendparams): StoRM Frontend params class
 * [`storm::frontend::service`](#stormfrontendservice): StoRM Frontend service class
 * [`storm::gridftp`](#stormgridftp): StoRM GridFTP puppet module
 * [`storm::gridftp::config`](#stormgridftpconfig): StoRM GridFTP config class
 * [`storm::gridftp::install`](#stormgridftpinstall): StoRM GridFTP install class
-* [`storm::gridftp::params`](#stormgridftpparams): StoRM GridFTP params class
 * [`storm::gridftp::service`](#stormgridftpservice): StoRM GridFTP service class
 * [`storm::params`](#stormparams): StoRM params class
 * [`storm::repo`](#stormrepo): Choose which StoRM repository you want to intall and enable. Also a custom list of repository URL can be specified.
@@ -30,12 +27,12 @@ add storm user and all the necessary grants.
 * [`storm::webdav`](#stormwebdav): StoRM WebDAV puppet module
 * [`storm::webdav::config`](#stormwebdavconfig): StoRM WebDAV config class
 * [`storm::webdav::install`](#stormwebdavinstall): StoRM WebDAV install class
-* [`storm::webdav::params`](#stormwebdavparams): StoRM WebDAV params class
 * [`storm::webdav::service`](#stormwebdavservice): StoRM WebDAV service class
 
 **Defined types**
 
 * [`storm::backend::service_conf_file`](#stormbackendservice_conf_file): 
+* [`storm::backend::storage_site_report`](#stormbackendstorage_site_report): 
 * [`storm::rootdir`](#stormrootdir): StoRM root directory defined resource
 * [`storm::webdav::application_file`](#stormwebdavapplication_file): 
 * [`storm::webdav::storage_area_file`](#stormwebdavstorage_area_file): 
@@ -118,7 +115,7 @@ Data type: `String`
 
 StoRM Backend Fully Qualified Domain Name
 
-Default value: lookup('storm::backend::hostname', String, undef, $::fqdn)
+Default value: $::fqdn
 
 ##### `install_native_libs_gpfs`
 
@@ -126,15 +123,13 @@ Data type: `Boolean`
 
 Set this if you need to install storm-native-libs-gpfs. Default: false.
 
-Default value: $storm::backend::params::install_native_libs_gpfs
-
 ##### `db_hostname`
 
 Data type: `String`
 
 Fully Qualified Domain Name of database hostname. Default value: `hostname`.
 
-Default value: lookup('storm::backend::db_hostname', String, undef, $hostname)
+Default value: $hostname
 
 ##### `db_username`
 
@@ -142,15 +137,11 @@ Data type: `String`
 
 The name of user used to connect to local database. Default: storm
 
-Default value: $storm::backend::params::db_username
-
 ##### `db_password`
 
 Data type: `String`
 
 Password for the user in `db_storm_username`. Default: bluemoon
-
-Default value: $storm::backend::params::db_password
 
 ##### `xroot_hostname`
 
@@ -159,15 +150,13 @@ Data type: `String`
 Root server (default value for all Storage Areas).
 Note: you may change the settings for each SA acting on its configuration.
 
-Default value: lookup('storm::backend::xroot_hostname', String, undef, $hostname)
+Default value: $hostname
 
 ##### `xroot_port`
 
 Data type: `Integer`
 
 Root server port (default value for all Storage Areas).
-
-Default value: $storm::backend::params::xroot_port
 
 ##### `gsiftp_pool_balance_strategy`
 
@@ -178,8 +167,6 @@ Note: you may change the settings for each SA acting on its configuration.
 Available values: round-robin, smart-rr, random, weight. Default value: round-robin.
 See [Storm::Backend::BalanceStrategy](#stormbackendbalancestrategy).
 
-Default value: $storm::backend::params::gsiftp_pool_balance_strategy
-
 ##### `gsiftp_pool_members`
 
 Data type: `Array[Storm::Backend::GsiftpPoolMember]`
@@ -187,8 +174,6 @@ Data type: `Array[Storm::Backend::GsiftpPoolMember]`
 Array of [Storm::Backend::GsiftpPoolMember](#stormbackendgsiftppoolmember).
 GridFTP servers pool list (default value for all Storage Areas).
 Note: you may change the settings for each SA acting on its configuration.
-
-Default value: $storm::backend::params::gsiftp_pool_members
 
 ##### `webdav_pool_members`
 
@@ -198,8 +183,6 @@ Array of [Storm::Backend::WebdavPoolMember](#stormbackendwebdavpoolmember).
 WebDAV endpoints pool list (default value for all Storage Areas).
 Note: you may change the settings for each SA acting on its configuration.
 
-Default value: $storm::backend::params::webdav_pool_members
-
 ##### `srm_pool_members`
 
 Data type: `Array[Storm::Backend::SrmPoolMember]`
@@ -208,16 +191,12 @@ Array of [Storm::Backend::SrmPoolMember](#stormbackendsrmpoolmember).
 Frontend endpoints pool list (default value for all Storage Areas).
 Note: you may change the settings for each SA acting on its configuration.
 
-Default value: $storm::backend::params::srm_pool_members
-
 ##### `transfer_protocols`
 
 Data type: `Array[Storm::Backend::TransferProtocol]`
 
 List of supported (and published) transfer protocols (default value for all Storage Areas).
 Note: you may change the settings for each SA acting on its configuration.
-
-Default value: $storm::backend::params::transfer_protocols
 
 ##### `fs_type`
 
@@ -228,16 +207,12 @@ Note: you may change the settings for each SA acting on its configuration.
 Available values: posixfs, gpfs and test. Default value: posixfs
 See [Storm::Backend::FsType](#stormbackendfstype).
 
-Default value: $storm::backend::params::fs_type
-
 ##### `storage_areas`
 
 Data type: `Array[Storm::Backend::StorageArea]`
 
 List of supported Storage Areas.
 Array of [Storm::Backend::StorageArea](#stormbackendstoragearea).
-
-Default value: $storm::backend::params::storage_areas
 
 ##### `frontend_public_host`
 
@@ -246,7 +221,7 @@ Data type: `String`
 StoRM Frontend service public host. It’s used by StoRM Info Provider to publish the SRM endpoint into the Resource BDII.
 Default value: `hostname`
 
-Default value: lookup('storm::backend::srm_hostname', String, undef, $hostname)
+Default value: $hostname
 
 ##### `frontend_port`
 
@@ -254,15 +229,11 @@ Data type: `Integer`
 
 StoRM Frontend service port. Default value: 8444
 
-Default value: $storm::backend::params::frontend_port
-
 ##### `directory_automatic_creation`
 
 Data type: `Boolean`
 
 Flag to enable automatic missing directory creation upon srmPrepareToPut requests. Default: false.
-
-Default value: $storm::backend::params::directory_automatic_creation
 
 ##### `directory_writeperm`
 
@@ -270,15 +241,11 @@ Data type: `Boolean`
 
 Flag to enable directory write permission setting upon srmMkDir requests on created directories. Default: false.
 
-Default value: $storm::backend::params::directory_writeperm
-
 ##### `rest_services_port`
 
 Data type: `Integer`
 
 REST services port. Default value: 9998
-
-Default value: $storm::backend::params::rest_services_port
 
 ##### `rest_services_max_threads`
 
@@ -286,23 +253,17 @@ Data type: `Integer`
 
 REST services max active requests. Default: 100
 
-Default value: $storm::backend::params::rest_services_max_threads
-
 ##### `rest_services_max_queue_size`
 
 Data type: `Integer`
 
 REST services max queue size of accepted requests. Default: 1000
 
-Default value: $storm::backend::params::rest_services_max_queue_size
-
 ##### `xmlrpc_unsecure_server_port`
 
 Data type: `Integer`
 
 Port to listen on for incoming XML-RPC connections from Frontends(s). Default: 8080
-
-Default value: $storm::backend::params::xmlrpc_unsecure_server_port
 
 ##### `xmlrpc_maxthread`
 
@@ -312,23 +273,17 @@ Number of threads managing XML-RPC connection from Frontends(s).
 A well sized value for this parameter have to be at least equal to the sum of the number of working threads in all Frontends.
 Default: 100.
 
-Default value: $storm::backend::params::xmlrpc_maxthread
-
 ##### `xmlrpc_max_queue_size`
 
 Data type: `Integer`
 
 Max number of accepted and queued XML-RPC connection from Frontends(s). Default: **1000**
 
-Default value: $storm::backend::params::xmlrpc_max_queue_size
-
 ##### `xmlrpc_security_enabled`
 
 Data type: `Boolean`
 
 Whether the backend will require a token to be present for accepting XML-RPC requests. Default: true.
-
-Default value: $storm::backend::params::xmlrpc_security_enabled
 
 ##### `xmlrpc_security_token`
 
@@ -337,15 +292,11 @@ Data type: `String`
 The token that the backend will require to be present for accepting XML-RPC requests.
 Mandatory if xmlrpc_security_enabled is true.
 
-Default value: $storm::backend::params::xmlrpc_security_token
-
 ##### `ptg_skip_acl_setup`
 
 Data type: `Boolean`
 
 Skip ACL setup for PtG requests. Default: false.
-
-Default value: $storm::backend::params::ptg_skip_acl_setup
 
 ##### `pinlifetime_default`
 
@@ -354,15 +305,11 @@ Data type: `Integer`
 Default PinLifetime in seconds used for pinning files in case of srmPrepareToPut or srmPrepareToGet operation
 without any pinLifetime specified. Default: 259200.
 
-Default value: $storm::backend::params::pinlifetime_default
-
 ##### `pinlifetime_maximum`
 
 Data type: `Integer`
 
 Maximum PinLifetime allowed in seconds. Default: 1814400.
-
-Default value: $storm::backend::params::pinlifetime_maximum
 
 ##### `sanity_check_enabled`
 
@@ -370,15 +317,11 @@ Data type: `Boolean`
 
 Enable/disable sanity checks during bootstrap phase. Default: true.
 
-Default value: $storm::backend::params::sanity_check_enabled
-
 ##### `service_du_enabled`
 
 Data type: `Boolean`
 
 Flag to enable disk usage service. Default: false.
-
-Default value: $storm::backend::params::service_du_enabled
 
 ##### `service_du_delay`
 
@@ -386,15 +329,11 @@ Data type: `Integer`
 
 The initial delay before the service is started (seconds). Default: 60.
 
-Default value: $storm::backend::params::service_du_delay
-
 ##### `service_du_interval`
 
 Data type: `Integer`
 
 The interval in seconds between successive run. Default: 360.
-
-Default value: $storm::backend::params::service_du_interval
 
 ##### `max_ls_entries`
 
@@ -403,15 +342,11 @@ Data type: `Integer`
 Maximum number of entries returned by an srmLs call.
 Since in case of recursive srmLs results can be in order of million, this prevent a server overload. Default: 500.
 
-Default value: $storm::backend::params::max_ls_entries
-
 ##### `gc_pinnedfiles_cleaning_delay`
 
 Data type: `Integer`
 
 Initial delay before starting the reserved space, JIT ACLs and pinned files garbage collection process, in seconds. Default: 10.
-
-Default value: $storm::backend::params::gc_pinnedfiles_cleaning_delay
 
 ##### `gc_pinnedfiles_cleaning_interval`
 
@@ -419,23 +354,17 @@ Data type: `Integer`
 
 Time interval in seconds between successive purging run. Default: 300.
 
-Default value: $storm::backend::params::gc_pinnedfiles_cleaning_interval
-
 ##### `gc_purge_enabled`
 
 Data type: `Boolean`
 
 Enable the request garbage collector. Default: true.
 
-Default value: $storm::backend::params::gc_purge_enabled
-
 ##### `gc_purge_interval`
 
 Data type: `Integer`
 
 Time interval in seconds between successive purging run. Default: 600.
-
-Default value: $storm::backend::params::gc_purge_interval
 
 ##### `gc_purge_size`
 
@@ -444,8 +373,6 @@ Data type: `Integer`
 Number of requests picked up for cleaning from the requests garbage collector at each run.
 This value is use also by Tape Recall Garbage Collector. Default: 800
 
-Default value: $storm::backend::params::gc_purge_size
-
 ##### `gc_expired_request_time`
 
 Data type: `Integer`
@@ -453,15 +380,11 @@ Data type: `Integer`
 Time in seconds to consider a request expired after its submission. Default: 604800 seconds (1 week).
 From StoRM 1.11.13 it is used also to identify how much time is needed to consider a completed recall task as cleanable.
 
-Default value: $storm::backend::params::gc_expired_request_time
-
 ##### `gc_expired_inprogress_time`
 
 Data type: `Integer`
 
 Time in seconds to consider an in-progress ptp request as expired. Default: 2592000 seconds (1 month).
-
-Default value: $storm::backend::params::gc_expired_inprogress_time
 
 ##### `gc_ptp_transit_interval`
 
@@ -469,15 +392,11 @@ Data type: `Integer`
 
 Time interval in seconds between successive expired put requests agent run. Default: 3000.
 
-Default value: $storm::backend::params::gc_ptp_transit_interval
-
 ##### `gc_ptp_transit_start_delay`
 
 Data type: `Integer`
 
 Initial delay before starting the expired put requests agent process, in seconds. Default: 60
-
-Default value: $storm::backend::params::gc_ptp_transit_start_delay
 
 ##### `extraslashes_file`
 
@@ -485,15 +404,11 @@ Data type: `String`
 
 Add extra slashes after the “authority” part of a TURL for file protocol. Defaul: ''
 
-Default value: $storm::backend::params::extraslashes_file
-
 ##### `extraslashes_root`
 
 Data type: `String`
 
 Add extra slashes after the “authority” part of a TURL for xroot protocol. Default: '/'
-
-Default value: $storm::backend::params::extraslashes_root
 
 ##### `extraslashes_gsiftp`
 
@@ -501,15 +416,11 @@ Data type: `String`
 
 Add extra slashes after the “authority” part of a TURL for gsiftp protocol. Default: '/'
 
-Default value: $storm::backend::params::extraslashes_gsiftp
-
 ##### `db_connection_pool_enabled`
 
 Data type: `Boolean`
 
 Enable the database connection pool. Default: true
-
-Default value: $storm::backend::params::db_connection_pool_enabled
 
 ##### `db_connection_pool_max_active`
 
@@ -517,15 +428,11 @@ Data type: `Integer`
 
 Database connection pool max active connections. Default: 10
 
-Default value: $storm::backend::params::db_connection_pool_max_active
-
 ##### `db_connection_pool_max_wait`
 
 Data type: `Integer`
 
 Database connection pool max wait time to provide a connection. Default: 50
-
-Default value: $storm::backend::params::db_connection_pool_max_wait
 
 ##### `asynch_db_reconnect_period`
 
@@ -533,15 +440,11 @@ Data type: `Integer`
 
 Database connection refresh time intervall in seconds. Default: 18000
 
-Default value: $storm::backend::params::asynch_db_reconnect_period
-
 ##### `asynch_db_delay_period`
 
 Data type: `Integer`
 
 Database connection refresh initial delay in seconds. Default: 30.
-
-Default value: $storm::backend::params::asynch_db_delay_period
 
 ##### `asynch_picking_initial_delay`
 
@@ -549,15 +452,11 @@ Data type: `Integer`
 
 Initial delay before starting to pick requests from the DB, in seconds. Default: 1.
 
-Default value: $storm::backend::params::asynch_picking_initial_delay
-
 ##### `asynch_picking_time_interval`
 
 Data type: `Integer`
 
 Polling interval in seconds to pick up new SRM requests. Default: 2.
-
-Default value: $storm::backend::params::asynch_picking_time_interval
 
 ##### `asynch_picking_max_batch_size`
 
@@ -565,15 +464,11 @@ Data type: `Integer`
 
 Maximum number of requests picked up at each polling time. Default: 100.
 
-Default value: $storm::backend::params::asynch_picking_max_batch_size
-
 ##### `requests_scheduler_core_size`
 
 Data type: `Integer`
 
 Crusher Scheduler worker pool base size. Default: 50.
-
-Default value: $storm::backend::params::requests_scheduler_core_size
 
 ##### `requests_scheduler_max_size`
 
@@ -581,15 +476,11 @@ Data type: `Integer`
 
 Crusher Schedule worker pool max size. Default: 200.
 
-Default value: $storm::backend::params::requests_scheduler_max_size
-
 ##### `requests_scheduler_queue_size`
 
 Data type: `Integer`
 
 Request queue maximum size. Default: 2000.
-
-Default value: $storm::backend::params::requests_scheduler_queue_size
 
 ##### `ptp_requests_scheduler_core_size`
 
@@ -597,15 +488,11 @@ Data type: `Integer`
 
 PrepareToPut worker pool base size. Default: 50.
 
-Default value: $storm::backend::params::ptp_requests_scheduler_core_size
-
 ##### `ptp_requests_scheduler_max_size`
 
 Data type: `Integer`
 
 PrepareToPut worker pool max size. Default: 200.
-
-Default value: $storm::backend::params::ptp_requests_scheduler_max_size
 
 ##### `ptp_requests_scheduler_queue_size`
 
@@ -613,15 +500,11 @@ Data type: `Integer`
 
 PrepareToPut request queue maximum size. Default: 1000.
 
-Default value: $storm::backend::params::ptp_requests_scheduler_queue_size
-
 ##### `ptg_requests_scheduler_core_size`
 
 Data type: `Integer`
 
 PrepareToGet worker pool base size. Default: 50.
-
-Default value: $storm::backend::params::ptg_requests_scheduler_core_size
 
 ##### `ptg_requests_scheduler_max_size`
 
@@ -629,15 +512,11 @@ Data type: `Integer`
 
 PrepareToGet worker pool max size. Default: 200.
 
-Default value: $storm::backend::params::ptg_requests_scheduler_max_size
-
 ##### `ptg_requests_scheduler_queue_size`
 
 Data type: `Integer`
 
 PrepareToGet request queue maximum size. Default: 2000.
-
-Default value: $storm::backend::params::ptg_requests_scheduler_queue_size
 
 ##### `bol_requests_scheduler_core_size`
 
@@ -645,15 +524,11 @@ Data type: `Integer`
 
 BringOnline worker pool base size. Default: 50.
 
-Default value: $storm::backend::params::bol_requests_scheduler_core_size
-
 ##### `bol_requests_scheduler_max_size`
 
 Data type: `Integer`
 
 BringOnline Worker pool max size. Default: 200.
-
-Default value: $storm::backend::params::bol_requests_scheduler_max_size
 
 ##### `bol_requests_scheduler_queue_size`
 
@@ -661,15 +536,11 @@ Data type: `Integer`
 
 BringOnline request queue maximum size. Default: 2000.
 
-Default value: $storm::backend::params::bol_requests_scheduler_queue_size
-
 ##### `info_sitename`
 
 Data type: `String`
 
 It’s the human-readable name of your site used to set the Glue-SiteName attribute.
-
-Default value: $storm::backend::params::info_sitename
 
 ##### `info_storage_default_root`
 
@@ -677,15 +548,11 @@ Data type: `String`
 
 Default directory for Storage Areas.
 
-Default value: $storm::backend::params::info_storage_default_root
-
 ##### `info_endpoint_quality_level`
 
 Data type: `Integer`
 
 Endpoint maturity level to be published by the StoRM info provider. Default value: 2.
-
-Default value: $storm::backend::params::info_endpoint_quality_level
 
 ##### `info_webdav_pool_list`
 
@@ -693,17 +560,11 @@ Data type: `Array[Storm::Backend::WebdavPoolMember]`
 
 List of published webdav endpoints.
 
-Default value: lookup('storm::backend::info_webdav_pool_list',
-    Array[Storm::Backend::WebdavPoolMember], undef, $webdav_pool_members)
-
 ##### `info_frontend_host_list`
 
 Data type: `Array[Storm::Backend::SrmPoolMember]`
 
 List of published srm endpoints.
-
-Default value: lookup('storm::backend::info_frontend_host_list',
-    Array[Storm::Backend::SrmPoolMember], undef, $srm_pool_members)
 
 ##### `jvm_options`
 
@@ -711,15 +572,11 @@ Data type: `String`
 
 
 
-Default value: $storm::backend::params::jvm_options
-
 ##### `jmx`
 
 Data type: `Boolean`
 
 
-
-Default value: $storm::backend::params::jmx
 
 ##### `jmx_options`
 
@@ -727,15 +584,11 @@ Data type: `String`
 
 
 
-Default value: $storm::backend::params::jmx_options
-
 ##### `debug`
 
 Data type: `Boolean`
 
 
-
-Default value: $storm::backend::params::debug
 
 ##### `debug_port`
 
@@ -743,15 +596,11 @@ Data type: `Integer`
 
 
 
-Default value: $storm::backend::params::debug_port
-
 ##### `debug_suspend`
 
 Data type: `Boolean`
 
 
-
-Default value: $storm::backend::params::debug_suspend
 
 ##### `lcmaps_db_file`
 
@@ -759,15 +608,11 @@ Data type: `String`
 
 
 
-Default value: $storm::backend::params::lcmaps_db_file
-
 ##### `lcmaps_policy_name`
 
 Data type: `String`
 
 
-
-Default value: $storm::backend::params::lcmaps_policy_name
 
 ##### `lcmaps_log_file`
 
@@ -775,15 +620,11 @@ Data type: `String`
 
 
 
-Default value: $storm::backend::params::lcmaps_log_file
-
 ##### `lcmaps_debug_level`
 
 Data type: `Integer`
 
 
-
-Default value: $storm::backend::params::lcmaps_debug_level
 
 ##### `http_turl_prefix`
 
@@ -791,39 +632,29 @@ Data type: `String`
 
 
 
-Default value: $storm::backend::params::http_turl_prefix
-
 ##### `storm_limit_nofile`
 
 Data type: `Integer`
 
 Sets LimitNOFILE value.
 
-Default value: $storm::backend::params::storm_limit_nofile
-
 ##### `manage_path_authz_db`
 
-Data type: `Any`
+Data type: `Boolean`
 
 If true, allows to set content of path-authz.db file.
 
-Default value: $storm::backend::params::manage_path_authz_db
-
 ##### `path_authz_db_file`
 
-Data type: `Any`
+Data type: `String`
 
 If manage_path_authz_db is true, set the content from this source path
-
-Default value: $storm::backend::params::path_authz_db_file
 
 ##### `info_config_file`
 
 Data type: `String`
 
 
-
-Default value: $storm::backend::params::info_config_file
 
 ### storm::backend::config
 
@@ -1541,10 +1372,6 @@ Default value: $storm::backend::db_password
 
 StoRM Backend install class
 
-### storm::backend::params
-
-StoRM Frontend params class
-
 ### storm::backend::service
 
 StoRM Backend service class
@@ -1580,15 +1407,11 @@ Data type: `String`
 
 MySQL root password. Default: 'storm'.
 
-Default value: 'storm'
-
 ##### `storm_username`
 
 Data type: `String`
 
 The username of the user used by storm services to query the databases. Default 'storm'.
-
-Default value: 'storm'
 
 ##### `storm_password`
 
@@ -1596,28 +1419,17 @@ Data type: `String`
 
 The password of 'storm' username used by storm services to access the databases. Default: 'storm'.
 
-Default value: 'storm'
-
 ##### `override_options`
 
 Data type: `Data`
 
 MySQL server override options. Read more about this at https://forge.puppet.com/puppetlabs/mysql/reference#override_options.
 
-Default value: {
-    'mysqld' => {
-      'bind-address'    => '0.0.0.0',
-      'max_connections' => 2048,
-    },
-  }
-
 ##### `limit_no_file`
 
 Data type: `Integer`
 
 MariaDB setting for limitNoFile
-
-Default value: 65535
 
 ### storm::frontend
 
@@ -1653,15 +1465,11 @@ Data type: `Integer`
 
 Backend XML-RPC server port. Default is 8080.
 
-Default value: $storm::frontend::params::be_xmlrpc_port
-
 ##### `be_xmlrpc_token`
 
 Data type: `String`
 
 Token used for communicating with Backend service. Mandatory, has no default.
-
-Default value: $storm::frontend::params::be_xmlrpc_token
 
 ##### `be_xmlrpc_path`
 
@@ -1669,15 +1477,11 @@ Data type: `String`
 
 XML-RPC server path. Default is /RPC2.
 
-Default value: $storm::frontend::params::be_xmlrpc_path
-
 ##### `be_recalltable_port`
 
 Data type: `Integer`
 
 REST server port running on the Backend machine. Default is 9998.
-
-Default value: $storm::frontend::params::be_recalltable_port
 
 ##### `db_host`
 
@@ -1685,7 +1489,7 @@ Data type: `String`
 
 Host for database connection. Default is set to be_xmlrpc_host.
 
-Default value: lookup('storm::frontend::db::host', String, undef, $be_xmlrpc_host)
+Default value: $be_xmlrpc_host
 
 ##### `db_user`
 
@@ -1693,15 +1497,11 @@ Data type: `String`
 
 User for database connection. Default is storm.
 
-Default value: $storm::frontend::params::db_user
-
 ##### `db_passwd`
 
 Data type: `String`
 
 Password for database connection. Default is storm.
-
-Default value: $storm::frontend::params::db_passwd
 
 ##### `port`
 
@@ -1709,15 +1509,11 @@ Data type: `Integer`
 
 Frontend service port. Default is 8444.
 
-Default value: $storm::frontend::params::port
-
 ##### `threadpool_maxpending`
 
 Data type: `Integer`
 
 Size of the internal queue used to maintain SRM tasks in case there are no free worker threads. Default is 200
-
-Default value: $storm::frontend::params::threadpool_maxpending
 
 ##### `threadpool_threads_number`
 
@@ -1725,15 +1521,11 @@ Data type: `Integer`
 
 Size of the worker thread pool. Default is 50.
 
-Default value: $storm::frontend::params::threadpool_threads_number
-
 ##### `gsoap_maxpending`
 
 Data type: `Integer`
 
 Size of the GSOAP queue used to maintain pending SRM requests. Default is 1000.
-
-Default value: $storm::frontend::params::gsoap_maxpending
 
 ##### `check_user_blacklisting`
 
@@ -1741,15 +1533,11 @@ Data type: `Boolean`
 
 Enable/disable user blacklisting. Default is false.
 
-Default value: $storm::frontend::params::check_user_blacklisting
-
 ##### `argus_pepd_endpoint`
 
 Data type: `String`
 
 The complete service endpoint of Argus PEP server. Mandatory if check_user_blacklisting is true.
-
-Default value: $storm::frontend::params::argus_pepd_endpoint
 
 ##### `monitoring_enabled`
 
@@ -1757,15 +1545,11 @@ Data type: `Boolean`
 
 Enable/disable monitoring. Default is true.
 
-Default value: $storm::frontend::params::monitoring_enabled
-
 ##### `monitoring_time_interval`
 
 Data type: `Integer`
 
 Time interval in seconds between each monitoring round. Default is 60.
-
-Default value: $storm::frontend::params::monitoring_time_interval
 
 ##### `monitoring_detailed`
 
@@ -1773,15 +1557,11 @@ Data type: `Boolean`
 
 Enable/disable detailed monitoring. Default is false.
 
-Default value: $storm::frontend::params::monitoring_detailed
-
 ##### `security_enable_mapping`
 
 Data type: `Boolean`
 
 Flag to enable/disable DN-to-userid mapping via gridmap-file. Default is false.
-
-Default value: $storm::frontend::params::security_enable_mapping
 
 ##### `security_enable_vomscheck`
 
@@ -1789,15 +1569,11 @@ Data type: `Boolean`
 
 Flag to enable/disable checking proxy VOMS credentials. Default is true.
 
-Default value: $storm::frontend::params::security_enable_vomscheck
-
 ##### `log_debuglevel`
 
 Data type: `String`
 
 Logging level. Possible values are: ERROR, WARN, INFO, DEBUG, DEBUG2. Default is INFO
-
-Default value: $storm::frontend::params::log_debuglevel
 
 ##### `gridmap_dir`
 
@@ -1805,15 +1581,11 @@ Data type: `String`
 
 Gridmap directory path. Defailt value is: /etc/grid-security/gridmapdir
 
-Default value: $storm::frontend::params::gridmap_dir
-
 ##### `gridmap_file`
 
 Data type: `String`
 
 Gridmap file path. Defailt value is: /etc/grid-security/grid-mapfile
-
-Default value: $storm::frontend::params::gridmap_file
 
 ### storm::frontend::config
 
@@ -2003,10 +1775,6 @@ Default value: $storm::frontend::gridmap_file
 
 StoRM Frontend install class
 
-### storm::frontend::params
-
-StoRM Frontend params class
-
 ### storm::frontend::service
 
 StoRM Frontend service class
@@ -2044,15 +1812,11 @@ Data type: `Integer`
 
 The port used by GridFTP server service.
 
-Default value: $storm::gridftp::params::port
-
 ##### `port_range`
 
 Data type: `String`
 
 The range of ports used by transfer sockets; format is 'MIN,MAX'.
-
-Default value: $storm::gridftp::params::port_range
 
 ##### `connections_max`
 
@@ -2060,15 +1824,11 @@ Data type: `Integer`
 
 The number of max allowed connections to server.
 
-Default value: $storm::gridftp::params::connections_max
-
 ##### `log_single`
 
 Data type: `String`
 
 Session log file path. Default is: /var/log/storm/storm-gridftp-session.log
-
-Default value: $storm::gridftp::params::log_single
 
 ##### `log_transfer`
 
@@ -2076,15 +1836,11 @@ Data type: `String`
 
 Transfer log file path. Default is: /var/log/storm/storm-globus-gridftp.log
 
-Default value: $storm::gridftp::params::log_transfer
-
 ##### `redirect_lcmaps_log`
 
 Data type: `Boolean`
 
 If true, redirect the LCMAPS log to the file specified by 'llgt_log_file'.
-
-Default value: $storm::gridftp::params::redirect_lcmaps_log
 
 ##### `llgt_log_file`
 
@@ -2092,15 +1848,11 @@ Data type: `String`
 
 The LCMAPS log file used if 'redirect_lcmaps_log' is true.
 
-Default value: $storm::gridftp::params::llgt_log_file
-
 ##### `lcmaps_debug_level`
 
 Data type: `Integer`
 
 The LCMAPS logging level. Values from 0 (ERROR) to 5 (DEBUG). Default: 3 (INFO)
-
-Default value: $storm::gridftp::params::lcmaps_debug_level
 
 ##### `lcas_debug_level`
 
@@ -2108,15 +1860,11 @@ Data type: `Integer`
 
 The LCAS logging level. Values from 0 (ERROR) to 5 (DEBUG). Default: 3 (INFO)
 
-Default value: $storm::gridftp::params::lcas_debug_level
-
 ##### `load_storm_dsi_module`
 
 Data type: `Boolean`
 
 Enable/Disable StoRM DSI module. Default: true (enabled)
-
-Default value: $storm::gridftp::params::load_storm_dsi_module
 
 ### storm::gridftp::config
 
@@ -2210,10 +1958,6 @@ Default value: $storm::gridftp::load_storm_dsi_module
 
 StoRM GridFTP install class
 
-### storm::gridftp::params
-
-StoRM GridFTP params class
-
 ### storm::gridftp::service
 
 StoRM GridFTP service class
@@ -2246,23 +1990,17 @@ Data type: `Array[Enum['stable', 'beta', 'nightly']]`
 
 The list of repositories that have to be installed. Allowed values are `stable`, `beta` and `nightly`. Optional.
 
-Default value: ['stable', 'beta', 'nightly']
-
 ##### `enabled`
 
 Data type: `Array[Enum['stable', 'beta', 'nightly']]`
 
 The list of repositories that have to be enabled. Allowed values are `stable`, `beta` and `nightly`. Optional.
 
-Default value: ['stable']
-
 ##### `extra`
 
 Data type: `Array[Storm::CustomRepo]`
 
 A list of repository that have to be created. Optional.
-
-Default value: []
 
 ### storm::storage
 
@@ -2340,30 +2078,11 @@ Data type: `Accounts::Group::Hash`
 
 
 
-Default value: { }
-
 ##### `users`
 
 Data type: `Accounts::User::Hash`
 
 
-
-Default value: {
-    'edguser' => {
-      'comment' => 'Edguser user',
-      'groups'  => [ edguser, storm, ],
-      'uid'     => '1101',
-      'gid'     => '1101',
-      'home'    => '/home/edguser',
-    },
-    'storm' => {
-      'comment' => 'StoRM user',
-      'groups'  => [ storm, edguser, ],
-      'uid'     => '1100',
-      'gid'     => '1100',
-      'home'    => '/home/storm',
-    },
-  }
 
 ### storm::webdav
 
@@ -2407,8 +2126,6 @@ Data type: `Boolean`
 
 Set to True if you want to manage storage areas configuration. Default: true.
 
-Default value: $storm::webdav::params::manage_storage_areas
-
 ##### `storage_areas`
 
 Data type: `Array[Storm::Webdav::StorageArea]`
@@ -2416,15 +2133,11 @@ Data type: `Array[Storm::Webdav::StorageArea]`
 List of storage area's configuration. Ignored if storage_areas_directory is defined.
 Ignored if manage_storage_areas is false.
 
-Default value: $storm::webdav::params::storage_areas
-
 ##### `hostnames`
 
 Data type: `Array[String]`
 
 Sets STORM_WEBDAV_HOSTNAME_(N) environment variables.
-
-Default value: $storm::webdav::params::hostnames
 
 ##### `http_port`
 
@@ -2432,15 +2145,11 @@ Data type: `Integer`
 
 Sets STORM_WEBDAV_HTTP_PORT environment variable.
 
-Default value: $storm::webdav::params::http_port
-
 ##### `https_port`
 
 Data type: `Integer`
 
 Sets STORM_WEBDAV_HTTPS_PORT environment variable.
-
-Default value: $storm::webdav::params::https_port
 
 ##### `trust_anchors_refresh_interval`
 
@@ -2448,15 +2157,11 @@ Data type: `Integer`
 
 Sets STORM_WEBDAV_TRUST_ANCHORS_REFRESH_INTERVAL environment variable.
 
-Default value: $storm::webdav::params::trust_anchors_refresh_interval
-
 ##### `max_concurrent_connections`
 
 Data type: `Integer`
 
 Sets STORM_WEBDAV_MAX_CONNECTIONS environment variable.
-
-Default value: $storm::webdav::params::max_concurrent_connections
 
 ##### `max_queue_size`
 
@@ -2464,15 +2169,11 @@ Data type: `Integer`
 
 Sets STORM_WEBDAV_MAX_QUEUE_SIZE environment variable.
 
-Default value: $storm::webdav::params::max_queue_size
-
 ##### `connector_max_idle_time`
 
 Data type: `Integer`
 
 Sets STORM_WEBDAV_CONNECTOR_MAX_IDLE_TIME environment variable.
-
-Default value: $storm::webdav::params::connector_max_idle_time
 
 ##### `vo_map_files_enable`
 
@@ -2480,15 +2181,11 @@ Data type: `Boolean`
 
 Sets STORM_WEBDAV_VO_MAP_FILES_ENABLE environment variable.
 
-Default value: $storm::webdav::params::vo_map_files_enable
-
 ##### `vo_map_files_config_dir`
 
 Data type: `String`
 
 Sets STORM_WEBDAV_VO_MAP_FILES_CONFIG_DIR environment variable.
-
-Default value: $storm::webdav::params::vo_map_files_config_dir
 
 ##### `vo_map_files_refresh_interval`
 
@@ -2496,15 +2193,11 @@ Data type: `Integer`
 
 Sets STORM_WEBDAV_VO_MAP_FILES_REFRESH_INTERVAL environment variable.
 
-Default value: $storm::webdav::params::vo_map_files_refresh_interval
-
 ##### `tpc_max_connections`
 
 Data type: `Integer`
 
 Sets STORM_WEBDAV_TPC_MAX_CONNECTIONS environment variable.
-
-Default value: $storm::webdav::params::tpc_max_connections
 
 ##### `tpc_verify_checksum`
 
@@ -2512,15 +2205,11 @@ Data type: `Boolean`
 
 Sets STORM_WEBDAV_TPC_VERIFY_CHECKSUM environment variable.
 
-Default value: $storm::webdav::params::tpc_verify_checksum
-
 ##### `jvm_opts`
 
 Data type: `String`
 
 Sets part of STORM_WEBDAV_JVM_OPTS environment variable.
-
-Default value: $storm::webdav::params::jvm_opts
 
 ##### `authz_server_enable`
 
@@ -2528,15 +2217,11 @@ Data type: `Boolean`
 
 Sets STORM_WEBDAV_AUTHZ_SERVER_ENABLE environment variable.
 
-Default value: $storm::webdav::params::authz_server_enable
-
 ##### `authz_server_issuer`
 
 Data type: `String`
 
 Sets STORM_WEBDAV_AUTHZ_SERVER_ISSUER environment variable.
-
-Default value: $storm::webdav::params::authz_server_issuer
 
 ##### `authz_server_max_token_lifetime_sec`
 
@@ -2544,15 +2229,11 @@ Data type: `Integer`
 
 Sets STORM_WEBDAV_AUTHZ_SERVER_MAX_TOKEN_LIFETIME_SEC environment variable.
 
-Default value: $storm::webdav::params::authz_server_max_token_lifetime_sec
-
 ##### `authz_server_secret`
 
 Data type: `String`
 
 Sets STORM_WEBDAV_AUTHZ_SERVER_SECRET environment variable.
-
-Default value: $storm::webdav::params::authz_server_secret
 
 ##### `require_client_cert`
 
@@ -2560,15 +2241,11 @@ Data type: `Boolean`
 
 Sets STORM_WEBDAV_REQUIRE_CLIENT_CERT environment variable.
 
-Default value: $storm::webdav::params::require_client_cert
-
 ##### `use_conscrypt`
 
 Data type: `Boolean`
 
 Sets STORM_WEBDAV_USE_CONSCRYPT environment variable.
-
-Default value: $storm::webdav::params::use_conscrypt
 
 ##### `tpc_use_conscrypt`
 
@@ -2576,15 +2253,11 @@ Data type: `Boolean`
 
 Sets STORM_WEBDAV_TPC_USE_CONSCRYPT environment variable.
 
-Default value: $storm::webdav::params::tpc_use_conscrypt
-
 ##### `enable_http2`
 
 Data type: `Boolean`
 
 Sets STORM_WEBDAV_ENABLE_HTTP2 environment variable.
-
-Default value: $storm::webdav::params::enable_http2
 
 ##### `debug`
 
@@ -2592,15 +2265,11 @@ Data type: `Boolean`
 
 Sets part of STORM_WEBDAV_JVM_OPTS environment variable. It enables remote debug.
 
-Default value: $storm::webdav::params::debug
-
 ##### `debug_port`
 
 Data type: `Integer`
 
 Sets part of STORM_WEBDAV_JVM_OPTS environment variable. It sets the remote debug port if remote debug is enabled.
-
-Default value: $storm::webdav::params::debug_port
 
 ##### `debug_suspend`
 
@@ -2608,15 +2277,11 @@ Data type: `Boolean`
 
 Sets part of STORM_WEBDAV_JVM_OPTS environment variable. It sets debug suspend value in case remote debug is enabled.
 
-Default value: $storm::webdav::params::debug_suspend
-
 ##### `storm_limit_nofile`
 
 Data type: `Integer`
 
 Sets LimitNOFILE value.
-
-Default value: $storm::webdav::params::storm_limit_nofile
 
 ### storm::webdav::config
 
@@ -2846,10 +2511,6 @@ Default value: $storm::webdav::storm_limit_nofile
 
 StoRM WebDAV install class
 
-### storm::webdav::params
-
-StoRM WebDAV params class
-
 ### storm::webdav::service
 
 StoRM WebDAV service class
@@ -2869,6 +2530,28 @@ The following parameters are available in the `storm::backend::service_conf_file
 Data type: `Any`
 
 
+
+### storm::backend::storage_site_report
+
+The storm::backend::storage_site_report class.
+
+#### Parameters
+
+The following parameters are available in the `storm::backend::storage_site_report` defined type.
+
+##### `report_path`
+
+Data type: `String`
+
+
+
+##### `minute`
+
+Data type: `String`
+
+
+
+Default value: '*/30'
 
 ### storm::rootdir
 

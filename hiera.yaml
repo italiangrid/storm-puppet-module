@@ -1,0 +1,28 @@
+---
+  version: 5
+  
+  defaults:  # Used for any hierarchy level that omits these keys.
+    datadir: data         # This path is relative to hiera.yaml's directory.
+    data_hash: yaml_data  # Use the built-in YAML backend.
+  
+  hierarchy:
+    - name: 'StoRM Frontend Defaults'
+      path: 'frontend-defaults.yaml'
+
+    - name: 'StoRM WebDAV Defaults'
+      path: 'webdav-defaults.yaml'
+
+    - name: 'StoRM GridFTP DSI Defaults'
+      path: 'gridftp-defaults.yaml'
+
+    - name: 'StoRM Backend Defaults'
+      path: 'backend-defaults.yaml'
+
+    - name: 'StoRM database Defaults'
+      path: 'db-defaults.yaml'
+
+    - name: 'StoRM repo'
+      path: 'repo-defaults.yaml'
+
+    - name: 'StoRM users'
+      path: 'users-defaults.yaml'

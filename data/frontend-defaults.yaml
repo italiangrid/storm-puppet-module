@@ -1,0 +1,21 @@
+---
+storm::frontend::db_user: 'storm'
+storm::frontend::db_passwd: 'storm'
+storm::frontend::port: 8444
+storm::frontend::threadpool_threads_number: 50
+storm::frontend::threadpool_maxpending: 200
+storm::frontend::gsoap_maxpending: 1000
+storm::frontend::be_xmlrpc_token: 'secret'
+storm::frontend::be_xmlrpc_port: 8080
+storm::frontend::be_xmlrpc_path: '/RPC2'
+storm::frontend::be_recalltable_port: 9998
+storm::frontend::check_user_blacklisting: false
+storm::frontend::argus_pepd_endpoint: ''
+storm::frontend::monitoring_enabled: true
+storm::frontend::monitoring_time_interval: 60
+storm::frontend::monitoring_detailed: false
+storm::frontend::security_enable_mapping: false
+storm::frontend::security_enable_vomscheck: true
+storm::frontend::log_debuglevel: 'INFO'
+storm::frontend::gridmap_dir: '/etc/grid-security/gridmapdir'
+storm::frontend::gridmap_file: '/etc/grid-security/grid-mapfile'

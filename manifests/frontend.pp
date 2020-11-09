@@ -79,36 +79,38 @@
 class storm::frontend (
 
   String $be_xmlrpc_host,
-  String $be_xmlrpc_token = $storm::frontend::params::be_xmlrpc_token,
-  Integer $be_xmlrpc_port = $storm::frontend::params::be_xmlrpc_port,
-  String $be_xmlrpc_path = $storm::frontend::params::be_xmlrpc_path,
-  Integer $be_recalltable_port = $storm::frontend::params::be_recalltable_port,
+  String $be_xmlrpc_token,
+  Integer $be_xmlrpc_port,
+  String $be_xmlrpc_path,
+  Integer $be_recalltable_port,
 
-  String $db_host = lookup('storm::frontend::db::host', String, undef, $be_xmlrpc_host),
-  String $db_user = $storm::frontend::params::db_user,
-  String $db_passwd = $storm::frontend::params::db_passwd,
+  String $db_user,
+  String $db_passwd,
 
-  Integer $port = $storm::frontend::params::port,
-  Integer $threadpool_threads_number = $storm::frontend::params::threadpool_threads_number,
-  Integer $threadpool_maxpending = $storm::frontend::params::threadpool_maxpending,
-  Integer $gsoap_maxpending = $storm::frontend::params::gsoap_maxpending,
+  Integer $port,
+  Integer $threadpool_threads_number,
+  Integer $threadpool_maxpending,
+  Integer $gsoap_maxpending,
 
-  Boolean $check_user_blacklisting = $storm::frontend::params::check_user_blacklisting,
-  String $argus_pepd_endpoint = $storm::frontend::params::argus_pepd_endpoint,
+  Boolean $check_user_blacklisting,
+  String $argus_pepd_endpoint,
 
-  Boolean $monitoring_enabled = $storm::frontend::params::monitoring_enabled,
-  Integer $monitoring_time_interval = $storm::frontend::params::monitoring_time_interval,
-  Boolean $monitoring_detailed = $storm::frontend::params::monitoring_detailed,
+  Boolean $monitoring_enabled,
+  Integer $monitoring_time_interval,
+  Boolean $monitoring_detailed,
 
-  Boolean $security_enable_mapping = $storm::frontend::params::security_enable_mapping,
-  Boolean $security_enable_vomscheck = $storm::frontend::params::security_enable_vomscheck,
+  Boolean $security_enable_mapping,
+  Boolean $security_enable_vomscheck,
 
-  String $log_debuglevel = $storm::frontend::params::log_debuglevel,
+  String $log_debuglevel,
 
-  String $gridmap_dir = $storm::frontend::params::gridmap_dir,
-  String $gridmap_file = $storm::frontend::params::gridmap_file,
+  String $gridmap_dir,
+  String $gridmap_file,
 
-) inherits storm::frontend::params {
+  String $db_host = $be_xmlrpc_host,
+
+
+) {
 
   contain storm::frontend::install
   contain storm::frontend::config

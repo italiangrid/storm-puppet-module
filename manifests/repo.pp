@@ -15,10 +15,10 @@
 #   }
 class storm::repo (
 
-  Array[Enum['stable', 'beta', 'nightly']] $installed = ['stable', 'beta', 'nightly'],
-  Array[Enum['stable', 'beta', 'nightly']] $enabled = ['stable'],
+  Array[Enum['stable', 'beta', 'nightly']] $installed,
+  Array[Enum['stable', 'beta', 'nightly']] $enabled,
 
-  Array[Storm::CustomRepo] $extra = [],
+  Array[Storm::CustomRepo] $extra,
 
 ) {
 

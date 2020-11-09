@@ -1,0 +1,8 @@
+---
+storm::repo::installed:
+  - 'stable'
+  - 'beta'
+  - 'nightly'
+storm::repo::enabled:
+  - 'stable'
+storm::repo::extra: []

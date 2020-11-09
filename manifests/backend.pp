@@ -303,156 +303,155 @@
 #
 class storm::backend (
 
-  String $hostname = lookup('storm::backend::hostname', String, undef, $::fqdn),
-
   # Install native libs gpfs
-  Boolean $install_native_libs_gpfs = $storm::backend::params::install_native_libs_gpfs,
+  Boolean $install_native_libs_gpfs,
 
   # Db connection
-  String $db_hostname = lookup('storm::backend::db_hostname', String, undef, $hostname),
-  String $db_username = $storm::backend::params::db_username,
-  String $db_password = $storm::backend::params::db_password,
+  String $db_username,
+  String $db_password,
 
   ### Default values for Storage Areas
   # 1. xroot
-  String $xroot_hostname = lookup('storm::backend::xroot_hostname', String, undef, $hostname),
-  Integer $xroot_port = $storm::backend::params::xroot_port,
+  Integer $xroot_port,
   # 2. gridftp pool
-  Storm::Backend::BalanceStrategy $gsiftp_pool_balance_strategy = $storm::backend::params::gsiftp_pool_balance_strategy,
-  Array[Storm::Backend::GsiftpPoolMember] $gsiftp_pool_members = $storm::backend::params::gsiftp_pool_members,
+  Storm::Backend::BalanceStrategy $gsiftp_pool_balance_strategy,
+  Array[Storm::Backend::GsiftpPoolMember] $gsiftp_pool_members,
   # 3. webdav pool
-  Array[Storm::Backend::WebdavPoolMember] $webdav_pool_members = $storm::backend::params::webdav_pool_members,
+  Array[Storm::Backend::WebdavPoolMember] $webdav_pool_members,
   # 4. frontend pool
-  Array[Storm::Backend::SrmPoolMember] $srm_pool_members = $storm::backend::params::srm_pool_members,
+  Array[Storm::Backend::SrmPoolMember] $srm_pool_members,
   # 5. transfer protocols
-  Array[Storm::Backend::TransferProtocol] $transfer_protocols = $storm::backend::params::transfer_protocols,
+  Array[Storm::Backend::TransferProtocol] $transfer_protocols,
   # 6. fs-type
-  Storm::Backend::FsType $fs_type = $storm::backend::params::fs_type,
+  Storm::Backend::FsType $fs_type,
 
   # Storage Areas
-  Array[Storm::Backend::StorageArea] $storage_areas = $storm::backend::params::storage_areas,
+  Array[Storm::Backend::StorageArea] $storage_areas,
 
   # Frontend public host and port
-  String $frontend_public_host = lookup('storm::backend::srm_hostname', String, undef, $hostname),
-  Integer $frontend_port = $storm::backend::params::frontend_port,
+  Integer $frontend_port,
 
   # Directory options
-  Boolean $directory_automatic_creation = $storm::backend::params::directory_automatic_creation,
-  Boolean $directory_writeperm = $storm::backend::params::directory_writeperm,
+  Boolean $directory_automatic_creation,
+  Boolean $directory_writeperm,
 
   # REST server conf
-  Integer $rest_services_port = $storm::backend::params::rest_services_port,
-  Integer $rest_services_max_threads = $storm::backend::params::rest_services_max_threads,
-  Integer $rest_services_max_queue_size = $storm::backend::params::rest_services_max_queue_size,
+  Integer $rest_services_port,
+  Integer $rest_services_max_threads,
+  Integer $rest_services_max_queue_size,
 
   # XMLRPC Server parameter
-  Integer $xmlrpc_unsecure_server_port = $storm::backend::params::xmlrpc_unsecure_server_port,
-  Integer $xmlrpc_maxthread = $storm::backend::params::xmlrpc_maxthread,
-  Integer $xmlrpc_max_queue_size = $storm::backend::params::xmlrpc_max_queue_size,
-  Boolean $xmlrpc_security_enabled = $storm::backend::params::xmlrpc_security_enabled,
-  String $xmlrpc_security_token = $storm::backend::params::xmlrpc_security_token,
+  Integer $xmlrpc_unsecure_server_port,
+  Integer $xmlrpc_maxthread,
+  Integer $xmlrpc_max_queue_size,
+  Boolean $xmlrpc_security_enabled,
+  String $xmlrpc_security_token,
 
   # Skip ACL setup for PTG requests
-  Boolean $ptg_skip_acl_setup = $storm::backend::params::ptg_skip_acl_setup,
+  Boolean $ptg_skip_acl_setup,
 
   # Pin lifetime
-  Integer $pinlifetime_default = $storm::backend::params::pinlifetime_default,
-  Integer $pinlifetime_maximum = $storm::backend::params::pinlifetime_maximum,
+  Integer $pinlifetime_default,
+  Integer $pinlifetime_maximum,
 
   # Sanity checks
-  Boolean $sanity_check_enabled = $storm::backend::params::sanity_check_enabled,
+  Boolean $sanity_check_enabled,
 
   # DU service
-  Boolean $service_du_enabled = $storm::backend::params::service_du_enabled,
-  Integer $service_du_delay = $storm::backend::params::service_du_delay,
-  Integer $service_du_interval = $storm::backend::params::service_du_interval,
+  Boolean $service_du_enabled,
+  Integer $service_du_delay,
+  Integer $service_du_interval,
 
   # Ls max entries
-  Integer $max_ls_entries = $storm::backend::params::max_ls_entries,
+  Integer $max_ls_entries,
 
   # Pinned Files cleaning parameters
-  Integer $gc_pinnedfiles_cleaning_delay = $storm::backend::params::gc_pinnedfiles_cleaning_delay,
-  Integer $gc_pinnedfiles_cleaning_interval = $storm::backend::params::gc_pinnedfiles_cleaning_interval,
+  Integer $gc_pinnedfiles_cleaning_delay,
+  Integer $gc_pinnedfiles_cleaning_interval,
 
   # Garbage Collector
-  Boolean $gc_purge_enabled = $storm::backend::params::gc_purge_enabled,
-  Integer $gc_purge_interval = $storm::backend::params::gc_purge_interval,
-  Integer $gc_purge_size = $storm::backend::params::gc_purge_size,
-  Integer $gc_expired_request_time = $storm::backend::params::gc_expired_request_time,
-  Integer $gc_expired_inprogress_time = $storm::backend::params::gc_expired_inprogress_time,
-  Integer $gc_ptp_transit_interval = $storm::backend::params::gc_ptp_transit_interval,
-  Integer $gc_ptp_transit_start_delay = $storm::backend::params::gc_ptp_transit_start_delay,
+  Boolean $gc_purge_enabled,
+  Integer $gc_purge_interval,
+  Integer $gc_purge_size,
+  Integer $gc_expired_request_time,
+  Integer $gc_expired_inprogress_time,
+  Integer $gc_ptp_transit_interval,
+  Integer $gc_ptp_transit_start_delay,
 
   # Extraslashes
-  String $extraslashes_file = $storm::backend::params::extraslashes_file,
-  String $extraslashes_root = $storm::backend::params::extraslashes_root,
-  String $extraslashes_gsiftp = $storm::backend::params::extraslashes_gsiftp,
+  String $extraslashes_file,
+  String $extraslashes_root,
+  String $extraslashes_gsiftp,
 
   # Db Connection Pool
-  Boolean $db_connection_pool_enabled = $storm::backend::params::db_connection_pool_enabled,
-  Integer $db_connection_pool_max_active = $storm::backend::params::db_connection_pool_max_active,
-  Integer $db_connection_pool_max_wait = $storm::backend::params::db_connection_pool_max_wait,
+  Boolean $db_connection_pool_enabled,
+  Integer $db_connection_pool_max_active,
+  Integer $db_connection_pool_max_wait,
 
   # Asynch Picker
-  Integer $asynch_db_reconnect_period = $storm::backend::params::asynch_db_reconnect_period,
-  Integer $asynch_db_delay_period = $storm::backend::params::asynch_db_delay_period,
-  Integer $asynch_picking_initial_delay = $storm::backend::params::asynch_picking_initial_delay,
-  Integer $asynch_picking_time_interval = $storm::backend::params::asynch_picking_time_interval,
-  Integer $asynch_picking_max_batch_size = $storm::backend::params::asynch_picking_max_batch_size,
+  Integer $asynch_db_reconnect_period,
+  Integer $asynch_db_delay_period,
+  Integer $asynch_picking_initial_delay,
+  Integer $asynch_picking_time_interval,
+  Integer $asynch_picking_max_batch_size,
 
   # Requests schedulers
-  Integer $requests_scheduler_core_size = $storm::backend::params::requests_scheduler_core_size,
-  Integer $requests_scheduler_max_size = $storm::backend::params::requests_scheduler_max_size,
-  Integer $requests_scheduler_queue_size = $storm::backend::params::requests_scheduler_queue_size,
-  Integer $ptp_requests_scheduler_core_size = $storm::backend::params::ptp_requests_scheduler_core_size,
-  Integer $ptp_requests_scheduler_max_size = $storm::backend::params::ptp_requests_scheduler_max_size,
-  Integer $ptp_requests_scheduler_queue_size = $storm::backend::params::ptp_requests_scheduler_queue_size,
-  Integer $ptg_requests_scheduler_core_size = $storm::backend::params::ptg_requests_scheduler_core_size,
-  Integer $ptg_requests_scheduler_max_size = $storm::backend::params::ptg_requests_scheduler_max_size,
-  Integer $ptg_requests_scheduler_queue_size = $storm::backend::params::ptg_requests_scheduler_queue_size,
-  Integer $bol_requests_scheduler_core_size = $storm::backend::params::bol_requests_scheduler_core_size,
-  Integer $bol_requests_scheduler_max_size = $storm::backend::params::bol_requests_scheduler_max_size,
-  Integer $bol_requests_scheduler_queue_size = $storm::backend::params::bol_requests_scheduler_queue_size,
+  Integer $requests_scheduler_core_size,
+  Integer $requests_scheduler_max_size,
+  Integer $requests_scheduler_queue_size,
+  Integer $ptp_requests_scheduler_core_size,
+  Integer $ptp_requests_scheduler_max_size,
+  Integer $ptp_requests_scheduler_queue_size,
+  Integer $ptg_requests_scheduler_core_size,
+  Integer $ptg_requests_scheduler_max_size,
+  Integer $ptg_requests_scheduler_queue_size,
+  Integer $bol_requests_scheduler_core_size,
+  Integer $bol_requests_scheduler_max_size,
+  Integer $bol_requests_scheduler_queue_size,
 
   # Info Provider
-  String $info_config_file = $storm::backend::params::info_config_file,
-  String $info_sitename = $storm::backend::params::info_sitename,
-  String $info_storage_default_root = $storm::backend::params::info_storage_default_root,
-  Integer $info_endpoint_quality_level = $storm::backend::params::info_endpoint_quality_level,
-  Array[Storm::Backend::WebdavPoolMember] $info_webdav_pool_list = lookup('storm::backend::info_webdav_pool_list',
-    Array[Storm::Backend::WebdavPoolMember], undef, $webdav_pool_members),
-  Array[Storm::Backend::SrmPoolMember] $info_frontend_host_list = lookup('storm::backend::info_frontend_host_list',
-    Array[Storm::Backend::SrmPoolMember], undef, $srm_pool_members),
+  String $info_config_file,
+  String $info_sitename,
+  String $info_storage_default_root,
+  Integer $info_endpoint_quality_level,
+  Array[Storm::Backend::WebdavPoolMember] $info_webdav_pool_list,
+  Array[Storm::Backend::SrmPoolMember] $info_frontend_host_list,
 
   # JVM options
-  String $jvm_options = $storm::backend::params::jvm_options,
+  String $jvm_options,
 
   # JMX options
-  Boolean $jmx = $storm::backend::params::jmx,
-  String $jmx_options = $storm::backend::params::jmx_options,
+  Boolean $jmx,
+  String $jmx_options,
 
   # Debug options
-  Boolean $debug = $storm::backend::params::debug,
-  Integer $debug_port = $storm::backend::params::debug_port,
-  Boolean $debug_suspend = $storm::backend::params::debug_suspend,
+  Boolean $debug,
+  Integer $debug_port,
+  Boolean $debug_suspend,
 
   # LCMAPS
-  String $lcmaps_db_file = $storm::backend::params::lcmaps_db_file,
-  String $lcmaps_policy_name = $storm::backend::params::lcmaps_policy_name,
-  String $lcmaps_log_file = $storm::backend::params::lcmaps_log_file,
-  Integer $lcmaps_debug_level = $storm::backend::params::lcmaps_debug_level,
+  String $lcmaps_db_file,
+  String $lcmaps_policy_name,
+  String $lcmaps_log_file,
+  Integer $lcmaps_debug_level,
 
   # HTTP TURL prefix
-  String $http_turl_prefix = $storm::backend::params::http_turl_prefix,
+  String $http_turl_prefix,
 
   # LimitNOFILE
-  Integer $storm_limit_nofile = $storm::backend::params::storm_limit_nofile,
+  Integer $storm_limit_nofile,
 
   # manage path-authz.db
-  $manage_path_authz_db = $storm::backend::params::manage_path_authz_db,
-  $path_authz_db_file = $storm::backend::params::path_authz_db_file,
+  Boolean $manage_path_authz_db,
+  String $path_authz_db_file,
 
-) inherits storm::backend::params {
+  # hostnames
+  String $hostname = $::fqdn,
+  String $db_hostname = $hostname,
+  String $xroot_hostname = $hostname,
+  String $frontend_public_host = $hostname,
+
+) {
 
   contain storm::backend::install
   contain storm::backend::configdb

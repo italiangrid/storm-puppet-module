@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.0] - 2020-11-09
+
+- Moved default parameters into YAML data files
+- Deleted params.pp files
+- Added hiera.yaml
+
+## [2.1.0] - 2020-10-29
+
+- Moved gridftp.conf into /etc/grid-security directory
+
 ## [2.0.1] - 2020-10-19
 
 - Fixed CHANGELOG

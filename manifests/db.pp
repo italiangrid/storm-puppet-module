@@ -24,17 +24,13 @@
 #
 class storm::db (
 
+  String $root_password,
+  String $storm_username,
+  String $storm_password,
+  Data $override_options,
+  Integer $limit_no_file,
+
   String $fqdn_hostname = $::fqdn,
-  String $root_password = 'storm',
-  String $storm_username = 'storm',
-  String $storm_password = 'storm',
-  Data $override_options = {
-    'mysqld' => {
-      'bind-address'    => '0.0.0.0',
-      'max_connections' => 2048,
-    },
-  },
-  Integer $limit_no_file = 65535,
 
 ) {
 
