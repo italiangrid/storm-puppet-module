@@ -20,7 +20,6 @@ add storm user and all the necessary grants.
 * [`storm::gridftp::config`](#stormgridftpconfig): StoRM GridFTP config class
 * [`storm::gridftp::install`](#stormgridftpinstall): StoRM GridFTP install class
 * [`storm::gridftp::service`](#stormgridftpservice): StoRM GridFTP service class
-* [`storm::params`](#stormparams): StoRM params class
 * [`storm::repo`](#stormrepo): Choose which StoRM repository you want to intall and enable. Also a custom list of repository URL can be specified.
 * [`storm::storage`](#stormstorage): Init testbed storage area's directories
 * [`storm::users`](#stormusers): StoRM accounts configuration
@@ -31,11 +30,21 @@ add storm user and all the necessary grants.
 
 **Defined types**
 
-* [`storm::backend::service_conf_file`](#stormbackendservice_conf_file): 
-* [`storm::backend::storage_site_report`](#stormbackendstorage_site_report): 
+* [`storm::backend::service_conf_file`](#stormbackendservice_conf_file): Starting from Puppet module v2.0.0, site administrators can inject
+one or more .conf files into `/etc/systemd/system/storm-backend-server.service.d`
+directory.
+* [`storm::backend::storage_site_report`](#stormbackendstorage_site_report): Starting from Puppet module v2.0.0, the management of Storage Site Report has been improved.
+Site administrators can add script and cron described in the [how-to](http://italiangrid.github.io/storm/documentation/how-to/how-to-publish-json-report/)
 * [`storm::rootdir`](#stormrootdir): StoRM root directory defined resource
-* [`storm::webdav::application_file`](#stormwebdavapplication_file): 
-* [`storm::webdav::storage_area_file`](#stormwebdavstorage_area_file): 
+* [`storm::webdav::application_file`](#stormwebdavapplication_file): Starting from Puppet module v2.0.0, the management of application.yml
+file has been removed from storm::webdav class. Site administrators can edit
+their own configuration files or use this defined type to inject one or more YAML
+files into the proper directory.
+* [`storm::webdav::storage_area_file`](#stormwebdavstorage_area_file): Storage Areas can be configured singularly by using this defined type.
+This strategy allows site administrators to keep their manifests unaware of
+the improvements on StoRM WebDAV code. For example, if a new property is added
+into Storage Area configuration files, you haven't to update your Puppet module
+and all the service configuration will continue working.
 
 **Data types**
 
@@ -1962,10 +1971,6 @@ StoRM GridFTP install class
 
 StoRM GridFTP service class
 
-### storm::params
-
-storm class default parameters
-
 ### storm::repo
 
 Choose which StoRM repository you want to intall and enable. Also a custom list of repository URL can be specified.
@@ -2519,7 +2524,23 @@ StoRM WebDAV service class
 
 ### storm::backend::service_conf_file
 
-The storm::backend::service_conf_file class.
+Starting from Puppet module v2.0.0, site administrators can inject
+one or more .conf files into `/etc/systemd/system/storm-backend-server.service.d`
+directory.
+
+#### Examples
+
+##### 
+
+```puppet
+class { 'storm::backend':
+  hostname => 'storm-backend.test.example',
+  # ...
+}
+storm::backend::service_conf_file { 'override.conf':
+  source => '/path/to/my/override.conf',
+}
+```
 
 #### Parameters
 
@@ -2529,11 +2550,26 @@ The following parameters are available in the `storm::backend::service_conf_file
 
 Data type: `Any`
 
-
+The source of file resource. It can be an absolute path or a Puppet module relative path.
 
 ### storm::backend::storage_site_report
 
-The storm::backend::storage_site_report class.
+  by using this defined type.
+
+#### Examples
+
+##### 
+
+```puppet
+class { 'storm::backend':
+  hostname => 'storm-backend.test.example',
+  # ...
+}
+storm::backend::storage_site_report { 'storage-site-report':
+  report_path => '/storage/info/report.json', # the internal storage area path
+  minute      => '*/20', # set cron's minute
+}
+```
 
 #### Parameters
 
@@ -2543,13 +2579,13 @@ The following parameters are available in the `storm::backend::storage_site_repo
 
 Data type: `String`
 
-
+The full path of the generated report. Usually it points to a "info" storage area.
 
 ##### `minute`
 
 Data type: `String`
 
-
+The cron job's minute parameter. Refer to [Resource Type cron](https://puppet.com/docs/puppet/5.5/types/cron.html#cron-attribute-minute).
 
 Default value: '*/30'
 
@@ -2569,7 +2605,26 @@ Data type: `String`
 
 ### storm::webdav::application_file
 
-The storm::webdav::application_file class.
+Starting from Puppet module v2.0.0, the management of application.yml
+file has been removed from storm::webdav class. Site administrators can edit
+their own configuration files or use this defined type to inject one or more YAML
+files into the proper directory.
+
+#### Examples
+
+##### 
+
+```puppet
+class { 'storm::webdav':
+  hostnames => ['storm-webdav.test.example', 'alias-for-storm-webdav.test.example'],
+}
+storm::webdav::application_file { 'application.yml':
+  source => '/path/to/my/application.yml',
+}
+storm::webdav::application_file { 'application-wlcg.yml':
+  source => '/path/to/my/application-wlcg.yml',
+}
+```
 
 #### Parameters
 
@@ -2579,11 +2634,31 @@ The following parameters are available in the `storm::webdav::application_file` 
 
 Data type: `Any`
 
-
+The source of file resource. It can be an absolute path or a Puppet module relative path.
 
 ### storm::webdav::storage_area_file
 
-The storm::webdav::storage_area_file class.
+Storage Areas can be configured singularly by using this defined type.
+This strategy allows site administrators to keep their manifests unaware of
+the improvements on StoRM WebDAV code. For example, if a new property is added
+into Storage Area configuration files, you haven't to update your Puppet module
+and all the service configuration will continue working.
+
+#### Examples
+
+##### 
+
+```puppet
+class { 'storm::webdav':
+  hostnames => ['storm-webdav.test.example', 'alias-for-storm-webdav.test.example'],
+}
+storm::webdav::storage_area_file { 'test.vo.properties':
+  source => '/path/to/my/test.vo.properties',
+}
+storm::webdav::storage_area_file { 'test.vo.2.properties':
+  source => '/path/to/my/test.vo.2.properties',
+}
+```
 
 #### Parameters
 
@@ -2593,7 +2668,7 @@ The following parameters are available in the `storm::webdav::storage_area_file`
 
 Data type: `Any`
 
-
+The source of file resource. It can be an absolute path or a Puppet module relative path.
 
 ## Data types
 
