@@ -61,6 +61,10 @@ describe 'storm::webdav', :type => :class do
 
         it { is_expected.to compile.with_all_deps }
 
+        it "config class is used" do
+          is_expected.to contain_class('storm::webdav::config')
+        end
+
         it "check storm-webdav host certificate and key" do
 
           is_expected.to contain_file('/etc/grid-security/storm-webdav').with( 

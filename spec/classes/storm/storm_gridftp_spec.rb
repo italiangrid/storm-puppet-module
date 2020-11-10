@@ -9,7 +9,11 @@ describe 'storm::gridftp', :type => :class do
       let(:facts) do
         facts
       end
-    
+
+      it "config class is used" do
+        is_expected.to contain_class('storm::gridftp::config')
+      end
+
       context 'Use custom gridftp params' do
 
         let(:params) do 

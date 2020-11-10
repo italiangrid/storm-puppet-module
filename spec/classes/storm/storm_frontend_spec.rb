@@ -19,6 +19,10 @@ describe 'storm::frontend', :type => :class do
       it { is_expected.to compile }
       it { is_expected.to compile.with_all_deps }
 
+      it "config class is used" do
+        is_expected.to contain_class('storm::frontend::config')
+      end
+
       context 'Check frontend host credentials' do
 
         it 'Check /etc/grid-security/storm directory' do
@@ -42,7 +46,7 @@ describe 'storm::frontend', :type => :class do
           )
         end
       end
-
+  
       context 'Use custom frontend params' do
 
         let(:params) do 

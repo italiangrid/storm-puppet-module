@@ -108,6 +108,11 @@ describe 'storm::backend', :type => :class do
           })
         end
 
+        it "config class is used" do
+          is_expected.to contain_class('storm::backend::config')
+          is_expected.to contain_class('storm::backend::configdb')
+        end
+
         it "check backend namespace file content" do
           title='/etc/storm/backend-server/namespace.xml'
           is_expected.to contain_file(title).with( 
