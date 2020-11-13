@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.0]
+
+- Converted to pdk project
+- Removed storm::storage class
+- Added storm::sarootdir defined type
+- Use hiera YAML files for all default parameters
+- Removed all params.pp files
+
 ## [2.2.1] - 2020-11-09
 
 - Fixed type into data file

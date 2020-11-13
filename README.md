@@ -39,7 +39,7 @@ You can also build and install module from source code as follow:
 ```shell
 git clone https://github.com/italiangrid/storm-puppet-module.git
 cd storm-puppet-module
-puppet module build
+pdk build
 puppet module install ./pkg/cnafsd-storm-*.tar.gz
 ```
 
@@ -60,7 +60,6 @@ Utility classes:
 * [StoRM database class](#storm-database-class)
 * [StoRM repo class](#storm-repo-class)
 * [StoRM users class](#storm-users-class)
-* [StoRM storage class](#storm-storage-class)
 
 ### StoRM Backend class
 
@@ -330,31 +329,6 @@ class { 'storm::users':
 
 The whole list of StoRM repo class parameters can be found [here](https://italiangrid.github.io/storm-puppet-module/puppet_classes/storm_3A_3Ausers.html).
 
-### StoRM storage class
-
-To create the root directories of your storage areas, you can use the `storm::storage` utility class. This class is mainly used for test purposes. We expected not to use this class on production.
-
-The whole list of StoRM storage class parameters can be found [here](https://italiangrid.github.io/storm-puppet-module/puppet_classes/storm_3A_3Astorage.html).
-
-Example of StoRM storage usage on our testbed:
-
-```Puppet
-file { '/storage':
-  ensure  => directory,
-  mode    => '0755',
-  owner   => 'root',
-  group   => 'root',
-  recurse => false,
-} -> class { 'storm::storage':
-  root_directories => [
-    '/storage/test.vo',
-    '/storage/test.vo.2',
-    '/storage/tape',
-    '/storage/info',
-  ],
-}
-```
-
 ## Documentation
 
 You can find all the info about module classes and parameters at:
@@ -362,6 +336,20 @@ You can find all the info about module classes and parameters at:
 - [StoRM Puppet module main site doc](https://italiangrid.github.io/storm-puppet-module)
 - [REFERENCE.md](https://github.com/italiangrid/storm-puppet-module/blob/master/REFERENCE.md)
 
+
+## Developers
+
+Run tests with:
+
+```
+pdk test unit
+```
+
+Validate code with:
+
+```
+pdk validate
+```
 
 ## Limitations
 

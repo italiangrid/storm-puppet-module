@@ -21,7 +21,6 @@ add storm user and all the necessary grants.
 * [`storm::gridftp::install`](#stormgridftpinstall): StoRM GridFTP install class
 * [`storm::gridftp::service`](#stormgridftpservice): StoRM GridFTP service class
 * [`storm::repo`](#stormrepo): Choose which StoRM repository you want to intall and enable. Also a custom list of repository URL can be specified.
-* [`storm::storage`](#stormstorage): Init testbed storage area's directories
 * [`storm::users`](#stormusers): StoRM accounts configuration
 * [`storm::webdav`](#stormwebdav): StoRM WebDAV puppet module
 * [`storm::webdav::config`](#stormwebdavconfig): StoRM WebDAV config class
@@ -35,7 +34,8 @@ one or more .conf files into `/etc/systemd/system/storm-backend-server.service.d
 directory.
 * [`storm::backend::storage_site_report`](#stormbackendstorage_site_report): Starting from Puppet module v2.0.0, the management of Storage Site Report has been improved.
 Site administrators can add script and cron described in the [how-to](http://italiangrid.github.io/storm/documentation/how-to/how-to-publish-json-report/)
-* [`storm::rootdir`](#stormrootdir): StoRM root directory defined resource
+* [`storm::rootdir`](#stormrootdir): StoRM main storage area root directory defined resource
+* [`storm::sarootdir`](#stormsarootdir): StoRM Storage Area root directory defined resource
 * [`storm::webdav::application_file`](#stormwebdavapplication_file): Starting from Puppet module v2.0.0, the management of application.yml
 file has been removed from storm::webdav class. Site administrators can edit
 their own configuration files or use this defined type to inject one or more YAML
@@ -2007,36 +2007,6 @@ Data type: `Array[Storm::CustomRepo]`
 
 A list of repository that have to be created. Optional.
 
-### storm::storage
-
-Init testbed storage area's directories
-
-#### Examples
-
-##### Example of usage
-
-```puppet
-class { 'storm::storage':
-  root_directories => [
-    '/storage',
-    '/storage/disk',
-    '/storage/tape',
-  ],
-}
-```
-
-#### Parameters
-
-The following parameters are available in the `storm::storage` class.
-
-##### `root_directories`
-
-Data type: `Array[String]`
-
-A list of all storage root directories owned by storm user. You must add also all parent directories.
-
-Default value: ['/storage']
-
 ### storm::users
 
 Parameters
@@ -2591,17 +2561,11 @@ Default value: '*/30'
 
 ### storm::rootdir
 
-StoRM root directory defined resource
+StoRM main storage area root directory defined resource
 
-#### Parameters
+### storm::sarootdir
 
-The following parameters are available in the `storm::rootdir` defined type.
-
-##### `path`
-
-Data type: `String`
-
-
+StoRM Storage Area root directory defined resource
 
 ### storm::webdav::application_file
 

@@ -29,14 +29,26 @@ pipeline {
   triggers { cron('@daily') }
 
   stages {
-    stage('rspec-tests') {
+    stage('validate') {
       steps {
         script {
           checkout scm
-          sh """
-            rake test
-          """
-          archiveArtifacts 'rspec_report.html'
+          sh "pdk validate"
+        }
+      }
+    }
+    stage('tests') {
+      steps {
+        script {
+          sh "pdk test unit"
+        }
+      }
+    }
+    stage('build') {
+      steps {
+        script {
+          sh "pdk build"
+          archiveArtifacts 'pkg/cnafsd-storm-*.tar.gz'
         }
       }
     }

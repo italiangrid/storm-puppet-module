@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'namespace.xml.erb' do
-
   let(:scope) { Puppet::Parser::Scope }
 
   let(:harness) { TemplateHarness.new('templates/etc/storm/backend-server/namespace.xml.erb', scope) }
@@ -16,7 +15,7 @@ describe 'namespace.xml.erb' do
         'storage_class' => 'T1D1',
         'online_size' => 4,
         'nearline_size' => 10,
-        'transfer_protocols' => ['file','gsiftp','root','http','https'],
+        'transfer_protocols' => ['file', 'gsiftp', 'root', 'http', 'https'],
       },
       {
         'name' => 'atlas',
@@ -36,10 +35,10 @@ describe 'namespace.xml.erb' do
           }, {
             'hostname' => 'gridftp-1.example.com',
           }
-        ] 
-      }
+        ],
+      },
     ]
-  end  
+  end
 
   let(:gsiftp_pool_members) do
     [
@@ -66,7 +65,6 @@ describe 'namespace.xml.erb' do
   end
 
   it 'render the same file each time' do
-
     harness.set('@storage_areas', storage_areas)
     harness.set('@gsiftp_pool_members', gsiftp_pool_members)
     harness.set('@webdav_pool_members', webdav_pool_members)
@@ -74,12 +72,12 @@ describe 'namespace.xml.erb' do
     rendered = harness.run
 
     xml_doc = Nokogiri::XML(rendered)
-    expect(xml_doc.xpath("//filesystem")).not_to be_empty
+    expect(xml_doc.xpath('//filesystem')).not_to be_empty
 
     namespace = Nokogiri::Slop(rendered)
-    expect(namespace.search('filesystems').search('filesystem').first.root.text).to eq("/storage/test.vo")
+    expect(namespace.search('filesystems').search('filesystem').first.root.text).to eq('/storage/test.vo')
 
-    schema = Nokogiri::XML::Schema(my_fixture_read("namespace.xsd"))
+    schema = Nokogiri::XML::Schema(my_fixture_read('namespace.xsd'))
     errors = schema.validate(xml_doc)
 
     puts rendered

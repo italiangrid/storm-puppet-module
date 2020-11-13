@@ -1,44 +1,62 @@
+# frozen_string_literal: true
+
 RSpec.configure do |c|
   c.mock_with :rspec
 end
 
 require 'puppetlabs_spec_helper/module_spec_helper'
-require 'rspec-puppet'
 require 'rspec-puppet-facts'
-require 'rspec-puppet-utils'
-require 'nokogiri'
+
+require 'spec_helper_local' if File.file?(File.join(File.dirname(__FILE__), 'spec_helper_local.rb'))
 
 include RspecPuppetFacts
 
-# Add the 'root_home' fact to all tests
-add_custom_fact :root_home, '/root'
+default_facts = {
+  puppetversion: Puppet.version,
+  facterversion: Facter.version,
+}
 
-# rspec 2.x doesn't have RSpec::Support, so fall back to File::ALT_SEPARATOR to
-# detect if running on windows
-def windows?
-  return @windowsp unless @windowsp.nil?
-  @windowsp = defined?(RSpec::Support) ? RSpec::Support::OS.windows? : !!File::ALT_SEPARATOR
-end
+default_fact_files = [
+  File.expand_path(File.join(File.dirname(__FILE__), 'default_facts.yml')),
+  File.expand_path(File.join(File.dirname(__FILE__), 'default_module_facts.yml')),
+]
 
-fixture_path = File.expand_path(File.join(__FILE__, '..', 'fixtures'))
+default_fact_files.each do |f|
+  next unless File.exist?(f) && File.readable?(f) && File.size?(f)
 
-RSpec.configure do |c|
-
-  c.pattern = 'spec/{classes,defines,unit,functions,templates}/**/*_spec.rb'
-
-  default_facts = {
-    puppetversion: Puppet.version,
-    facterversion: Facter.version
-  }
-  c.default_facts = default_facts
-
-  c.module_path     = File.join(fixture_path, 'modules')
-  c.manifest_dir    = File.join(fixture_path, 'manifests')
-  c.manifest        = File.join(fixture_path, 'manifests', 'site.pp')
-  c.environmentpath = File.join(Dir.pwd, 'spec')
-  c.parser          = ENV['FUTURE_PARSER'] == 'yes' ? 'future' : 'current'
-
-  c.after(:suite) do
-     RSpec::Puppet::Coverage.report!(80)
+  begin
+    default_facts.merge!(YAML.safe_load(File.read(f), [], [], true))
+  rescue => e
+    RSpec.configuration.reporter.message "WARNING: Unable to load #{f}: #{e}"
   end
 end
+
+# read default_facts and merge them over what is provided by facterdb
+default_facts.each do |fact, value|
+  add_custom_fact fact, value
+end
+
+RSpec.configure do |c|
+  c.default_facts = default_facts
+  c.before :each do
+    # set to strictest setting for testing
+    # by default Puppet runs at warning level
+    Puppet.settings[:strict] = :warning
+    Puppet.settings[:strict_variables] = true
+  end
+  c.filter_run_excluding(bolt: true) unless ENV['GEM_BOLT']
+  c.after(:suite) do
+    RSpec::Puppet::Coverage.report!(80)
+  end
+end
+
+# Ensures that a module is defined
+# @param module_name Name of the module
+def ensure_module_defined(module_name)
+  module_name.split('::').reduce(Object) do |last_module, next_module|
+    last_module.const_set(next_module, Module.new) unless last_module.const_defined?(next_module, false)
+    last_module.const_get(next_module, false)
+  end
+end
+
+# 'spec_overrides' from sync.yml will appear below this line

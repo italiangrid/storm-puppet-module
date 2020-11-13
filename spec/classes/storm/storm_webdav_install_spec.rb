@@ -1,11 +1,8 @@
 require 'spec_helper'
 
 describe 'storm::webdav::install' do
-
   on_supported_os.each do |os, facts|
-
     context "on #{os}" do
-
       let(:facts) do
         facts
       end
@@ -15,5 +12,4 @@ describe 'storm::webdav::install' do
       end
     end
   end
-
 end
