@@ -1,12 +1,9 @@
 require 'spec_helper'
 
 describe 'storm::backend::install' do
-
   on_supported_os.each do |os, facts|
-
     context "on #{os}" do
-
-      context "test fs_type = posixfs" do
+      context 'test fs_type = posixfs' do
         let(:pre_condition) do
           <<-EOF
             class { 'storm::backend':
@@ -29,7 +26,7 @@ describe 'storm::backend::install' do
         end
       end
 
-      context "test fs_type = gpfs with install_native_libs_gpfs = false" do
+      context 'test fs_type = gpfs with install_native_libs_gpfs = false' do
         let(:pre_condition) do
           <<-EOF
             class { 'storm::backend':
@@ -43,11 +40,11 @@ describe 'storm::backend::install' do
         end
 
         it 'check failure' do
-          is_expected.to compile.and_raise_error(/You have declared fs_type as 'gpfs' but 'install_native_libs_gpfs' is false. Check your configuration./)
+          is_expected.to compile.and_raise_error(%r{You have declared fs_type as 'gpfs' but 'install_native_libs_gpfs' is false. Check your configuration.})
         end
       end
 
-      context "test storage area has fs_type = gpfs with install_native_libs_gpfs = false" do
+      context 'test storage area has fs_type = gpfs with install_native_libs_gpfs = false' do
         let(:pre_condition) do
           <<-EOF
             class { 'storm::backend':
@@ -73,11 +70,11 @@ describe 'storm::backend::install' do
         end
 
         it 'check failure' do
-          is_expected.to compile.and_raise_error(/Storage area test.vo is 'gpfs' but 'install_native_libs_gpfs' is false. Check your configuration./)
+          is_expected.to compile.and_raise_error(%r{Storage area test.vo is 'gpfs' but 'install_native_libs_gpfs' is false. Check your configuration.})
         end
       end
 
-      context "test fs_type = gpfs with install_native_libs_gpfs = true" do
+      context 'test fs_type = gpfs with install_native_libs_gpfs = true' do
         let(:pre_condition) do
           <<-EOF
             class { 'storm::backend':
@@ -102,7 +99,7 @@ describe 'storm::backend::install' do
         end
       end
 
-      context "test storage area has fs_type = gpfs with install_native_libs_gpfs = true" do
+      context 'test storage area has fs_type = gpfs with install_native_libs_gpfs = true' do
         let(:pre_condition) do
           <<-EOF
             class { 'storm::backend':

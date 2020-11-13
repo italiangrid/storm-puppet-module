@@ -1,12 +1,10 @@
-# @summary StoRM root directory defined resource
+# @summary StoRM main storage area root directory defined resource
 define storm::rootdir (
-  String $path,
 ) {
-  file { $path:
-    ensure  => 'directory',
-    owner   => 'storm',
-    group   => 'storm',
-    mode    => '0750',
-    recurse => true,
+  file { $title:
+    ensure => directory,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0755',
   }
 }
