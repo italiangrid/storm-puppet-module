@@ -2563,9 +2563,33 @@ Default value: '*/30'
 
 StoRM main storage area root directory defined resource
 
+#### Parameters
+
+The following parameters are available in the `storm::rootdir` defined type.
+
+##### `mode`
+
+Data type: `String`
+
+
+
+Default value: '0755'
+
 ### storm::sarootdir
 
 StoRM Storage Area root directory defined resource
+
+#### Parameters
+
+The following parameters are available in the `storm::sarootdir` defined type.
+
+##### `mode`
+
+Data type: `String`
+
+
+
+Default value: '0750'
 
 ### storm::webdav::application_file
 

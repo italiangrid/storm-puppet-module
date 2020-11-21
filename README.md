@@ -12,7 +12,6 @@
   * [StoRM database class](#storm-database-class)
   * [StoRM repo class](#storm-repo-class)
   * [StoRM users class](#storm-users-class)
-  * [StoRM storage class](#storm-storage-class)
 * [Limitations - OS compatibility](#limitations)
 
 ## Description

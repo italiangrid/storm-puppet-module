@@ -6,4 +6,5 @@ storm::db::override_options:
   mysqld:
     bind-address: '0.0.0.0'
     max_connections: 2048
+    wait_timeout: 86400
 storm::db::limit_no_file: 65535

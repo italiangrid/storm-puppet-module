@@ -29,6 +29,7 @@ describe 'storm::db', type: 'class' do
               'mysqld' => {
                 'bind-address'    => '0.0.0.0',
                 'max_connections' => 2048,
+                'wait_timeout'    => 86400,
               },
             },
             databases: {

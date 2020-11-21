@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.1.0]
+
+- Added mode parameter to storm::rootdir and storm::sarootdir defined types
+- Increased default value for wait_timeout in storm::db::override_options
+
 ## [3.0.0]
 
 - Converted to pdk project
