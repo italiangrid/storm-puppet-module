@@ -103,7 +103,7 @@ class { 'storm::backend':
   ],
   webdav_pool_members   => [
     {
-      'hostname' => wendav.test.example,
+      'hostname' => webdav.test.example,
     },
   ],
   storage_areas         => [
@@ -138,6 +138,61 @@ storm::backend::storage_site_report { 'storage-site-report':
   minute      => '*/20', # set cron's minute
 }
 ```
+
+#### Enable GPFS native libs on StoRM Backend
+
+If you're running StoRM Backend on GPFS file system and you need to install the GPFS native libs, enable the installation through the Puppet module as follows:
+
+```puppet
+class { 'storm::backend':
+  # ...
+  'install_native_libs_gpfs' => true,
+  # ...
+}
+```
+
+In this case the *storm-native-libs-gpfs* library is added to the installed packages.
+
+#### Enable HTTP as transfer protocol for SRM
+
+To enable HTTP as transfer protocol for SRM prepare-to-get and prepare-to-put requests, you must add `webdav` protocol to the list of your *transfer_protocols* and define at least one member for *webdav_pool_members*. You can re-define the default list of transfer protocols by adding your *storm::backend::transfer_protocols* variable and/or you can override this list by adding a specific *transfer_protocols* for each storage area:
+
+```puppet
+class { 'storm::backend':
+  # ...
+  'webdav_pool_members' => [
+    {
+      'hostname' => webdav.test.example,
+    },
+  ],
+  # defines the default list of transfer protocols for each storage area:
+  'transfer_protocols'  => ['file', 'gsiftp', 'webdav'], 
+  'storage_areas'       => [
+    {
+      'name'          => 'sa-http-enabled',
+      'root_path'     => '/storage/sa-http-enabled',
+      'access_points' => ['/sa-http-enabled'],
+      'vos'           => ['test.vo'],
+      'online_size'   => 40,
+    },
+    {
+      'name'               => 'sa-no-http-enabled',
+      'root_path'          => '/storage/sa-no-http-enabled',
+      'access_points'      => ['/sa-no-http-enabled'],
+      'vos'                => ['test.vo'],
+      'online_size'        => 40,
+      # disable webdav protocol for this storage area
+      'transfer_protocols' => ['file', 'gsiftp'],
+    },
+    # ...
+  ],
+  # ...
+}
+```
+
+The *manifest.pp* showed above includes the HTTP transfer protocol for all the storage area defined.
+By default, *storm::backend::transfer_protocols* includes only `file` and `gsiftp`.
+
 
 ### StoRM Frontend class
 

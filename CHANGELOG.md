@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.1.1]
+
+- Improved README. No changes on module.
+
 ## [3.1.0]
 
 - Added mode parameter to storm::rootdir and storm::sarootdir defined types
