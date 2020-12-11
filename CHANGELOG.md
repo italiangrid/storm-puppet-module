@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.2.0]
+
+- Added daemon reload on backend and webdav restart command
+
 ## [3.1.1]
 
 - Improved README. No changes on module.

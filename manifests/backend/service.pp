@@ -11,6 +11,7 @@ class storm::backend::service {
     ensure    => running,
     enable    => true,
     start     => '/usr/bin/systemctl daemon-reload; /usr/bin/systemctl start storm-backend-server',
+    restart   => '/usr/bin/systemctl daemon-reload; /usr/bin/systemctl restart storm-backend-server',
     subscribe => $subscribed_to,
   }
   exec { 'configure-info-provider':
