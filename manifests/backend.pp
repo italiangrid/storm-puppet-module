@@ -37,9 +37,6 @@
 # @param hostname
 #   StoRM Backend Fully Qualified Domain Name
 #
-# @param install_native_libs_gpfs
-#   Set this if you need to install storm-native-libs-gpfs. Default: false.
-#
 # @param db_hostname
 #   Fully Qualified Domain Name of database hostname. Default value: `hostname`.
 #
@@ -302,9 +299,6 @@
 #   If manage_path_authz_db is true, set the content from this source path
 #
 class storm::backend (
-
-  # Install native libs gpfs
-  Boolean $install_native_libs_gpfs,
 
   # Db connection
   String $db_username,

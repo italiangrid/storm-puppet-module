@@ -4,8 +4,6 @@ class storm::backend::config (
 
   $hostname = $storm::backend::hostname,
 
-  $install_native_libs_gpfs = $storm::backend::install_native_libs_gpfs,
-
   $db_hostname = $storm::backend::db_hostname,
   $db_username = $storm::backend::db_username,
   $db_password = $storm::backend::db_password,
@@ -203,6 +201,7 @@ class storm::backend::config (
   file { $info_config_file:
     ensure  => present,
     content => template($info_yaim_template_file),
+    mode    => '0644',
     owner   => 'root',
     group   => 'storm',
     notify  => [Exec['configure-info-provider']],

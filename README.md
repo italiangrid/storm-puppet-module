@@ -86,24 +86,24 @@ Example of StoRM Backend configuration:
 
 ```Puppet
 class { 'storm::backend':
-  hostname              => backend.test.example,
-  frontend_public_host  => frontend.test.example,
+  hostname              => 'backend.test.example',
+  frontend_public_host  => 'frontend.test.example',
   transfer_protocols    => ['file', 'gsiftp', 'webdav'],
   xmlrpc_security_token => 'NS4kYAZuR65XJCq',
   service_du_enabled    => true,
   srm_pool_members      => [
     {
-      'hostname' => frontend.test.example,
+      'hostname' => 'frontend.test.example',
     }
   ],
   gsiftp_pool_members   => [
     {
-      'hostname' => gridftp.test.example,
+      'hostname' => 'gridftp.test.example',
     },
   ],
   webdav_pool_members   => [
     {
-      'hostname' => webdav.test.example,
+      'hostname' => 'webdav.test.example',
     },
   ],
   storage_areas         => [
@@ -139,20 +139,6 @@ storm::backend::storage_site_report { 'storage-site-report':
 }
 ```
 
-#### Enable GPFS native libs on StoRM Backend
-
-If you're running StoRM Backend on GPFS file system and you need to install the GPFS native libs, enable the installation through the Puppet module as follows:
-
-```puppet
-class { 'storm::backend':
-  # ...
-  'install_native_libs_gpfs' => true,
-  # ...
-}
-```
-
-In this case the *storm-native-libs-gpfs* library is added to the installed packages.
-
 #### Enable HTTP as transfer protocol for SRM
 
 To enable HTTP as transfer protocol for SRM prepare-to-get and prepare-to-put requests, you must add `webdav` protocol to the list of your *transfer_protocols* and define at least one member for *webdav_pool_members*. You can re-define the default list of transfer protocols by adding your *storm::backend::transfer_protocols* variable and/or you can override this list by adding a specific *transfer_protocols* for each storage area:
@@ -162,7 +148,7 @@ class { 'storm::backend':
   # ...
   'webdav_pool_members' => [
     {
-      'hostname' => webdav.test.example,
+      'hostname' => 'webdav.test.example',
     },
   ],
   # defines the default list of transfer protocols for each storage area:
