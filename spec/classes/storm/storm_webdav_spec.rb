@@ -236,45 +236,6 @@ describe 'storm::webdav', type: 'class' do
           )
         end
       end
-
-      context 'Check sysconfig debug enabled with custom port but not suspended' do
-        let(:params) do
-          {
-            'debug' => true,
-            'debug_port' => 1234,
-            'debug_suspend' => false,
-          }
-        end
-
-        it 'check service file' do
-          service_file = '/etc/systemd/system/storm-webdav.service.d/storm-webdav.conf'
-          is_expected.to contain_file(service_file).with(
-            ensure: 'present',
-          )
-          is_expected.to contain_file(service_file).with(
-            content: %r{^Environment="STORM_WEBDAV_JVM_OPTS=-Xms1024m -Xmx1024m -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=1234,suspend=n"},
-          )
-        end
-      end
-
-      context 'Check sysconfig debug enabled with default port and also suspended' do
-        let(:params) do
-          {
-            'debug' => true,
-            'debug_suspend' => true,
-          }
-        end
-
-        it 'check sysconfig file' do
-          service_file = '/etc/systemd/system/storm-webdav.service.d/storm-webdav.conf'
-          is_expected.to contain_file(service_file).with(
-            ensure: 'present',
-          )
-          is_expected.to contain_file(service_file).with(
-            content: %r{^Environment="STORM_WEBDAV_JVM_OPTS=-Xms1024m -Xmx1024m -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=1044,suspend=y"},
-          )
-        end
-      end
     end
   end
 end

@@ -75,6 +75,18 @@
             <host>webdav-1.example.org</host>
             <port>8085</port>
           </prot>
+          <prot name="https">
+            <id>7</id>
+            <schema>https</schema>
+            <host>webdav-2.example.org</host>
+            <port>8443</port>
+          </prot>
+          <prot name="http">
+            <id>8</id>
+            <schema>http</schema>
+            <host>webdav-2.example.org</host>
+            <port>8085</port>
+          </prot>
         </trans-prot>
         <pool>
           <balance-strategy>round-robin</balance-strategy>
@@ -155,6 +167,18 @@
             <host>webdav-1.example.org</host>
             <port>8085</port>
           </prot>
+          <prot name="https">
+            <id>6</id>
+            <schema>https</schema>
+            <host>webdav-2.example.org</host>
+            <port>8443</port>
+          </prot>
+          <prot name="http">
+            <id>7</id>
+            <schema>http</schema>
+            <host>webdav-2.example.org</host>
+            <port>8085</port>
+          </prot>
         </trans-prot>
         <pool>
           <balance-strategy>weight</balance-strategy>
@@ -225,6 +249,18 @@
             <id>5</id>
             <schema>http</schema>
             <host>webdav-1.example.org</host>
+            <port>8085</port>
+          </prot>
+          <prot name="https">
+            <id>6</id>
+            <schema>https</schema>
+            <host>webdav-2.example.org</host>
+            <port>8443</port>
+          </prot>
+          <prot name="http">
+            <id>7</id>
+            <schema>http</schema>
+            <host>webdav-2.example.org</host>
             <port>8085</port>
           </prot>
         </trans-prot>

@@ -5,9 +5,7 @@ describe 'storm::backend::storage_site_report' do
     context "on #{os}" do
       let(:pre_condition) do
         <<-EOF
-          class { 'storm::backend':
-            hostname => 'storm.example.org',
-          }
+          include 'storm::backend'
         EOF
       end
 

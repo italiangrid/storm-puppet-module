@@ -6,6 +6,7 @@
 #    class { 'storm::webdav':
 #      storage_areas => [
 #        {
+#          # minimal configuration
 #          name                       => 'test.vo',
 #          root_path                  => '/storage/test.vo',
 #        },
@@ -99,15 +100,6 @@
 # @param enable_http2
 #   Sets STORM_WEBDAV_ENABLE_HTTP2 environment variable.
 #
-# @param debug
-#   Sets part of STORM_WEBDAV_JVM_OPTS environment variable. It enables remote debug.
-#
-# @param debug_port
-#   Sets part of STORM_WEBDAV_JVM_OPTS environment variable. It sets the remote debug port if remote debug is enabled.
-#
-# @param debug_suspend
-#   Sets part of STORM_WEBDAV_JVM_OPTS environment variable. It sets debug suspend value in case remote debug is enabled.
-#
 # @param storm_limit_nofile
 #   Sets LimitNOFILE value.
 #
@@ -116,7 +108,6 @@ class storm::webdav (
   Boolean $ensure_empty_storage_area_dir,
   Array[Storm::Webdav::StorageArea] $storage_areas,
 
-  Array[String] $hostnames,
   Integer $http_port,
   Integer $https_port,
   Integer $trust_anchors_refresh_interval,
@@ -143,12 +134,10 @@ class storm::webdav (
   Boolean $use_conscrypt,
   Boolean $tpc_use_conscrypt,
   Boolean $enable_http2,
-  Boolean $debug,
-  Integer $debug_port,
-  Boolean $debug_suspend,
 
   Integer $storm_limit_nofile,
 
+  Array[String] $hostnames = [ $::fqdn ],
 ) {
 
   contain storm::webdav::install

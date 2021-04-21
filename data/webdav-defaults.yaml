@@ -20,6 +20,7 @@ storm::webdav::tpc_enable_tls_client_auth: false
 storm::webdav::tpc_progress_report_thread_pool_size: 4
 storm::webdav::tpc_verify_checksum: false
 storm::webdav::jvm_opts: '-Xms1024m -Xmx1024m'
+# storm::webdav::jvm_opts: '-Xms1024m -Xmx1024m -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=1044,suspend=n'
 storm::webdav::authz_server_enable: false
 storm::webdav::authz_server_issuer: 'https://storm.example:8443'
 storm::webdav::authz_server_max_token_lifetime_sec: 43200
@@ -28,7 +29,4 @@ storm::webdav::require_client_cert: false
 storm::webdav::use_conscrypt: false
 storm::webdav::tpc_use_conscrypt: false
 storm::webdav::enable_http2: false
-storm::webdav::debug: false
-storm::webdav::debug_port: 1044
-storm::webdav::debug_suspend: false
 storm::webdav::storm_limit_nofile: 65535

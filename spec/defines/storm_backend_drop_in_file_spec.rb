@@ -1,13 +1,11 @@
 require 'spec_helper'
 
-describe 'storm::backend::service_conf_file' do
+describe 'storm::backend::drop_in_file' do
   on_supported_os.each do |os, facts|
     context "on #{os}" do
       let(:pre_condition) do
         <<-EOF
-          class { 'storm::backend':
-            hostname => 'storm.example.org',
-          }
+          include 'storm::backend'
         EOF
       end
 

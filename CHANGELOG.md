@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.0.0]
+
+- A huge naming refactory has been done on StoRM Backend service configuration file (storm.properties) and, as a consequence, also `Storm::Backend` class has followed a similar renaming. The [Conversion Table](README.md#conversion-table-from-v320-to-v400) shows which properties have been removed, renamed or introduced.
+- Added `gridftp_conf_file` parameter to `Storm::Gridftp` that allows administrator to configure the service by injecting their own `/etc/grid-security/gridftp.conf` file.
+- Added `log_level` and `config_base_path` parameters to `Storm::Gridftp`.
+
 ## [3.3.1]
 
 - Added missing Argus's resource-id parameter within Frontend's configuration.
@@ -15,6 +21,10 @@ All notable changes to this project will be documented in this file.
 - StoRM WebDAV hostname list initialized with local FQDN
 - A cleanup of WebDAV storage area configuration directory can be enabled
 - Added storm::webdav::drop_in_file define in order to allow adding custom drop-in files to be stored in /etc/systemd/system/storm-webdav.service.d 
+- Added `tpc_max_connections_per_route`, `tpc_timeout_in_secs`, `tpc_tls_protocol`, `tpc_report_delay_secs`, `tpc_enable_tls_client_auth`, `tpc_progress_report_thread_pool_size` parameters to `Storm::Webdav`.
+- Removed `manage_storage_areas` parameter from `Storm::Webdav`. The logic has been simplified to managing storage areas only if `storage_areas` list is defined.
+- Added `ensure_empty_storage_area_dir` parameter to `Storm::Webdav` to ensure a cleaned storage area directory before adding the .properties files.
+- Increased StoRM WebDAV default heap size to 1024m and default timeout for TPC to 30 seconds
 
 ## [3.2.1]
 

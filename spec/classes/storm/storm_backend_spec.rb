@@ -3,22 +3,101 @@ require 'spec_helper'
 describe 'storm::backend', type: 'class' do
   on_supported_os.each do |os, facts|
     context "on #{os}" do
-      let(:params) do
-        {
-          'hostname' => 'storm.example.org',
-        }
-      end
       let(:facts) do
         facts
+      end
+      hostname = facts[:hostname]
+
+      context 'with storm.properties managed as a source' do
+        let(:params) do
+          {
+            'storm_properties_file' => '/path/to/storm.properties',
+          }
+        end
+
+        it 'check storm.properties source' do
+          title = '/etc/storm/backend-server/storm.properties'
+          is_expected.to contain_file(title).with(
+            ensure: 'present',
+            source: '/path/to/storm.properties',
+          )
+        end
+      end
+
+      context 'use default configuration' do
+
+        it 'check backend storm.properties file content' do
+          title = '/etc/storm/backend-server/storm.properties'
+          is_expected.to contain_file(title).with(
+            ensure: 'present',
+          )
+          is_expected.to contain_file(title).with(content: %r{db.username: storm})
+          is_expected.to contain_file(title).with(content: %r{db.password: storm})
+          is_expected.to contain_file(title).with(content: %r{db.hostname: #{hostname}})
+          is_expected.to contain_file(title).with(content: %r{db.port: 3306})
+          is_expected.to contain_file(title).with(content: %r{db.properties: serverTimezone=UTC&autoReconnect=true})
+          is_expected.to contain_file(title).with(content: %r{db.pool.size: -1})
+          is_expected.to contain_file(title).with(content: %r{db.pool.min_idle: 10})
+          is_expected.to contain_file(title).with(content: %r{db.pool.max_wait_millis: 5000})
+          is_expected.to contain_file(title).with(content: %r{db.pool.test_on_borrow: true})
+          is_expected.to contain_file(title).with(content: %r{db.pool.test_while_idle: true})
+          is_expected.to contain_file(title).with(content: %r{srm_endpoints\[0\].host: #{hostname}})
+          is_expected.to contain_file(title).with(content: %r{srm_endpoints\[0\].port: 8444})
+          is_expected.to contain_file(title).with(content: %r{rest.port: 9998})
+          is_expected.to contain_file(title).with(content: %r{rest.max_threads: 100})
+          is_expected.to contain_file(title).with(content: %r{rest.max_queue_size: 1000})
+          is_expected.to contain_file(title).with(content: %r{xmlrpc.port: 8080})
+          is_expected.to contain_file(title).with(content: %r{xmlrpc.max_threads: 256})
+          is_expected.to contain_file(title).with(content: %r{xmlrpc.max_queue_size: 1000})
+          is_expected.to contain_file(title).with(content: %r{sanity_checks_enabled: true})
+          is_expected.to contain_file(title).with(content: %r{du.enabled: false})
+          is_expected.to contain_file(title).with(content: %r{du.initial_delay: 60})
+          is_expected.to contain_file(title).with(content: %r{du.tasks_interval: 86400})
+          is_expected.to contain_file(title).with(content: %r{du.parallel_tasks_enabled: false})
+          is_expected.to contain_file(title).with(content: %r{security.enabled: true})
+          is_expected.to contain_file(title).with(content: %r{security.token: secret})
+          is_expected.to contain_file(title).with(content: %r{inprogress_requests_agent.delay: 10})
+          is_expected.to contain_file(title).with(content: %r{inprogress_requests_agent.interval: 300})
+          is_expected.to contain_file(title).with(content: %r{inprogress_requests_agent.ptp_expiration_time: 2592000})
+          is_expected.to contain_file(title).with(content: %r{expired_spaces_agent.delay: 10})
+          is_expected.to contain_file(title).with(content: %r{expired_spaces_agent.interval: 300})
+          is_expected.to contain_file(title).with(content: %r{completed_requests_agent.enabled: true})
+          is_expected.to contain_file(title).with(content: %r{completed_requests_agent.delay: 10})
+          is_expected.to contain_file(title).with(content: %r{completed_requests_agent.interval: 600})
+          is_expected.to contain_file(title).with(content: %r{completed_requests_agent.purge_size: 800})
+          is_expected.to contain_file(title).with(content: %r{completed_requests_agent.purge_age: 21600})
+          is_expected.to contain_file(title).with(content: %r{requests_picker_agent.delay: 1})
+          is_expected.to contain_file(title).with(content: %r{requests_picker_agent.interval: 2})
+          is_expected.to contain_file(title).with(content: %r{requests_picker_agent.max_fetched_size: 100})
+          is_expected.to contain_file(title).with(content: %r{requests_scheduler.core_pool_size: 10})
+          is_expected.to contain_file(title).with(content: %r{requests_scheduler.max_pool_size: 50})
+          is_expected.to contain_file(title).with(content: %r{requests_scheduler.queue_size: 2000})
+          is_expected.to contain_file(title).with(content: %r{ptp_scheduler.core_pool_size: 50})
+          is_expected.to contain_file(title).with(content: %r{ptp_scheduler.max_pool_size: 200})
+          is_expected.to contain_file(title).with(content: %r{ptp_scheduler.queue_size: 1000})
+          is_expected.to contain_file(title).with(content: %r{ptg_scheduler.core_pool_size: 50})
+          is_expected.to contain_file(title).with(content: %r{ptg_scheduler.max_pool_size: 200})
+          is_expected.to contain_file(title).with(content: %r{ptg_scheduler.queue_size: 2000})
+          is_expected.to contain_file(title).with(content: %r{bol_scheduler.core_pool_size: 50})
+          is_expected.to contain_file(title).with(content: %r{bol_scheduler.max_pool_size: 200})
+          is_expected.to contain_file(title).with(content: %r{bol_scheduler.queue_size: 2000})
+          is_expected.to contain_file(title).with(content: %r{extraslashes.file: })
+          is_expected.to contain_file(title).with(content: %r{extraslashes.rfio: })
+          is_expected.to contain_file(title).with(content: %r{extraslashes.gsiftp: /})
+          is_expected.to contain_file(title).with(content: %r{extraslashes.root: /})
+          is_expected.to contain_file(title).with(content: %r{synch_ls.max_entries: 2000})
+          is_expected.to contain_file(title).with(content: %r{synch_ls.default_all_level_recursive: false})
+          is_expected.to contain_file(title).with(content: %r{synch_ls.default_num_levels: 1})
+          is_expected.to contain_file(title).with(content: %r{synch_ls.default_offset: 0})
+        end
       end
 
       context 'with custom backend params' do
         let(:params) do
-          super().merge(
-            'install_native_libs_gpfs' => true,
-            'frontend_public_host' => 'frontend.example.org',
+          {
             'db_username' => 'test',
-            'db_password' => 'secret',
+            'db_pool_size' => 200,
+            'xroot_hostname' => 'storm.example.org',
             'gsiftp_pool_members' => [
               {
                 'hostname' => 'gridftp-0.example.org',
@@ -31,6 +110,9 @@ describe 'storm::backend', type: 'class' do
                 'hostname' => 'webdav-0.example.org',
               }, {
                 'hostname' => 'webdav-1.example.org',
+              }, {
+                'hostname' => 'webdav-2.example.org',
+                'published' => false,
               }
             ],
             'srm_pool_members' => [
@@ -46,7 +128,6 @@ describe 'storm::backend', type: 'class' do
               {
                 'name' => 'test.vo',
                 'root_path' => '/storage/test.vo',
-                'access_points' => ['/test.vo'],
                 'vos' => ['test.vo', 'test.vo.2'],
                 'storage_class' => 'T0D1',
                 'online_size' => 4,
@@ -62,7 +143,6 @@ describe 'storm::backend', type: 'class' do
                 'name' => 'atlas',
                 'root_path' => '/storage/atlas',
                 'access_points' => ['/atlas', '/atlasdisk'],
-                'vos' => ['atlas'],
                 'fs_type' => 'gpfs',
                 'storage_class' => 'T1D0',
                 'online_size' => 4,
@@ -90,7 +170,6 @@ describe 'storm::backend', type: 'class' do
               {
                 'name' => 'novos',
                 'root_path' => '/storage/novos',
-                'access_points' => ['/novos'],
                 'vos' => [],
                 'online_size' => 4,
               },
@@ -100,7 +179,7 @@ describe 'storm::backend', type: 'class' do
             'info_endpoint_quality_level' => 1,
             'jvm_options' => '-Xms512m -Xmx1024m',
             'storm_limit_nofile' => 15_535,
-          )
+          }
         end
 
         it 'config class is used' do
@@ -121,63 +200,66 @@ describe 'storm::backend', type: 'class' do
           is_expected.to contain_file(title).with(
             ensure: 'present',
           )
-          is_expected.to contain_file(title).with(content: %r{storm.service.FE-public.hostname=frontend.example.org})
-          is_expected.to contain_file(title).with(content: %r{storm.service.port=8444})
-          is_expected.to contain_file(title).with(content: %r{storm.service.SURL.endpoint=srm:\/\/frontend-0.example.org:8445\/srm\/managerv2,srm:\/\/frontend-1.example.org:8444\/srm\/managerv2})
-          is_expected.to contain_file(title).with(content: %r{storm.service.SURL.default-ports=8445,8444})
-          is_expected.to contain_file(title).with(content: %r{storm.service.request-db.host=storm.example.org})
-          is_expected.to contain_file(title).with(content: %r{storm.service.request-db.username=test})
-          is_expected.to contain_file(title).with(content: %r{storm.service.request-db.passwd=secret})
-          is_expected.to contain_file(title).with(content: %r{directory.automatic-creation=false})
-          is_expected.to contain_file(title).with(content: %r{directory.writeperm=false})
-          is_expected.to contain_file(title).with(content: %r{ptg.skip-acl-setup=false})
-          is_expected.to contain_file(title).with(content: %r{pinLifetime.default=259200})
-          is_expected.to contain_file(title).with(content: %r{pinLifetime.maximum=1814400})
-          is_expected.to contain_file(title).with(content: %r{sanity-check.enabled=true})
-          is_expected.to contain_file(title).with(content: %r{storm.service.du.enabled=false})
-          is_expected.to contain_file(title).with(content: %r{storm.service.du.delay=60})
-          is_expected.to contain_file(title).with(content: %r{storm.service.du.interval=360})
-          is_expected.to contain_file(title).with(content: %r{synchcall.directoryManager.maxLsEntry=2000})
-          is_expected.to contain_file(title).with(content: %r{gc.pinnedfiles.cleaning.delay=10})
-          is_expected.to contain_file(title).with(content: %r{gc.pinnedfiles.cleaning.interval=300})
-          is_expected.to contain_file(title).with(content: %r{purging=true})
-          is_expected.to contain_file(title).with(content: %r{purge.interval=600})
-          is_expected.to contain_file(title).with(content: %r{purge.size=800})
-          is_expected.to contain_file(title).with(content: %r{expired.request.time=21600})
-          is_expected.to contain_file(title).with(content: %r{transit.interval=300})
-          is_expected.to contain_file(title).with(content: %r{transit.delay=10})
-          is_expected.to contain_file(title).with(content: %r{extraslashes.file=})
-          is_expected.to contain_file(title).with(content: %r{extraslashes.root=\/})
-          is_expected.to contain_file(title).with(content: %r{extraslashes.gsiftp=\/})
-          is_expected.to contain_file(title).with(content: %r{persistence.internal-db.connection-pool=true})
-          is_expected.to contain_file(title).with(content: %r{persistence.internal-db.connection-pool.maxActive=200})
-          is_expected.to contain_file(title).with(content: %r{persistence.internal-db.connection-pool.maxWait=50})
-          is_expected.to contain_file(title).with(content: %r{asynch.db.ReconnectPeriod=18000})
-          is_expected.to contain_file(title).with(content: %r{asynch.db.DelayPeriod=30})
-          is_expected.to contain_file(title).with(content: %r{asynch.PickingInitialDelay=1})
-          is_expected.to contain_file(title).with(content: %r{asynch.PickingTimeInterval=2})
-          is_expected.to contain_file(title).with(content: %r{asynch.PickingMaxBatchSize=100})
-          is_expected.to contain_file(title).with(content: %r{synchcall.directoryManager.maxLsEntry=2000})
-          is_expected.to contain_file(title).with(content: %r{storm.rest.services.port=9998})
-          is_expected.to contain_file(title).with(content: %r{storm.rest.services.maxthreads=100})
-          is_expected.to contain_file(title).with(content: %r{storm.rest.services.max_queue_size=1000})
-          is_expected.to contain_file(title).with(content: %r{synchcall.xmlrpc.unsecureServerPort=8080})
-          is_expected.to contain_file(title).with(content: %r{synchcall.xmlrpc.maxthread=256})
-          is_expected.to contain_file(title).with(content: %r{synchcall.xmlrpc.max_queue_size=1000})
-          is_expected.to contain_file(title).with(content: %r{synchcall.xmlrpc.security.enabled=true})
-          is_expected.to contain_file(title).with(content: %r{synchcall.xmlrpc.security.token=secret})
-
-          is_expected.to contain_file(title).with(content: %r{gc.pinnedfiles.cleaning.delay=10})
-          is_expected.to contain_file(title).with(content: %r{gc.pinnedfiles.cleaning.interval=300})
-          is_expected.to contain_file(title).with(content: %r{purging=true})
-          is_expected.to contain_file(title).with(content: %r{purge.interval=600})
-          is_expected.to contain_file(title).with(content: %r{purge.size=800})
-          is_expected.to contain_file(title).with(content: %r{expired.request.time=21600})
-          is_expected.to contain_file(title).with(content: %r{expired.inprogress.time=2592000})
-          is_expected.to contain_file(title).with(content: %r{transit.interval=300})
-          is_expected.to contain_file(title).with(content: %r{transit.delay=10})
-          is_expected.to contain_file(title).with(content: %r{ptg.skip-acl-setup=false})
-          is_expected.to contain_file(title).with(content: %r{http.turl_prefix=})
+          is_expected.to contain_file(title).with(content: %r{db.username: test})
+          is_expected.to contain_file(title).with(content: %r{db.password: storm})
+          is_expected.to contain_file(title).with(content: %r{db.hostname: #{hostname}})
+          is_expected.to contain_file(title).with(content: %r{db.port: 3306})
+          is_expected.to contain_file(title).with(content: %r{db.properties: serverTimezone=UTC&autoReconnect=true})
+          is_expected.to contain_file(title).with(content: %r{db.pool.size: 200})
+          is_expected.to contain_file(title).with(content: %r{db.pool.min_idle: 10})
+          is_expected.to contain_file(title).with(content: %r{db.pool.max_wait_millis: 5000})
+          is_expected.to contain_file(title).with(content: %r{db.pool.test_on_borrow: true})
+          is_expected.to contain_file(title).with(content: %r{db.pool.test_while_idle: true})
+          is_expected.to contain_file(title).with(content: %r{srm_endpoints\[0\].host: frontend-0.example.org})
+          is_expected.to contain_file(title).with(content: %r{srm_endpoints\[0\].port: 8445})
+          is_expected.to contain_file(title).with(content: %r{srm_endpoints\[1\].host: frontend-1.example.org})
+          is_expected.to contain_file(title).with(content: %r{srm_endpoints\[1\].port: 8444})
+          is_expected.to contain_file(title).with(content: %r{rest.port: 9998})
+          is_expected.to contain_file(title).with(content: %r{rest.max_threads: 100})
+          is_expected.to contain_file(title).with(content: %r{rest.max_queue_size: 1000})
+          is_expected.to contain_file(title).with(content: %r{xmlrpc.port: 8080})
+          is_expected.to contain_file(title).with(content: %r{xmlrpc.max_threads: 256})
+          is_expected.to contain_file(title).with(content: %r{xmlrpc.max_queue_size: 1000})
+          is_expected.to contain_file(title).with(content: %r{sanity_checks_enabled: true})
+          is_expected.to contain_file(title).with(content: %r{du.enabled: false})
+          is_expected.to contain_file(title).with(content: %r{du.initial_delay: 60})
+          is_expected.to contain_file(title).with(content: %r{du.tasks_interval: 86400})
+          is_expected.to contain_file(title).with(content: %r{du.parallel_tasks_enabled: false})
+          is_expected.to contain_file(title).with(content: %r{security.enabled: true})
+          is_expected.to contain_file(title).with(content: %r{security.token: secret})
+          is_expected.to contain_file(title).with(content: %r{inprogress_requests_agent.delay: 10})
+          is_expected.to contain_file(title).with(content: %r{inprogress_requests_agent.interval: 300})
+          is_expected.to contain_file(title).with(content: %r{inprogress_requests_agent.ptp_expiration_time: 2592000})
+          is_expected.to contain_file(title).with(content: %r{expired_spaces_agent.delay: 10})
+          is_expected.to contain_file(title).with(content: %r{expired_spaces_agent.interval: 300})
+          is_expected.to contain_file(title).with(content: %r{completed_requests_agent.enabled: true})
+          is_expected.to contain_file(title).with(content: %r{completed_requests_agent.delay: 10})
+          is_expected.to contain_file(title).with(content: %r{completed_requests_agent.interval: 600})
+          is_expected.to contain_file(title).with(content: %r{completed_requests_agent.purge_size: 800})
+          is_expected.to contain_file(title).with(content: %r{completed_requests_agent.purge_age: 21600})
+          is_expected.to contain_file(title).with(content: %r{requests_picker_agent.delay: 1})
+          is_expected.to contain_file(title).with(content: %r{requests_picker_agent.interval: 2})
+          is_expected.to contain_file(title).with(content: %r{requests_picker_agent.max_fetched_size: 100})
+          is_expected.to contain_file(title).with(content: %r{requests_scheduler.core_pool_size: 10})
+          is_expected.to contain_file(title).with(content: %r{requests_scheduler.max_pool_size: 50})
+          is_expected.to contain_file(title).with(content: %r{requests_scheduler.queue_size: 2000})
+          is_expected.to contain_file(title).with(content: %r{ptp_scheduler.core_pool_size: 50})
+          is_expected.to contain_file(title).with(content: %r{ptp_scheduler.max_pool_size: 200})
+          is_expected.to contain_file(title).with(content: %r{ptp_scheduler.queue_size: 1000})
+          is_expected.to contain_file(title).with(content: %r{ptg_scheduler.core_pool_size: 50})
+          is_expected.to contain_file(title).with(content: %r{ptg_scheduler.max_pool_size: 200})
+          is_expected.to contain_file(title).with(content: %r{ptg_scheduler.queue_size: 2000})
+          is_expected.to contain_file(title).with(content: %r{bol_scheduler.core_pool_size: 50})
+          is_expected.to contain_file(title).with(content: %r{bol_scheduler.max_pool_size: 200})
+          is_expected.to contain_file(title).with(content: %r{bol_scheduler.queue_size: 2000})
+          is_expected.to contain_file(title).with(content: %r{extraslashes.file: })
+          is_expected.to contain_file(title).with(content: %r{extraslashes.rfio: })
+          is_expected.to contain_file(title).with(content: %r{extraslashes.gsiftp: /})
+          is_expected.to contain_file(title).with(content: %r{extraslashes.root: /})
+          is_expected.to contain_file(title).with(content: %r{synch_ls.max_entries: 2000})
+          is_expected.to contain_file(title).with(content: %r{synch_ls.default_all_level_recursive: false})
+          is_expected.to contain_file(title).with(content: %r{synch_ls.default_num_levels: 1})
+          is_expected.to contain_file(title).with(content: %r{synch_ls.default_offset: 0})
         end
 
         it 'check info provider configuration file content' do
@@ -186,11 +268,11 @@ describe 'storm::backend', type: 'class' do
             ensure: 'present',
           )
           is_expected.to contain_file(title).with(content: %r{SITE_NAME=test})
-          is_expected.to contain_file(title).with(content: %r{STORM_FRONTEND_PUBLIC_HOST=frontend.example.org})
-          is_expected.to contain_file(title).with(content: %r{STORM_BACKEND_HOST=storm.example.org})
+          is_expected.to contain_file(title).with(content: %r{STORM_FRONTEND_PUBLIC_HOST=frontend-0.example.org})
+          is_expected.to contain_file(title).with(content: %r{STORM_BACKEND_HOST=#{hostname}})
           is_expected.to contain_file(title).with(content: %r{STORM_DEFAULT_ROOT=\/another-storage})
           is_expected.to contain_file(title).with(content: %r{STORM_FRONTEND_PATH=\/srm\/managerv2})
-          is_expected.to contain_file(title).with(content: %r{STORM_FRONTEND_PORT=8444})
+          is_expected.to contain_file(title).with(content: %r{STORM_FRONTEND_PORT=8445})
           is_expected.to contain_file(title).with(content: %r{STORM_BACKEND_REST_SERVICES_PORT=9998})
           is_expected.to contain_file(title).with(content: %r{STORM_ENDPOINT_QUALITY_LEVEL=1})
 
@@ -283,17 +365,18 @@ describe 'storm::backend', type: 'class' do
 
         context 'test path authz db' do
           let(:params) do
-            super().merge(
-              'manage_path_authz_db' => true,
-            )
+            {
+              'path_authz_db_file' => '/path/to/path-authz.db',
+            }
           end
 
-          it 'check path-authz.db file' do
+          it 'check path-authz.db file source' do
             is_expected.to contain_file('/etc/storm/backend-server/path-authz.db').with(
               ensure: 'present',
               owner: 'root',
               group: 'storm',
               mode: '0644',
+              source: '/path/to/path-authz.db',
             )
           end
         end

@@ -1,10 +1,17 @@
 # @summary The storage area type for storm-backend-server
 #
+# <table>
+#   <thead> <tr><th>Property</th><th>Description</th></tr> </thead>
+#   <tbody>
+#     <tr><td>name</td><td><b>Mandatory</b> - Storage Area's name used to initialize the default accesspoint and the VO name.</td></tr>
+#   </tbody>
+# </table>
+#
 type Storm::Backend::StorageArea = Struct[{
   name                         => String,
   root_path                    => String,
-  access_points                => Array[String],
-  vos                          => Array[String],
+  access_points                => Optional[Array[String]],
+  vos                          => Optional[Array[String]],
   fs_type                      => Optional[Storm::Backend::FsType],
   space_token                  => Optional[String],
   authz                        => Optional[String],

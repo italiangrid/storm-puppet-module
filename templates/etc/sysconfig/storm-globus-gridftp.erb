@@ -5,10 +5,9 @@
 # will go to the given file instead of to syslog. 
 # When either $LCAS_LOG_FILE or $LCMAPS_LOG_FILE is unset, it will 
 # also be set to this same file.
-<%- if @redirect_lcmaps_log -%>
-LLGT_LOG_FILE=<%=@llgt_log_file%>
-<%- else -%>
 #LLGT_LOG_FILE=/var/log/storm/storm-gridftp-lcmaps.log
+<%- if scope.lookupvar('storm::gridftp::redirect_lcmaps_log') -%>
+LLGT_LOG_FILE=<%=scope.lookupvar('storm::gridftp::llgt_log_file')%>
 <%- end -%>
 
 
@@ -19,7 +18,7 @@ LLGT_LOG_FILE=<%=@llgt_log_file%>
 #  3: All messages with a priority of LOG_NOTICE or more severe, i.e. LOG_ERR or LOG_WARNING, are written to file and/or Syslog. 
 #  4: All messages with a priority of LOG_INFO or more severe, i.e. all messages between (and including) LOG_ERR and LOG_INFO, are written to file and/or Syslog.
 #  5: All messages with a priority of LOG_DEBUG or more severe, i.e. all messages between (and including) LOG_ERR and LOG_DEBUG, are written to file and/or Syslog.
-LCMAPS_DEBUG_LEVEL=<%=@lcmaps_debug_level%>
+LCMAPS_DEBUG_LEVEL=<%=scope.lookupvar('storm::gridftp::lcmaps_debug_level')%>
 
 # Tune the LCAS log level. Default: 3.
-LCAS_DEBUG_LEVEL=<%=@lcas_debug_level%>
+LCAS_DEBUG_LEVEL=<%=scope.lookupvar('storm::gridftp::lcas_debug_level')%>

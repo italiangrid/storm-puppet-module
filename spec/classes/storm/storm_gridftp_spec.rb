@@ -11,6 +11,22 @@ describe 'storm::gridftp', type: 'class' do
         is_expected.to contain_class('storm::gridftp::config')
       end
 
+      context 'Use gridftp configuration file' do
+        let(:params) do
+          {
+            'gridftp_conf_file' => '/path/to/gridftp.conf',
+          }
+        end
+
+        it 'check gridftp conf file source' do
+          title = '/etc/grid-security/gridftp.conf'
+          is_expected.to contain_file(title).with(
+            ensure: 'present',
+            source: '/path/to/gridftp.conf',
+          )
+        end
+      end
+
       context 'Use custom gridftp params' do
         let(:params) do
           {

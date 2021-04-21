@@ -6,7 +6,7 @@
 
 ### Classes
 
-* [`storm::backend`](#stormbackend): StoRM Backend puppet module
+* [`storm::backend`](#stormbackend): StoRM Backend installation and configuration class.
 * [`storm::backend::config`](#stormbackendconfig): StoRM Backend config class
 * [`storm::backend::configdb`](#stormbackendconfigdb): StoRM Backend DB config class
 * [`storm::backend::install`](#stormbackendinstall): StoRM Backend install class
@@ -17,7 +17,7 @@ add storm user and all the necessary grants.
 * [`storm::frontend::config`](#stormfrontendconfig): StoRM Frontend config class
 * [`storm::frontend::install`](#stormfrontendinstall): StoRM Frontend install class
 * [`storm::frontend::service`](#stormfrontendservice): StoRM Frontend service class
-* [`storm::gridftp`](#stormgridftp): StoRM GridFTP puppet module
+* [`storm::gridftp`](#stormgridftp): StoRM GridFTP installation and configuration class.
 * [`storm::gridftp::config`](#stormgridftpconfig): StoRM GridFTP config class
 * [`storm::gridftp::install`](#stormgridftpinstall): StoRM GridFTP install class
 * [`storm::gridftp::service`](#stormgridftpservice): StoRM GridFTP service class
@@ -30,11 +30,11 @@ add storm user and all the necessary grants.
 
 ### Defined types
 
-* [`storm::backend::service_conf_file`](#stormbackendservice_conf_file): Starting from Puppet module v2.0.0, site administrators can inject
-one or more .conf files into `/etc/systemd/system/storm-backend-server.service.d`
-directory.
+* [`storm::backend::drop_in_file`](#stormbackenddrop_in_file): Use this define to inject one or more .conf files
+into `/etc/systemd/system/storm-backend-server.service.d` directory.
 * [`storm::backend::storage_site_report`](#stormbackendstorage_site_report): Starting from Puppet module v2.0.0, the management of Storage Site Report has been improved.
 Site administrators can add script and cron described in the [how-to](http://italiangrid.github.io/storm/documentation/how-to/how-to-publish-json-report/)
+* [`storm::backend::storm_properties_file`](#stormbackendstorm_properties_file): Define your own storm.properties file with an absolute path or a Puppet module relative path.
 * [`storm::rootdir`](#stormrootdir): StoRM main storage area root directory defined resource
 * [`storm::sarootdir`](#stormsarootdir): StoRM Storage Area root directory defined resource
 * [`storm::webdav::application_file`](#stormwebdavapplication_file): Starting from Puppet module v2.0.0, the management of application.yml
@@ -48,6 +48,10 @@ This strategy allows site administrators to keep their manifests unaware of
 the improvements on StoRM WebDAV code. For example, if a new property is added
 into Storage Area configuration files, you haven't to update your Puppet module
 and all the service configuration will continue working.
+
+### Functions
+
+* [`storm::has_gpfs`](#stormhas_gpfs): Function that compute whether at least one of the configured storage areas is deployed on GPFS.
 
 ### Data types
 
@@ -77,7 +81,20 @@ and all the service configuration will continue working.
 
 ### <a name="stormbackend"></a>`storm::backend`
 
-StoRM Backend puppet module
+It's recommended to set your own database password and XMLRPC/REST security token.
+You also mainly need to configure your storage areas and the list of SRM, GridFTP and (in case) WebDAV endpoints.
+
+<table>
+  <thead> <tr> <th style="text-align: left;"> See also: </th> </tr> </thead>
+  <tbody>
+    <tr><td>
+      <a href="../puppet_data_type_aliases/Storm_3A_3ABackend_3A_3AStorageArea.html">Storm::Backend::StorageArea</a>
+    </td></tr>
+    <tr><td>
+        <a href="../puppet_data_type_aliases/Storm_3A_3ABackend_3A_3AFsType.html">Storm::Backend::FsType</a>
+    </td></tr>
+  </tbody>
+</table>
 
 #### Examples
 
@@ -85,9 +102,8 @@ StoRM Backend puppet module
 
 ```puppet
 class { 'storm::backend':
-  hostname => 'backend.test.example',
-  db_username => 'storm',
-  db_password => 'bluemoon',
+  db_password => 'secret',
+  security_token => 'secret',
   srm_pool_members => [
     {
       'hostname' => 'frontend.test.example',
@@ -103,15 +119,46 @@ class { 'storm::backend':
       'hostname' => 'webdav.test.example',
     },
   ],
+  transfer_protocols => ['gsiftp', 'webdav'],
   storage_areas => [
     {
       'name'               => 'test.vo',
       'root_path'          => '/storage/test.vo',
-      'access_points'      => ['/test.vo'],
-      'vos'                => ['test.vo'],
       'storage_class'      => 'T0D1',
       'online_size'        => 4,
-      'transfer_protocols' => ['file', 'gsiftp', 'https'],
+    },
+  ],
+}
+```
+
+##### Example with a provided 'storm.properties'
+
+```puppet
+class { 'storm::backend':
+  storm_properties_file => '/path/to/your/storm.properties',
+  db_password => 'my-secret-db-password',
+  srm_pool_members => [
+    {
+      'hostname' => 'frontend.test.example',
+    }
+  ],
+  gsiftp_pool_members => [
+    {
+      'hostname' => 'gridftp.test.example',
+    },
+  ],
+  webdav_pool_members => [
+    {
+      'hostname' => 'webdav.test.example',
+    },
+  ],
+  transfer_protocols => ['gsiftp', 'webdav'],
+  storage_areas => [
+    {
+      'name'               => 'test.vo',
+      'root_path'          => '/storage/test.vo',
+      'storage_class'      => 'T0D1',
+      'online_size'        => 4,
     },
   ],
 }
@@ -121,11 +168,17 @@ class { 'storm::backend':
 
 The following parameters are available in the `storm::backend` class:
 
-* [`hostname`](#hostname)
-* [`install_native_libs_gpfs`](#install_native_libs_gpfs)
-* [`db_hostname`](#db_hostname)
+* [`storm_properties_file`](#storm_properties_file)
 * [`db_username`](#db_username)
 * [`db_password`](#db_password)
+* [`db_hostname`](#db_hostname)
+* [`db_port`](#db_port)
+* [`db_properties`](#db_properties)
+* [`db_pool_size`](#db_pool_size)
+* [`db_pool_min_idle`](#db_pool_min_idle)
+* [`db_pool_max_wait_millis`](#db_pool_max_wait_millis)
+* [`db_pool_test_on_borrow`](#db_pool_test_on_borrow)
+* [`db_pool_test_while_idle`](#db_pool_test_while_idle)
 * [`xroot_hostname`](#xroot_hostname)
 * [`xroot_port`](#xroot_port)
 * [`gsiftp_pool_balance_strategy`](#gsiftp_pool_balance_strategy)
@@ -135,511 +188,677 @@ The following parameters are available in the `storm::backend` class:
 * [`transfer_protocols`](#transfer_protocols)
 * [`fs_type`](#fs_type)
 * [`storage_areas`](#storage_areas)
-* [`frontend_public_host`](#frontend_public_host)
-* [`frontend_port`](#frontend_port)
-* [`directory_automatic_creation`](#directory_automatic_creation)
-* [`directory_writeperm`](#directory_writeperm)
-* [`rest_services_port`](#rest_services_port)
-* [`rest_services_max_threads`](#rest_services_max_threads)
-* [`rest_services_max_queue_size`](#rest_services_max_queue_size)
-* [`xmlrpc_unsecure_server_port`](#xmlrpc_unsecure_server_port)
-* [`xmlrpc_maxthread`](#xmlrpc_maxthread)
-* [`xmlrpc_max_queue_size`](#xmlrpc_max_queue_size)
-* [`xmlrpc_security_enabled`](#xmlrpc_security_enabled)
-* [`xmlrpc_security_token`](#xmlrpc_security_token)
-* [`ptg_skip_acl_setup`](#ptg_skip_acl_setup)
+* [`rest_server_port`](#rest_server_port)
+* [`rest_server_max_threads`](#rest_server_max_threads)
+* [`rest_server_max_queue_size`](#rest_server_max_queue_size)
+* [`xmlrpc_server_port`](#xmlrpc_server_port)
+* [`xmlrpc_server_max_threads`](#xmlrpc_server_max_threads)
+* [`xmlrpc_server_max_queue_size`](#xmlrpc_server_max_queue_size)
+* [`du_service_enabled`](#du_service_enabled)
+* [`du_service_initial_delay`](#du_service_initial_delay)
+* [`du_service_tasks_interval`](#du_service_tasks_interval)
+* [`du_service_parallel_tasks_enabled`](#du_service_parallel_tasks_enabled)
+* [`security_enabled`](#security_enabled)
+* [`security_token`](#security_token)
+* [`sanity_checks_enabled`](#sanity_checks_enabled)
+* [`inprogress_requests_agent_delay`](#inprogress_requests_agent_delay)
+* [`inprogress_requests_agent_interval`](#inprogress_requests_agent_interval)
+* [`inprogress_requests_agent_ptp_expiration_time`](#inprogress_requests_agent_ptp_expiration_time)
+* [`expired_spaces_agent_delay`](#expired_spaces_agent_delay)
+* [`expired_spaces_agent_interval`](#expired_spaces_agent_interval)
+* [`completed_requests_agent_enabled`](#completed_requests_agent_enabled)
+* [`completed_requests_agent_delay`](#completed_requests_agent_delay)
+* [`completed_requests_agent_interval`](#completed_requests_agent_interval)
+* [`completed_requests_agent_purge_size`](#completed_requests_agent_purge_size)
+* [`completed_requests_agent_purge_age`](#completed_requests_agent_purge_age)
+* [`requests_picker_agent_delay`](#requests_picker_agent_delay)
+* [`requests_picker_agent_interval`](#requests_picker_agent_interval)
+* [`requests_picker_agent_max_fetched_size`](#requests_picker_agent_max_fetched_size)
+* [`requests_scheduler_core_pool_size`](#requests_scheduler_core_pool_size)
+* [`requests_scheduler_max_pool_size`](#requests_scheduler_max_pool_size)
+* [`requests_scheduler_queue_size`](#requests_scheduler_queue_size)
+* [`ptp_scheduler_core_pool_size`](#ptp_scheduler_core_pool_size)
+* [`ptp_scheduler_max_pool_size`](#ptp_scheduler_max_pool_size)
+* [`ptp_scheduler_queue_size`](#ptp_scheduler_queue_size)
+* [`ptg_scheduler_core_pool_size`](#ptg_scheduler_core_pool_size)
+* [`ptg_scheduler_max_pool_size`](#ptg_scheduler_max_pool_size)
+* [`ptg_scheduler_queue_size`](#ptg_scheduler_queue_size)
+* [`bol_scheduler_core_pool_size`](#bol_scheduler_core_pool_size)
+* [`bol_scheduler_max_pool_size`](#bol_scheduler_max_pool_size)
+* [`bol_scheduler_queue_size`](#bol_scheduler_queue_size)
+* [`extraslashes_file`](#extraslashes_file)
+* [`extraslashes_rfio`](#extraslashes_rfio)
+* [`extraslashes_gsiftp`](#extraslashes_gsiftp)
+* [`extraslashes_root`](#extraslashes_root)
+* [`skip_ptg_acl_setup`](#skip_ptg_acl_setup)
+* [`synch_ls_max_entries`](#synch_ls_max_entries)
+* [`synch_ls_default_all_level_recursive`](#synch_ls_default_all_level_recursive)
+* [`synch_ls_default_num_levels`](#synch_ls_default_num_levels)
+* [`synch_ls_default_offset`](#synch_ls_default_offset)
+* [`files_default_size`](#files_default_size)
+* [`files_default_lifetime`](#files_default_lifetime)
+* [`files_default_overwrite`](#files_default_overwrite)
+* [`files_default_storagetype`](#files_default_storagetype)
+* [`directories_enable_automatic_creation`](#directories_enable_automatic_creation)
+* [`directories_enable_writeperm_on_creation`](#directories_enable_writeperm_on_creation)
 * [`pinlifetime_default`](#pinlifetime_default)
 * [`pinlifetime_maximum`](#pinlifetime_maximum)
-* [`sanity_check_enabled`](#sanity_check_enabled)
-* [`service_du_enabled`](#service_du_enabled)
-* [`service_du_delay`](#service_du_delay)
-* [`service_du_interval`](#service_du_interval)
-* [`max_ls_entries`](#max_ls_entries)
-* [`gc_pinnedfiles_cleaning_delay`](#gc_pinnedfiles_cleaning_delay)
-* [`gc_pinnedfiles_cleaning_interval`](#gc_pinnedfiles_cleaning_interval)
-* [`gc_purge_enabled`](#gc_purge_enabled)
-* [`gc_purge_interval`](#gc_purge_interval)
-* [`gc_purge_size`](#gc_purge_size)
-* [`gc_expired_request_time`](#gc_expired_request_time)
-* [`gc_expired_inprogress_time`](#gc_expired_inprogress_time)
-* [`gc_ptp_transit_interval`](#gc_ptp_transit_interval)
-* [`gc_ptp_transit_start_delay`](#gc_ptp_transit_start_delay)
-* [`extraslashes_file`](#extraslashes_file)
-* [`extraslashes_root`](#extraslashes_root)
-* [`extraslashes_gsiftp`](#extraslashes_gsiftp)
-* [`db_connection_pool_enabled`](#db_connection_pool_enabled)
-* [`db_connection_pool_max_active`](#db_connection_pool_max_active)
-* [`db_connection_pool_max_wait`](#db_connection_pool_max_wait)
-* [`asynch_db_reconnect_period`](#asynch_db_reconnect_period)
-* [`asynch_db_delay_period`](#asynch_db_delay_period)
-* [`asynch_picking_initial_delay`](#asynch_picking_initial_delay)
-* [`asynch_picking_time_interval`](#asynch_picking_time_interval)
-* [`asynch_picking_max_batch_size`](#asynch_picking_max_batch_size)
-* [`requests_scheduler_core_size`](#requests_scheduler_core_size)
-* [`requests_scheduler_max_size`](#requests_scheduler_max_size)
-* [`requests_scheduler_queue_size`](#requests_scheduler_queue_size)
-* [`ptp_requests_scheduler_core_size`](#ptp_requests_scheduler_core_size)
-* [`ptp_requests_scheduler_max_size`](#ptp_requests_scheduler_max_size)
-* [`ptp_requests_scheduler_queue_size`](#ptp_requests_scheduler_queue_size)
-* [`ptg_requests_scheduler_core_size`](#ptg_requests_scheduler_core_size)
-* [`ptg_requests_scheduler_max_size`](#ptg_requests_scheduler_max_size)
-* [`ptg_requests_scheduler_queue_size`](#ptg_requests_scheduler_queue_size)
-* [`bol_requests_scheduler_core_size`](#bol_requests_scheduler_core_size)
-* [`bol_requests_scheduler_max_size`](#bol_requests_scheduler_max_size)
-* [`bol_requests_scheduler_queue_size`](#bol_requests_scheduler_queue_size)
+* [`hearthbeat_bookkeeping_enabled`](#hearthbeat_bookkeeping_enabled)
+* [`hearthbeat_performance_measuring_enabled`](#hearthbeat_performance_measuring_enabled)
+* [`hearthbeat_period`](#hearthbeat_period)
+* [`hearthbeat_performance_logbook_time_interval`](#hearthbeat_performance_logbook_time_interval)
+* [`hearthbeat_performance_glance_time_interval`](#hearthbeat_performance_glance_time_interval)
+* [`info_quota_refresh_period`](#info_quota_refresh_period)
+* [`http_turl_prefix`](#http_turl_prefix)
+* [`server_pool_status_check_timeout`](#server_pool_status_check_timeout)
+* [`abort_maxloop`](#abort_maxloop)
+* [`ping_properties_filename`](#ping_properties_filename)
+* [`info_config_file`](#info_config_file)
 * [`info_sitename`](#info_sitename)
 * [`info_storage_default_root`](#info_storage_default_root)
 * [`info_endpoint_quality_level`](#info_endpoint_quality_level)
-* [`info_webdav_pool_list`](#info_webdav_pool_list)
-* [`info_frontend_host_list`](#info_frontend_host_list)
 * [`jvm_options`](#jvm_options)
-* [`jmx`](#jmx)
-* [`jmx_options`](#jmx_options)
-* [`debug`](#debug)
-* [`debug_port`](#debug_port)
-* [`debug_suspend`](#debug_suspend)
 * [`lcmaps_db_file`](#lcmaps_db_file)
 * [`lcmaps_policy_name`](#lcmaps_policy_name)
 * [`lcmaps_log_file`](#lcmaps_log_file)
 * [`lcmaps_debug_level`](#lcmaps_debug_level)
-* [`http_turl_prefix`](#http_turl_prefix)
 * [`storm_limit_nofile`](#storm_limit_nofile)
-* [`manage_path_authz_db`](#manage_path_authz_db)
 * [`path_authz_db_file`](#path_authz_db_file)
-* [`info_config_file`](#info_config_file)
 
-##### <a name="hostname"></a>`hostname`
-
-Data type: `String`
-
-StoRM Backend Fully Qualified Domain Name
-
-Default value: `$::fqdn`
-
-##### <a name="install_native_libs_gpfs"></a>`install_native_libs_gpfs`
-
-Data type: `Boolean`
-
-Set this if you need to install storm-native-libs-gpfs. Default: false.
-
-##### <a name="db_hostname"></a>`db_hostname`
+##### <a name="storm_properties_file"></a>`storm_properties_file`
 
 Data type: `String`
 
-Fully Qualified Domain Name of database hostname. Default value: `hostname`.
-
-Default value: `$hostname`
+Use this to provide your own storm.properties file. This can be used for example when you're using the
+latest module version to configure an old StoRM deployment. It's used when it has a non-empty value, and
+it overwrites several other module parameters. Default value: empty string, that means not used.
 
 ##### <a name="db_username"></a>`db_username`
 
 Data type: `String`
 
-The name of user used to connect to local database. Default: storm
+The database connection user name to be passed to the JDBC driver to establish a connection. Default value: 'storm'
 
 ##### <a name="db_password"></a>`db_password`
 
 Data type: `String`
 
-Password for the user in `db_storm_username`. Default: bluemoon
+The database connection password to be passed to the JDBC driver to establish a connection. Default value: 'storm'.
+
+##### <a name="db_hostname"></a>`db_hostname`
+
+Data type: `String`
+
+Fully Qualified Domain Name of database hostname. It's initialized with fact ::fqdn.
+
+##### <a name="db_port"></a>`db_port`
+
+Data type: `Integer`
+
+Database connection URL port. Ignored if `storm_properties_file` is set. Default value: 3306.
+
+##### <a name="db_properties"></a>`db_properties`
+
+Data type: `String`
+
+Database connection URL properties. Ignored if `storm_properties_file` is set. Default value: serverTimezone=UTC&autoReconnect=true
+
+##### <a name="db_pool_size"></a>`db_pool_size`
+
+Data type: `Integer`
+
+The maximum number of active connections that can be allocated from database connection pool at the same time,
+or negative for no limit. Ignored if `storm_properties_file` is set. Default value: -1.
+
+##### <a name="db_pool_min_idle"></a>`db_pool_min_idle`
+
+Data type: `Integer`
+
+The minimum number of connections that can remain idle in the pool, without extra ones being created, or zero
+to create none. Ignored if `storm_properties_file` is set. Default value: 10.
+
+##### <a name="db_pool_max_wait_millis"></a>`db_pool_max_wait_millis`
+
+Data type: `Integer`
+
+The maximum number of milliseconds that the pool will wait (when there are no available connections)
+for a connection to be returned before throwing an exception, or -1 to wait indefinitely.
+Ignored if `storm_properties_file` is set. Default value: 5000.
+
+##### <a name="db_pool_test_on_borrow"></a>`db_pool_test_on_borrow`
+
+Data type: `Boolean`
+
+The indication of whether objects will be validated before being borrowed from the pool. If the
+object fails to validate, it will be dropped from the pool, and we will attempt to borrow another.
+Ignored if `storm_properties_file` is set. Default value: true.
+
+##### <a name="db_pool_test_while_idle"></a>`db_pool_test_while_idle`
+
+Data type: `Boolean`
+
+The indication of whether objects will be validated by the idle object evictor (if any). If an object
+fails to validate, it will be dropped from the pool. Ignored if `storm_properties_file` is set.
+Default value: true.
 
 ##### <a name="xroot_hostname"></a>`xroot_hostname`
 
 Data type: `String`
 
-Root server (default value for all Storage Areas).
-Note: you may change the settings for each SA acting on its configuration.
-
-Default value: `$hostname`
+If your deployment also consists of a xroot server, this is its FQDN in order to be used to provide valid
+xroot TURL. Setting this parameter, the administrator provides a default value for all Storage Areas that
+have 'xroot' as a transfer protocol. Note: you may overwrite this setting at single SA configuration level.
+It's initialized with fact ::fqdn.
 
 ##### <a name="xroot_port"></a>`xroot_port`
 
 Data type: `Integer`
 
-Root server port (default value for all Storage Areas).
+Xroot server port default value for all Storage Areas that have 'xroot' as a transfer protocol.
+Note: you may overwrite this setting at single SA configuration level. Default value: 1094.
 
 ##### <a name="gsiftp_pool_balance_strategy"></a>`gsiftp_pool_balance_strategy`
 
 Data type: `Storm::Backend::BalanceStrategy`
 
-Load balancing strategy for GridFTP server pool (default value for all Storage Areas).
-Note: you may change the settings for each SA acting on its configuration.
-Available values: round-robin, smart-rr, random, weight. Default value: round-robin.
-See [Storm::Backend::BalanceStrategy](#stormbackendbalancestrategy).
+Default load balancing strategy of GridFTP server pool for all the Storage Areas.
+Note: you may overwrite this setting at single SA configuration level.
+Available values: 'round-robin', 'smart-rr', 'random', 'weight'. Default value: 'round-robin'.
 
 ##### <a name="gsiftp_pool_members"></a>`gsiftp_pool_members`
 
 Data type: `Array[Storm::Backend::GsiftpPoolMember]`
 
-Array of [Storm::Backend::GsiftpPoolMember](#stormbackendgsiftppoolmember).
-GridFTP servers pool list (default value for all Storage Areas).
-Note: you may change the settings for each SA acting on its configuration.
+Default GridFTP servers pool list for all Storage Areas.
+Note: you may overwrite this setting at single SA configuration level. Default value: empty array.
 
 ##### <a name="webdav_pool_members"></a>`webdav_pool_members`
 
 Data type: `Array[Storm::Backend::WebdavPoolMember]`
 
-Array of [Storm::Backend::WebdavPoolMember](#stormbackendwebdavpoolmember).
-WebDAV endpoints pool list (default value for all Storage Areas).
-Note: you may change the settings for each SA acting on its configuration.
+Default WebDAV endpoint pool list for all Storage Areas.
+Note: you may overwrite this setting at single SA configuration level. Default value: empty array.
 
 ##### <a name="srm_pool_members"></a>`srm_pool_members`
 
 Data type: `Array[Storm::Backend::SrmPoolMember]`
 
-Array of [Storm::Backend::SrmPoolMember](#stormbackendsrmpoolmember).
-Frontend endpoints pool list (default value for all Storage Areas).
-Note: you may change the settings for each SA acting on its configuration.
+Default SRM endpoint pool list for all Storage Areas (the Frontend list).
+Note: you may overwrite this setting at single SA configuration level. Default value: empty array.
 
 ##### <a name="transfer_protocols"></a>`transfer_protocols`
 
 Data type: `Array[Storm::Backend::TransferProtocol]`
 
-List of supported (and published) transfer protocols (default value for all Storage Areas).
-Note: you may change the settings for each SA acting on its configuration.
+Default list of supported (and published) transfer protocols for all Storage Areas.
+Note: you may overwrite this setting at single SA configuration level. Default value: ['file', 'gsiftp']
 
 ##### <a name="fs_type"></a>`fs_type`
 
 Data type: `Storm::Backend::FsType`
 
-File System Type (default value for all Storage Areas).
-Note: you may change the settings for each SA acting on its configuration.
-Available values: posixfs, gpfs and test. Default value: posixfs
-See [Storm::Backend::FsType](#stormbackendfstype).
+Default File System Type value for all Storage Areas. Note: you may overwrite this setting at single SA configuration
+level. Available values: 'posixfs', 'gpfs' and 'test'. Default value: 'posixfs'
 
 ##### <a name="storage_areas"></a>`storage_areas`
 
 Data type: `Array[Storm::Backend::StorageArea]`
 
-List of supported Storage Areas.
-Array of [Storm::Backend::StorageArea](#stormbackendstoragearea).
+The list of the managed storage areas. For each storage area a proper configuration must be provided.
+Default value: empty array.
 
-##### <a name="frontend_public_host"></a>`frontend_public_host`
+##### <a name="rest_server_port"></a>`rest_server_port`
+
+Data type: `Integer`
+
+REST services endpoint port on which the server is listening and accepting connections.
+Ignored if `storm_properties_file` is set. Default value: 9998.
+
+##### <a name="rest_server_max_threads"></a>`rest_server_max_threads`
+
+Data type: `Integer`
+
+The maximum number of parallel requests run by REST endpoint server.
+Ignored if `storm_properties_file` is set. Default value: 100.
+
+##### <a name="rest_server_max_queue_size"></a>`rest_server_max_queue_size`
+
+Data type: `Integer`
+
+Internal REST services endpoint max queue size of accepted requests.
+Ignored if `storm_properties_file` is set. Default value: 1000.
+
+##### <a name="xmlrpc_server_port"></a>`xmlrpc_server_port`
+
+Data type: `Integer`
+
+XMLRPC server endpoint port where backend listens for incoming XML-RPC connections from Frontends(s).
+Ignored if `storm_properties_file` is set. Default value: 8080.
+
+##### <a name="xmlrpc_server_max_threads"></a>`xmlrpc_server_max_threads`
+
+Data type: `Integer`
+
+Number of threads managing XML-RPC connection from Frontends(s). A well sized value for this parameter
+have to be at least equal to the sum of the number of working threads in all FrontEend(s).
+Ignored if `storm_properties_file` is set. Default value: 256.
+
+##### <a name="xmlrpc_server_max_queue_size"></a>`xmlrpc_server_max_queue_size`
+
+Data type: `Integer`
+
+Max number of accepted and queued XML-RPC connection from Frontends(s).
+Ignored if `storm_properties_file` is set. Default value: 1000.
+
+##### <a name="du_service_enabled"></a>`du_service_enabled`
+
+Data type: `Boolean`
+
+Flag to enable Disk Usage service. The Disk Usage service is used for a periodic update of the used-space of
+all the storage spaces that are not GPFS-with-quota-enabled. This periodic update consists of a
+'du -s -b' executed on the storage area root directory. By default, the service is disabled.
+Ignored if `storm_properties_file` is set. Default value: false.
+
+##### <a name="du_service_initial_delay"></a>`du_service_initial_delay`
+
+Data type: `Integer`
+
+The initial delay before the service is started (seconds). Ignored if `storm_properties_file` is set.
+Default value: 60.
+
+##### <a name="du_service_tasks_interval"></a>`du_service_tasks_interval`
+
+Data type: `Integer`
+
+The interval in seconds between successive run. Ignored if `storm_properties_file` is set. Default value: 360.
+
+##### <a name="du_service_parallel_tasks_enabled"></a>`du_service_parallel_tasks_enabled`
+
+Data type: `Boolean`
+
+Enable/disable parallel execution for du tasks. Ignored if `storm_properties_file` is set. Default value: false.
+
+##### <a name="security_enabled"></a>`security_enabled`
+
+Data type: `Boolean`
+
+Whether the backend will require a token to be present for accepting XML-RPC/REST requests.
+Ignored if `storm_properties_file` is set. Default value: true.
+
+##### <a name="security_token"></a>`security_token`
 
 Data type: `String`
 
-StoRM Frontend service public host. It’s used by StoRM Info Provider to publish the SRM endpoint into the Resource BDII.
-Default value: `hostname`
+The token that the backend will require to be present for accepting XML-RPC/REST requests.
+Mandatory if `security_enabled` is true. Ignored if `storm_properties_file` is set.
+Default value: 'secret'
 
-Default value: `$hostname`
-
-##### <a name="frontend_port"></a>`frontend_port`
-
-Data type: `Integer`
-
-StoRM Frontend service port. Default value: 8444
-
-##### <a name="directory_automatic_creation"></a>`directory_automatic_creation`
+##### <a name="sanity_checks_enabled"></a>`sanity_checks_enabled`
 
 Data type: `Boolean`
 
-Flag to enable automatic missing directory creation upon srmPrepareToPut requests. Default: false.
+Enable/disable sanity checks during bootstrap phase. Ignored if `storm_properties_file` is set.
+Default value: true.
 
-##### <a name="directory_writeperm"></a>`directory_writeperm`
+##### <a name="inprogress_requests_agent_delay"></a>`inprogress_requests_agent_delay`
+
+Data type: `Integer`
+
+Initial delay in seconds before starting the inprogress requests agent. This agent transits
+expired get/put requests from SRM_FILE_PINNED or SRM_SPACE_AVAILABLE to a final state.
+A request is expired if pinLifetime is reached. This agent also transits ptp that are stuck
+in SRM_REQUEST_IN_PROGRESS for more than `ptp_expiration_time`. Ignored if `storm_properties_file` is set.
+Default value: 10.
+
+##### <a name="inprogress_requests_agent_interval"></a>`inprogress_requests_agent_interval`
+
+Data type: `Integer`
+
+Time interval in seconds between two agent executions. Ignored if `storm_properties_file` is set.
+Default value: 300.
+
+##### <a name="inprogress_requests_agent_ptp_expiration_time"></a>`inprogress_requests_agent_ptp_expiration_time`
+
+Data type: `Integer`
+
+Time in seconds to consider an in-progress ptp request as expired.
+Ignored if `storm_properties_file` is set. Default value: 2592000.
+
+##### <a name="expired_spaces_agent_delay"></a>`expired_spaces_agent_delay`
+
+Data type: `Integer`
+
+Initial delay in seconds before starting the expired spaces agent. The expired spaces agent removes
+expired reserved spaces. Ignored if `storm_properties_file` is set. Default value: 10.
+
+##### <a name="expired_spaces_agent_interval"></a>`expired_spaces_agent_interval`
+
+Data type: `Integer`
+
+Time interval in seconds between two agent executions. Default value: 300.
+
+##### <a name="completed_requests_agent_enabled"></a>`completed_requests_agent_enabled`
 
 Data type: `Boolean`
 
-Flag to enable directory write permission setting upon srmMkDir requests on created directories. Default: false.
+Enable/Disable the completed requests agent. This agent deletes from database a bunch of `purge_size`
+requests that are in a final status, older than `purge_age` seconds. Ignored if `storm_properties_file` is set.
+Default value: true.
 
-##### <a name="rest_services_port"></a>`rest_services_port`
-
-Data type: `Integer`
-
-REST services port. Default value: 9998
-
-##### <a name="rest_services_max_threads"></a>`rest_services_max_threads`
+##### <a name="completed_requests_agent_delay"></a>`completed_requests_agent_delay`
 
 Data type: `Integer`
 
-REST services max active requests. Default: 100
+Initial delay in seconds before starting the requests garbage collection process.
+Ignored if `storm_properties_file` is set. Default value: 10.
 
-##### <a name="rest_services_max_queue_size"></a>`rest_services_max_queue_size`
-
-Data type: `Integer`
-
-REST services max queue size of accepted requests. Default: 1000
-
-##### <a name="xmlrpc_unsecure_server_port"></a>`xmlrpc_unsecure_server_port`
+##### <a name="completed_requests_agent_interval"></a>`completed_requests_agent_interval`
 
 Data type: `Integer`
 
-Port to listen on for incoming XML-RPC connections from Frontends(s). Default: 8080
+Time interval in seconds between two agent executions. Ignored if `storm_properties_file` is set.
+Default value: 300.
 
-##### <a name="xmlrpc_maxthread"></a>`xmlrpc_maxthread`
-
-Data type: `Integer`
-
-Number of threads managing XML-RPC connection from Frontends(s).
-A well sized value for this parameter have to be at least equal to the sum of the number of working threads in all Frontends.
-Default: 100.
-
-##### <a name="xmlrpc_max_queue_size"></a>`xmlrpc_max_queue_size`
+##### <a name="completed_requests_agent_purge_size"></a>`completed_requests_agent_purge_size`
 
 Data type: `Integer`
 
-Max number of accepted and queued XML-RPC connection from Frontends(s). Default: **1000**
+The size of the maximum deleted requests at each agent execution. Ignored if `storm_properties_file` is set.
+Default value: 800.
 
-##### <a name="xmlrpc_security_enabled"></a>`xmlrpc_security_enabled`
-
-Data type: `Boolean`
-
-Whether the backend will require a token to be present for accepting XML-RPC requests. Default: true.
-
-##### <a name="xmlrpc_security_token"></a>`xmlrpc_security_token`
-
-Data type: `String`
-
-The token that the backend will require to be present for accepting XML-RPC requests.
-Mandatory if xmlrpc_security_enabled is true.
-
-##### <a name="ptg_skip_acl_setup"></a>`ptg_skip_acl_setup`
-
-Data type: `Boolean`
-
-Skip ACL setup for PtG requests. Default: false.
-
-##### <a name="pinlifetime_default"></a>`pinlifetime_default`
+##### <a name="completed_requests_agent_purge_age"></a>`completed_requests_agent_purge_age`
 
 Data type: `Integer`
 
-Default PinLifetime in seconds used for pinning files in case of srmPrepareToPut or srmPrepareToGet operation
-without any pinLifetime specified. Default: 259200.
+The age in seconds after that the completed requests can be considered as removable.
+Ignored if `storm_properties_file` is set. Default value: 21600.
 
-##### <a name="pinlifetime_maximum"></a>`pinlifetime_maximum`
-
-Data type: `Integer`
-
-Maximum PinLifetime allowed in seconds. Default: 1814400.
-
-##### <a name="sanity_check_enabled"></a>`sanity_check_enabled`
-
-Data type: `Boolean`
-
-Enable/disable sanity checks during bootstrap phase. Default: true.
-
-##### <a name="service_du_enabled"></a>`service_du_enabled`
-
-Data type: `Boolean`
-
-Flag to enable disk usage service. Default: false.
-
-##### <a name="service_du_delay"></a>`service_du_delay`
+##### <a name="requests_picker_agent_delay"></a>`requests_picker_agent_delay`
 
 Data type: `Integer`
 
-The initial delay before the service is started (seconds). Default: 60.
+Initial delay in seconds before starting the requests garbage collection process.
+Ignored if `storm_properties_file` is set. Default value: 1.
 
-##### <a name="service_du_interval"></a>`service_du_interval`
-
-Data type: `Integer`
-
-The interval in seconds between successive run. Default: 360.
-
-##### <a name="max_ls_entries"></a>`max_ls_entries`
+##### <a name="requests_picker_agent_interval"></a>`requests_picker_agent_interval`
 
 Data type: `Integer`
 
-Maximum number of entries returned by an srmLs call.
-Since in case of recursive srmLs results can be in order of million, this prevent a server overload. Default: 500.
+Time interval in seconds between two agent executions. Ignored if `storm_properties_file` is set.
+Default value: 2.
 
-##### <a name="gc_pinnedfiles_cleaning_delay"></a>`gc_pinnedfiles_cleaning_delay`
-
-Data type: `Integer`
-
-Initial delay before starting the reserved space, JIT ACLs and pinned files garbage collection process, in seconds. Default: 10.
-
-##### <a name="gc_pinnedfiles_cleaning_interval"></a>`gc_pinnedfiles_cleaning_interval`
+##### <a name="requests_picker_agent_max_fetched_size"></a>`requests_picker_agent_max_fetched_size`
 
 Data type: `Integer`
 
-Time interval in seconds between successive purging run. Default: 300.
+Maximum number of picked requests at each execution. Ignored if `storm_properties_file` is set.
+Default value: 100.
 
-##### <a name="gc_purge_enabled"></a>`gc_purge_enabled`
-
-Data type: `Boolean`
-
-Enable the request garbage collector. Default: true.
-
-##### <a name="gc_purge_interval"></a>`gc_purge_interval`
+##### <a name="requests_scheduler_core_pool_size"></a>`requests_scheduler_core_pool_size`
 
 Data type: `Integer`
 
-Time interval in seconds between successive purging run. Default: 600.
+Requests scheduler worker pool base size. Ignored if `storm_properties_file` is set. Default value: 10.
 
-##### <a name="gc_purge_size"></a>`gc_purge_size`
-
-Data type: `Integer`
-
-Number of requests picked up for cleaning from the requests garbage collector at each run.
-This value is use also by Tape Recall Garbage Collector. Default: 800
-
-##### <a name="gc_expired_request_time"></a>`gc_expired_request_time`
+##### <a name="requests_scheduler_max_pool_size"></a>`requests_scheduler_max_pool_size`
 
 Data type: `Integer`
 
-Time in seconds to consider a request expired after its submission. Default: 604800 seconds (1 week).
-From StoRM 1.11.13 it is used also to identify how much time is needed to consider a completed recall task as cleanable.
-
-##### <a name="gc_expired_inprogress_time"></a>`gc_expired_inprogress_time`
-
-Data type: `Integer`
-
-Time in seconds to consider an in-progress ptp request as expired. Default: 2592000 seconds (1 month).
-
-##### <a name="gc_ptp_transit_interval"></a>`gc_ptp_transit_interval`
-
-Data type: `Integer`
-
-Time interval in seconds between successive expired put requests agent run. Default: 3000.
-
-##### <a name="gc_ptp_transit_start_delay"></a>`gc_ptp_transit_start_delay`
-
-Data type: `Integer`
-
-Initial delay before starting the expired put requests agent process, in seconds. Default: 60
-
-##### <a name="extraslashes_file"></a>`extraslashes_file`
-
-Data type: `String`
-
-Add extra slashes after the “authority” part of a TURL for file protocol. Defaul: ''
-
-##### <a name="extraslashes_root"></a>`extraslashes_root`
-
-Data type: `String`
-
-Add extra slashes after the “authority” part of a TURL for xroot protocol. Default: '/'
-
-##### <a name="extraslashes_gsiftp"></a>`extraslashes_gsiftp`
-
-Data type: `String`
-
-Add extra slashes after the “authority” part of a TURL for gsiftp protocol. Default: '/'
-
-##### <a name="db_connection_pool_enabled"></a>`db_connection_pool_enabled`
-
-Data type: `Boolean`
-
-Enable the database connection pool. Default: true
-
-##### <a name="db_connection_pool_max_active"></a>`db_connection_pool_max_active`
-
-Data type: `Integer`
-
-Database connection pool max active connections. Default: 10
-
-##### <a name="db_connection_pool_max_wait"></a>`db_connection_pool_max_wait`
-
-Data type: `Integer`
-
-Database connection pool max wait time to provide a connection. Default: 50
-
-##### <a name="asynch_db_reconnect_period"></a>`asynch_db_reconnect_period`
-
-Data type: `Integer`
-
-Database connection refresh time intervall in seconds. Default: 18000
-
-##### <a name="asynch_db_delay_period"></a>`asynch_db_delay_period`
-
-Data type: `Integer`
-
-Database connection refresh initial delay in seconds. Default: 30.
-
-##### <a name="asynch_picking_initial_delay"></a>`asynch_picking_initial_delay`
-
-Data type: `Integer`
-
-Initial delay before starting to pick requests from the DB, in seconds. Default: 1.
-
-##### <a name="asynch_picking_time_interval"></a>`asynch_picking_time_interval`
-
-Data type: `Integer`
-
-Polling interval in seconds to pick up new SRM requests. Default: 2.
-
-##### <a name="asynch_picking_max_batch_size"></a>`asynch_picking_max_batch_size`
-
-Data type: `Integer`
-
-Maximum number of requests picked up at each polling time. Default: 100.
-
-##### <a name="requests_scheduler_core_size"></a>`requests_scheduler_core_size`
-
-Data type: `Integer`
-
-Crusher Scheduler worker pool base size. Default: 50.
-
-##### <a name="requests_scheduler_max_size"></a>`requests_scheduler_max_size`
-
-Data type: `Integer`
-
-Crusher Schedule worker pool max size. Default: 200.
+Requests scheduler worker pool max size. Ignored if `storm_properties_file` is set. Default value: 50.
 
 ##### <a name="requests_scheduler_queue_size"></a>`requests_scheduler_queue_size`
 
 Data type: `Integer`
 
-Request queue maximum size. Default: 2000.
+Requests scheduler worker pool queue size. Ignored if `storm_properties_file` is set. Default value: 1000.
 
-##### <a name="ptp_requests_scheduler_core_size"></a>`ptp_requests_scheduler_core_size`
-
-Data type: `Integer`
-
-PrepareToPut worker pool base size. Default: 50.
-
-##### <a name="ptp_requests_scheduler_max_size"></a>`ptp_requests_scheduler_max_size`
+##### <a name="ptp_scheduler_core_pool_size"></a>`ptp_scheduler_core_pool_size`
 
 Data type: `Integer`
 
-PrepareToPut worker pool max size. Default: 200.
+Ptp requests scheduler worker pool base size. Ignored if `storm_properties_file` is set. Default value: 50.
 
-##### <a name="ptp_requests_scheduler_queue_size"></a>`ptp_requests_scheduler_queue_size`
-
-Data type: `Integer`
-
-PrepareToPut request queue maximum size. Default: 1000.
-
-##### <a name="ptg_requests_scheduler_core_size"></a>`ptg_requests_scheduler_core_size`
+##### <a name="ptp_scheduler_max_pool_size"></a>`ptp_scheduler_max_pool_size`
 
 Data type: `Integer`
 
-PrepareToGet worker pool base size. Default: 50.
+Ptp requests scheduler worker pool max size. Ignored if `storm_properties_file` is set. Default value: 200.
 
-##### <a name="ptg_requests_scheduler_max_size"></a>`ptg_requests_scheduler_max_size`
-
-Data type: `Integer`
-
-PrepareToGet worker pool max size. Default: 200.
-
-##### <a name="ptg_requests_scheduler_queue_size"></a>`ptg_requests_scheduler_queue_size`
+##### <a name="ptp_scheduler_queue_size"></a>`ptp_scheduler_queue_size`
 
 Data type: `Integer`
 
-PrepareToGet request queue maximum size. Default: 2000.
+Ptp requests scheduler worker pool queue size. Ignored if `storm_properties_file` is set. Default value: 1000.
 
-##### <a name="bol_requests_scheduler_core_size"></a>`bol_requests_scheduler_core_size`
-
-Data type: `Integer`
-
-BringOnline worker pool base size. Default: 50.
-
-##### <a name="bol_requests_scheduler_max_size"></a>`bol_requests_scheduler_max_size`
+##### <a name="ptg_scheduler_core_pool_size"></a>`ptg_scheduler_core_pool_size`
 
 Data type: `Integer`
 
-BringOnline Worker pool max size. Default: 200.
+Ptg requests scheduler worker pool base size. Ignored if `storm_properties_file` is set. Default value: 50.
 
-##### <a name="bol_requests_scheduler_queue_size"></a>`bol_requests_scheduler_queue_size`
+##### <a name="ptg_scheduler_max_pool_size"></a>`ptg_scheduler_max_pool_size`
 
 Data type: `Integer`
 
-BringOnline request queue maximum size. Default: 2000.
+Ptg requests scheduler worker pool max size. Ignored if `storm_properties_file` is set. Default value: 200.
+
+##### <a name="ptg_scheduler_queue_size"></a>`ptg_scheduler_queue_size`
+
+Data type: `Integer`
+
+Ptg requests scheduler worker pool queue size. Ignored if `storm_properties_file` is set. Default value: 2000.
+
+##### <a name="bol_scheduler_core_pool_size"></a>`bol_scheduler_core_pool_size`
+
+Data type: `Integer`
+
+Bol requests scheduler worker pool base size. Ignored if `storm_properties_file` is set. Default value: 50.
+
+##### <a name="bol_scheduler_max_pool_size"></a>`bol_scheduler_max_pool_size`
+
+Data type: `Integer`
+
+Bol requests scheduler worker pool max size. Ignored if `storm_properties_file` is set. Default value: 200.
+
+##### <a name="bol_scheduler_queue_size"></a>`bol_scheduler_queue_size`
+
+Data type: `Integer`
+
+Bol requests scheduler worker pool queue size. Ignored if `storm_properties_file` is set. Default value: 2000.
+
+##### <a name="extraslashes_file"></a>`extraslashes_file`
+
+Data type: `String`
+
+Specify extra slashes (or a prefix) after the “authority” part of a File TURL.
+Ignored if `storm_properties_file` is set. Default value: empty string.
+
+##### <a name="extraslashes_rfio"></a>`extraslashes_rfio`
+
+Data type: `String`
+
+Specify extra slashes (or a prefix) after the “authority” part of a RFIO TURL.
+Ignored if `storm_properties_file` is set. Default value: empty string.
+
+##### <a name="extraslashes_gsiftp"></a>`extraslashes_gsiftp`
+
+Data type: `String`
+
+Specify extra slashes (or a prefix) after the “authority” part of a GsiFTP TURL.
+Ignored if `storm_properties_file` is set. Default value: /.
+
+##### <a name="extraslashes_root"></a>`extraslashes_root`
+
+Data type: `String`
+
+Specify extra slashes (or a prefix) after the “authority” part of a Root TURL.
+Ignored if `storm_properties_file` is set. Default value: /.
+
+##### <a name="skip_ptg_acl_setup"></a>`skip_ptg_acl_setup`
+
+Data type: `Boolean`
+
+Skip ACL setup for PtG requests. Ignored if `storm_properties_file` is set.
+
+##### <a name="synch_ls_max_entries"></a>`synch_ls_max_entries`
+
+Data type: `Integer`
+
+SRM ls maximum number of entries returned. Ignored if `storm_properties_file` is set. Default value: 2000.
+
+##### <a name="synch_ls_default_all_level_recursive"></a>`synch_ls_default_all_level_recursive`
+
+Data type: `Boolean`
+
+Enable/disable an all level response for SRM ls. Ignored if `storm_properties_file` is set.
+Default value: false.
+
+##### <a name="synch_ls_default_num_levels"></a>`synch_ls_default_num_levels`
+
+Data type: `Integer`
+
+Default number of levels returned by SRM ls. Ignored if `storm_properties_file` is set. Default value: 1.
+
+##### <a name="synch_ls_default_offset"></a>`synch_ls_default_offset`
+
+Data type: `Integer`
+
+Default offset used by SRM ls. Ignored if `storm_properties_file` is set. Default value: 0.
+
+##### <a name="files_default_size"></a>`files_default_size`
+
+Data type: `Integer`
+
+Default file size. Ignored if `storm_properties_file` is set. Default value: 1000000
+
+##### <a name="files_default_lifetime"></a>`files_default_lifetime`
+
+Data type: `Integer`
+
+Default FileLifetime in seconds used for VOLATILE file in case of SRM request.
+Ignored if `storm_properties_file` is set. Default value: 259200.
+
+##### <a name="files_default_overwrite"></a>`files_default_overwrite`
+
+Data type: `Enum['N', 'A', 'D']`
+
+Default file overwrite mode to use upon srmPrepareToPut requests. Possible values are N (Never),
+A (Always), D (when files Differs). Ignored if `storm_properties_file` is set. Default value: A.
+
+##### <a name="files_default_storagetype"></a>`files_default_storagetype`
+
+Data type: `Enum['V', 'D', 'P']`
+
+Default File Storage Type to be used for srmPrepareToPut requests. Possible values are  V (Volatile),
+P (Permanent) and  D (Durable). Ignored if `storm_properties_file` is set. Default value: P.
+
+##### <a name="directories_enable_automatic_creation"></a>`directories_enable_automatic_creation`
+
+Data type: `Boolean`
+
+Enable/disable the automatic directory creation during srmPrepareToPut requests.
+Ignored if `storm_properties_file` is set. Default value: false.
+
+##### <a name="directories_enable_writeperm_on_creation"></a>`directories_enable_writeperm_on_creation`
+
+Data type: `Boolean`
+
+Enable/disable write permission on directory created through srmMkDir requests.
+Ignored if `storm_properties_file` is set. Default value: false.
+
+##### <a name="pinlifetime_default"></a>`pinlifetime_default`
+
+Data type: `Integer`
+
+Default pinLifetime in seconds used for pinning files in case of srmPrepareToPut or srmPrapareToGet
+requests. Ignored if `storm_properties_file` is set. Default value: 259200.
+
+##### <a name="pinlifetime_maximum"></a>`pinlifetime_maximum`
+
+Data type: `Integer`
+
+Maximum allowed value for pinLifeTime. Values beyond the max will be dropped to max value.
+Ignored if `storm_properties_file` is set. Default value: 1814400.
+
+##### <a name="hearthbeat_bookkeeping_enabled"></a>`hearthbeat_bookkeeping_enabled`
+
+Data type: `Boolean`
+
+Advanced settings for hearthbeat log. Enable/disable hearthbeat also bookkeeping.
+Ignored if `storm_properties_file` is set. Default value: false
+
+##### <a name="hearthbeat_performance_measuring_enabled"></a>`hearthbeat_performance_measuring_enabled`
+
+Data type: `Boolean`
+
+Advanced settings for hearthbeat log. Enable/disable hearthbeat performance measuring for bookkeeping.
+Ignored if `storm_properties_file` is set. Default value: false
+
+##### <a name="hearthbeat_period"></a>`hearthbeat_period`
+
+Data type: `Integer`
+
+Advanced settings for hearthbeat log. Interval of logging executions in seconds.
+Ignored if `storm_properties_file` is set. Default value: 60.
+
+##### <a name="hearthbeat_performance_logbook_time_interval"></a>`hearthbeat_performance_logbook_time_interval`
+
+Data type: `Integer`
+
+Advanced settings for hearthbeat log. Performance logbook time interval.
+Ignored if `storm_properties_file` is set. Default value: 15.
+
+##### <a name="hearthbeat_performance_glance_time_interval"></a>`hearthbeat_performance_glance_time_interval`
+
+Data type: `Integer`
+
+Advanced settings for hearthbeat log. Performance glance time interval.
+Ignored if `storm_properties_file` is set. Default value: 15.
+
+##### <a name="info_quota_refresh_period"></a>`info_quota_refresh_period`
+
+Data type: `Integer`
+
+Time interval between two runs of GPFS quota agent. Ignored if `storm_properties_file` is set.
+Default value: 900.
+
+##### <a name="http_turl_prefix"></a>`http_turl_prefix`
+
+Data type: `String`
+
+Ignored if `storm_properties_file` is set. Default value: empty string.
+
+##### <a name="server_pool_status_check_timeout"></a>`server_pool_status_check_timeout`
+
+Data type: `Integer`
+
+Lifetime in seconds of the cached status of a GsiFTP server in list.
+Ignored if `storm_properties_file` is set. Default value: 20000.
+
+##### <a name="abort_maxloop"></a>`abort_maxloop`
+
+Data type: `Integer`
+
+Max abort internal tentatives. Ignored if `storm_properties_file` is set. Default value: 10.
+
+##### <a name="ping_properties_filename"></a>`ping_properties_filename`
+
+Data type: `String`
+
+File name containing key-value properties that must be appended to SRM Ping body returned.
+Ignored if `storm_properties_file` is set. Default value: ping-values.properties.
+
+##### <a name="info_config_file"></a>`info_config_file`
+
+Data type: `String`
+
+Path of the Info Provider main configuration file auto-generated.
 
 ##### <a name="info_sitename"></a>`info_sitename`
 
 Data type: `String`
 
-It’s the human-readable name of your site used to set the Glue-SiteName attribute.
+It’s the human-readable name of your site used to set the Glue-SiteName attribute. Default value: 'StoRM site'.
 
 ##### <a name="info_storage_default_root"></a>`info_storage_default_root`
 
@@ -653,908 +872,56 @@ Data type: `Integer`
 
 Endpoint maturity level to be published by the StoRM info provider. Default value: 2.
 
-##### <a name="info_webdav_pool_list"></a>`info_webdav_pool_list`
-
-Data type: `Array[Storm::Backend::WebdavPoolMember]`
-
-List of published webdav endpoints.
-
-##### <a name="info_frontend_host_list"></a>`info_frontend_host_list`
-
-Data type: `Array[Storm::Backend::SrmPoolMember]`
-
-List of published srm endpoints.
-
 ##### <a name="jvm_options"></a>`jvm_options`
 
 Data type: `String`
 
-
-
-##### <a name="jmx"></a>`jmx`
-
-Data type: `Boolean`
-
-
-
-##### <a name="jmx_options"></a>`jmx_options`
-
-Data type: `String`
-
-
-
-##### <a name="debug"></a>`debug`
-
-Data type: `Boolean`
-
-
-
-##### <a name="debug_port"></a>`debug_port`
-
-Data type: `Integer`
-
-
-
-##### <a name="debug_suspend"></a>`debug_suspend`
-
-Data type: `Boolean`
-
-
+Default value: '-Xms512m -Xmx512m'
 
 ##### <a name="lcmaps_db_file"></a>`lcmaps_db_file`
 
 Data type: `String`
 
-
+Default value: '/etc/storm/backend-server/lcmaps.db'.
 
 ##### <a name="lcmaps_policy_name"></a>`lcmaps_policy_name`
 
 Data type: `String`
 
-
+Default value: 'standard'.
 
 ##### <a name="lcmaps_log_file"></a>`lcmaps_log_file`
 
 Data type: `String`
 
-
+Default value: '/var/log/storm/lcmaps.log'.
 
 ##### <a name="lcmaps_debug_level"></a>`lcmaps_debug_level`
 
 Data type: `Integer`
 
-
-
-##### <a name="http_turl_prefix"></a>`http_turl_prefix`
-
-Data type: `String`
-
-
+Default value: 0.
 
 ##### <a name="storm_limit_nofile"></a>`storm_limit_nofile`
 
 Data type: `Integer`
 
-Sets LimitNOFILE value.
-
-##### <a name="manage_path_authz_db"></a>`manage_path_authz_db`
-
-Data type: `Boolean`
-
-If true, allows to set content of path-authz.db file.
+Sets LimitNOFILE value. Default value: 65535.
 
 ##### <a name="path_authz_db_file"></a>`path_authz_db_file`
 
 Data type: `String`
 
-If manage_path_authz_db is true, set the content from this source path
-
-##### <a name="info_config_file"></a>`info_config_file`
-
-Data type: `String`
-
-
+If not an empty string, set the content of your path-authz.db file from this source path.
+Default value: empty string.
 
 ### <a name="stormbackendconfig"></a>`storm::backend::config`
 
 StoRM Backend config class
 
-#### Parameters
-
-The following parameters are available in the `storm::backend::config` class:
-
-* [`hostname`](#hostname)
-* [`install_native_libs_gpfs`](#install_native_libs_gpfs)
-* [`db_hostname`](#db_hostname)
-* [`db_username`](#db_username)
-* [`db_password`](#db_password)
-* [`xroot_hostname`](#xroot_hostname)
-* [`xroot_port`](#xroot_port)
-* [`gsiftp_pool_members`](#gsiftp_pool_members)
-* [`gsiftp_pool_balance_strategy`](#gsiftp_pool_balance_strategy)
-* [`webdav_pool_members`](#webdav_pool_members)
-* [`srm_pool_members`](#srm_pool_members)
-* [`transfer_protocols`](#transfer_protocols)
-* [`fs_type`](#fs_type)
-* [`storage_areas`](#storage_areas)
-* [`frontend_public_host`](#frontend_public_host)
-* [`frontend_port`](#frontend_port)
-* [`directory_automatic_creation`](#directory_automatic_creation)
-* [`directory_writeperm`](#directory_writeperm)
-* [`rest_services_port`](#rest_services_port)
-* [`rest_services_max_threads`](#rest_services_max_threads)
-* [`rest_services_max_queue_size`](#rest_services_max_queue_size)
-* [`xmlrpc_unsecure_server_port`](#xmlrpc_unsecure_server_port)
-* [`xmlrpc_maxthread`](#xmlrpc_maxthread)
-* [`xmlrpc_max_queue_size`](#xmlrpc_max_queue_size)
-* [`xmlrpc_security_enabled`](#xmlrpc_security_enabled)
-* [`xmlrpc_security_token`](#xmlrpc_security_token)
-* [`ptg_skip_acl_setup`](#ptg_skip_acl_setup)
-* [`pinlifetime_default`](#pinlifetime_default)
-* [`pinlifetime_maximum`](#pinlifetime_maximum)
-* [`sanity_check_enabled`](#sanity_check_enabled)
-* [`service_du_enabled`](#service_du_enabled)
-* [`service_du_delay`](#service_du_delay)
-* [`service_du_interval`](#service_du_interval)
-* [`max_ls_entries`](#max_ls_entries)
-* [`gc_pinnedfiles_cleaning_delay`](#gc_pinnedfiles_cleaning_delay)
-* [`gc_pinnedfiles_cleaning_interval`](#gc_pinnedfiles_cleaning_interval)
-* [`gc_purge_enabled`](#gc_purge_enabled)
-* [`gc_purge_interval`](#gc_purge_interval)
-* [`gc_purge_size`](#gc_purge_size)
-* [`gc_expired_request_time`](#gc_expired_request_time)
-* [`gc_expired_inprogress_time`](#gc_expired_inprogress_time)
-* [`gc_ptp_transit_interval`](#gc_ptp_transit_interval)
-* [`gc_ptp_transit_start_delay`](#gc_ptp_transit_start_delay)
-* [`extraslashes_file`](#extraslashes_file)
-* [`extraslashes_root`](#extraslashes_root)
-* [`extraslashes_gsiftp`](#extraslashes_gsiftp)
-* [`db_connection_pool_enabled`](#db_connection_pool_enabled)
-* [`db_connection_pool_max_active`](#db_connection_pool_max_active)
-* [`db_connection_pool_max_wait`](#db_connection_pool_max_wait)
-* [`asynch_db_reconnect_period`](#asynch_db_reconnect_period)
-* [`asynch_db_delay_period`](#asynch_db_delay_period)
-* [`asynch_picking_initial_delay`](#asynch_picking_initial_delay)
-* [`asynch_picking_time_interval`](#asynch_picking_time_interval)
-* [`asynch_picking_max_batch_size`](#asynch_picking_max_batch_size)
-* [`requests_scheduler_core_size`](#requests_scheduler_core_size)
-* [`requests_scheduler_max_size`](#requests_scheduler_max_size)
-* [`requests_scheduler_queue_size`](#requests_scheduler_queue_size)
-* [`ptp_requests_scheduler_core_size`](#ptp_requests_scheduler_core_size)
-* [`ptp_requests_scheduler_max_size`](#ptp_requests_scheduler_max_size)
-* [`ptp_requests_scheduler_queue_size`](#ptp_requests_scheduler_queue_size)
-* [`ptg_requests_scheduler_core_size`](#ptg_requests_scheduler_core_size)
-* [`ptg_requests_scheduler_max_size`](#ptg_requests_scheduler_max_size)
-* [`ptg_requests_scheduler_queue_size`](#ptg_requests_scheduler_queue_size)
-* [`bol_requests_scheduler_core_size`](#bol_requests_scheduler_core_size)
-* [`bol_requests_scheduler_max_size`](#bol_requests_scheduler_max_size)
-* [`bol_requests_scheduler_queue_size`](#bol_requests_scheduler_queue_size)
-* [`info_config_file`](#info_config_file)
-* [`info_sitename`](#info_sitename)
-* [`info_storage_default_root`](#info_storage_default_root)
-* [`info_endpoint_quality_level`](#info_endpoint_quality_level)
-* [`jvm_options`](#jvm_options)
-* [`jmx`](#jmx)
-* [`jmx_options`](#jmx_options)
-* [`debug`](#debug)
-* [`debug_port`](#debug_port)
-* [`debug_suspend`](#debug_suspend)
-* [`lcmaps_db_file`](#lcmaps_db_file)
-* [`lcmaps_policy_name`](#lcmaps_policy_name)
-* [`lcmaps_log_file`](#lcmaps_log_file)
-* [`lcmaps_debug_level`](#lcmaps_debug_level)
-* [`http_turl_prefix`](#http_turl_prefix)
-* [`storm_limit_nofile`](#storm_limit_nofile)
-* [`manage_path_authz_db`](#manage_path_authz_db)
-* [`path_authz_db_file`](#path_authz_db_file)
-
-##### <a name="hostname"></a>`hostname`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::hostname`
-
-##### <a name="install_native_libs_gpfs"></a>`install_native_libs_gpfs`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::install_native_libs_gpfs`
-
-##### <a name="db_hostname"></a>`db_hostname`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::db_hostname`
-
-##### <a name="db_username"></a>`db_username`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::db_username`
-
-##### <a name="db_password"></a>`db_password`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::db_password`
-
-##### <a name="xroot_hostname"></a>`xroot_hostname`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::xroot_hostname`
-
-##### <a name="xroot_port"></a>`xroot_port`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::xroot_port`
-
-##### <a name="gsiftp_pool_members"></a>`gsiftp_pool_members`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::gsiftp_pool_members`
-
-##### <a name="gsiftp_pool_balance_strategy"></a>`gsiftp_pool_balance_strategy`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::gsiftp_pool_balance_strategy`
-
-##### <a name="webdav_pool_members"></a>`webdav_pool_members`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::webdav_pool_members`
-
-##### <a name="srm_pool_members"></a>`srm_pool_members`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::srm_pool_members`
-
-##### <a name="transfer_protocols"></a>`transfer_protocols`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::transfer_protocols`
-
-##### <a name="fs_type"></a>`fs_type`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::fs_type`
-
-##### <a name="storage_areas"></a>`storage_areas`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::storage_areas`
-
-##### <a name="frontend_public_host"></a>`frontend_public_host`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::frontend_public_host`
-
-##### <a name="frontend_port"></a>`frontend_port`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::frontend_port`
-
-##### <a name="directory_automatic_creation"></a>`directory_automatic_creation`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::directory_automatic_creation`
-
-##### <a name="directory_writeperm"></a>`directory_writeperm`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::directory_writeperm`
-
-##### <a name="rest_services_port"></a>`rest_services_port`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::rest_services_port`
-
-##### <a name="rest_services_max_threads"></a>`rest_services_max_threads`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::rest_services_max_threads`
-
-##### <a name="rest_services_max_queue_size"></a>`rest_services_max_queue_size`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::rest_services_max_queue_size`
-
-##### <a name="xmlrpc_unsecure_server_port"></a>`xmlrpc_unsecure_server_port`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::xmlrpc_unsecure_server_port`
-
-##### <a name="xmlrpc_maxthread"></a>`xmlrpc_maxthread`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::xmlrpc_maxthread`
-
-##### <a name="xmlrpc_max_queue_size"></a>`xmlrpc_max_queue_size`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::xmlrpc_max_queue_size`
-
-##### <a name="xmlrpc_security_enabled"></a>`xmlrpc_security_enabled`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::xmlrpc_security_enabled`
-
-##### <a name="xmlrpc_security_token"></a>`xmlrpc_security_token`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::xmlrpc_security_token`
-
-##### <a name="ptg_skip_acl_setup"></a>`ptg_skip_acl_setup`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::ptg_skip_acl_setup`
-
-##### <a name="pinlifetime_default"></a>`pinlifetime_default`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::pinlifetime_default`
-
-##### <a name="pinlifetime_maximum"></a>`pinlifetime_maximum`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::pinlifetime_maximum`
-
-##### <a name="sanity_check_enabled"></a>`sanity_check_enabled`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::sanity_check_enabled`
-
-##### <a name="service_du_enabled"></a>`service_du_enabled`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::service_du_enabled`
-
-##### <a name="service_du_delay"></a>`service_du_delay`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::service_du_delay`
-
-##### <a name="service_du_interval"></a>`service_du_interval`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::service_du_interval`
-
-##### <a name="max_ls_entries"></a>`max_ls_entries`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::max_ls_entries`
-
-##### <a name="gc_pinnedfiles_cleaning_delay"></a>`gc_pinnedfiles_cleaning_delay`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::gc_pinnedfiles_cleaning_delay`
-
-##### <a name="gc_pinnedfiles_cleaning_interval"></a>`gc_pinnedfiles_cleaning_interval`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::gc_pinnedfiles_cleaning_interval`
-
-##### <a name="gc_purge_enabled"></a>`gc_purge_enabled`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::gc_purge_enabled`
-
-##### <a name="gc_purge_interval"></a>`gc_purge_interval`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::gc_purge_interval`
-
-##### <a name="gc_purge_size"></a>`gc_purge_size`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::gc_purge_size`
-
-##### <a name="gc_expired_request_time"></a>`gc_expired_request_time`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::gc_expired_request_time`
-
-##### <a name="gc_expired_inprogress_time"></a>`gc_expired_inprogress_time`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::gc_expired_inprogress_time`
-
-##### <a name="gc_ptp_transit_interval"></a>`gc_ptp_transit_interval`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::gc_ptp_transit_interval`
-
-##### <a name="gc_ptp_transit_start_delay"></a>`gc_ptp_transit_start_delay`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::gc_ptp_transit_start_delay`
-
-##### <a name="extraslashes_file"></a>`extraslashes_file`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::extraslashes_file`
-
-##### <a name="extraslashes_root"></a>`extraslashes_root`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::extraslashes_root`
-
-##### <a name="extraslashes_gsiftp"></a>`extraslashes_gsiftp`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::extraslashes_gsiftp`
-
-##### <a name="db_connection_pool_enabled"></a>`db_connection_pool_enabled`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::db_connection_pool_enabled`
-
-##### <a name="db_connection_pool_max_active"></a>`db_connection_pool_max_active`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::db_connection_pool_max_active`
-
-##### <a name="db_connection_pool_max_wait"></a>`db_connection_pool_max_wait`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::db_connection_pool_max_wait`
-
-##### <a name="asynch_db_reconnect_period"></a>`asynch_db_reconnect_period`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::asynch_db_reconnect_period`
-
-##### <a name="asynch_db_delay_period"></a>`asynch_db_delay_period`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::asynch_db_delay_period`
-
-##### <a name="asynch_picking_initial_delay"></a>`asynch_picking_initial_delay`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::asynch_picking_initial_delay`
-
-##### <a name="asynch_picking_time_interval"></a>`asynch_picking_time_interval`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::asynch_picking_time_interval`
-
-##### <a name="asynch_picking_max_batch_size"></a>`asynch_picking_max_batch_size`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::asynch_picking_max_batch_size`
-
-##### <a name="requests_scheduler_core_size"></a>`requests_scheduler_core_size`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::requests_scheduler_core_size`
-
-##### <a name="requests_scheduler_max_size"></a>`requests_scheduler_max_size`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::requests_scheduler_max_size`
-
-##### <a name="requests_scheduler_queue_size"></a>`requests_scheduler_queue_size`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::requests_scheduler_queue_size`
-
-##### <a name="ptp_requests_scheduler_core_size"></a>`ptp_requests_scheduler_core_size`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::ptp_requests_scheduler_core_size`
-
-##### <a name="ptp_requests_scheduler_max_size"></a>`ptp_requests_scheduler_max_size`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::ptp_requests_scheduler_max_size`
-
-##### <a name="ptp_requests_scheduler_queue_size"></a>`ptp_requests_scheduler_queue_size`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::ptp_requests_scheduler_queue_size`
-
-##### <a name="ptg_requests_scheduler_core_size"></a>`ptg_requests_scheduler_core_size`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::ptg_requests_scheduler_core_size`
-
-##### <a name="ptg_requests_scheduler_max_size"></a>`ptg_requests_scheduler_max_size`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::ptg_requests_scheduler_max_size`
-
-##### <a name="ptg_requests_scheduler_queue_size"></a>`ptg_requests_scheduler_queue_size`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::ptg_requests_scheduler_queue_size`
-
-##### <a name="bol_requests_scheduler_core_size"></a>`bol_requests_scheduler_core_size`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::bol_requests_scheduler_core_size`
-
-##### <a name="bol_requests_scheduler_max_size"></a>`bol_requests_scheduler_max_size`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::bol_requests_scheduler_max_size`
-
-##### <a name="bol_requests_scheduler_queue_size"></a>`bol_requests_scheduler_queue_size`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::bol_requests_scheduler_queue_size`
-
-##### <a name="info_config_file"></a>`info_config_file`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::info_config_file`
-
-##### <a name="info_sitename"></a>`info_sitename`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::info_sitename`
-
-##### <a name="info_storage_default_root"></a>`info_storage_default_root`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::info_storage_default_root`
-
-##### <a name="info_endpoint_quality_level"></a>`info_endpoint_quality_level`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::info_endpoint_quality_level`
-
-##### <a name="jvm_options"></a>`jvm_options`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::jvm_options`
-
-##### <a name="jmx"></a>`jmx`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::jmx`
-
-##### <a name="jmx_options"></a>`jmx_options`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::jmx_options`
-
-##### <a name="debug"></a>`debug`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::debug`
-
-##### <a name="debug_port"></a>`debug_port`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::debug_port`
-
-##### <a name="debug_suspend"></a>`debug_suspend`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::debug_suspend`
-
-##### <a name="lcmaps_db_file"></a>`lcmaps_db_file`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::lcmaps_db_file`
-
-##### <a name="lcmaps_policy_name"></a>`lcmaps_policy_name`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::lcmaps_policy_name`
-
-##### <a name="lcmaps_log_file"></a>`lcmaps_log_file`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::lcmaps_log_file`
-
-##### <a name="lcmaps_debug_level"></a>`lcmaps_debug_level`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::lcmaps_debug_level`
-
-##### <a name="http_turl_prefix"></a>`http_turl_prefix`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::http_turl_prefix`
-
-##### <a name="storm_limit_nofile"></a>`storm_limit_nofile`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::storm_limit_nofile`
-
-##### <a name="manage_path_authz_db"></a>`manage_path_authz_db`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::manage_path_authz_db`
-
-##### <a name="path_authz_db_file"></a>`path_authz_db_file`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::path_authz_db_file`
-
 ### <a name="stormbackendconfigdb"></a>`storm::backend::configdb`
 
 StoRM Backend DB config class
-
-#### Parameters
-
-The following parameters are available in the `storm::backend::configdb` class:
-
-* [`db_hostname`](#db_hostname)
-* [`db_username`](#db_username)
-* [`db_password`](#db_password)
-
-##### <a name="db_hostname"></a>`db_hostname`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::db_hostname`
-
-##### <a name="db_username"></a>`db_username`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::db_username`
-
-##### <a name="db_password"></a>`db_password`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::backend::db_password`
 
 ### <a name="stormbackendinstall"></a>`storm::backend::install`
 
@@ -1833,24 +1200,30 @@ StoRM Frontend service class
 
 ### <a name="stormgridftp"></a>`storm::gridftp`
 
-Parameters
-----------
-
-The StoRM GridFTP configuration parameters are:
-
-* `port`: the port used by GridFTP server service;
-* `port_range`: the range of ports used by transfer sockets; format is 'MIN,MAX';
-* `connections_max`: the number of max allowed connections to server;
+StoRM GridFTP installation and configuration class.
 
 #### Examples
 
-##### Example of usage
+##### Example of usage with default configuration values
+
+```puppet
+include 'storm::gridftp'
+```
+
+##### Example of usage with some custom parameters
 
 ```puppet
 class { 'storm::gridftp':
-  port            => 2811,
-  port_range      => '20000,25000',
-  connections_max => 2000,
+  port_range => '20000,40000',
+  connections_max => 5000,
+}
+```
+
+##### Example of usage with a provided gridftp.conf
+
+```puppet
+class { 'storm::gridftp':
+  gridftp_conf_file => '/path/to/your/gridftp.conf',
 }
 ```
 
@@ -1858,175 +1231,106 @@ class { 'storm::gridftp':
 
 The following parameters are available in the `storm::gridftp` class:
 
+* [`gridftp_conf_file`](#gridftp_conf_file)
 * [`port`](#port)
 * [`port_range`](#port_range)
 * [`connections_max`](#connections_max)
+* [`log_level`](#log_level)
 * [`log_single`](#log_single)
 * [`log_transfer`](#log_transfer)
+* [`config_base_path`](#config_base_path)
 * [`redirect_lcmaps_log`](#redirect_lcmaps_log)
 * [`llgt_log_file`](#llgt_log_file)
 * [`lcmaps_debug_level`](#lcmaps_debug_level)
 * [`lcas_debug_level`](#lcas_debug_level)
 * [`load_storm_dsi_module`](#load_storm_dsi_module)
 
+##### <a name="gridftp_conf_file"></a>`gridftp_conf_file`
+
+Data type: `String`
+
+Use this to provide a source file to be used as your own /etc/grid-security/gridftp.conf configuration file.
+Ignored if set to an empty string. In case of a proper value, all the other class parameters will be ignored.
+Default value: empty string.
+
 ##### <a name="port"></a>`port`
 
 Data type: `Integer`
 
-The port used by GridFTP server service.
+The port used by GridFTP server service. Default value: 2811.
 
 ##### <a name="port_range"></a>`port_range`
 
 Data type: `String`
 
-The range of ports used by transfer sockets; format is 'MIN,MAX'.
+The range of ports used by transfer sockets; format is 'MIN,MAX'. Default value: '20000,25000'.
 
 ##### <a name="connections_max"></a>`connections_max`
 
 Data type: `Integer`
 
-The number of max allowed connections to server.
+The number of max allowed connections to server. Default value: 2000.
+
+##### <a name="log_level"></a>`log_level`
+
+Data type: `String`
+
+A comma separated list of levels from: ERROR, WARN, INFO, TRANSFER, DUMP, ALL. TRANSFER includes the same
+statistics that are sent to the separate transfer log when -log-transfer is used. Example: error,warn,info. You may also specify a
+numeric level of 1-255. Default value: 'ERROR,WARN,INFO'.
 
 ##### <a name="log_single"></a>`log_single`
 
 Data type: `String`
 
-Session log file path. Default is: /var/log/storm/storm-gridftp-session.log
+Session log file path. Default value: '/var/log/storm/storm-gridftp-session.log'.
 
 ##### <a name="log_transfer"></a>`log_transfer`
 
 Data type: `String`
 
-Transfer log file path. Default is: /var/log/storm/storm-globus-gridftp.log
+Transfer log file path. Default value: '/var/log/storm/storm-globus-gridftp.log'.
+
+##### <a name="config_base_path"></a>`config_base_path`
+
+Data type: `String`
+
+Base path to use when config and log path options are not full paths. By default this is the current directory
+when the process is started. Default value: '/'.
 
 ##### <a name="redirect_lcmaps_log"></a>`redirect_lcmaps_log`
 
 Data type: `Boolean`
 
-If true, redirect the LCMAPS log to the file specified by 'llgt_log_file'.
+If true, redirect the LCMAPS log to the file specified by 'llgt_log_file'. Default value: false.
 
 ##### <a name="llgt_log_file"></a>`llgt_log_file`
 
 Data type: `String`
 
-The LCMAPS log file used if 'redirect_lcmaps_log' is true.
+The LCMAPS log file used if 'redirect_lcmaps_log' is true. Default value: '/var/log/storm/storm-gridftp-lcmaps.log'.
 
 ##### <a name="lcmaps_debug_level"></a>`lcmaps_debug_level`
 
 Data type: `Integer`
 
-The LCMAPS logging level. Values from 0 (ERROR) to 5 (DEBUG). Default: 3 (INFO)
+The LCMAPS logging level. Values from 0 (ERROR) to 5 (DEBUG). Default value: 3 (INFO)
 
 ##### <a name="lcas_debug_level"></a>`lcas_debug_level`
 
 Data type: `Integer`
 
-The LCAS logging level. Values from 0 (ERROR) to 5 (DEBUG). Default: 3 (INFO)
+The LCAS logging level. Values from 0 (ERROR) to 5 (DEBUG). Default value: 3 (INFO)
 
 ##### <a name="load_storm_dsi_module"></a>`load_storm_dsi_module`
 
 Data type: `Boolean`
 
-Enable/Disable StoRM DSI module. Default: true (enabled)
+Enable/Disable StoRM DSI module. Default value: true (enabled)
 
 ### <a name="stormgridftpconfig"></a>`storm::gridftp::config`
 
 StoRM GridFTP config class
-
-#### Parameters
-
-The following parameters are available in the `storm::gridftp::config` class:
-
-* [`port`](#port)
-* [`port_range`](#port_range)
-* [`connections_max`](#connections_max)
-* [`log_single`](#log_single)
-* [`log_transfer`](#log_transfer)
-* [`redirect_lcmaps_log`](#redirect_lcmaps_log)
-* [`llgt_log_file`](#llgt_log_file)
-* [`lcmaps_debug_level`](#lcmaps_debug_level)
-* [`lcas_debug_level`](#lcas_debug_level)
-* [`load_storm_dsi_module`](#load_storm_dsi_module)
-
-##### <a name="port"></a>`port`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::gridftp::port`
-
-##### <a name="port_range"></a>`port_range`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::gridftp::port_range`
-
-##### <a name="connections_max"></a>`connections_max`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::gridftp::connections_max`
-
-##### <a name="log_single"></a>`log_single`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::gridftp::log_single`
-
-##### <a name="log_transfer"></a>`log_transfer`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::gridftp::log_transfer`
-
-##### <a name="redirect_lcmaps_log"></a>`redirect_lcmaps_log`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::gridftp::redirect_lcmaps_log`
-
-##### <a name="llgt_log_file"></a>`llgt_log_file`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::gridftp::llgt_log_file`
-
-##### <a name="lcmaps_debug_level"></a>`lcmaps_debug_level`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::gridftp::lcmaps_debug_level`
-
-##### <a name="lcas_debug_level"></a>`lcas_debug_level`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::gridftp::lcas_debug_level`
-
-##### <a name="load_storm_dsi_module"></a>`load_storm_dsi_module`
-
-Data type: `Any`
-
-
-
-Default value: `$storm::gridftp::load_storm_dsi_module`
 
 ### <a name="stormgridftpinstall"></a>`storm::gridftp::install`
 
@@ -2144,6 +1448,7 @@ StoRM WebDAV puppet module
 class { 'storm::webdav':
   storage_areas => [
     {
+      # minimal configuration
       name                       => 'test.vo',
       root_path                  => '/storage/test.vo',
     },
@@ -2184,9 +1489,6 @@ The following parameters are available in the `storm::webdav` class:
 * [`use_conscrypt`](#use_conscrypt)
 * [`tpc_use_conscrypt`](#tpc_use_conscrypt)
 * [`enable_http2`](#enable_http2)
-* [`debug`](#debug)
-* [`debug_port`](#debug_port)
-* [`debug_suspend`](#debug_suspend)
 * [`storm_limit_nofile`](#storm_limit_nofile)
 
 ##### <a name="ensure_empty_storage_area_dir"></a>`ensure_empty_storage_area_dir`
@@ -2206,6 +1508,8 @@ List of storage area's configuration. Default value: empty list.
 Data type: `Array[String]`
 
 Sets STORM_WEBDAV_HOSTNAME_(N) environment variables.
+
+Default value: `[ $::fqdn ]`
 
 ##### <a name="http_port"></a>`http_port`
 
@@ -2363,24 +1667,6 @@ Data type: `Boolean`
 
 Sets STORM_WEBDAV_ENABLE_HTTP2 environment variable.
 
-##### <a name="debug"></a>`debug`
-
-Data type: `Boolean`
-
-Sets part of STORM_WEBDAV_JVM_OPTS environment variable. It enables remote debug.
-
-##### <a name="debug_port"></a>`debug_port`
-
-Data type: `Integer`
-
-Sets part of STORM_WEBDAV_JVM_OPTS environment variable. It sets the remote debug port if remote debug is enabled.
-
-##### <a name="debug_suspend"></a>`debug_suspend`
-
-Data type: `Boolean`
-
-Sets part of STORM_WEBDAV_JVM_OPTS environment variable. It sets debug suspend value in case remote debug is enabled.
-
 ##### <a name="storm_limit_nofile"></a>`storm_limit_nofile`
 
 Data type: `Integer`
@@ -2401,11 +1687,10 @@ StoRM WebDAV service class
 
 ## Defined types
 
-### <a name="stormbackendservice_conf_file"></a>`storm::backend::service_conf_file`
+### <a name="stormbackenddrop_in_file"></a>`storm::backend::drop_in_file`
 
-Starting from Puppet module v2.0.0, site administrators can inject
-one or more .conf files into `/etc/systemd/system/storm-backend-server.service.d`
-directory.
+Use this define to inject one or more .conf files
+into `/etc/systemd/system/storm-backend-server.service.d` directory.
 
 #### Examples
 
@@ -2413,17 +1698,16 @@ directory.
 
 ```puppet
 class { 'storm::backend':
-  hostname => 'storm-backend.test.example',
-  # ...
+  # backend parameters
 }
-storm::backend::service_conf_file { 'override.conf':
+storm::backend::drop_in_file { 'override.conf':
   source => '/path/to/my/override.conf',
 }
 ```
 
 #### Parameters
 
-The following parameters are available in the `storm::backend::service_conf_file` defined type:
+The following parameters are available in the `storm::backend::drop_in_file` defined type:
 
 * [`source`](#source)
 
@@ -2443,7 +1727,6 @@ The source of file resource. It can be an absolute path or a Puppet module relat
 
 ```puppet
 class { 'storm::backend':
-  hostname => 'storm-backend.test.example',
   # ...
 }
 storm::backend::storage_site_report { 'storage-site-report':
@@ -2472,6 +1755,32 @@ Data type: `String`
 The cron job's minute parameter. Refer to [Resource Type cron](https://puppet.com/docs/puppet/5.5/types/cron.html#cron-attribute-minute).
 
 Default value: `'*/30'`
+
+### <a name="stormbackendstorm_properties_file"></a>`storm::backend::storm_properties_file`
+
+Define your own storm.properties file with an absolute path or a Puppet module relative path.
+
+#### Examples
+
+##### 
+
+```puppet
+storm::backend::storm_properties_file { 'my-storm-properties':
+  source => '/path/to/my/storm.properties',
+}
+```
+
+#### Parameters
+
+The following parameters are available in the `storm::backend::storm_properties_file` defined type:
+
+* [`source`](#source)
+
+##### <a name="source"></a>`source`
+
+Data type: `Any`
+
+The source of your storm.properties file resource. It can be an absolute path or a Puppet module relative path.
 
 ### <a name="stormrootdir"></a>`storm::rootdir`
 
@@ -2610,6 +1919,32 @@ Data type: `Any`
 
 The source of file resource. It can be an absolute path or a Puppet module relative path.
 
+## Functions
+
+### <a name="stormhas_gpfs"></a>`storm::has_gpfs`
+
+Type: Ruby 4.x API
+
+Function that compute whether at least one of the configured storage areas is deployed on GPFS.
+
+#### `storm::has_gpfs(Storm::Backend::FsType $fs_type, Array[Storm::Backend::StorageArea] $storage_areas)`
+
+Function that compute whether at least one of the configured storage areas is deployed on GPFS.
+
+Returns: `Boolean` Returns true if at least one of the configured storage area has GPFS as its file system.
+
+##### `fs_type`
+
+Data type: `Storm::Backend::FsType`
+
+the default fs type value for all the storage areas
+
+##### `storage_areas`
+
+Data type: `Array[Storm::Backend::StorageArea]`
+
+the storage areas configuration.
+
 ## Data types
 
 ### <a name="stormbackendacl"></a>`Storm::Backend::Acl`
@@ -2715,8 +2050,8 @@ Alias of
 ```puppet
 Struct[{
   hostname => String,
-  port     => Optional[Integer],
-  weight   => Optional[Integer],
+  port => Optional[Integer],
+  weight => Optional[Integer],
 }]
 ```
 
@@ -2773,13 +2108,18 @@ Alias of
 ```puppet
 Struct[{
   hostname => String,
-  port     => Optional[Integer],
+  port => Optional[Integer],
 }]
 ```
 
 ### <a name="stormbackendstoragearea"></a>`Storm::Backend::StorageArea`
 
-The storage area type for storm-backend-server
+<table>
+  <thead> <tr><th>Property</th><th>Description</th></tr> </thead>
+  <tbody>
+    <tr><td>name</td><td><b>Mandatory</b> - Storage Area's name used to initialize the default accesspoint and the VO name.</td></tr>
+  </tbody>
+</table>
 
 Alias of
 
@@ -2787,8 +2127,8 @@ Alias of
 Struct[{
   name                         => String,
   root_path                    => String,
-  access_points                => Array[String],
-  vos                          => Array[String],
+  access_points                => Optional[Array[String]],
+  vos                          => Optional[Array[String]],
   fs_type                      => Optional[Storm::Backend::FsType],
   space_token                  => Optional[String],
   authz                        => Optional[String],
@@ -2848,7 +2188,9 @@ Struct[{
 
 ### <a name="stormbackendwebdavpoolmember"></a>`Storm::Backend::WebdavPoolMember`
 
-The WebdavPoolMember type for storm-backend-server
+Since v4.0.0, the `hidden` optional parameter has been renamed to `published`.
+Its meaning is now the opposite: a value of true means that the endpoint is published by info provider.
+Default value is true.
 
 Alias of
 
@@ -2857,6 +2199,7 @@ Struct[{
   hostname => String,
   http_port => Optional[Integer],
   https_port => Optional[Integer],
+  published => Optional[Boolean],
 }]
 ```
 

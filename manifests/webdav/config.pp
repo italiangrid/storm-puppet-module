@@ -1,7 +1,6 @@
 # @summary StoRM WebDAV config class
 #
 class storm::webdav::config (
-
 ) {
 
   file { '/var/lib/storm-webdav/work':
@@ -49,6 +48,7 @@ class storm::webdav::config (
   } else {
     $sa_properties_require = []
   }
+
   if $storm::webdav::storage_areas {
     $sa_properties_template_file='storm/etc/storm/webdav/sa.d/sa.properties.erb'
     $storm::webdav::storage_areas.each | $sa | {

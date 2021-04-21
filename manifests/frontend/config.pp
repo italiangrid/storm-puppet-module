@@ -34,6 +34,7 @@ class storm::frontend::config (
 
   $conf_file='/etc/storm/frontend-server/storm-frontend-server.conf'
   if (!empty($storm::frontend::storm_frontend_server_conf_file)) {
+    notice("${conf_file} initialized from ${storm::frontend::storm_frontend_server_conf_file}")
     file { $conf_file:
       ensure  => present,
       owner   => 'root',
@@ -43,6 +44,7 @@ class storm::frontend::config (
       require => Package['storm-frontend-mp'],
     }
   } else {
+    notice("${conf_file} initialized from internal template")
     $conf_template_file='storm/etc/storm/frontend-server/storm-frontend-server.conf.erb'
     file { $conf_file:
       ensure  => present,
