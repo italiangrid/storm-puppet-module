@@ -55,6 +55,24 @@ pipeline {
         }
       }
     }
+    stage('update-doc') {
+      when { buildingTag() }
+      steps {
+        script {
+          withCredentials([
+              usernamePassword(credentialsId: 'enrico-github', passwordVariable: 'github_pwd', usernameVariable: 'github_username')
+            ]) {
+            sh '''
+              bundle update
+              git config —global user.email “maverick17586@gmail.com”
+              git config --global user.name ${github_username}
+              git config --global user.password ${github_pwd}
+              bundle exec rake strings:gh_pages:update
+            '''
+          }
+        }
+      }
+    }
     stage('result') {
       steps {
         script {
