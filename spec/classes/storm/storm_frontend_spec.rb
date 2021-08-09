@@ -51,7 +51,6 @@ describe 'storm::frontend', type: 'class' do
             'threadpool_threads_number' => 60,
             'gsoap_maxpending'          => 2000,
             'log_debuglevel'            => 'DEBUG',
-            'security_enable_mapping'   => true,
             'security_enable_vomscheck' => false,
             'be_xmlrpc_host'            => 'storm.example.org',
             'be_xmlrpc_token'           => 'token',
@@ -79,7 +78,7 @@ describe 'storm::frontend', type: 'class' do
           is_expected.to contain_file(title).with(content: %r{fe.threadpool.threads.number=60})
           is_expected.to contain_file(title).with(content: %r{fe.gsoap.maxpending=2000})
           is_expected.to contain_file(title).with(content: %r{log.debuglevel=DEBUG})
-          is_expected.to contain_file(title).with(content: %r{security.enable.mapping=true})
+          is_expected.to contain_file(title).with(content: %r{security.enable.mapping=false})
           is_expected.to contain_file(title).with(content: %r{security.enable.vomscheck=false})
           is_expected.to contain_file(title).with(content: %r{be.xmlrpc.host=storm.example.org})
           is_expected.to contain_file(title).with(content: %r{be.xmlrpc.token=token})

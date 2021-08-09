@@ -61,9 +61,6 @@
 # @param monitoring_detailed
 #   Enable/disable detailed monitoring. Default is false.
 #
-# @param security_enable_mapping
-#   Flag to enable/disable DN-to-userid mapping via gridmap-file. Default is false.
-#
 # @param security_enable_vomscheck
 #   Flag to enable/disable checking proxy VOMS credentials. Default is true.
 #
@@ -99,7 +96,6 @@ class storm::frontend (
   Integer $monitoring_time_interval,
   Boolean $monitoring_detailed,
 
-  Boolean $security_enable_mapping,
   Boolean $security_enable_vomscheck,
 
   String $log_debuglevel,

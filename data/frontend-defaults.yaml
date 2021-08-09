@@ -14,7 +14,6 @@ storm::frontend::argus_pepd_endpoint: ''
 storm::frontend::monitoring_enabled: true
 storm::frontend::monitoring_time_interval: 60
 storm::frontend::monitoring_detailed: false
-storm::frontend::security_enable_mapping: false
 storm::frontend::security_enable_vomscheck: true
 storm::frontend::log_debuglevel: 'INFO'
 storm::frontend::gridmap_dir: '/etc/grid-security/gridmapdir'
