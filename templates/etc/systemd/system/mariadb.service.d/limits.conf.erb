@@ -1,2 +1,2 @@
 [Service]
-LimitNOFILE=<%=@limit_no_file%>
+LimitNOFILE=<%=scope.lookupvar('storm::db::limit_no_file')%>

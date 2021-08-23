@@ -6,9 +6,7 @@ describe 'storm::backend::install' do
       context 'test fs_type = posixfs' do
         let(:pre_condition) do
           <<-EOF
-            class { 'storm::backend':
-              hostname => 'storm.example.org',
-            }
+            include 'storm::backend'
           EOF
         end
         let(:facts) do
@@ -30,7 +28,6 @@ describe 'storm::backend::install' do
         let(:pre_condition) do
           <<-EOF
             class { 'storm::backend':
-              hostname => 'storm.example.org',
               fs_type => 'gpfs',
             }
           EOF
@@ -54,7 +51,6 @@ describe 'storm::backend::install' do
         let(:pre_condition) do
           <<-EOF
             class { 'storm::backend':
-              hostname => 'storm.example.org',
               storage_areas => [
                 {
                   name => 'test.vo',

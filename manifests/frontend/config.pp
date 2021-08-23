@@ -34,15 +34,28 @@ class storm::frontend::config (
   }
 
   $conf_file='/etc/storm/frontend-server/storm-frontend-server.conf'
-  $conf_template_file='storm/etc/storm/frontend-server/storm-frontend-server.conf.erb'
 
-  file { $conf_file:
-    ensure  => present,
-    owner   => 'root',
-    group   => 'storm',
-    content => template($conf_template_file),
-    notify  => Service['storm-frontend-server'],
-    require => Package['storm-frontend-mp'],
+  if (!empty($storm::frontend::configuration_file)) {
+    notice("${conf_file} initialized from ${storm::frontend::configuration_file}")
+    file { $conf_file:
+      ensure  => present,
+      owner   => 'root',
+      group   => 'storm',
+      source  => $storm::frontend::configuration_file,
+      notify  => Service['storm-frontend-server'],
+      require => Package['storm-frontend-mp'],
+    }
+  } else {
+    notice("${conf_file} initialized from internal template")
+    $conf_template_file='storm/etc/storm/frontend-server/storm-frontend-server.conf.erb'
+    file { $conf_file:
+      ensure  => present,
+      owner   => 'root',
+      group   => 'storm',
+      content => template($conf_template_file),
+      notify  => Service['storm-frontend-server'],
+      require => Package['storm-frontend-mp'],
+    }
   }
 
   $ld_library_path=$::os['architecture'] ? {

@@ -1,7 +1,6 @@
 ---
-storm::webdav::manage_storage_areas: true
 storm::webdav::storage_areas: []
-storm::webdav::hostnames: []
+storm::webdav::ensure_empty_storage_area_dir: false
 storm::webdav::http_port: 8085
 storm::webdav::https_port: 8443
 storm::webdav::trust_anchors_refresh_interval: 86400
@@ -12,6 +11,12 @@ storm::webdav::vo_map_files_enable: false
 storm::webdav::vo_map_files_config_dir: '/etc/storm/webdav/vo-mapfiles.d'
 storm::webdav::vo_map_files_refresh_interval: 21600
 storm::webdav::tpc_max_connections: 50
+storm::webdav::tpc_max_connections_per_route: 25
+storm::webdav::tpc_timeout_in_secs: 5
+storm::webdav::tpc_tls_protocol: 'TLSv1.2'
+storm::webdav::tpc_report_delay_secs: 5
+storm::webdav::tpc_enable_tls_client_auth: false
+storm::webdav::tpc_progress_report_thread_pool_size: 4
 storm::webdav::tpc_verify_checksum: false
 storm::webdav::jvm_opts: '-Xms256m -Xmx512m'
 storm::webdav::authz_server_enable: false

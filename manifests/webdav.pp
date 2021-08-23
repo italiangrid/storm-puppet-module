@@ -6,30 +6,25 @@
 #    class { 'storm::webdav':
 #      storage_areas => [
 #        {
+#          # minimal configuration
 #          name                       => 'test.vo',
 #          root_path                  => '/storage/test.vo',
-#          access_points              => ['/test.vo'],
-#          vos                        => ['test.vo', 'test.vo.2'],
 #        },
 #        {
 #          name                       => 'test.vo.2',
 #          root_path                  => '/storage/test.vo.2',
-#          access_points              => ['/test.vo.2'],
-#          vos                        => ['test.vo.2'],
+#          access_points              => ['/test.vo.2', '/test2'],
+#          vos                        => ['test.vo', 'test.vo.2'],
 #          authenticated_read_enabled => true,
 #          anonymous_read_enabled     => true,
 #          vo_map_enabled             => false,
 #        },  
 #      ],
-#      hostnames => ['webdav.example.org', 'storm-webdav.example.org'],
+#      hostnames => ['storm-webdav.example.org', 'storm-webdav-alias.example.org'],
 #    }
 #
-# @param manage_storage_areas
-#   Set to True if you want to manage storage areas configuration. Default: true.
-#
 # @param storage_areas
-#   List of storage area's configuration. Ignored if storage_areas_directory is defined.
-#   Ignored if manage_storage_areas is false.
+#   List of storage area's configuration. Default value: empty list.
 #
 # @param hostnames
 #   Sets STORM_WEBDAV_HOSTNAME_(N) environment variables.
@@ -64,8 +59,26 @@
 # @param tpc_max_connections
 #   Sets STORM_WEBDAV_TPC_MAX_CONNECTIONS environment variable.
 #
+# @param tpc_max_connections_per_route
+#   Sets STORM_WEBDAV_TPC_MAX_CONNECTIONS_PER_ROUTE environment variable.
+#
 # @param tpc_verify_checksum
 #   Sets STORM_WEBDAV_TPC_VERIFY_CHECKSUM environment variable.
+#
+# @param tpc_timeout_in_secs
+#   Sets STORM_WEBDAV_TPC_TIMEOUT_IN_SECS environment variable.
+#
+# @param tpc_tls_protocol
+#   Sets STORM_WEBDAV_TPC_TLS_PROTOCOL environment variable.
+#
+# @param tpc_report_delay_secs
+#   Sets STORM_WEBDAV_TPC_REPORT_DELAY_SECS environment variable.
+#
+# @param tpc_enable_tls_client_auth
+#   Sets STORM_WEBDAV_TPC_ENABLE_TLS_CLIENT_AUTH environment variable.
+#
+# @param tpc_progress_report_thread_pool_size
+#   Sets STORM_WEBDAV_TPC_PROGRESS_REPORT_THREAD_POOL_SIZE environment variable.
 #
 # @param jvm_opts
 #   Sets part of STORM_WEBDAV_JVM_OPTS environment variable.
@@ -74,13 +87,13 @@
 #   Sets STORM_WEBDAV_AUTHZ_SERVER_ENABLE environment variable.
 #
 # @param authz_server_issuer
-#   Sets STORM_WEBDAV_AUTHZ_SERVER_ISSUER environment variable.
+#   Sets STORM_WEBDAV_AUTHZ_SERVER_ISSUER environment variable if authz_server_enable is true.
 #
 # @param authz_server_max_token_lifetime_sec
-#   Sets STORM_WEBDAV_AUTHZ_SERVER_MAX_TOKEN_LIFETIME_SEC environment variable.
+#   Sets STORM_WEBDAV_AUTHZ_SERVER_MAX_TOKEN_LIFETIME_SEC environment variable if authz_server_enable is true.
 #
 # @param authz_server_secret
-#   Sets STORM_WEBDAV_AUTHZ_SERVER_SECRET environment variable.
+#   Sets STORM_WEBDAV_AUTHZ_SERVER_SECRET environment variable if authz_server_enable is true.
 #
 # @param require_client_cert
 #   Sets STORM_WEBDAV_REQUIRE_CLIENT_CERT environment variable.
@@ -108,10 +121,9 @@
 #
 class storm::webdav (
 
-  Boolean $manage_storage_areas,
   Array[Storm::Webdav::StorageArea] $storage_areas,
+  Boolean $ensure_empty_storage_area_dir,
 
-  Array[String] $hostnames,
   Integer $http_port,
   Integer $https_port,
   Integer $trust_anchors_refresh_interval,
@@ -122,7 +134,13 @@ class storm::webdav (
   String $vo_map_files_config_dir,
   Integer $vo_map_files_refresh_interval,
   Integer $tpc_max_connections,
+  Integer $tpc_max_connections_per_route,
   Boolean $tpc_verify_checksum,
+  Integer $tpc_timeout_in_secs,
+  String $tpc_tls_protocol,
+  Integer $tpc_report_delay_secs,
+  Boolean $tpc_enable_tls_client_auth,
+  Integer $tpc_progress_report_thread_pool_size,
   String $jvm_opts,
   Boolean $authz_server_enable,
   String $authz_server_issuer,
@@ -138,6 +156,7 @@ class storm::webdav (
 
   Integer $storm_limit_nofile,
 
+  Array[String] $hostnames = [ $::fqdn ],
 ) {
 
   contain storm::webdav::install

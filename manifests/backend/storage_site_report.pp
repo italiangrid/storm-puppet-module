@@ -4,7 +4,6 @@
 #
 # @example
 #   class { 'storm::backend':
-#     hostname => 'storm-backend.test.example',
 #     # ...
 #   }
 #   storm::backend::storage_site_report { 'storage-site-report':

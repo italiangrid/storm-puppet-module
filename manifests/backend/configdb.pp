@@ -2,9 +2,9 @@
 #
 class storm::backend::configdb (
 
-  $db_hostname = $storm::backend::db_hostname,
   $db_username = $storm::backend::db_username,
   $db_password = $storm::backend::db_password,
+  $db_hostname = $storm::backend::db_hostname,
 
 ) {
 

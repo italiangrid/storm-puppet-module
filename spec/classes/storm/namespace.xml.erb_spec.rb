@@ -65,9 +65,18 @@ describe 'namespace.xml.erb' do
   end
 
   it 'render the same file each time' do
-    harness.set('@storage_areas', storage_areas)
-    harness.set('@gsiftp_pool_members', gsiftp_pool_members)
-    harness.set('@webdav_pool_members', webdav_pool_members)
+    scope.stubs(:lookupvar).with('storm::backend::storage_areas').returns(storage_areas)
+    scope.stubs(:lookupvar).with('storm::backend::gsiftp_pool_members').returns(gsiftp_pool_members)
+    scope.stubs(:lookupvar).with('storm::backend::webdav_pool_members').returns(webdav_pool_members)
+    scope.stubs(:lookupvar).with('storm::backend::fs_type').returns('posixfs')
+    scope.stubs(:lookupvar).with('storm::backend::transfer_protocols').returns(['file','gsiftp'])
+    scope.stubs(:lookupvar).with('storm::backend::xroot_hostname').returns('xroot-1.example.com')
+    scope.stubs(:lookupvar).with('storm::backend::xroot_port').returns(1094)
+    scope.stubs(:lookupvar).with('storm::backend::gsiftp_pool_balance_strategy').returns('round-robin')
+
+    #harness.set('@storage_areas', storage_areas)
+    #harness.set('@gsiftp_pool_members', gsiftp_pool_members)
+    #harness.set('@webdav_pool_members', webdav_pool_members)
 
     rendered = harness.run
 

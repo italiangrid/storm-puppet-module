@@ -1,10 +1,17 @@
 ---
-# Native libs gpfs
-storm::backend::install_native_libs_gpfs: false
+# Manage storm.properties file
+storm::backend::storm_properties_file: ''
 
 # Db connection
 storm::backend::db_username: 'storm'
 storm::backend::db_password: 'storm'
+storm::backend::db_port: 3306
+storm::backend::db_properties: 'serverTimezone=UTC&autoReconnect=true'
+storm::backend::db_pool_size: -1
+storm::backend::db_pool_min_idle: 10
+storm::backend::db_pool_max_wait_millis: 5000
+storm::backend::db_pool_test_on_borrow: true
+storm::backend::db_pool_test_while_idle: true
 
 ### Default values for Storage Areas
 # 1. xroot
@@ -27,11 +34,7 @@ storm::backend::fs_type: 'posixfs'
 storm::backend::storage_areas: []
 
 # Frontend public host and port
-storm::backend::frontend_port: 8444
-
-# StoRM Service Generic Behavior
-storm::backend::directory_automatic_creation: false
-storm::backend::directory_writeperm: false
+storm::backend::srm_public_port: 8444
 
 # REST Services parameters
 storm::backend::rest_services_port: 9998
@@ -39,74 +42,20 @@ storm::backend::rest_services_max_threads: 100
 storm::backend::rest_services_max_queue_size: 1000
 
 # XMLRPC Server parameters
-storm::backend::xmlrpc_unsecure_server_port: 8080
-storm::backend::xmlrpc_maxthread: 256
+storm::backend::xmlrpc_server_port: 8080
+storm::backend::xmlrpc_max_threads: 256
 storm::backend::xmlrpc_max_queue_size: 1000
 storm::backend::xmlrpc_security_enabled: true
 storm::backend::xmlrpc_security_token: 'secret'
 
-# Skip ACL setup for PTG requests
-storm::backend::ptg_skip_acl_setup: false
-
-# pin lifetime
-storm::backend::pinlifetime_default: 259200
-storm::backend::pinlifetime_maximum: 1814400
+# DU service
+storm::backend::du_service_enabled: false
+storm::backend::du_service_initial_delay: 60
+storm::backend::du_service_tasks_interval: 360
+storm::backend::du_service_parallel_tasks_enabled: false
 
 # sanity check enabled
 storm::backend::sanity_check_enabled: true
-
-# DU service
-storm::backend::service_du_enabled: false
-storm::backend::service_du_delay: 60
-storm::backend::service_du_interval: 360
-
-# ls max entries
-storm::backend::max_ls_entries: 2000
-
-# Pinned Files cleaning parameters
-storm::backend::gc_pinnedfiles_cleaning_delay: 10
-storm::backend::gc_pinnedfiles_cleaning_interval: 300
-
-# Garbage Collector
-storm::backend::gc_purge_enabled: true
-storm::backend::gc_purge_interval: 600
-storm::backend::gc_purge_size: 800
-storm::backend::gc_expired_request_time: 21600
-storm::backend::gc_expired_inprogress_time: 2592000
-# Expired-Put-Requests-Agent parameters
-storm::backend::gc_ptp_transit_interval: 300
-storm::backend::gc_ptp_transit_start_delay: 10
-
-# extraslashes
-storm::backend::extraslashes_file: ''
-storm::backend::extraslashes_root: '/'
-storm::backend::extraslashes_gsiftp: '/'
-
-# Db Connection Pool
-storm::backend::db_connection_pool_enabled: true
-storm::backend::db_connection_pool_max_active: 200
-storm::backend::db_connection_pool_max_wait: 50
-
-# Asynch Picker
-storm::backend::asynch_db_reconnect_period: 18000
-storm::backend::asynch_db_delay_period: 30
-storm::backend::asynch_picking_initial_delay: 1
-storm::backend::asynch_picking_time_interval: 2
-storm::backend::asynch_picking_max_batch_size: 100
-
-# Scheduler pools
-storm::backend::requests_scheduler_core_size: 50
-storm::backend::requests_scheduler_max_size: 200
-storm::backend::requests_scheduler_queue_size: 2000
-storm::backend::ptp_requests_scheduler_core_size: 50
-storm::backend::ptp_requests_scheduler_max_size: 200
-storm::backend::ptp_requests_scheduler_queue_size: 1000
-storm::backend::ptg_requests_scheduler_core_size: 50
-storm::backend::ptg_requests_scheduler_max_size: 200
-storm::backend::ptg_requests_scheduler_queue_size: 2000
-storm::backend::bol_requests_scheduler_core_size: 50
-storm::backend::bol_requests_scheduler_max_size: 200
-storm::backend::bol_requests_scheduler_queue_size: 2000
 
 # Info Provider
 storm::backend::info_config_file: '/etc/storm/info-provider/storm-yaim-variables.conf'
@@ -118,15 +67,6 @@ storm::backend::info_frontend_host_list: []
 
 # JVM Options
 storm::backend::jvm_options: '-Xms512m -Xmx512m'
-
-# JMX options
-storm::backend::jmx: false
-storm::backend::jmx_options: '-Dcom.sun.management.jmxremote.port=8501 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false'
-
-# Debug options
-storm::backend::debug: false
-storm::backend::debug_port: 1044
-storm::backend::debug_suspend: false
 
 # LCMAPS
 storm::backend::lcmaps_db_file: '/etc/storm/backend-server/lcmaps.db'
@@ -141,5 +81,10 @@ storm::backend::http_turl_prefix: ''
 storm::backend::storm_limit_nofile: 65535
 
 # manage path-authz.db
-storm::backend::manage_path_authz_db: false
-storm::backend::path_authz_db_file: 'puppet:///modules/storm/etc/storm/backend/path-authz.db'
+storm::backend::path_authz_db_file: ''
+
+# advanced properties
+storm::backend::advanced_properties: {}
+
+# debug for developers
+storm::backend::debug: false

@@ -1,46 +1,6 @@
 # @summary StoRM WebDAV config class
 #
 class storm::webdav::config (
-
-  $manage_storage_areas = $storm::webdav::manage_storage_areas,
-  $storage_areas = $storm::webdav::storage_areas,
-
-  $hostnames = $storm::webdav::hostnames,
-
-  $http_port = $storm::webdav::http_port,
-  $https_port = $storm::webdav::https_port,
-
-  $trust_anchors_refresh_interval = $storm::webdav::trust_anchors_refresh_interval,
-
-  $max_concurrent_connections = $storm::webdav::max_concurrent_connections,
-  $max_queue_size = $storm::webdav::max_queue_size,
-  $connector_max_idle_time = $storm::webdav::connector_max_idle_time,
-
-  $vo_map_files_enable = $storm::webdav::vo_map_files_enable,
-  $vo_map_files_config_dir = $storm::webdav::vo_map_files_config_dir,
-  $vo_map_files_refresh_interval = $storm::webdav::vo_map_files_refresh_interval,
-
-  $tpc_max_connections = $storm::webdav::tpc_max_connections,
-  $tpc_verify_checksum = $storm::webdav::tpc_verify_checksum,
-
-  $jvm_opts = $storm::webdav::jvm_opts,
-
-  $authz_server_enable = $storm::webdav::authz_server_enable,
-  $authz_server_issuer = $storm::webdav::authz_server_issuer,
-  $authz_server_max_token_lifetime_sec = $storm::webdav::authz_server_max_token_lifetime_sec,
-  $authz_server_secret = $storm::webdav::authz_server_secret,
-  $require_client_cert = $storm::webdav::require_client_cert,
-
-  $use_conscrypt = $storm::webdav::use_conscrypt,
-  $tpc_use_conscrypt = $storm::webdav::tpc_use_conscrypt,
-  $enable_http2 = $storm::webdav::enable_http2,
-
-  $debug = $storm::webdav::debug,
-  $debug_port = $storm::webdav::debug_port,
-  $debug_suspend = $storm::webdav::debug_suspend,
-
-  $storm_limit_nofile = $storm::webdav::storm_limit_nofile,
-
 ) {
 
   file { '/var/lib/storm-webdav/work':
@@ -78,38 +38,49 @@ class storm::webdav::config (
     require => File['/etc/grid-security/storm-webdav'],
   }
 
-  if $manage_storage_areas {
+  if $storm::webdav::ensure_empty_storage_area_dir {
+    notice('Clear all *.properties file from /etc/storm/webdav/sa.d')
+    tidy { '/etc/storm/webdav/sa.d':
+      matches => [ '*.properties' ],
+      recurse => true,
+    }
+    $sa_properties_require = [Tidy['/etc/storm/webdav/sa.d']]
+  } else {
+    $sa_properties_require = []
+  }
 
-    ## Use class variables to configure storage areas
-    if $storage_areas {
-      $sa_properties_template_file='storm/etc/storm/webdav/sa.d/sa.properties.erb'
-      $storage_areas.each | $sa | {
-        # define template variables
-        # mandatory fields
-        $name = $sa[name]
-        $root_path = $sa[root_path]
-        $access_points = $sa[access_points]
-        $vos = $sa[vos]
-        # optional fileds
-        $orgs = $sa[orgs]
-        $authenticated_read_enabled = $sa[authenticated_read_enabled]
-        $anonymous_read_enabled = $sa[anonymous_read_enabled]
-        $vo_map_enabled = $sa[vo_map_enabled]
-        $vo_map_grants_write_permission = $sa[vo_map_grants_write_permission]
-        $orgs_grant_read_permission = $sa[orgs_grant_read_permission]
-        $orgs_grant_write_permission = $sa[orgs_grant_write_permission]
-        $wlcg_scope_authz_enabled = $sa[wlcg_scope_authz_enabled]
-        $fine_grained_authz_enabled = $sa[fine_grained_authz_enabled]
-        # use template
-        file { "/etc/storm/webdav/sa.d/${name}.properties":
-          ensure  => present,
-          content => template($sa_properties_template_file),
-          owner   => 'root',
-          group   => 'storm',
-          notify  => Service['storm-webdav'],
-        }
+  if $storm::webdav::storage_areas {
+    $sa_properties_template_file='storm/etc/storm/webdav/sa.d/sa.properties.erb'
+    $storm::webdav::storage_areas.each | $sa | {
+      # define template variables
+      # mandatory fields
+      $name = $sa[name]
+      $root_path = $sa[root_path]
+      # optional fileds
+      $fs_type = pick($sa[filesystem_type], 'posix')
+      $access_points = pick($sa[access_points], ["/${name}"])
+      $vos = pick($sa[vos], [$name])
+      $orgs = pick($sa[orgs], [])
+      $authenticated_read_enabled = pick($sa[authenticated_read_enabled], false)
+      $anonymous_read_enabled = pick($sa[anonymous_read_enabled], false)
+      $vo_map_enabled = pick($sa[vo_map_enabled], true)
+      $vo_map_grants_write_permission = pick($sa[vo_map_grants_write_permission], false)
+      $orgs_grant_read_permission = pick($sa[orgs_grant_read_permission], true)
+      $orgs_grant_write_permission = pick($sa[orgs_grant_write_permission], false)
+      $wlcg_scope_authz_enabled = pick($sa[wlcg_scope_authz_enabled], false)
+      $fine_grained_authz_enabled = pick($sa[fine_grained_authz_enabled], false)
+      # use template
+      file { "/etc/storm/webdav/sa.d/${name}.properties":
+        ensure  => present,
+        content => template($sa_properties_template_file),
+        owner   => 'root',
+        group   => 'storm',
+        notify  => Service['storm-webdav'],
+        require => $sa_properties_require,
       }
     }
+  } else {
+    notice('Empty storage area list. No storage area has been defined and initialized.')
   }
 
   # Directory '/etc/systemd/system/storm-webdav.service.d' is created by rpm

@@ -14,7 +14,6 @@ describe 'storm::webdav', type: 'class' do
               {
                 'name' => 'test.vo',
                 'root_path' => '/storage/test.vo',
-                'access_points' => ['/test.vo'],
                 'vos' => ['test.vo', 'test.vo.2'],
                 'authenticated_read_enabled' => true,
                 'vo_map_enabled' => false,
@@ -23,7 +22,7 @@ describe 'storm::webdav', type: 'class' do
                 'name' => 'atlas',
                 'root_path' => '/storage/atlas',
                 'access_points' => ['/atlas', '/atlasdisk'],
-                'vos' => ['atlas'],
+                'filesystem_type' => 'gpfs',
                 'orgs' => ['atlas'],
                 'anonymous_read_enabled' => true,
                 'orgs_grant_read_permission' => false,
@@ -42,7 +41,13 @@ describe 'storm::webdav', type: 'class' do
             'trust_anchors_refresh_interval' => 80_000,
 
             'tpc_max_connections' => 100,
+            'tpc_max_connections_per_route' => 50,
             'tpc_verify_checksum' => true,
+            'tpc_timeout_in_secs' => 10,
+            'tpc_tls_protocol' => 'tlsVersion',
+            'tpc_report_delay_secs' => 20,
+            'tpc_enable_tls_client_auth' => true,
+            'tpc_progress_report_thread_pool_size' => 250,
 
             'jvm_opts' => '-Xms512m -Xmx1024m',
 
@@ -52,6 +57,8 @@ describe 'storm::webdav', type: 'class' do
             'authz_server_secret' => 'secret',
             'require_client_cert' => true,
             'storm_limit_nofile' => 1046,
+
+            'ensure_empty_storage_area_dir' => true,
           }
         end
 
@@ -91,6 +98,12 @@ describe 'storm::webdav', type: 'class' do
           )
         end
 
+        it 'check storage area is cleared of other properties files ' do
+          is_expected.to contain_tidy('/etc/storm/webdav/sa.d').with(
+            recurse: true,
+          )
+        end
+
         it 'check storage area properties files' do
           # test.vo properties
           testvo_props = '/etc/storm/webdav/sa.d/test.vo.properties'
@@ -99,6 +112,7 @@ describe 'storm::webdav', type: 'class' do
           )
           is_expected.to contain_file(testvo_props).with(content: %r{name=test.vo})
           is_expected.to contain_file(testvo_props).with(content: %r{rootPath=\/storage\/test.vo})
+          is_expected.to contain_file(testvo_props).with(content: %r{filesystemType=posix})
           is_expected.to contain_file(testvo_props).with(content: %r{accessPoints=\/test.vo})
           is_expected.to contain_file(testvo_props).with(content: %r{vos=test.vo,test.vo.2})
           is_expected.to contain_file(testvo_props).with(content: %r{orgs=})
@@ -118,6 +132,7 @@ describe 'storm::webdav', type: 'class' do
           )
           is_expected.to contain_file(atlas_props).with(content: %r{name=atlas})
           is_expected.to contain_file(atlas_props).with(content: %r{rootPath=\/storage\/atlas})
+          is_expected.to contain_file(atlas_props).with(content: %r{filesystemType=gpfs})
           is_expected.to contain_file(atlas_props).with(content: %r{accessPoints=\/atlas,\/atlasdisk})
           is_expected.to contain_file(atlas_props).with(content: %r{vos=atlas})
           is_expected.to contain_file(atlas_props).with(content: %r{orgs=atlas})
@@ -158,7 +173,13 @@ describe 'storm::webdav', type: 'class' do
           is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_TRUST_ANCHORS_DIR=\/etc\/grid-security\/certificates"})
           is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_TRUST_ANCHORS_REFRESH_INTERVAL=80000"})
           is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_TPC_MAX_CONNECTIONS=100"})
+          is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_TPC_MAX_CONNECTIONS_PER_ROUTE=50"})
           is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_TPC_VERIFY_CHECKSUM=true"})
+          is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_TPC_TIMEOUT_IN_SECS=10"})
+          is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_TPC_TLS_PROTOCOL=tlsVersion"})
+          is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_TPC_REPORT_DELAY_SECS=20"})
+          is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_TPC_ENABLE_TLS_CLIENT_AUTH=true"})
+          is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_TPC_PROGRESS_REPORT_THREAD_POOL_SIZE=250"})
           is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_JVM_OPTS=-Xms512m -Xmx1024m"})
           is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_AUTHZ_SERVER_ENABLE=true"})
           is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_AUTHZ_SERVER_ISSUER=https:\/\/storm-w1.example:9443"})
