@@ -1,20 +1,31 @@
 ---
+lookup_options:
+  storm::backend:
+    merge:
+      strategy: 'deep'
+
 # Manage storm.properties file
 storm::backend::storm_properties_file: ''
 
 # Db connection
-storm::backend::db_username: 'storm'
-storm::backend::db_password: 'storm'
-storm::backend::db_port: 3306
-storm::backend::db_properties: 'serverTimezone=UTC&autoReconnect=true'
-storm::backend::db_pool_size: -1
-storm::backend::db_pool_min_idle: 10
-storm::backend::db_pool_max_wait_millis: 5000
-storm::backend::db_pool_test_on_borrow: true
-storm::backend::db_pool_test_while_idle: true
+storm::backend::db:
+  username: 'storm'
+  password: 'storm'
+  hostname: "%{facts.fqdn}"
+  port: 3306
+  properties: 'serverTimezone=UTC&autoReconnect=true'
+
+# Db connection pool
+storm::backend::db_pool:
+  size: -1
+  min_idle: 10
+  max_wait_millis: 5000
+  test_on_borrow: true
+  test_while_idle: true
 
 ### Default values for Storage Areas
 # 1. xroot
+storm::backend::xroot_hostname: "%{facts.fqdn}"
 storm::backend::xroot_port: 1094
 # 2. gridftp pool
 storm::backend::gsiftp_pool_balance_strategy: 'round-robin'
@@ -22,7 +33,9 @@ storm::backend::gsiftp_pool_members: []
 # 3. webdav pool
 storm::backend::webdav_pool_members: []
 # 4. frontend pool
-storm::backend::srm_pool_members: []
+storm::backend::srm_pool_members:
+  - hostname: "%{facts.fqdn}"
+    port: 8444
 # 5. transfer protocols
 storm::backend::transfer_protocols: 
   - 'file'
@@ -33,29 +46,127 @@ storm::backend::fs_type: 'posixfs'
 # Storage Areas
 storm::backend::storage_areas: []
 
-# Frontend public host and port
-storm::backend::srm_public_port: 8444
-
-# REST Services parameters
-storm::backend::rest_services_port: 9998
-storm::backend::rest_services_max_threads: 100
-storm::backend::rest_services_max_queue_size: 1000
+# REST services
+storm::backend::rest_server:
+  port: 9998
+  max_threads: 100
+  max_queue_size: 1000
 
 # XMLRPC Server parameters
-storm::backend::xmlrpc_server_port: 8080
-storm::backend::xmlrpc_max_threads: 256
-storm::backend::xmlrpc_max_queue_size: 1000
-storm::backend::xmlrpc_security_enabled: true
-storm::backend::xmlrpc_security_token: 'secret'
+storm::backend::xmlrpc_server:
+  port: 8080
+  max_threads: 256
+  max_queue_size: 1000
+
+# Security
+storm::backend::security:
+  enabled: true
+  token: secret
 
 # DU service
-storm::backend::du_service_enabled: false
-storm::backend::du_service_initial_delay: 60
-storm::backend::du_service_tasks_interval: 360
-storm::backend::du_service_parallel_tasks_enabled: false
+storm::backend::du_service:
+  enabled: false
+  initial_delay: 60
+  tasks_interval: 86400
+  parallel_tasks_enabled: false
+
+# In-progress-requests agent
+storm::backend::inprogress_requests_agent:
+  delay: 10
+  interval: 300
+  ptp_expiration_time: 2592000
+
+# Expired spaces agent
+storm::backend::expired_spaces_agent:
+  delay: 10
+  interval: 300
+
+# Completed requests agent
+storm::backend::completed_requests_agent:
+  enabled: true
+  delay: 10
+  interval: 600
+  purge_size: 800
+  purge_age: 21600
+
+# Requests picker agent
+storm::backend::requests_picker_agent:
+  delay: 1
+  interval: 2
+  max_fetched_size: 100
+
+# Requests scheduer
+storm::backend::requests_scheduler:
+  core_pool_size: 10
+  max_pool_size: 50
+  queue_size: 2000
+# Ptp requests scheduler
+storm::backend::ptp_scheduler:
+  core_pool_size: 50
+  max_pool_size: 200
+  queue_size: 1000
+# Ptg requests scheduler
+storm::backend::ptg_scheduler:
+  core_pool_size: 50
+  max_pool_size: 200
+  queue_size: 2000
+# Bol requests scheduler
+storm::backend::bol_scheduler:
+  core_pool_size: 50
+  max_pool_size: 200
+  queue_size: 2000
 
 # sanity check enabled
-storm::backend::sanity_check_enabled: true
+storm::backend::sanity_checks_enabled: true
+
+# extraslashes
+storm::backend::extraslashes:
+  file: ''
+  rfio: ''
+  gsiftp: '/'
+  root: '/'
+
+# SRM ls advanced settings
+storm::backend::synch_ls:
+  max_entries: 2000
+  default_all_level_recursive: false
+  default_num_levels: 1
+  default_offset: 0
+
+# Skip PtG ACL setup
+storm::backend::skip_ptg_acl_setup: false
+
+# pinlifetime
+storm::backend::pinlifetime:
+  default: 259200
+  maximum: 1814400
+
+# files
+storm::backend::files:
+  default_size: 1000000
+  default_lifetime: 259200
+  default_overwrite: A
+  default_storagetype: P  
+
+# directories
+storm::backend::directories:
+  enable_automatic_creation: false
+  enable_writeperm_on_creation: false
+
+# Hearthbeat
+storm::backend::hearthbeat:
+  bookkeeping_enabled: false
+  performance_measuring_enabled: false
+  period: 60
+  performance_logbook_time_interval: 15
+  performance_glance_time_interval: 15
+
+# Others
+storm::backend::info_quota_refresh_period: 900
+storm::backend::http_turl_prefix: ''
+storm::backend::server_pool_status_check_timeout: 20000
+storm::backend::abort_maxloop: 10
+storm::backend::ping_properties_filename: ping-values.properties
 
 # Info Provider
 storm::backend::info_config_file: '/etc/storm/info-provider/storm-yaim-variables.conf'
@@ -74,17 +185,11 @@ storm::backend::lcmaps_policy_name: 'standard'
 storm::backend::lcmaps_log_file: '/var/log/storm/lcmaps.log'
 storm::backend::lcmaps_debug_level: 0
 
-# HTTP TURL prefix
-storm::backend::http_turl_prefix: ''
-
 # LimitNOFILE
 storm::backend::storm_limit_nofile: 65535
 
 # manage path-authz.db
 storm::backend::path_authz_db_file: ''
-
-# advanced properties
-storm::backend::advanced_properties: {}
 
 # debug for developers
 storm::backend::debug: false

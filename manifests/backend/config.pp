@@ -4,6 +4,87 @@ class storm::backend::config (
 
 ) {
 
+  $db = deep_merge(
+    lookup('storm::backend::db'),
+    $storm::backend::db
+  )
+  $db_pool = deep_merge(
+    lookup('storm::backend::db_pool'),
+    $storm::backend::db_pool
+  )
+  $rest_server = deep_merge(
+    lookup('storm::backend::rest_server'),
+    $storm::backend::rest_server
+  )
+  $xmlrpc_server = deep_merge(
+    lookup('storm::backend::xmlrpc_server'),
+    $storm::backend::xmlrpc_server
+  )
+  $security = deep_merge(
+    lookup('storm::backend::security'),
+    $storm::backend::security
+  )
+  $du_service = deep_merge(
+    lookup('storm::backend::du_service'),
+    $storm::backend::du_service
+  )
+  $inprogress_requests_agent = deep_merge(
+    lookup('storm::backend::inprogress_requests_agent'),
+    $storm::backend::inprogress_requests_agent
+  )
+  $expired_spaces_agent = deep_merge(
+    lookup('storm::backend::expired_spaces_agent'),
+    $storm::backend::expired_spaces_agent,
+  )
+  $completed_requests_agent = deep_merge(
+    lookup('storm::backend::completed_requests_agent'),
+    $storm::backend::completed_requests_agent,
+  )
+  $requests_picker_agent = deep_merge(
+    lookup('storm::backend::requests_picker_agent'),
+    $storm::backend::requests_picker_agent,
+  )
+  $requests_scheduler = deep_merge(
+    lookup('storm::backend::requests_scheduler'),
+    $storm::backend::requests_scheduler,
+  )
+  $ptp_scheduler = deep_merge(
+    lookup('storm::backend::ptp_scheduler'),
+    $storm::backend::ptp_scheduler,
+  )
+  $ptg_scheduler = deep_merge(
+    lookup('storm::backend::ptg_scheduler'),
+    $storm::backend::ptg_scheduler,
+  )
+  $bol_scheduler = deep_merge(
+    lookup('storm::backend::bol_scheduler'),
+    $storm::backend::bol_scheduler,
+  )
+  $extraslashes = deep_merge(
+    lookup('storm::backend::extraslashes'),
+    $storm::backend::extraslashes,
+  )
+  $synch_ls = deep_merge(
+    lookup('storm::backend::synch_ls'),
+    $storm::backend::synch_ls,
+  )
+  $hearthbeat = deep_merge(
+    lookup('storm::backend::hearthbeat'),
+    $storm::backend::hearthbeat,
+  )
+  $pinlifetime = deep_merge(
+    lookup('storm::backend::pinlifetime'),
+    $storm::backend::pinlifetime,
+  )
+  $files = deep_merge(
+    lookup('storm::backend::files'),
+    $storm::backend::files,
+  )
+  $directories = deep_merge(
+    lookup('storm::backend::directories'),
+    $storm::backend::directories,
+  )
+  
   # Service's host credentials directory
   if !defined(File['/etc/grid-security/storm']) {
     file { '/etc/grid-security/storm':
@@ -61,7 +142,7 @@ class storm::backend::config (
     }
   } else {
     notice("${properties_file} initialized from internal template")
-    # use internal template, updated to the last released version
+    # use internal template, updated to the last released 
     $properties_template_file='storm/etc/storm/backend-server/storm.properties.erb'
     file { $properties_file:
       ensure  => present,
@@ -102,7 +183,13 @@ class storm::backend::config (
   }
 
   $info_yaim_template_file='storm/etc/storm/info-provider/storm-yaim-variables.conf.erb'
-
+  $info_backend_host=$::fqdn
+  $info_frontend_host=$storm::backend::srm_pool_members[0]['hostname']
+  if ($storm::backend::srm_pool_members[0]['port']) {
+    $info_frontend_port=$storm::backend::srm_pool_members[0]['port']
+  } else {
+    $info_frontend_port=8444
+  }
   file { $storm::backend::info_config_file:
     ensure  => present,
     content => template($info_yaim_template_file),
