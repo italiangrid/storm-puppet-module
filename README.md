@@ -86,11 +86,9 @@ Example of StoRM Backend configuration:
 
 ```Puppet
 class { 'storm::backend':
-  hostname              => 'backend.test.example',
-  frontend_public_host  => 'frontend.test.example',
-  transfer_protocols    => ['file', 'gsiftp', 'webdav'],
-  xmlrpc_security_token => 'NS4kYAZuR65XJCq',
-  service_du_enabled    => true,
+  transfer_protocols    => ['gsiftp', 'webdav'],
+  security_token        => 'NS4kYAZuR65XJCq',
+  du_service_enabled    => true,
   srm_pool_members      => [
     {
       'hostname' => 'frontend.test.example',
@@ -152,7 +150,7 @@ class { 'storm::backend':
     },
   ],
   # defines the default list of transfer protocols for each storage area:
-  'transfer_protocols'  => ['file', 'gsiftp', 'webdav'], 
+  'transfer_protocols'  => ['gsiftp', 'webdav'], 
   'storage_areas'       => [
     {
       'name'          => 'sa-http-enabled',

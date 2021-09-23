@@ -3,17 +3,17 @@
 
 version: 2.0
 
-db.username: <%= scope['db']['username'] %>
-db.password: <%= scope['db']['password'] %>
-db.hostname: <%= scope['db']['hostname'] %>
-db.port: <%= scope['db']['port'] %>
-db.properties: <%= scope['db']['properties'] %>
+db.username: <%= scope['storm::backend::db_username'] %>
+db.password: <%= scope['storm::backend::db_password'] %>
+db.hostname: <%= scope['storm::backend::db_hostname'] %>
+db.port: <%= scope['storm::backend::db_port'] %>
+db.properties: <%= scope['storm::backend::db_properties'] %>
 
-db.pool.size: <%= scope['db_pool']['size'] %>
-db.pool.min_idle: <%= scope['db_pool']['min_idle'] %>
-db.pool.max_wait_millis: <%= scope['db_pool']['max_wait_millis'] %>
-db.pool.test_on_borrow: <%= scope['db_pool']['test_on_borrow'] %>
-db.pool.test_while_idle: <%= scope['db_pool']['test_while_idle'] %>
+db.pool.size: <%= scope['storm::backend::db_pool_size'] %>
+db.pool.min_idle: <%= scope['storm::backend::db_pool_min_idle'] %>
+db.pool.max_wait_millis: <%= scope['storm::backend::db_pool_max_wait_millis'] %>
+db.pool.test_on_borrow: <%= scope['storm::backend::db_pool_test_on_borrow'] %>
+db.pool.test_while_idle: <%= scope['storm::backend::db_pool_test_while_idle'] %>
 
 <%- # srm endpoints loop
 scope['storm::backend::srm_pool_members'].each_with_index do | member, i |
@@ -24,82 +24,82 @@ srm_endpoints[<%=i%>].host: <%= @host %>
 srm_endpoints[<%=i%>].port: <%= @port %>
 <%- end # srm endpoints loop -%>
 
-rest.port: <%= scope['rest_server']['port'] %>
-rest.max_threads: <%= scope['rest_server']['max_threads'] %>
-rest.max_queue_size: <%= scope['rest_server']['max_queue_size'] %>
+rest.port: <%= scope['storm::backend::rest_server_port'] %>
+rest.max_threads: <%= scope['storm::backend::rest_server_max_threads'] %>
+rest.max_queue_size: <%= scope['storm::backend::rest_server_max_queue_size'] %>
 
-xmlrpc.port: <%= scope['xmlrpc_server']['port'] %>
-xmlrpc.max_threads: <%= scope['xmlrpc_server']['max_threads'] %>
-xmlrpc.max_queue_size: <%= scope['xmlrpc_server']['max_queue_size'] %>
+xmlrpc.port: <%= scope['storm::backend::xmlrpc_server_port'] %>
+xmlrpc.max_threads: <%= scope['storm::backend::xmlrpc_server_max_threads'] %>
+xmlrpc.max_queue_size: <%= scope['storm::backend::xmlrpc_server_max_queue_size'] %>
 
 sanity_checks_enabled: <%= scope['storm::backend::sanity_checks_enabled'] %>
 
-du.enabled: <%= scope['du_service']['enabled'] %>
-du.initial_delay: <%= scope['du_service']['initial_delay'] %>
-du.tasks_interval: <%= scope['du_service']['tasks_interval'] %>
-du.parallel_tasks_enabled: <%= scope['du_service']['parallel_tasks_enabled'] %>
+du.enabled: <%= scope['storm::backend::du_service_enabled'] %>
+du.initial_delay: <%= scope['storm::backend::du_service_initial_delay'] %>
+du.tasks_interval: <%= scope['storm::backend::du_service_tasks_interval'] %>
+du.parallel_tasks_enabled: <%= scope['storm::backend::du_service_parallel_tasks_enabled'] %>
 
-security.enabled: <%= scope['storm::backend::security']['enabled'] %>
-security.token: <%= scope['storm::backend::security']['token'] %>
+security.enabled: <%= scope['storm::backend::security_enabled'] %>
+security.token: <%= scope['storm::backend::security_token'] %>
 
-inprogress_requests_agent.delay: <%= scope['inprogress_requests_agent']['delay'] %>
-inprogress_requests_agent.interval: <%= scope['inprogress_requests_agent']['interval'] %>
-inprogress_requests_agent.ptp_expiration_time: <%= scope['inprogress_requests_agent']['ptp_expiration_time'] %>
+inprogress_requests_agent.delay: <%= scope['storm::backend::inprogress_requests_agent_delay'] %>
+inprogress_requests_agent.interval: <%= scope['storm::backend::inprogress_requests_agent_interval'] %>
+inprogress_requests_agent.ptp_expiration_time: <%= scope['storm::backend::inprogress_requests_agent_ptp_expiration_time'] %>
 
-expired_spaces_agent.delay: <%= scope['expired_spaces_agent']['delay'] %>
-expired_spaces_agent.interval: <%= scope['expired_spaces_agent']['interval'] %>
+expired_spaces_agent.delay: <%= scope['storm::backend::expired_spaces_agent_delay'] %>
+expired_spaces_agent.interval: <%= scope['storm::backend::expired_spaces_agent_interval'] %>
 
-completed_requests_agent.enabled: <%= scope['completed_requests_agent']['enabled'] %>
-completed_requests_agent.delay: <%= scope['completed_requests_agent']['delay'] %>
-completed_requests_agent.interval: <%= scope['completed_requests_agent']['interval'] %>
-completed_requests_agent.purge_age: <%= scope['completed_requests_agent']['purge_age'] %>
-completed_requests_agent.purge_size: <%= scope['completed_requests_agent']['purge_size'] %>
+completed_requests_agent.enabled: <%= scope['storm::backend::completed_requests_agent_enabled'] %>
+completed_requests_agent.delay: <%= scope['storm::backend::completed_requests_agent_delay'] %>
+completed_requests_agent.interval: <%= scope['storm::backend::completed_requests_agent_interval'] %>
+completed_requests_agent.purge_age: <%= scope['storm::backend::completed_requests_agent_purge_age'] %>
+completed_requests_agent.purge_size: <%= scope['storm::backend::completed_requests_agent_purge_size'] %>
 
-requests_picker_agent.delay: <%= scope['requests_picker_agent']['delay'] %>
-requests_picker_agent.interval: <%= scope['requests_picker_agent']['interval'] %>
-requests_picker_agent.max_fetched_size: <%= scope['requests_picker_agent']['max_fetched_size'] %>
+requests_picker_agent.delay: <%= scope['storm::backend::requests_picker_agent_delay'] %>
+requests_picker_agent.interval: <%= scope['storm::backend::requests_picker_agent_interval'] %>
+requests_picker_agent.max_fetched_size: <%= scope['storm::backend::requests_picker_agent_max_fetched_size'] %>
 
-requests_scheduler.core_pool_size: <%= scope['requests_scheduler']['core_pool_size'] %>
-requests_scheduler.max_pool_size: <%= scope['requests_scheduler']['max_pool_size'] %>
-requests_scheduler.queue_size: <%= scope['requests_scheduler']['queue_size'] %>
-ptp_scheduler.core_pool_size: <%= scope['ptp_scheduler']['core_pool_size'] %>
-ptp_scheduler.max_pool_size: <%= scope['ptp_scheduler']['max_pool_size'] %>
-ptp_scheduler.queue_size: <%= scope['ptp_scheduler']['queue_size'] %>
-ptg_scheduler.core_pool_size: <%= scope['ptg_scheduler']['core_pool_size'] %>
-ptg_scheduler.max_pool_size: <%= scope['ptg_scheduler']['max_pool_size'] %>
-ptg_scheduler.queue_size: <%= scope['ptg_scheduler']['queue_size'] %>
-bol_scheduler.core_pool_size: <%= scope['bol_scheduler']['core_pool_size'] %>
-bol_scheduler.max_pool_size: <%= scope['bol_scheduler']['max_pool_size'] %>
-bol_scheduler.queue_size: <%= scope['bol_scheduler']['queue_size'] %>
+requests_scheduler.core_pool_size: <%= scope['storm::backend::requests_scheduler_core_pool_size'] %>
+requests_scheduler.max_pool_size: <%= scope['storm::backend::requests_scheduler_max_pool_size'] %>
+requests_scheduler.queue_size: <%= scope['storm::backend::requests_scheduler_queue_size'] %>
+ptp_scheduler.core_pool_size: <%= scope['storm::backend::ptp_scheduler_core_pool_size'] %>
+ptp_scheduler.max_pool_size: <%= scope['storm::backend::ptp_scheduler_max_pool_size'] %>
+ptp_scheduler.queue_size: <%= scope['storm::backend::ptp_scheduler_queue_size'] %>
+ptg_scheduler.core_pool_size: <%= scope['storm::backend::ptg_scheduler_core_pool_size'] %>
+ptg_scheduler.max_pool_size: <%= scope['storm::backend::ptg_scheduler_max_pool_size'] %>
+ptg_scheduler.queue_size: <%= scope['storm::backend::ptg_scheduler_queue_size'] %>
+bol_scheduler.core_pool_size: <%= scope['storm::backend::bol_scheduler_core_pool_size'] %>
+bol_scheduler.max_pool_size: <%= scope['storm::backend::bol_scheduler_max_pool_size'] %>
+bol_scheduler.queue_size: <%= scope['storm::backend::bol_scheduler_queue_size'] %>
 
-extraslashes.file: <%= scope['extraslashes']['file'] %>
-extraslashes.rfio: <%= scope['extraslashes']['rfio'] %>
-extraslashes.gsiftp: <%= scope['extraslashes']['gsiftp'] %>
-extraslashes.root: <%= scope['extraslashes']['root'] %>
+extraslashes.file: <%= scope['storm::backend::extraslashes_file'] %>
+extraslashes.rfio: <%= scope['storm::backend::extraslashes_rfio'] %>
+extraslashes.gsiftp: <%= scope['storm::backend::extraslashes_gsiftp'] %>
+extraslashes.root: <%= scope['storm::backend::extraslashes_root'] %>
 
 skip_ptg_acl_setup: <%= scope['storm::backend::skip_ptg_acl_setup'] %>
 
-synch_ls.max_entries: <%= scope['synch_ls']['max_entries'] %>
-synch_ls.default_all_level_recursive: <%= scope['synch_ls']['default_all_level_recursive'] %>
-synch_ls.default_num_levels: <%= scope['synch_ls']['default_num_levels'] %>
-synch_ls.default_offset: <%= scope['synch_ls']['default_offset'] %>
+synch_ls.max_entries: <%= scope['storm::backend::synch_ls_max_entries'] %>
+synch_ls.default_all_level_recursive: <%= scope['storm::backend::synch_ls_default_all_level_recursive'] %>
+synch_ls.default_num_levels: <%= scope['storm::backend::synch_ls_default_num_levels'] %>
+synch_ls.default_offset: <%= scope['storm::backend::synch_ls_default_offset'] %>
 
-pinlifetime.default: <%= scope['pinlifetime']['default'] %>
-pinlifetime.maximum: <%= scope['pinlifetime']['maximum'] %>
+pinlifetime.default: <%= scope['storm::backend::pinlifetime_default'] %>
+pinlifetime.maximum: <%= scope['storm::backend::pinlifetime_maximum'] %>
 
-files.default_size: <%= scope['files']['default_size'] %>
-files.default_lifetime: <%= scope['files']['default_lifetime'] %>
-files.default_overwrite: <%= scope['files']['default_overwrite'] %>
-files.default_storagetype: <%= scope['files']['default_storagetype'] %>
+files.default_size: <%= scope['storm::backend::files_default_size'] %>
+files.default_lifetime: <%= scope['storm::backend::files_default_lifetime'] %>
+files.default_overwrite: <%= scope['storm::backend::files_default_overwrite'] %>
+files.default_storagetype: <%= scope['storm::backend::files_default_storagetype'] %>
 
-directories.enable_automatic_creation: <%= scope['directories']['enable_automatic_creation'] %>
-directories.enable_writeperm_on_creation: <%= scope['directories']['enable_writeperm_on_creation'] %>
+directories.enable_automatic_creation: <%= scope['storm::backend::directories_enable_automatic_creation'] %>
+directories.enable_writeperm_on_creation: <%= scope['storm::backend::directories_enable_writeperm_on_creation'] %>
 
-hearthbeat.bookkeeping_enabled: <%= scope['hearthbeat']['bookkeeping_enabled'] %>
-hearthbeat.performance_measuring_enabled: <%= scope['hearthbeat']['performance_measuring_enabled'] %>
-hearthbeat.period: <%= scope['hearthbeat']['period'] %>
-hearthbeat.performance_logbook_time_interval: <%= scope['hearthbeat']['performance_logbook_time_interval'] %>
-hearthbeat.performance_glance_time_interval: <%= scope['hearthbeat']['performance_glance_time_interval'] %>
+hearthbeat.bookkeeping_enabled: <%= scope['storm::backend::hearthbeat_bookkeeping_enabled'] %>
+hearthbeat.performance_measuring_enabled: <%= scope['storm::backend::hearthbeat_performance_measuring_enabled'] %>
+hearthbeat.period: <%= scope['storm::backend::hearthbeat_period'] %>
+hearthbeat.performance_logbook_time_interval: <%= scope['storm::backend::hearthbeat_performance_logbook_time_interval'] %>
+hearthbeat.performance_glance_time_interval: <%= scope['storm::backend::hearthbeat_performance_glance_time_interval'] %>
 
 info_quota_refresh_period: <%= scope['storm::backend::info_quota_refresh_period'] %>
 http_turl_prefix: <%= scope['storm::backend::http_turl_prefix'] %>

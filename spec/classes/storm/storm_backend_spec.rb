@@ -95,12 +95,8 @@ describe 'storm::backend', type: 'class' do
       context 'with custom backend params' do
         let(:params) do
           {
-            'db' => {
-              'username' => 'test',
-            },
-            'db_pool' => {
-              'size' => 200,
-            },
+            'db_username' => 'test',
+            'db_pool_size' => 200,
             'xroot_hostname' => 'storm.example.org',
             'gsiftp_pool_members' => [
               {

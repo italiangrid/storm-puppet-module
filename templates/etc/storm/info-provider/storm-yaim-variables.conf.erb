@@ -4,7 +4,7 @@ STORM_DEFAULT_ROOT=<%= scope['storm::backend::info_storage_default_root'] %>
 STORM_FRONTEND_PATH=/srm/managerv2
 STORM_FRONTEND_PORT=<%= @info_frontend_port %>
 STORM_FRONTEND_PUBLIC_HOST=<%= @info_frontend_host %>
-STORM_BACKEND_REST_SERVICES_PORT=<%= scope['storm::backend::rest_server']['port'] %>
+STORM_BACKEND_REST_SERVICES_PORT=<%= scope['storm::backend::rest_server_port'] %>
 STORM_ENDPOINT_QUALITY_LEVEL=<%= scope['storm::backend::info_endpoint_quality_level'] %>
 <%-
 @enabled_access_protocols=[]

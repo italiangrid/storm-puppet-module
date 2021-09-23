@@ -8,20 +8,18 @@ lookup_options:
 storm::backend::storm_properties_file: ''
 
 # Db connection
-storm::backend::db:
-  username: 'storm'
-  password: 'storm'
-  hostname: "%{facts.fqdn}"
-  port: 3306
-  properties: 'serverTimezone=UTC&autoReconnect=true'
+storm::backend::db_username: 'storm'
+storm::backend::db_password: 'storm'
+storm::backend::db_hostname: "%{facts.fqdn}"
+storm::backend::db_port: 3306
+storm::backend::db_properties: 'serverTimezone=UTC&autoReconnect=true'
 
 # Db connection pool
-storm::backend::db_pool:
-  size: -1
-  min_idle: 10
-  max_wait_millis: 5000
-  test_on_borrow: true
-  test_while_idle: true
+storm::backend::db_pool_size: -1
+storm::backend::db_pool_min_idle: 10
+storm::backend::db_pool_max_wait_millis: 5000
+storm::backend::db_pool_test_on_borrow: true
+storm::backend::db_pool_test_while_idle: true
 
 ### Default values for Storage Areas
 # 1. xroot
@@ -47,119 +45,101 @@ storm::backend::fs_type: 'posixfs'
 storm::backend::storage_areas: []
 
 # REST services
-storm::backend::rest_server:
-  port: 9998
-  max_threads: 100
-  max_queue_size: 1000
+storm::backend::rest_server_port: 9998
+storm::backend::rest_server_max_threads: 100
+storm::backend::rest_server_max_queue_size: 1000
 
 # XMLRPC Server parameters
-storm::backend::xmlrpc_server:
-  port: 8080
-  max_threads: 256
-  max_queue_size: 1000
+storm::backend::xmlrpc_server_port: 8080
+storm::backend::xmlrpc_server_max_threads: 256
+storm::backend::xmlrpc_server_max_queue_size: 1000
 
 # Security
-storm::backend::security:
-  enabled: true
-  token: secret
+storm::backend::security_enabled: true
+storm::backend::security_token: secret
 
 # DU service
-storm::backend::du_service:
-  enabled: false
-  initial_delay: 60
-  tasks_interval: 86400
-  parallel_tasks_enabled: false
+storm::backend::du_service_enabled: false
+storm::backend::du_service_initial_delay: 60
+storm::backend::du_service_tasks_interval: 86400
+storm::backend::du_service_parallel_tasks_enabled: false
 
 # In-progress-requests agent
-storm::backend::inprogress_requests_agent:
-  delay: 10
-  interval: 300
-  ptp_expiration_time: 2592000
+storm::backend::inprogress_requests_agent_delay: 10
+storm::backend::inprogress_requests_agent_interval: 300
+storm::backend::inprogress_requests_agent_ptp_expiration_time: 2592000
 
 # Expired spaces agent
-storm::backend::expired_spaces_agent:
-  delay: 10
-  interval: 300
+storm::backend::expired_spaces_agent_delay: 10
+storm::backend::expired_spaces_agent_interval: 300
 
 # Completed requests agent
-storm::backend::completed_requests_agent:
-  enabled: true
-  delay: 10
-  interval: 600
-  purge_size: 800
-  purge_age: 21600
+storm::backend::completed_requests_agent_enabled: true
+storm::backend::completed_requests_agent_delay: 10
+storm::backend::completed_requests_agent_interval: 600
+storm::backend::completed_requests_agent_purge_size: 800
+storm::backend::completed_requests_agent_purge_age: 21600
 
 # Requests picker agent
-storm::backend::requests_picker_agent:
-  delay: 1
-  interval: 2
-  max_fetched_size: 100
+storm::backend::requests_picker_agent_delay: 1
+storm::backend::requests_picker_agent_interval: 2
+storm::backend::requests_picker_agent_max_fetched_size: 100
 
 # Requests scheduer
-storm::backend::requests_scheduler:
-  core_pool_size: 10
-  max_pool_size: 50
-  queue_size: 2000
+storm::backend::requests_scheduler_core_pool_size: 10
+storm::backend::requests_scheduler_max_pool_size: 50
+storm::backend::requests_scheduler_queue_size: 2000
 # Ptp requests scheduler
-storm::backend::ptp_scheduler:
-  core_pool_size: 50
-  max_pool_size: 200
-  queue_size: 1000
+storm::backend::ptp_scheduler_core_pool_size: 50
+storm::backend::ptp_scheduler_max_pool_size: 200
+storm::backend::ptp_scheduler_queue_size: 1000
 # Ptg requests scheduler
-storm::backend::ptg_scheduler:
-  core_pool_size: 50
-  max_pool_size: 200
-  queue_size: 2000
+storm::backend::ptg_scheduler_core_pool_size: 50
+storm::backend::ptg_scheduler_max_pool_size: 200
+storm::backend::ptg_scheduler_queue_size: 2000
 # Bol requests scheduler
-storm::backend::bol_scheduler:
-  core_pool_size: 50
-  max_pool_size: 200
-  queue_size: 2000
+storm::backend::bol_scheduler_core_pool_size: 50
+storm::backend::bol_scheduler_max_pool_size: 200
+storm::backend::bol_scheduler_queue_size: 2000
 
 # sanity check enabled
 storm::backend::sanity_checks_enabled: true
 
 # extraslashes
-storm::backend::extraslashes:
-  file: ''
-  rfio: ''
-  gsiftp: '/'
-  root: '/'
+storm::backend::extraslashes_file: ''
+storm::backend::extraslashes_rfio: ''
+storm::backend::extraslashes_gsiftp: '/'
+storm::backend::extraslashes_root: '/'
 
 # SRM ls advanced settings
-storm::backend::synch_ls:
-  max_entries: 2000
-  default_all_level_recursive: false
-  default_num_levels: 1
-  default_offset: 0
+storm::backend::synch_ls_max_entries: 2000
+storm::backend::synch_ls_default_all_level_recursive: false
+storm::backend::synch_ls_default_num_levels: 1
+storm::backend::synch_ls_default_offset: 0
 
 # Skip PtG ACL setup
 storm::backend::skip_ptg_acl_setup: false
 
 # pinlifetime
-storm::backend::pinlifetime:
-  default: 259200
-  maximum: 1814400
+storm::backend::pinlifetime_default: 259200
+storm::backend::pinlifetime_maximum: 1814400
 
 # files
-storm::backend::files:
-  default_size: 1000000
-  default_lifetime: 259200
-  default_overwrite: A
-  default_storagetype: P  
+storm::backend::files_default_size: 1000000
+storm::backend::files_default_lifetime: 259200
+storm::backend::files_default_overwrite: A
+storm::backend::files_default_storagetype: P  
 
 # directories
-storm::backend::directories:
-  enable_automatic_creation: false
-  enable_writeperm_on_creation: false
+storm::backend::directories_enable_automatic_creation: false
+storm::backend::directories_enable_writeperm_on_creation: false
 
 # Hearthbeat
-storm::backend::hearthbeat:
-  bookkeeping_enabled: false
-  performance_measuring_enabled: false
-  period: 60
-  performance_logbook_time_interval: 15
-  performance_glance_time_interval: 15
+storm::backend::hearthbeat_bookkeeping_enabled: false
+storm::backend::hearthbeat_performance_measuring_enabled: false
+storm::backend::hearthbeat_period: 60
+storm::backend::hearthbeat_performance_logbook_time_interval: 15
+storm::backend::hearthbeat_performance_glance_time_interval: 15
 
 # Others
 storm::backend::info_quota_refresh_period: 900
