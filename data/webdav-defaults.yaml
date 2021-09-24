@@ -12,7 +12,7 @@ storm::webdav::vo_map_files_config_dir: '/etc/storm/webdav/vo-mapfiles.d'
 storm::webdav::vo_map_files_refresh_interval: 21600
 storm::webdav::tpc_max_connections: 50
 storm::webdav::tpc_max_connections_per_route: 25
-storm::webdav::tpc_timeout_in_secs: 5
+storm::webdav::tpc_timeout_in_secs: 30
 storm::webdav::tpc_tls_protocol: 'TLSv1.2'
 storm::webdav::tpc_report_delay_secs: 5
 storm::webdav::tpc_enable_tls_client_auth: false

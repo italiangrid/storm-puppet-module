@@ -66,10 +66,11 @@ Utility classes:
 
 The Backend class installs:
 
-- `storm-backend-mp` and all the releated packages;
+- `storm-backend-mp` and all its related packages, such as `storm-backend-server`,
+- `storm-native-libs-gpfs` in case GPFS is specified as filesystem,
 - `storm-dynamic-info-provider`.
 
-Then, the Backend class configures `storm-backend-server` service by managing the following files:
+The Backend class configures `storm-backend-server` service by managing the following files:
 
 - `/etc/storm/backend-server/storm.properties`
 - `/etc/storm/backend-server/namespace.xml`
@@ -86,25 +87,26 @@ Example of StoRM Backend configuration:
 
 ```Puppet
 class { 'storm::backend':
-  transfer_protocols    => ['gsiftp', 'webdav'],
-  security_token        => 'NS4kYAZuR65XJCq',
-  du_service_enabled    => true,
-  srm_pool_members      => [
+  db_password         => 'secret-password',
+  transfer_protocols  => ['gsiftp', 'webdav'],
+  security_token      => 'secret-token',
+  du_service_enabled  => true,
+  srm_pool_members    => [
     {
       'hostname' => 'frontend.test.example',
     }
   ],
-  gsiftp_pool_members   => [
+  gsiftp_pool_members => [
     {
       'hostname' => 'gridftp.test.example',
     },
   ],
-  webdav_pool_members   => [
+  webdav_pool_members => [
     {
       'hostname' => 'webdav.test.example',
     },
   ],
-  storage_areas         => [
+  storage_areas       => [
     {
       'name'          => 'dteam-disk',
       'root_path'     => '/storage/disk',
@@ -195,7 +197,7 @@ class { 'storm::frontend':
   be_xmlrpc_token => 'NS4kYAZuR65XJCq',
   db_host         => 'backend.test.example',
   db_user         => 'storm',
-  db_passwd       => 'storm',
+  db_passwd       => 'secret-password',
 }
 ```
 
