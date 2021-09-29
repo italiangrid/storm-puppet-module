@@ -544,8 +544,6 @@ class storm::backend (
   String $info_sitename,
   String $info_storage_default_root,
   Integer $info_endpoint_quality_level,
-  Array[Storm::Backend::WebdavPoolMember] $info_webdav_pool_list,
-  Array[Storm::Backend::SrmPoolMember] $info_frontend_host_list,
 
   # JVM options
   String $jvm_options,

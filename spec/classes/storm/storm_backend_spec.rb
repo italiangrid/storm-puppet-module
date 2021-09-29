@@ -110,6 +110,9 @@ describe 'storm::backend', type: 'class' do
                 'hostname' => 'webdav-0.example.org',
               }, {
                 'hostname' => 'webdav-1.example.org',
+              }, {
+                'hostname' => 'webdav-2.example.org',
+                'published' => false,
               }
             ],
             'srm_pool_members' => [

@@ -36,12 +36,14 @@ STORM_FRONTEND_HOST_LIST=<%= @frontend_host_list.join(',') %>
 <%-
 @webdav_pool_list=[]
 scope['storm::backend::webdav_pool_members'].each do | e |
-  @http_port=e['http_port'] != nil ? e['http_port'] : 8085
-  @https_port=e['https_port'] != nil ? e['https_port'] : 8443
-  @http_endpoint="http://#{e['hostname']}:#{@http_port}/"
-  @https_endpoint="https://#{e['hostname']}:#{@https_port}/"
-  @webdav_pool_list.push(@http_endpoint)
-  @webdav_pool_list.push(@https_endpoint)
+  if e['published'] == nil or e['published']
+    @http_port=e['http_port'] != nil ? e['http_port'] : 8085
+    @https_port=e['https_port'] != nil ? e['https_port'] : 8443
+    @http_endpoint="http://#{e['hostname']}:#{@http_port}/"
+    @https_endpoint="https://#{e['hostname']}:#{@https_port}/"
+    @webdav_pool_list.push(@http_endpoint)
+    @webdav_pool_list.push(@https_endpoint)
+  end
 end
 -%>
 STORM_WEBDAV_POOL_LIST=<%= @webdav_pool_list.join(',') %>
