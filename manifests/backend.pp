@@ -368,12 +368,6 @@
 # @param info_endpoint_quality_level
 #   Endpoint maturity level to be published by the StoRM info provider. Default value: 2.
 #
-# @param info_webdav_pool_list
-#   List of published WebDAV endpoints.
-#
-# @param info_frontend_host_list
-#   List of published SRM endpoints.
-#
 # @param jvm_options
 #   Default value: '-Xms512m -Xmx512m'
 #

@@ -775,18 +775,6 @@ Data type: `Integer`
 
 Endpoint maturity level to be published by the StoRM info provider. Default value: 2.
 
-##### `info_webdav_pool_list`
-
-Data type: `Array[Storm::Backend::WebdavPoolMember]`
-
-List of published WebDAV endpoints.
-
-##### `info_frontend_host_list`
-
-Data type: `Array[Storm::Backend::SrmPoolMember]`
-
-List of published SRM endpoints.
-
 ##### `jvm_options`
 
 Data type: `String`
@@ -928,6 +916,16 @@ class { 'storm::frontend':
 
 The following parameters are available in the `storm::frontend` class.
 
+##### `storm_frontend_server_conf_file`
+
+Data type: `String`
+
+Use this parameter to provide your own storm-frontend-server.conf file.
+This can be used, for example, when you're using the latest module version
+to configure an old StoRM deployment. This parameter is used only when it has
+a non-empty value and it overwrites several other module parameters.
+Default value: empty string (that means not used).
+
 ##### `be_xmlrpc_host`
 
 Data type: `String`
@@ -946,7 +944,7 @@ StoRM Backend XML-RPC server port. Default value: 8080.
 
 Data type: `String`
 
-Secutiry token used for communicating with StoRM Backend. Mandatory.
+Security token used for communicating with StoRM Backend. Mandatory.
 
 ##### `be_xmlrpc_path`
 
@@ -1058,12 +1056,6 @@ Gridmap directory path. Defailt value: '/etc/grid-security/gridmapdir'.
 Data type: `String`
 
 Gridmap file path. Defailt value: '/etc/grid-security/grid-mapfile'.
-
-##### `configuration_file`
-
-Data type: `String`
-
-
 
 ### `storm::frontend::config`
 
@@ -1853,8 +1845,8 @@ The GsiftpPoolMember type for storm-backend-server
 
 Alias of `Struct[{
   hostname => String,
-  port     => Optional[Integer],
-  weight   => Optional[Integer],
+  port => Optional[Integer],
+  weight => Optional[Integer],
 }]`
 
 ### `Storm::Backend::Pool`
@@ -1895,7 +1887,7 @@ The SrmPoolMember type for storm-backend-server
 
 Alias of `Struct[{
   hostname => String,
-  port     => Optional[Integer],
+  port => Optional[Integer],
 }]`
 
 ### `Storm::Backend::StorageArea`
@@ -1958,13 +1950,15 @@ Alias of `Struct[{
 
 ### `Storm::Backend::WebdavPoolMember`
 
-The WebdavPoolMember type for storm-backend-server
+Since v4.0.0, the `hidden` optional parameter has been renamed to `published`.
+Its meaning is now the opposite: a value of true means that the endpoint is published by info provider.
+Default value is true.
 
 Alias of `Struct[{
   hostname => String,
   http_port => Optional[Integer],
   https_port => Optional[Integer],
-  hidden => Optional[Boolean],
+  published => Optional[Boolean],
 }]`
 
 ### `Storm::Backend::Xroot`

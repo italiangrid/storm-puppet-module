@@ -6,8 +6,8 @@ All notable changes to this project will be documented in this file.
 
 - A huge naming refactory has been done on StoRM Backend service configuration file (storm.properties) and, as a consequence, also `Storm::Backend` class has followed a similar renaming. The [Conversion Table](README.md#conversion-table-from-v320-to-v400) shows which properties have been removed, renamed or introduced.
 - Removed `security_enable_mapping` parameter from `Storm::Frontend`.
-- Added `configuration_file` parameter to `Storm::Frontend` that allows administrator to configure the service by using their own `/etc/storm/frontend-server/storm-frontend-server.conf` file.
-- Added `gridftp_conf_file` parameter to `Storm::Gridftp` that allows administrator to configure the service by using their own `/etc/grid-security/gridftp.conf` file.
+- Added `storm_frontend_server_conf_file` parameter to `Storm::Frontend` that allows administrator to configure the service by injecting their own `/etc/storm/frontend-server/storm-frontend-server.conf` file.
+- Added `gridftp_conf_file` parameter to `Storm::Gridftp` that allows administrator to configure the service by injecting their own `/etc/grid-security/gridftp.conf` file.
 - Added `log_level` and `config_base_path` parameters to `Storm::Gridftp`.
 - Removed `manage_storage_areas` parameter from `Storm::Webdav`. The logic has been simplified to managing storage areas only if `storage_areas` list is defined.
 - Added `tpc_max_connections_per_route`, `tpc_timeout_in_secs`, `tpc_tls_protocol`, `tpc_report_delay_secs`, `tpc_enable_tls_client_auth`, `tpc_progress_report_thread_pool_size` parameters to `Storm::Webdav`.

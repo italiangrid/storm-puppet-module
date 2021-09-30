@@ -1,5 +1,5 @@
 ---
-storm::frontend::configuration_file: ''
+storm::frontend::storm_frontend_server_conf_file: ''
 storm::frontend::db_user: 'storm'
 storm::frontend::db_passwd: 'storm'
 storm::frontend::port: 8444

@@ -46,7 +46,7 @@ describe 'storm::frontend', type: 'class' do
       context 'Use your own frontend configuration file' do
         let(:params) do
           super().merge(
-            'configuration_file' => '/path/to/your/storm-frontend-server.conf',
+            'storm_frontend_server_conf_file' => '/path/to/your/storm-frontend-server.conf',
           )
         end
 
