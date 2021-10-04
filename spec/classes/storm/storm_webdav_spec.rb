@@ -252,7 +252,7 @@ describe 'storm::webdav', type: 'class' do
             ensure: 'present',
           )
           is_expected.to contain_file(service_file).with(
-            content: %r{^Environment="STORM_WEBDAV_JVM_OPTS=-Xms256m -Xmx512m -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=1234,suspend=n"},
+            content: %r{^Environment="STORM_WEBDAV_JVM_OPTS=-Xms1024m -Xmx1024m -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=1234,suspend=n"},
           )
         end
       end
@@ -271,7 +271,7 @@ describe 'storm::webdav', type: 'class' do
             ensure: 'present',
           )
           is_expected.to contain_file(service_file).with(
-            content: %r{^Environment="STORM_WEBDAV_JVM_OPTS=-Xms256m -Xmx512m -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=1044,suspend=y"},
+            content: %r{^Environment="STORM_WEBDAV_JVM_OPTS=-Xms1024m -Xmx1024m -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=1044,suspend=y"},
           )
         end
       end

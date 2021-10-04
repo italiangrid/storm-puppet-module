@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Removed `manage_storage_areas` parameter from `Storm::Webdav`. The logic has been simplified to managing storage areas only if `storage_areas` list is defined.
 - Added `tpc_max_connections_per_route`, `tpc_timeout_in_secs`, `tpc_tls_protocol`, `tpc_report_delay_secs`, `tpc_enable_tls_client_auth`, `tpc_progress_report_thread_pool_size` parameters to `Storm::Webdav`.
 - Added `ensure_empty_storage_area_dir` parameter to `Storm::Webdav` to ensure a cleaned storage area directory before adding the .properties files.
+- Increased StoRM WebDAV default heap size to 1024m and default timeout for TPC to 30 seconds
 
 ## [3.2.1]
 
