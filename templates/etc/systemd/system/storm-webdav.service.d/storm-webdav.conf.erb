@@ -2,6 +2,8 @@
 [Service]
 Environment="STORM_WEBDAV_USER=storm"
 <%- if scope.lookupvar('storm::webdav::debug') -%>
+# To have the JVM debug agent bind on all interfaces use `...,address=*:1044,suspend=n`, otherwise the agent binds only on
+# localhost
 Environment="STORM_WEBDAV_JVM_OPTS=<%=scope.lookupvar('storm::webdav::jvm_opts')%> -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=<%=scope.lookupvar('storm::webdav::debug_port')%>,<%- if scope.lookupvar('storm::webdav::debug_suspend') -%>suspend=y<%- else -%>suspend=n<%- end -%>"
 <%- else -%>
 Environment="STORM_WEBDAV_JVM_OPTS=<%=scope.lookupvar('storm::webdav::jvm_opts')%>"
