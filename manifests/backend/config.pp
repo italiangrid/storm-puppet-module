@@ -203,6 +203,7 @@ class storm::backend::config (
   file { $info_config_file:
     ensure  => present,
     content => template($info_yaim_template_file),
+    mode    => '0644',
     owner   => 'root',
     group   => 'storm',
     notify  => [Exec['configure-info-provider']],

@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.2.1]
+
+- Fixed permissions on info-provider configuration file
+
 ## [3.2.0]
 
 - Added daemon reload on backend and webdav restart command
