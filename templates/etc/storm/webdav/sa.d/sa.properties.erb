@@ -1,80 +1,16 @@
 # This file is managed by Puppet
 
-# Name of the storage area
 name=<%=@name%>
-
-# Root path for the storage area. Files will be served from this path, which must exist and
-# must be accessible from the user that runs the storm webdav service
 rootPath=<%=@root_path%>
-
-# Comma separated list of storage area access points. 
+filesystemType=<%=@fs_type%>
 accessPoints=<%=@access_points.join(',')%>
-
-# Comma-separated list of VOMS VOs supported in this storage area
 vos=<%=@vos.join(',')%>
-
-# Comma-separated list of OAuth/OpenID Connect token issuers trusted in this storage area
-<%- if defined?(@orgs) -%>
 orgs=<%=@orgs.join(',')%>
-<%- else -%>
-# orgs=https://super-provider.example/
-<%- end -%>
-
-# Enables read access to users authenticated with an X.509 certificate issued by
-# a trusted CA (users without VOMS credentials).
-# Defaults to false, which means that all users need to authenticate with a VOMS credential
-<%- if defined?(@authenticated_read_enabled) -%>
 authenticatedReadEnabled=<%=@authenticated_read_enabled%>
-<%- else -%>
-# authenticatedReadEnabled=false
-<%- end -%>
-
-# Enables read access to anonymous users. Defaults to false. 
-<%- if defined?(@anonymous_read_enabled)-%>
 anonymousReadEnabled=<%= @anonymous_read_enabled%>
-<%- else -%>
-# anonymousReadEnabled=false
-<%- end -%>
-
-# Enables VO map files for this storage area. Defaults to true. 
-<%- if defined?(@vo_map_enabled) -%>
 voMapEnabled=<%= @vo_map_enabled %>
-<%- else -%>
-# voMapEnabled=true
-<%- end -%>
-
-# VO map normally grants read-only access to storage area files. To grant 
-# write access set this flag to true. Defaults to false. 
-<%- if defined?(@vo_map_grants_write_permission) -%>
 voMapGrantsWritePermission=<%= @vo_map_grants_write_permission %>
-<%- else -%>
-# voMapGrantsWritePermission=false
-<%- end -%>
-
-# Enables read access to storage area files to users authenticated using OAuth/OIDC. Defaults to true.
-<%- if defined?(@orgs_grant_read_permission) -%>
 orgsGrantReadPermission=<%= @orgs_grant_read_permission %>
-<%- else -%>
-# orgsGrantReadPermission=true
-<%- end -%>
-
-# Enables write access to storage area files to users authenticated using OAuth/OIDC. Defaults to false.
-<%- if defined?(@orgs_grant_write_permission) -%>
 orgsGrantWritePermission=<%= @orgs_grant_write_permission %>
-<%- else -%>
-# orgsGrantWritePermission=false
-<%- end -%>
-
-# Enables scope-based authorization following the rules imposed by the WLCG JWT profile. Defaults to false.
-<%- if defined?(@wlcg_scope_authz_enabled) -%>
 wlcgScopeAuthzEnabled=<%= @wlcg_scope_authz_enabled %>
-<%- else -%>
-# wlcgScopeAuthzEnabled=false
-<%- end -%>
-
-# Enables fine-grained authorization engine. Defaults to false.
-<%- if defined?(@fine_grained_authz_enabled) -%>
 fineGrainedAuthzEnabled=<%= @fine_grained_authz_enabled %>
-<%- else -%>
-# fineGrainedAuthzEnabled=false
-<%- end -%>

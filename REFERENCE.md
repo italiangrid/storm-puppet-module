@@ -40,6 +40,8 @@ Site administrators can add script and cron described in the [how-to](http://ita
 file has been removed from storm::webdav class. Site administrators can edit
 their own configuration files or use this defined type to inject one or more YAML
 files into the proper directory.
+* [`storm::webdav::drop_in_file`](#stormwebdavdrop_in_file): Use this define to inject one or more .conf files
+into `/etc/systemd/system/storm-webdav.service.d` directory.
 * [`storm::webdav::storage_area_file`](#stormwebdavstorage_area_file): Storage Areas can be configured singularly by using this defined type.
 This strategy allows site administrators to keep their manifests unaware of
 the improvements on StoRM WebDAV code. For example, if a new property is added
@@ -2074,20 +2076,8 @@ class { 'storm::webdav':
     {
       name                       => 'test.vo',
       root_path                  => '/storage/test.vo',
-      access_points              => ['/test.vo'],
-      vos                        => ['test.vo', 'test.vo.2'],
-    },
-    {
-      name                       => 'test.vo.2',
-      root_path                  => '/storage/test.vo.2',
-      access_points              => ['/test.vo.2'],
-      vos                        => ['test.vo.2'],
-      authenticated_read_enabled => true,
-      anonymous_read_enabled     => true,
-      vo_map_enabled             => false,
     },
   ],
-  hostnames => ['webdav.example.org', 'storm-webdav.example.org'],
 }
 ```
 
@@ -2095,18 +2085,17 @@ class { 'storm::webdav':
 
 The following parameters are available in the `storm::webdav` class.
 
-##### `manage_storage_areas`
+##### `ensure_empty_storage_area_dir`
 
 Data type: `Boolean`
 
-Set to True if you want to manage storage areas configuration. Default: true.
+Clean storage area's configuration directory from old .properties files before adding the new ones. Default value: false.
 
 ##### `storage_areas`
 
 Data type: `Array[Storm::Webdav::StorageArea]`
 
-List of storage area's configuration. Ignored if storage_areas_directory is defined.
-Ignored if manage_storage_areas is false.
+List of storage area's configuration. Default value: empty list.
 
 ##### `hostnames`
 
@@ -2174,11 +2163,47 @@ Data type: `Integer`
 
 Sets STORM_WEBDAV_TPC_MAX_CONNECTIONS environment variable.
 
+##### `tpc_max_connections_per_route`
+
+Data type: `Integer`
+
+Sets STORM_WEBDAV_TPC_MAX_CONNECTIONS_PER_ROUTE environment variable.
+
 ##### `tpc_verify_checksum`
 
 Data type: `Boolean`
 
 Sets STORM_WEBDAV_TPC_VERIFY_CHECKSUM environment variable.
+
+##### `tpc_timeout_in_secs`
+
+Data type: `Integer`
+
+Sets STORM_WEBDAV_TPC_TIMEOUT_IN_SECS environment variable.
+
+##### `tpc_tls_protocol`
+
+Data type: `String`
+
+Sets STORM_WEBDAV_TPC_TLS_PROTOCOL environment variable.
+
+##### `tpc_report_delay_secs`
+
+Data type: `Integer`
+
+Sets STORM_WEBDAV_TPC_REPORT_DELAY_SECS environment variable.
+
+##### `tpc_enable_tls_client_auth`
+
+Data type: `Boolean`
+
+Sets STORM_WEBDAV_TPC_ENABLE_TLS_CLIENT_AUTH environment variable.
+
+##### `tpc_progress_report_thread_pool_size`
+
+Data type: `Integer`
+
+Sets STORM_WEBDAV_TPC_PROGRESS_REPORT_THREAD_POOL_SIZE environment variable.
 
 ##### `jvm_opts`
 
@@ -2196,19 +2221,19 @@ Sets STORM_WEBDAV_AUTHZ_SERVER_ENABLE environment variable.
 
 Data type: `String`
 
-Sets STORM_WEBDAV_AUTHZ_SERVER_ISSUER environment variable.
+Sets STORM_WEBDAV_AUTHZ_SERVER_ISSUER environment variable if authz_server_enable is true.
 
 ##### `authz_server_max_token_lifetime_sec`
 
 Data type: `Integer`
 
-Sets STORM_WEBDAV_AUTHZ_SERVER_MAX_TOKEN_LIFETIME_SEC environment variable.
+Sets STORM_WEBDAV_AUTHZ_SERVER_MAX_TOKEN_LIFETIME_SEC environment variable if authz_server_enable is true.
 
 ##### `authz_server_secret`
 
 Data type: `String`
 
-Sets STORM_WEBDAV_AUTHZ_SERVER_SECRET environment variable.
+Sets STORM_WEBDAV_AUTHZ_SERVER_SECRET environment variable if authz_server_enable is true.
 
 ##### `require_client_cert`
 
@@ -2261,226 +2286,6 @@ Sets LimitNOFILE value.
 ### storm::webdav::config
 
 StoRM WebDAV config class
-
-#### Parameters
-
-The following parameters are available in the `storm::webdav::config` class.
-
-##### `manage_storage_areas`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::manage_storage_areas
-
-##### `storage_areas`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::storage_areas
-
-##### `hostnames`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::hostnames
-
-##### `http_port`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::http_port
-
-##### `https_port`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::https_port
-
-##### `trust_anchors_refresh_interval`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::trust_anchors_refresh_interval
-
-##### `max_concurrent_connections`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::max_concurrent_connections
-
-##### `max_queue_size`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::max_queue_size
-
-##### `connector_max_idle_time`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::connector_max_idle_time
-
-##### `vo_map_files_enable`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::vo_map_files_enable
-
-##### `vo_map_files_config_dir`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::vo_map_files_config_dir
-
-##### `vo_map_files_refresh_interval`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::vo_map_files_refresh_interval
-
-##### `tpc_max_connections`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::tpc_max_connections
-
-##### `tpc_verify_checksum`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::tpc_verify_checksum
-
-##### `jvm_opts`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::jvm_opts
-
-##### `authz_server_enable`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::authz_server_enable
-
-##### `authz_server_issuer`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::authz_server_issuer
-
-##### `authz_server_max_token_lifetime_sec`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::authz_server_max_token_lifetime_sec
-
-##### `authz_server_secret`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::authz_server_secret
-
-##### `require_client_cert`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::require_client_cert
-
-##### `use_conscrypt`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::use_conscrypt
-
-##### `tpc_use_conscrypt`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::tpc_use_conscrypt
-
-##### `enable_http2`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::enable_http2
-
-##### `debug`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::debug
-
-##### `debug_port`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::debug_port
-
-##### `debug_suspend`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::debug_suspend
-
-##### `storm_limit_nofile`
-
-Data type: `Any`
-
-
-
-Default value: $storm::webdav::storm_limit_nofile
 
 ### storm::webdav::install
 
@@ -2617,6 +2422,34 @@ storm::webdav::application_file { 'application-wlcg.yml':
 #### Parameters
 
 The following parameters are available in the `storm::webdav::application_file` defined type.
+
+##### `source`
+
+Data type: `Any`
+
+The source of file resource. It can be an absolute path or a Puppet module relative path.
+
+### storm::webdav::drop_in_file
+
+Use this define to inject one or more .conf files
+into `/etc/systemd/system/storm-webdav.service.d` directory.
+
+#### Examples
+
+##### 
+
+```puppet
+class { 'storm::webdav':
+  # storm webdav parameters
+}
+storm::webdav::drop_in_file { 'override.conf':
+  source => '/path/to/my/override.conf',
+}
+```
+
+#### Parameters
+
+The following parameters are available in the `storm::webdav::drop_in_file` defined type.
 
 ##### `source`
 
@@ -2861,8 +2694,9 @@ The storage area type for storm-webdav.
 Alias of `Struct[{
   name                           => String,
   root_path                      => String,
-  access_points                  => Array[String],
-  vos                            => Array[String],
+  filesystem_type                => Optional[String],
+  access_points                  => Optional[Array[String]],
+  vos                            => Optional[Array[String]],
   orgs                           => Optional[Array[String]],
   authenticated_read_enabled     => Optional[Boolean],
   anonymous_read_enabled         => Optional[Boolean],

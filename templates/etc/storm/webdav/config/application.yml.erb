@@ -1,7 +1,7 @@
 # This file is managed by Puppet
 oauth:
   issuers:
-<%- scope['storm::webdav::oauth_issuers'].each do | iss | -%>
+<%- scope.lookupvar('storm::webdav::oauth_issuers').each do | iss | -%>
     - name: <%= iss['name'] %>
       issuer: <%= iss['issuer'] %>
 <%- end -%>

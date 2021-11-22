@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.3.0]
+
+- Added missing StoRM WebDAV configuration parameters
+- StoRM WebDAV hostname list initialized with local FQDN
+- A cleanup of WebDAV storage area configuration directory can be enabled
+- Added storm::webdav::drop_in_file define in order to allow adding custom drop-in files to be stored in /etc/systemd/system/storm-webdav.service.d 
+
 ## [3.2.1]
 
 - Fixed permissions on info-provider configuration file
