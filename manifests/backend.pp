@@ -390,8 +390,6 @@
 #   If not an empty string, set the content of your path-authz.db file from this source path.
 #   Default value: empty string.
 #
-# @param debug
-#
 class storm::backend (
 
   # Manage storm.properties
@@ -553,9 +551,6 @@ class storm::backend (
 
   # manage path-authz.db
   String $path_authz_db_file,
-
-  # debug
-  Boolean $debug,
 
 ) {
 

@@ -158,6 +158,7 @@ storm::backend::info_frontend_host_list: []
 
 # JVM Options
 storm::backend::jvm_options: '-Xms512m -Xmx512m'
+#storm::backend::jvm_options: '-Xms512m -Xmx512m -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=1044,suspend=n'
 
 # LCMAPS
 storm::backend::lcmaps_db_file: '/etc/storm/backend-server/lcmaps.db'
@@ -170,6 +171,3 @@ storm::backend::storm_limit_nofile: 65535
 
 # manage path-authz.db
 storm::backend::path_authz_db_file: ''
-
-# debug for developers
-storm::backend::debug: false
