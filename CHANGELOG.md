@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.3.1]
+
+- Added missing Argus's resource-id parameter within Frontend's configuration.
+- Added support for using an external file for StoRM Frontend's configuration file.
+- Removed storm::frontend::security_enable_mapping parameter.
+- The storm::frontend::be_xmlrpc_host value is initialized with local FQDN.
+
 ## [3.3.0]
 
 - Added missing StoRM WebDAV configuration parameters
