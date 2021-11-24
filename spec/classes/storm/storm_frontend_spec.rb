@@ -43,6 +43,22 @@ describe 'storm::frontend', type: 'class' do
         end
       end
 
+      context 'Use your own frontend configuration file' do
+        let(:params) do
+          super().merge(
+            'storm_frontend_server_conf_file' => '/path/to/your/storm-frontend-server.conf',
+          )
+        end
+
+        it 'check frontend conf file content' do
+          title = '/etc/storm/frontend-server/storm-frontend-server.conf'
+          is_expected.to contain_file(title).with(
+            ensure: 'present',
+            source: '/path/to/your/storm-frontend-server.conf',
+          )
+        end
+      end
+
       context 'Use custom frontend params' do
         let(:params) do
           super().merge(
@@ -51,7 +67,6 @@ describe 'storm::frontend', type: 'class' do
             'threadpool_threads_number' => 60,
             'gsoap_maxpending'          => 2000,
             'log_debuglevel'            => 'DEBUG',
-            'security_enable_mapping'   => true,
             'security_enable_vomscheck' => false,
             'be_xmlrpc_host'            => 'storm.example.org',
             'be_xmlrpc_token'           => 'token',
@@ -63,6 +78,7 @@ describe 'storm::frontend', type: 'class' do
             'db_passwd'                 => 'password',
             'check_user_blacklisting'   => true,
             'argus_pepd_endpoint'       => 'storm.example.org',
+            'argus_resource_id'         => 'storm',
             'monitoring_enabled'        => false,
             'monitoring_time_interval'  => 50,
             'monitoring_detailed'       => true,
@@ -79,7 +95,7 @@ describe 'storm::frontend', type: 'class' do
           is_expected.to contain_file(title).with(content: %r{fe.threadpool.threads.number=60})
           is_expected.to contain_file(title).with(content: %r{fe.gsoap.maxpending=2000})
           is_expected.to contain_file(title).with(content: %r{log.debuglevel=DEBUG})
-          is_expected.to contain_file(title).with(content: %r{security.enable.mapping=true})
+          is_expected.to contain_file(title).with(content: %r{security.enable.mapping=false})
           is_expected.to contain_file(title).with(content: %r{security.enable.vomscheck=false})
           is_expected.to contain_file(title).with(content: %r{be.xmlrpc.host=storm.example.org})
           is_expected.to contain_file(title).with(content: %r{be.xmlrpc.token=token})
@@ -91,6 +107,7 @@ describe 'storm::frontend', type: 'class' do
           is_expected.to contain_file(title).with(content: %r{db.passwd=password})
           is_expected.to contain_file(title).with(content: %r{check.user.blacklisting=true})
           is_expected.to contain_file(title).with(content: %r{argus-pepd-endpoint=storm.example.org})
+          is_expected.to contain_file(title).with(content: %r{argus.resource-id=storm})
           is_expected.to contain_file(title).with(content: %r{monitoring.enabled=false})
           is_expected.to contain_file(title).with(content: %r{#monitoring.timeInterval=60})
           is_expected.to contain_file(title).with(content: %r{#monitoring.detailed=false})
@@ -129,6 +146,7 @@ describe 'storm::frontend', type: 'class' do
           is_expected.to contain_file(title).with(content: %r{db.passwd=storm})
           is_expected.to contain_file(title).with(content: %r{check.user.blacklisting=false})
           is_expected.to contain_file(title).with(content: %r{#argus-pepd-endpoint=})
+          is_expected.to contain_file(title).with(content: %r{#argus.resource-id=})
           is_expected.to contain_file(title).with(content: %r{monitoring.enabled=true})
           is_expected.to contain_file(title).with(content: %r{monitoring.timeInterval=60})
           is_expected.to contain_file(title).with(content: %r{monitoring.detailed=false})
