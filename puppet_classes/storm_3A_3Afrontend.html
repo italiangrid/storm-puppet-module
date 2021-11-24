@@ -93,16 +93,31 @@
 </div></p>
       
       <pre class="example code"><code>class { &#39;storm::frontend&#39;:
-  be_xmlrpc_host  =&gt; &#39;storm-backend.example&#39;,
-  be_xmlrpc_token =&gt; &#39;secret&#39;,
-  db_host         =&gt; &#39;storm-backend.example&#39;,
-  db_user         =&gt; &#39;storm&#39;,
-  db_passwd       =&gt; &#39;secret&#39;,
+  be_xmlrpc_host  =&gt; &#39;storm-backend.host.org&#39;,
+  be_xmlrpc_token =&gt; &#39;my-secret-xmlrpc-token&#39;,
+  db_host         =&gt; &#39;storm-backend.host.org&#39;,
+  db_passwd       =&gt; &#39;my-secret-db-password&#39;,
 }</code></pre>
     
   </div>
 <p class="tag_title">Parameters:</p>
 <ul class="param">
+  
+    <li>
+      
+        <span class='name'>storm_frontend_server_conf_file</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Use this parameter to provide your own storm-frontend-server.conf file. This can be used, for example, when you&#39;re using the latest module version to configure an old StoRM deployment. This parameter is used only when it has a non-empty value and it overwrites several other module parameters. Default value: empty string (that means not used).</p>
+</div>
+      
+    </li>
   
     <li>
       
@@ -112,10 +127,12 @@
         <span class='type'>(<tt>String</tt>)</span>
       
       
+        <em class="default">(defaults to: <tt>$::fqdn</tt>)</em>
+      
       
         &mdash;
         <div class='inline'>
-<p>Backend hostname. Required.</p>
+<p>StoRM Backend hostname.</p>
 </div>
       
     </li>
@@ -131,7 +148,7 @@
       
         &mdash;
         <div class='inline'>
-<p>Backend XML-RPC server port. Default is 8080.</p>
+<p>StoRM Backend XML-RPC server port. Default value: 8080.</p>
 </div>
       
     </li>
@@ -147,7 +164,7 @@
       
         &mdash;
         <div class='inline'>
-<p>Token used for communicating with Backend service. Mandatory, has no default.</p>
+<p>Security token used for communicating with StoRM Backend. Mandatory.</p>
 </div>
       
     </li>
@@ -163,7 +180,7 @@
       
         &mdash;
         <div class='inline'>
-<p>XML-RPC server path. Default is /RPC2.</p>
+<p>StoRM Backend XML-RPC server path. Default value: &#39;/RPC2&#39;.</p>
 </div>
       
     </li>
@@ -179,7 +196,7 @@
       
         &mdash;
         <div class='inline'>
-<p>REST server port running on the Backend machine. Default is 9998.</p>
+<p>StoRM Backend REST server port running on the Backend machine. Default value: 9998.</p>
 </div>
       
     </li>
@@ -197,7 +214,7 @@
       
         &mdash;
         <div class='inline'>
-<p>Host for database connection. Default is set to be_xmlrpc_host.</p>
+<p>Host for database connection.</p>
 </div>
       
     </li>
@@ -213,7 +230,7 @@
       
         &mdash;
         <div class='inline'>
-<p>User for database connection. Default is storm.</p>
+<p>User for database connection. Default value: &#39;storm&#39;.</p>
 </div>
       
     </li>
@@ -229,7 +246,7 @@
       
         &mdash;
         <div class='inline'>
-<p>Password for database connection. Default is storm.</p>
+<p>Password for database connection. Default value: &#39;storm&#39;.</p>
 </div>
       
     </li>
@@ -245,7 +262,7 @@
       
         &mdash;
         <div class='inline'>
-<p>Frontend service port. Default is 8444.</p>
+<p>Frontend service port. Default value: 8444.</p>
 </div>
       
     </li>
@@ -261,7 +278,7 @@
       
         &mdash;
         <div class='inline'>
-<p>Size of the internal queue used to maintain SRM tasks in case there are no free worker threads. Default is 200</p>
+<p>Size of the internal queue used to maintain SRM tasks in case there are no free worker threads. Default value: 200.</p>
 </div>
       
     </li>
@@ -277,7 +294,7 @@
       
         &mdash;
         <div class='inline'>
-<p>Size of the worker thread pool. Default is 50.</p>
+<p>Size of the worker thread pool. Default value: 50.</p>
 </div>
       
     </li>
@@ -293,7 +310,7 @@
       
         &mdash;
         <div class='inline'>
-<p>Size of the GSOAP queue used to maintain pending SRM requests. Default is 1000.</p>
+<p>Size of the GSOAP queue used to maintain pending SRM requests. Default value: 1000.</p>
 </div>
       
     </li>
@@ -309,7 +326,7 @@
       
         &mdash;
         <div class='inline'>
-<p>Enable/disable user blacklisting. Default is false.</p>
+<p>Enable/disable user blacklisting. Default value: false.</p>
 </div>
       
     </li>
@@ -325,7 +342,23 @@
       
         &mdash;
         <div class='inline'>
-<p>The complete service endpoint of Argus PEP server. Mandatory if check_user_blacklisting is true.</p>
+<p>The complete service endpoint of Argus PEP server. Mandatory if <code>check_user_blacklisting</code> is true.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>argus_resource_id</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The resource id is used to target a resource (or set of resources, if wildcards are used) under the control of Argus authorization. Mandatory if <code>check_user_blacklisting</code> is true.</p>
 </div>
       
     </li>
@@ -341,7 +374,7 @@
       
         &mdash;
         <div class='inline'>
-<p>Enable/disable monitoring. Default is true.</p>
+<p>Enable/disable monitoring. Default value: true.</p>
 </div>
       
     </li>
@@ -357,7 +390,7 @@
       
         &mdash;
         <div class='inline'>
-<p>Time interval in seconds between each monitoring round. Default is 60.</p>
+<p>Time interval in seconds between each monitoring round. Default value: 60.</p>
 </div>
       
     </li>
@@ -373,23 +406,7 @@
       
         &mdash;
         <div class='inline'>
-<p>Enable/disable detailed monitoring. Default is false.</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>security_enable_mapping</span>
-      
-      
-        <span class='type'>(<tt>Boolean</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>Flag to enable/disable DN-to-userid mapping via gridmap-file. Default is false.</p>
+<p>Enable/disable detailed monitoring. Default value: false.</p>
 </div>
       
     </li>
@@ -405,7 +422,7 @@
       
         &mdash;
         <div class='inline'>
-<p>Flag to enable/disable checking proxy VOMS credentials. Default is true.</p>
+<p>Flag to enable/disable checking proxy VOMS credentials. Default value: true.</p>
 </div>
       
     </li>
@@ -421,7 +438,7 @@
       
         &mdash;
         <div class='inline'>
-<p>Logging level. Possible values are: ERROR, WARN, INFO, DEBUG, DEBUG2. Default is INFO</p>
+<p>Logging level. Possible values are: ERROR, WARN, INFO, DEBUG, DEBUG2. Default value: INFO.</p>
 </div>
       
     </li>
@@ -437,7 +454,7 @@
       
         &mdash;
         <div class='inline'>
-<p>Gridmap directory path. Defailt value is: /etc/grid-security/gridmapdir</p>
+<p>Gridmap directory path. Defailt value: &#39;/etc/grid-security/gridmapdir&#39;.</p>
 </div>
       
     </li>
@@ -453,7 +470,7 @@
       
         &mdash;
         <div class='inline'>
-<p>Gridmap file path. Defailt value is: /etc/grid-security/grid-mapfile</p>
+<p>Gridmap file path. Defailt value: &#39;/etc/grid-security/grid-mapfile&#39;.</p>
 </div>
       
     </li>
@@ -469,14 +486,6 @@
         <pre class="lines">
 
 
-79
-80
-81
-82
-83
-84
-85
-86
 87
 88
 89
@@ -512,14 +521,24 @@
 119
 120
 121
-122</pre>
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/frontend.pp', line 79</span>
+        <pre class="code"><span class="info file"># File 'manifests/frontend.pp', line 87</span>
 
 class storm::frontend (
 
-  String $be_xmlrpc_host,
+  String $storm_frontend_server_conf_file,
+
   String $be_xmlrpc_token,
   Integer $be_xmlrpc_port,
   String $be_xmlrpc_path,
@@ -535,12 +554,12 @@ class storm::frontend (
 
   Boolean $check_user_blacklisting,
   String $argus_pepd_endpoint,
+  String $argus_resource_id,
 
   Boolean $monitoring_enabled,
   Integer $monitoring_time_interval,
   Boolean $monitoring_detailed,
 
-  Boolean $security_enable_mapping,
   Boolean $security_enable_vomscheck,
 
   String $log_debuglevel,
@@ -548,8 +567,8 @@ class storm::frontend (
   String $gridmap_dir,
   String $gridmap_file,
 
+  String $be_xmlrpc_host = $::fqdn,
   String $db_host = $be_xmlrpc_host,
-
 
 ) {
 
