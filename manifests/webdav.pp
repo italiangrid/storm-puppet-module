@@ -107,6 +107,7 @@ class storm::webdav (
 
   Boolean $ensure_empty_storage_area_dir,
   Array[Storm::Webdav::StorageArea] $storage_areas,
+  Array[String] $hostnames,
 
   Integer $http_port,
   Integer $https_port,
@@ -137,7 +138,6 @@ class storm::webdav (
 
   Integer $storm_limit_nofile,
 
-  Array[String] $hostnames = [ $::fqdn ],
 ) {
 
   contain storm::webdav::install
