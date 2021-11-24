@@ -5,47 +5,49 @@
 #
 
 # Service settings
-fe.port=<%=@port%>
-fe.threadpool.threads.number=<%=@threadpool_threads_number%>
-fe.threadpool.maxpending=<%=@threadpool_maxpending%>
-fe.gsoap.maxpending=<%=@gsoap_maxpending%>
+fe.port=<%=scope.lookupvar('storm::frontend::port')%>
+fe.threadpool.threads.number=<%=scope.lookupvar('storm::frontend::threadpool_threads_number')%>
+fe.threadpool.maxpending=<%=scope.lookupvar('storm::frontend::threadpool_maxpending')%>
+fe.gsoap.maxpending=<%=scope.lookupvar('storm::frontend::gsoap_maxpending')%>
 
 # Log settings
 log.filename = /var/log/storm/storm-frontend-server.log
 # Allowed values: ERROR, WARN, INFO, DEBUG, DEBUG2.
-log.debuglevel=<%=@log_debuglevel%>
+log.debuglevel=<%=scope.lookupvar('storm::frontend::log_debuglevel')%>
 
 # Security settings
-security.enable.mapping=<%=@security_enable_mapping%>
-security.enable.vomscheck=<%=@security_enable_vomscheck%>
+security.enable.mapping=false
+security.enable.vomscheck=<%=scope.lookupvar('storm::frontend::security_enable_vomscheck')%>
 
 # Backend information
-be.xmlrpc.host=<%=@be_xmlrpc_host%>
-be.xmlrpc.token=<%=@be_xmlrpc_token%>
-be.xmlrpc.port=<%=@be_xmlrpc_port%>
-be.xmlrpc.path=<%=@be_xmlrpc_path%>
+be.xmlrpc.host=<%=scope.lookupvar('storm::frontend::be_xmlrpc_host')%>
+be.xmlrpc.token=<%=scope.lookupvar('storm::frontend::be_xmlrpc_token')%>
+be.xmlrpc.port=<%=scope.lookupvar('storm::frontend::be_xmlrpc_port')%>
+be.xmlrpc.path=<%=scope.lookupvar('storm::frontend::be_xmlrpc_path')%>
 
 # default is 9998
-be.recalltable.port=<%=@be_recalltable_port%>
+be.recalltable.port=<%=scope.lookupvar('storm::frontend::be_recalltable_port')%>
 
 # Database
-db.host=<%=@db_host%>
-db.user=<%=@db_user%>
-db.passwd=<%=@db_passwd%>
+db.host=<%=scope.lookupvar('storm::frontend::db_host')%>
+db.user=<%=scope.lookupvar('storm::frontend::db_user')%>
+db.passwd=<%=scope.lookupvar('storm::frontend::db_passwd')%>
 
 # Argus Blacklisting
-check.user.blacklisting=<%=@check_user_blacklisting%>
-<% if @check_user_blacklisting %>
-argus-pepd-endpoint=<%=@argus_pepd_endpoint%>
+check.user.blacklisting=<%=scope.lookupvar('storm::frontend::check_user_blacklisting')%>
+<% if scope.lookupvar('storm::frontend::check_user_blacklisting') %>
+argus-pepd-endpoint=<%=scope.lookupvar('storm::frontend::argus_pepd_endpoint')%>
+argus.resource-id=<%=scope.lookupvar('storm::frontend::argus_resource_id')%>
 <% else %>
 #argus-pepd-endpoint=
+#argus.resource-id=
 <% end %>
 
 # Monitoring
-monitoring.enabled=<%=@monitoring_enabled%>
-<% if @monitoring_enabled %>
-monitoring.timeInterval=<%=@monitoring_time_interval%>
-monitoring.detailed=<%=@monitoring_detailed%>
+monitoring.enabled=<%=scope.lookupvar('storm::frontend::monitoring_enabled')%>
+<% if scope.lookupvar('storm::frontend::monitoring_enabled') %>
+monitoring.timeInterval=<%=scope.lookupvar('storm::frontend::monitoring_time_interval')%>
+monitoring.detailed=<%=scope.lookupvar('storm::frontend::monitoring_detailed')%>
 <% else %>
 #monitoring.timeInterval=60
 #monitoring.detailed=false
