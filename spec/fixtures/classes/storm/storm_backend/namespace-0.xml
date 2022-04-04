@@ -85,6 +85,24 @@
             </member>
           </members>
         </pool>
+        <pool>
+          <balance-strategy>round-robin</balance-strategy>
+          <members>
+            <member member-id="3">
+            </member>
+            <member member-id="5">
+            </member>
+          </members>
+        </pool>
+        <pool>
+          <balance-strategy>round-robin</balance-strategy>
+          <members>
+            <member member-id="4">
+            </member>
+            <member member-id="6">
+            </member>
+          </members>
+        </pool>
       </capabilities>
     </filesystem>
     <filesystem name="ATLAS-FS" fs_type="gpfs">
@@ -167,6 +185,24 @@
             </member>
           </members>
         </pool>
+        <pool>
+          <balance-strategy>round-robin</balance-strategy>
+          <members>
+            <member member-id="2">
+            </member>
+            <member member-id="4">
+            </member>
+          </members>
+        </pool>
+        <pool>
+          <balance-strategy>round-robin</balance-strategy>
+          <members>
+            <member member-id="3">
+            </member>
+            <member member-id="5">
+            </member>
+          </members>
+        </pool>
       </capabilities>
     </filesystem>
     <filesystem name="NOVOS-FS" fs_type="ext3">
@@ -234,6 +270,24 @@
             <member member-id="0">
             </member>
             <member member-id="1">
+            </member>
+          </members>
+        </pool>
+        <pool>
+          <balance-strategy>round-robin</balance-strategy>
+          <members>
+            <member member-id="2">
+            </member>
+            <member member-id="4">
+            </member>
+          </members>
+        </pool>
+        <pool>
+          <balance-strategy>round-robin</balance-strategy>
+          <members>
+            <member member-id="3">
+            </member>
+            <member member-id="5">
             </member>
           </members>
         </pool>

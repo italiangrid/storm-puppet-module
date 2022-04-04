@@ -16,6 +16,7 @@ class storm::backend::config (
   $gsiftp_pool_members = $storm::backend::gsiftp_pool_members,
   $gsiftp_pool_balance_strategy = $storm::backend::gsiftp_pool_balance_strategy,
   $webdav_pool_members = $storm::backend::webdav_pool_members,
+  $webdav_pool_balance_strategy = $storm::backend::webdav_pool_balance_strategy,
   $srm_pool_members = $storm::backend::srm_pool_members,
   $transfer_protocols = $storm::backend::transfer_protocols,
   $fs_type = $storm::backend::fs_type,

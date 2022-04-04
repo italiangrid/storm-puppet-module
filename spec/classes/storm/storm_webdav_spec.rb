@@ -134,7 +134,7 @@ describe 'storm::webdav', type: 'class' do
           is_expected.to contain_file(atlas_props).with(content: %r{rootPath=\/storage\/atlas})
           is_expected.to contain_file(atlas_props).with(content: %r{filesystemType=gpfs})
           is_expected.to contain_file(atlas_props).with(content: %r{accessPoints=\/atlas,\/atlasdisk})
-          is_expected.to contain_file(atlas_props).with(content: %r{vos=atlas})
+          is_expected.to contain_file(atlas_props).with(content: %r{vos=})
           is_expected.to contain_file(atlas_props).with(content: %r{orgs=atlas})
           is_expected.to contain_file(atlas_props).with(content: %r{authenticatedReadEnabled=false})
           is_expected.to contain_file(atlas_props).with(content: %r{anonymousReadEnabled=true})

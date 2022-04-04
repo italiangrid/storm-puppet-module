@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.3.2]
+
+- Changed default value to an empty array for vos field of Storm::Webdav::StorageArea
+- Added pool of webdav endpoints into backend's namespace.xml
+
 ## [3.3.1]
 
 - Added missing Argus's resource-id parameter within Frontend's configuration.

@@ -105,6 +105,14 @@
           @sa_gsiftp_balance_strategy='round-robin'
         end
       end
+
+      @sa_webdav_balance_strategy=sa['webdav_pool_balance_strategy']
+      if @sa_webdav_balance_strategy == nil
+        @sa_webdav_balance_strategy=@webdav_pool_balance_strategy
+        if @sa_webdav_balance_strategy == nil
+          @sa_webdav_balance_strategy='round-robin'
+        end
+      end
 -%>
     <filesystem name="<%= @sa_upp %>-FS" fs_type="<%= @sa_fs_type %>">
       <space-token-description><%= @sa_fs_space_token %></space-token-description>
@@ -205,6 +213,8 @@
             <%- if @sa_webdav_members == nil -%>
               <%= fail("https transfer protocol is enabled for #{@sa_low} but no webdav_pool_members is defined for storage area or globally") %>
             <%- end -%>
+            <%- @ids_http=[] -%>
+            <%- @ids_https=[] -%>
             <%- @sa_webdav_members.each do | member | -%>
           <prot name="https">
             <id><%= @protocol_id %></id>
@@ -216,6 +226,7 @@
             <port>8443</port>
             <%- end -%>
           </prot>
+              <%- @ids_https.push(@protocol_id) -%>
               <%- @protocol_id+=1 -%>
           <prot name="http">
             <id><%= @protocol_id %></id>
@@ -227,10 +238,12 @@
             <port>8085</port>
             <%- end -%>
           </prot>
+              <%- @ids_http.push(@protocol_id) -%>
               <%- @protocol_id+=1 -%>
             <%- end -%>
           <%- end -%>
         </trans-prot>
+        <%- if @sa_transfer_protocols.include?('gsiftp') -%>
         <pool>
           <balance-strategy><%= @sa_gsiftp_balance_strategy %></balance-strategy>
           <members>
@@ -245,6 +258,37 @@
             <%- end -%>
           </members>
         </pool>
+        <%- end -%>
+        <%- if @sa_transfer_protocols.include?('webdav') -%>
+        <pool>
+          <balance-strategy><%= @sa_webdav_balance_strategy %></balance-strategy>
+          <members>
+            <%- @sa_webdav_members.each_with_index do | member, i | -%>
+              <%- @id=@ids_https[i] -%>
+            <member member-id="<%= @id %>">
+              <%- if @sa_webdav_balance_strategy == "weight" -%>
+                <%- @weight=member['weight'].nil? ? 100 : member['weight'] -%>
+                <weight><%= @weight %></weight>
+              <%- end -%>
+            </member>
+            <%- end -%>
+          </members>
+        </pool>
+        <pool>
+          <balance-strategy><%= @sa_webdav_balance_strategy %></balance-strategy>
+          <members>
+            <%- @sa_webdav_members.each_with_index do | member, i | -%>
+              <%- @id=@ids_http[i] -%>
+            <member member-id="<%= @id %>">
+              <%- if @sa_webdav_balance_strategy == "weight" -%>
+                <%- @weight=member['weight'].nil? ? 100 : member['weight'] -%>
+                <weight><%= @weight %></weight>
+              <%- end -%>
+            </member>
+            <%- end -%>
+          </members>
+        </pool>
+        <%- end -%>
       </capabilities>
     </filesystem>
   <%- end -%>

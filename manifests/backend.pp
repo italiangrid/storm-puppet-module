@@ -67,6 +67,12 @@
 #   GridFTP servers pool list (default value for all Storage Areas).
 #   Note: you may change the settings for each SA acting on its configuration.
 #
+# @param webdav_pool_balance_strategy
+#   Load balancing strategy for WebDAV server pools (default value for all Storage Areas).
+#   Note: you may change the settings for each SA acting on its configuration.
+#   Available values: round-robin, smart-rr, random, weight. Default value: round-robin.
+#   See [Storm::Backend::BalanceStrategy](#stormbackendbalancestrategy).
+#
 # @param webdav_pool_members
 #   Array of [Storm::Backend::WebdavPoolMember](#stormbackendwebdavpoolmember).
 #   WebDAV endpoints pool list (default value for all Storage Areas).
@@ -317,6 +323,7 @@ class storm::backend (
   Storm::Backend::BalanceStrategy $gsiftp_pool_balance_strategy,
   Array[Storm::Backend::GsiftpPoolMember] $gsiftp_pool_members,
   # 3. webdav pool
+  Storm::Backend::BalanceStrategy $webdav_pool_balance_strategy,
   Array[Storm::Backend::WebdavPoolMember] $webdav_pool_members,
   # 4. frontend pool
   Array[Storm::Backend::SrmPoolMember] $srm_pool_members,

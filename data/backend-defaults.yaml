@@ -13,6 +13,7 @@ storm::backend::xroot_port: 1094
 storm::backend::gsiftp_pool_balance_strategy: 'round-robin'
 storm::backend::gsiftp_pool_members: []
 # 3. webdav pool
+storm::backend::webdav_pool_balance_strategy: 'round-robin'
 storm::backend::webdav_pool_members: []
 # 4. frontend pool
 storm::backend::srm_pool_members: []

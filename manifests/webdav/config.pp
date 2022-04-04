@@ -59,7 +59,7 @@ class storm::webdav::config (
       # optional fileds
       $fs_type = pick($sa[filesystem_type], 'posix')
       $access_points = pick($sa[access_points], ["/${name}"])
-      $vos = pick($sa[vos], [$name])
+      $vos = pick($sa[vos], [])
       $orgs = pick($sa[orgs], [])
       $authenticated_read_enabled = pick($sa[authenticated_read_enabled], false)
       $anonymous_read_enabled = pick($sa[anonymous_read_enabled], false)
