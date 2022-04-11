@@ -78,12 +78,6 @@
 # @param log_debuglevel [String]
 #  Logging level. Possible values are: ERROR, WARN, INFO, DEBUG, DEBUG2. Default value: INFO.
 #
-# @param gridmap_dir [String]
-#  Gridmap directory path. Defailt value: '/etc/grid-security/gridmapdir'.
-#
-# @param gridmap_file [String]
-#  Gridmap file path. Defailt value: '/etc/grid-security/grid-mapfile'.
-#
 class storm::frontend (
 
   String $storm_frontend_server_conf_file,
@@ -112,9 +106,6 @@ class storm::frontend (
   Boolean $security_enable_vomscheck,
 
   String $log_debuglevel,
-
-  String $gridmap_dir,
-  String $gridmap_file,
 
   String $be_xmlrpc_host = $::fqdn,
   String $db_host = $be_xmlrpc_host,

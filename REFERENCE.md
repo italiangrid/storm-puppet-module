@@ -1617,18 +1617,6 @@ Data type: `String`
 
 Logging level. Possible values are: ERROR, WARN, INFO, DEBUG, DEBUG2. Default value: INFO.
 
-##### `gridmap_dir`
-
-Data type: `String`
-
-Gridmap directory path. Defailt value: '/etc/grid-security/gridmapdir'.
-
-##### `gridmap_file`
-
-Data type: `String`
-
-Gridmap file path. Defailt value: '/etc/grid-security/grid-mapfile'.
-
 ### `storm::frontend::config`
 
 StoRM Frontend config class

@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.4.0]
+
+- Removed useless storm::frontend parameters gridmap_dir and gridmap_file 
+
 ## [3.3.2]
 
 - Changed default value to an empty array for vos field of Storm::Webdav::StorageArea
