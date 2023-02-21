@@ -10,15 +10,15 @@
   "dependencies": [
     {
       "name": "puppetlabs/accounts",
-      "version_requirement": ">= 6.1.0"
+      "version_requirement": ">= 6.1.0 < 7.0.0"
     },
     {
       "name": "puppetlabs/mysql",
-      "version_requirement": ">= 10.4.0"
+      "version_requirement": ">= 10.4.0 < 10.10.0"
     },
     {
       "name": "puppetlabs-stdlib",
-      "version_requirement": ">= 1.0.0"
+      "version_requirement": ">= 1.0.0 < 7.0.0"
     }
   ],
   "operatingsystem_support": [
@@ -35,7 +35,7 @@
       "version_requirement": ">= 5.5.0 < 6.0.0"
     }
   ],
-  "pdk-version": "1.18.1",
+  "pdk-version": "2.6.1",
   "template-url": "pdk-default#1.18.1",
   "template-ref": "tags/1.18.1-0-g3d2e75c"
 }
