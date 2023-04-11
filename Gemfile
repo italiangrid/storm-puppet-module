@@ -20,6 +20,7 @@ group :development do
   gem "json", '= 2.6.1',                           require: false if Gem::Requirement.create(['>= 3.1.0', '< 3.1.3']).satisfied_by?(Gem::Version.new(RUBY_VERSION.dup))
   gem "json", '= 2.6.3',                           require: false if Gem::Requirement.create(['>= 3.2.0', '< 4.0.0']).satisfied_by?(Gem::Version.new(RUBY_VERSION.dup))
   gem "voxpupuli-puppet-lint-plugins", '~> 4.0',   require: false
+  gem 'racc', '~> 1.6', '>= 1.6.2',                require: false
   gem "puppet-blacksmith", '= 6.1.1',              require: false
   gem "facterdb", '~> 1.18',                       require: false
   gem "metadata-json-lint", '>= 2.0.2', '< 4.0.0', require: false
@@ -35,7 +36,7 @@ group :development do
   gem "rubocop-performance", '= 1.9.1',            require: false
   gem "rubocop-rspec", '= 2.0.1',                  require: false
   gem "rb-readline", '= 0.5.5',                    require: false, platforms: [:mswin, :mingw, :x64_mingw]
-  gem "nokogiri",                                  require: false
+  gem "nokogiri", '= 1.14.2',                      require: false
   gem "rspec-puppet-utils",                        require: false
 end
 group :system_tests do

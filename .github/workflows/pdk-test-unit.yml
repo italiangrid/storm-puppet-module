@@ -1,25 +1,26 @@
-name: Run pdk test unit
+name: Run PDK tests
 
 on:
   - push
   - pull_request
 
 jobs:
-  build:
-    strategy:
-      matrix:
-        version: ["5.5.22", "6.28,0", "7.24.0"]
+  tests:
     runs-on: ubuntu-latest
     steps:
-    - name: Clone repository
-      uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Run unit tests
-      uses: puppets-epic-show-theatre/action-pdk-test-unit@v1
-      with:
-        puppet-version: ${{ matrix.version }}
-        # [optional]
-        # A string indicating the Puppet version to validate against, such as "5.4.2" or "5.5".
-        pe-version: ""
-        # [optional]
-        # A string indicating the PE version to validate against, such as "2017.3.5" or "2018.1".
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '2.7'
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+
+      - run: bundle exec rake spec:simplecov
+
+      - name: Simplecov Report
+        uses: aki77/simplecov-report-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          resultPath: ./coverage/codecov-result.json
+        if: github.event_name == 'pull_request'
