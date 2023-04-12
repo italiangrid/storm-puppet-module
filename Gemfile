@@ -1,5 +1,7 @@
 source ENV['GEM_SOURCE'] || 'https://rubygems.org'
 
+ruby '2.7.8'
+
 def location_for(place_or_version, fake_version = nil)
   git_url_regex = %r{\A(?<url>(https?|git)[:@][^#]*)(#(?<branch>.*))?}
   file_url_regex = %r{\Afile:\/\/(?<path>.*)}
@@ -36,7 +38,7 @@ group :development do
   gem "rubocop-performance", '= 1.9.1',            require: false
   gem "rubocop-rspec", '= 2.0.1',                  require: false
   gem "rb-readline", '= 0.5.5',                    require: false, platforms: [:mswin, :mingw, :x64_mingw]
-  gem "nokogiri", '= 1.14.2',                      require: false
+  gem "nokogiri", '~> 1.14', '< 1.14.3',           require: false
   gem "rspec-puppet-utils",                        require: false
 end
 group :system_tests do
