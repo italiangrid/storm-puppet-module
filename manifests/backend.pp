@@ -453,13 +453,12 @@ class storm::backend (
   String $path_authz_db_file,
 
   # hostnames
-  String $hostname = $::fqdn,
+  String $hostname = $fqdn,
   String $db_hostname = $hostname,
   String $xroot_hostname = $hostname,
   String $frontend_public_host = $hostname,
 
 ) {
-
   contain storm::backend::install
   contain storm::backend::configdb
   contain storm::backend::config

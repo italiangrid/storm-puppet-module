@@ -65,7 +65,6 @@ class storm::gridftp (
   Boolean $load_storm_dsi_module,
 
 ) {
-
   contain storm::gridftp::install
   contain storm::gridftp::config
   contain storm::gridftp::service

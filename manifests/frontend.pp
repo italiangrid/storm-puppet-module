@@ -107,11 +107,10 @@ class storm::frontend (
 
   String $log_debuglevel,
 
-  String $be_xmlrpc_host = $::fqdn,
+  String $be_xmlrpc_host = $fqdn,
   String $db_host = $be_xmlrpc_host,
 
 ) {
-
   contain storm::frontend::install
   contain storm::frontend::config
   contain storm::frontend::service

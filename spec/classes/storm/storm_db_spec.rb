@@ -57,7 +57,7 @@ describe 'storm::db', type: 'class' do
             mode: '0644',
           )
           is_expected.to contain_file(service_file).with(
-            ensure: 'present',
+            ensure: 'file',
             owner: 'root',
             group: 'root',
             mode: '0644',

@@ -21,12 +21,10 @@ class storm::repo (
   Array[Storm::CustomRepo] $extra,
 
 ) {
-
   $base = 'https://repo.cloud.cnaf.infn.it/repository'
-  $el = $::operatingsystemmajrelease
+  $el = $facts['os']['distro']['release']['major']
 
   $installed.each | $repo | {
-
     $enabled = $repo in $enabled ? { true => 1, default => 0 }
     $name = "storm-${repo}-centos${el}"
     $baseurl = "${base}/storm-rpm-${repo}/centos${el}/"
@@ -43,7 +41,6 @@ class storm::repo (
   }
 
   $extra.each | $repo | {
-
     $name = $repo[name]
     $baseurl = $repo[baseurl]
 
@@ -57,5 +54,4 @@ class storm::repo (
       gpgcheck => 0,
     }
   }
-
 }

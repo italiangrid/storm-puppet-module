@@ -30,10 +30,9 @@ class storm::db (
   Data $override_options,
   Integer $limit_no_file,
 
-  String $fqdn_hostname = $::fqdn,
+  String $fqdn_hostname = $fqdn,
 
 ) {
-
   ## MySQL Client
   include 'mysql::client'
 
@@ -50,7 +49,7 @@ class storm::db (
   $service_template_file='storm/etc/systemd/system/mariadb.service.d/limits.conf.erb'
 
   file { $service_file:
-    ensure  => present,
+    ensure  => file,
     content => template($service_template_file),
     mode    => '0644',
     owner   => 'root',
@@ -161,6 +160,4 @@ class storm::db (
     privileges => 'ALL',
     require    => [Mysql_user["${storm_username}@localhost"]],
   }
-
-
 }
