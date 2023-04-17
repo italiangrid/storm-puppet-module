@@ -17,8 +17,9 @@ class storm::gridftp::config (
 
   $load_storm_dsi_module = $storm::gridftp::load_storm_dsi_module,
 
-) {
+  $external_ip = $storm::gridftp::external_ip,
 
+) {
   $conf_file='/etc/grid-security/gridftp.conf'
   $conf_template_file='storm/etc/grid-security/gridftp.conf.erb'
 

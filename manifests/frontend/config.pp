@@ -2,7 +2,6 @@
 #
 class storm::frontend::config (
 ) {
-
   # Service's host credentials directory
   if !defined(File['/etc/grid-security/storm']) {
     file { '/etc/grid-security/storm':
@@ -14,7 +13,7 @@ class storm::frontend::config (
     }
     # Service's hostcert
     file { '/etc/grid-security/storm/hostcert.pem':
-      ensure  => present,
+      ensure  => file,
       mode    => '0644',
       owner   => 'storm',
       group   => 'storm',
@@ -23,7 +22,7 @@ class storm::frontend::config (
     }
     # Service's hostkey
     file { '/etc/grid-security/storm/hostkey.pem':
-      ensure  => present,
+      ensure  => file,
       mode    => '0400',
       owner   => 'storm',
       group   => 'storm',
@@ -35,7 +34,7 @@ class storm::frontend::config (
   $conf_file='/etc/storm/frontend-server/storm-frontend-server.conf'
   if (!empty($storm::frontend::storm_frontend_server_conf_file)) {
     file { $conf_file:
-      ensure  => present,
+      ensure  => file,
       owner   => 'root',
       group   => 'storm',
       source  => $storm::frontend::storm_frontend_server_conf_file,
@@ -45,7 +44,7 @@ class storm::frontend::config (
   } else {
     $conf_template_file='storm/etc/storm/frontend-server/storm-frontend-server.conf.erb'
     file { $conf_file:
-      ensure  => present,
+      ensure  => file,
       owner   => 'root',
       group   => 'storm',
       content => template($conf_template_file),
@@ -54,7 +53,7 @@ class storm::frontend::config (
     }
   }
 
-  $ld_library_path=$::os['architecture'] ? {
+  $ld_library_path=$facts['os']['architecture'] ? {
     'x86_64' => '/usr/lib64/storm',
     default  => '/usr/lib/storm',
   }
@@ -62,7 +61,7 @@ class storm::frontend::config (
   $sysconfig_file='/etc/sysconfig/storm-frontend-server'
   $sysconfig_template_file='storm/etc/sysconfig/storm-frontend-server.erb'
   file { $sysconfig_file:
-    ensure  => present,
+    ensure  => file,
     content => template($sysconfig_template_file),
     notify  => Service['storm-frontend-server'],
     require => Package['storm-frontend-mp'],

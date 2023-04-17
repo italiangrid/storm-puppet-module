@@ -57,14 +57,6 @@ class storm::db (
     require => [File[$service_dir]],
   }
 
-  exec { 'mariadb-daemon-reload':
-    command     => '/usr/bin/systemctl daemon-reload',
-    refreshonly => true,
-    subscribe   => File['/etc/systemd/system/mariadb.service.d/limits.conf'],
-    require     => File[$service_file],
-    notify      => Service['mysqld'],
-  }
-
   ## MySQL Server
   class { 'mysql::server':
     root_password      => $root_password,
@@ -83,7 +75,7 @@ class storm::db (
         collate => 'utf8_general_ci',
       },
     },
-    require            => [File[$service_file], Exec['mariadb-daemon-reload']],
+    require            => [File[$service_file]],
   }
 
   $short_hostname = regsubst($fqdn_hostname, '^([^.]*).*$', '\1')

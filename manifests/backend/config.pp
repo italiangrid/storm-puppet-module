@@ -117,7 +117,6 @@ class storm::backend::config (
   $path_authz_db_file = $storm::backend::path_authz_db_file,
 
 ) {
-
   # Service's host credentials directory
   if !defined(File['/etc/grid-security/storm']) {
     file { '/etc/grid-security/storm':
@@ -129,7 +128,7 @@ class storm::backend::config (
     }
     # Service's hostcert
     file { '/etc/grid-security/storm/hostcert.pem':
-      ensure  => present,
+      ensure  => file,
       mode    => '0644',
       owner   => 'storm',
       group   => 'storm',
@@ -138,7 +137,7 @@ class storm::backend::config (
     }
     # Service's hostkey
     file { '/etc/grid-security/storm/hostkey.pem':
-      ensure  => present,
+      ensure  => file,
       mode    => '0400',
       owner   => 'storm',
       group   => 'storm',
@@ -153,7 +152,7 @@ class storm::backend::config (
   $namespace_template_file='storm/etc/storm/backend-server/namespace.xml.erb'
 
   file { $namespace_file:
-    ensure  => present,
+    ensure  => file,
     content => template($namespace_template_file),
     owner   => 'root',
     group   => 'storm',
@@ -163,7 +162,7 @@ class storm::backend::config (
   $properties_template_file='storm/etc/storm/backend-server/storm.properties.erb'
 
   file { $properties_file:
-    ensure  => present,
+    ensure  => file,
     content => template($properties_template_file),
     owner   => 'root',
     group   => 'storm',
@@ -178,7 +177,7 @@ class storm::backend::config (
   $service_template_file='storm/etc/systemd/system/storm-backend-server.service.d/storm-backend-server.conf.erb'
 
   file { $service_file:
-    ensure  => present,
+    ensure  => file,
     content => template($service_template_file),
     mode    => '0644',
     owner   => 'root',
@@ -191,7 +190,7 @@ class storm::backend::config (
   $limit_template_file='storm/etc/systemd/system/storm-backend-server.service.d/filelimit.conf.erb'
 
   file { $limit_file:
-    ensure  => present,
+    ensure  => file,
     content => template($limit_template_file),
     mode    => '0644',
     owner   => 'root',
@@ -202,7 +201,7 @@ class storm::backend::config (
   $info_yaim_template_file='storm/etc/storm/info-provider/storm-yaim-variables.conf.erb'
 
   file { $info_config_file:
-    ensure  => present,
+    ensure  => file,
     content => template($info_yaim_template_file),
     mode    => '0644',
     owner   => 'root',
@@ -213,7 +212,7 @@ class storm::backend::config (
   if $manage_path_authz_db {
     # StoRM Backend's path-authz.db file
     file { '/etc/storm/backend-server/path-authz.db':
-      ensure => present,
+      ensure => file,
       mode   => '0644',
       owner  => 'root',
       group  => 'storm',

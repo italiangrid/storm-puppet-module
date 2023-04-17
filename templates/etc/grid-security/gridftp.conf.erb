@@ -50,3 +50,11 @@ allowed_modules StoRM
 # load_dsi_module StoRM
 # allowed_modules StoRM
 <%- end -%>
+
+# Hostname or IP address of the interface to use for data connections.
+# If not set will use the current control interface.
+<%- if @external_ip -%>
+data_interface <%=@external_ip%>
+<%- else -%>
+# data_interface <your-external-ip>
+<%- end -%>

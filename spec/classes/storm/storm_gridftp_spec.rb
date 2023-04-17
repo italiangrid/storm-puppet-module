@@ -22,6 +22,7 @@ describe 'storm::gridftp', type: 'class' do
             'lcmaps_debug_level'    => 0,
             'lcas_debug_level'      => 0,
             'load_storm_dsi_module' => false,
+            'external_ip'           => '131.154.1.2',
           }
         end
 
@@ -35,6 +36,7 @@ describe 'storm::gridftp', type: 'class' do
           is_expected.to contain_file(title).with(content: %r{^connections_max 4000})
           is_expected.to contain_file(title).with(content: %r{^# load_dsi_module StoRM})
           is_expected.to contain_file(title).with(content: %r{^# allowed_modules StoRM})
+          is_expected.to contain_file(title).with(content: %r{^data_interface 131.154.1.2})
         end
 
         it 'check gridftp sysconf file content' do
@@ -59,6 +61,7 @@ describe 'storm::gridftp', type: 'class' do
           is_expected.to contain_file(title).with(content: %r{connections_max 2000})
           is_expected.to contain_file(title).with(content: %r{^load_dsi_module StoRM})
           is_expected.to contain_file(title).with(content: %r{^allowed_modules StoRM})
+          is_expected.to contain_file(title).with(content: %r{^data_interface})
         end
 
         it 'check previous gridftp conf file not exists' do

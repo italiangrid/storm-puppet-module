@@ -4,6 +4,7 @@ fixtures:
     mysql: "puppetlabs/mysql"
     bdii: "cnafsd/bdii"
     firewall: "puppetlabs/firewall"
+    systemd: "puppet/systemd"
   repositories:
     stdlib: "https://github.com/puppetlabs/puppetlabs-stdlib"
     accounts: "https://github.com/puppetlabs/puppetlabs-accounts.git"
@@ -12,3 +13,4 @@ fixtures:
     bdii: "https://github.com/italiangrid/puppet-bdii.git"
     yumrepo: "https://github.com/puppetlabs/puppetlabs-yumrepo_core.git"
     cron_core: "https://github.com/puppetlabs/puppetlabs-cron_core.git"
+    systemd: "https://github.com/voxpupuli/puppet-systemd"

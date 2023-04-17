@@ -116,10 +116,6 @@ describe 'storm::db', type: 'class' do
           is_expected.to contain_mysql_user('storm@localhost')
           is_expected.to contain_mysql_user('storm@%')
         end
-
-        it 'check exec reload' do
-          is_expected.to contain_exec('mariadb-daemon-reload')
-        end
       end
     end
   end

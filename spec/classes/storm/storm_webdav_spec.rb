@@ -76,13 +76,13 @@ describe 'storm::webdav', type: 'class' do
             mode:   '0755',
           )
           is_expected.to contain_file('/etc/grid-security/storm-webdav/hostcert.pem').with(
-            ensure: 'present',
+            ensure: 'file',
             owner:  'storm',
             group:  'storm',
             mode:   '0644',
           )
           is_expected.to contain_file('/etc/grid-security/storm-webdav/hostkey.pem').with(
-            ensure: 'present',
+            ensure: 'file',
             owner:  'storm',
             group:  'storm',
             mode:   '0400',
@@ -99,8 +99,16 @@ describe 'storm::webdav', type: 'class' do
         end
 
         it 'check storage area is cleared of other properties files ' do
-          is_expected.to contain_tidy('/etc/storm/webdav/sa.d').with(
+          is_expected.to contain_file('/etc/storm/webdav/sa.d').with(
+            ensure: 'directory',
             recurse: true,
+            purge: true,
+          )
+          is_expected.to contain_file('/etc/storm/webdav/sa.d/README.md').with(
+            ensure: 'file',
+          )
+          is_expected.to contain_file('/etc/storm/webdav/sa.d/sa.properties.template').with(
+            ensure: 'file',
           )
         end
 
@@ -108,7 +116,7 @@ describe 'storm::webdav', type: 'class' do
           # test.vo properties
           testvo_props = '/etc/storm/webdav/sa.d/test.vo.properties'
           is_expected.to contain_file(testvo_props).with(
-            ensure: 'present',
+            ensure: 'file',
           )
           is_expected.to contain_file(testvo_props).with(content: %r{name=test.vo})
           is_expected.to contain_file(testvo_props).with(content: %r{rootPath=\/storage\/test.vo})
@@ -128,7 +136,7 @@ describe 'storm::webdav', type: 'class' do
           # atlas properties
           atlas_props = '/etc/storm/webdav/sa.d/atlas.properties'
           is_expected.to contain_file(atlas_props).with(
-            ensure: 'present',
+            ensure: 'file',
           )
           is_expected.to contain_file(atlas_props).with(content: %r{name=atlas})
           is_expected.to contain_file(atlas_props).with(content: %r{rootPath=\/storage\/atlas})
@@ -150,7 +158,7 @@ describe 'storm::webdav', type: 'class' do
         it 'check environment file' do
           service_file = '/etc/systemd/system/storm-webdav.service.d/storm-webdav.conf'
           is_expected.to contain_file(service_file).with(
-            ensure: 'present',
+            ensure: 'file',
           )
           is_expected.to contain_file(service_file).that_notifies(['Service[storm-webdav]'])
           is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_USER=storm"})
@@ -194,7 +202,7 @@ describe 'storm::webdav', type: 'class' do
         it 'check storm-webdav.service.d/filelimit.conf exists' do
           limit_file = '/etc/systemd/system/storm-webdav.service.d/filelimit.conf'
           is_expected.to contain_file(limit_file).with(
-            ensure: 'present',
+            ensure: 'file',
             owner:  'root',
             group:  'root',
             mode:   '0644',
@@ -249,7 +257,7 @@ describe 'storm::webdav', type: 'class' do
         it 'check service file' do
           service_file = '/etc/systemd/system/storm-webdav.service.d/storm-webdav.conf'
           is_expected.to contain_file(service_file).with(
-            ensure: 'present',
+            ensure: 'file',
           )
           is_expected.to contain_file(service_file).with(
             content: %r{^Environment="STORM_WEBDAV_JVM_OPTS=-Xms1024m -Xmx1024m -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=1234,suspend=n"},
@@ -268,7 +276,7 @@ describe 'storm::webdav', type: 'class' do
         it 'check sysconfig file' do
           service_file = '/etc/systemd/system/storm-webdav.service.d/storm-webdav.conf'
           is_expected.to contain_file(service_file).with(
-            ensure: 'present',
+            ensure: 'file',
           )
           is_expected.to contain_file(service_file).with(
             content: %r{^Environment="STORM_WEBDAV_JVM_OPTS=-Xms1024m -Xmx1024m -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=1044,suspend=y"},

@@ -19,6 +19,10 @@
     {
       "name": "puppetlabs-stdlib",
       "version_requirement": ">= 1.0.0"
+    },
+    {
+      "name": "puppet/systemd",
+      "version_requirement": ">= 4.1.0"
     }
   ],
   "operatingsystem_support": [
@@ -32,7 +36,7 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 6.1"
+      "version_requirement": ">= 6.1.0 < 8.0.0"
     }
   ],
   "pdk-version": "2.7.1",

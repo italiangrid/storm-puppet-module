@@ -21,7 +21,7 @@ define storm::webdav::application_file (
   $source,
 ) {
   file { "/etc/storm/webdav/config/${title}":
-    ensure  => present,
+    ensure  => file,
     source  => $source,
     owner   => 'root',
     group   => 'storm',

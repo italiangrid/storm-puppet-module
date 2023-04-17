@@ -111,7 +111,7 @@ describe 'storm::backend', type: 'class' do
         it 'check backend namespace file content' do
           title = '/etc/storm/backend-server/namespace.xml'
           is_expected.to contain_file(title).with(
-            ensure: 'present',
+            ensure: 'file',
             content: my_fixture_read('namespace-0.xml'),
           )
         end
@@ -119,7 +119,7 @@ describe 'storm::backend', type: 'class' do
         it 'check backend storm.properties file content' do
           title = '/etc/storm/backend-server/storm.properties'
           is_expected.to contain_file(title).with(
-            ensure: 'present',
+            ensure: 'file',
           )
           is_expected.to contain_file(title).with(content: %r{storm.service.FE-public.hostname=frontend.example.org})
           is_expected.to contain_file(title).with(content: %r{storm.service.port=8444})
@@ -183,7 +183,7 @@ describe 'storm::backend', type: 'class' do
         it 'check info provider configuration file content' do
           title = '/etc/storm/info-provider/storm-yaim-variables.conf'
           is_expected.to contain_file(title).with(
-            ensure: 'present',
+            ensure: 'file',
           )
           is_expected.to contain_file(title).with(content: %r{SITE_NAME=test})
           is_expected.to contain_file(title).with(content: %r{STORM_FRONTEND_PUBLIC_HOST=frontend.example.org})
@@ -241,7 +241,7 @@ describe 'storm::backend', type: 'class' do
         it 'check service file content' do
           title = '/etc/systemd/system/storm-backend-server.service.d/storm-backend-server.conf'
           is_expected.to contain_file(title).with(
-            ensure: 'present',
+            ensure: 'file',
           )
           is_expected.to contain_file(title).with(content: %r{^Environment="STORM_BE_JVM_OPTS=-Xms512m -Xmx1024m"})
           is_expected.to contain_file(title).with(content: %r{^Environment="LCMAPS_DB_FILE=\/etc\/storm\/backend-server\/lcmaps.db"})
@@ -253,7 +253,7 @@ describe 'storm::backend', type: 'class' do
         it 'check service file limit content' do
           title = '/etc/systemd/system/storm-backend-server.service.d/filelimit.conf'
           is_expected.to contain_file(title).with(
-            ensure: 'present',
+            ensure: 'file',
           )
           is_expected.to contain_file(title).with(content: %r{^LimitNOFILE=15535})
         end
@@ -261,11 +261,11 @@ describe 'storm::backend', type: 'class' do
         it 'check db scripts exist' do
           storm_db = '/tmp/storm_db.sql'
           is_expected.to contain_file(storm_db).with(
-            ensure: 'present',
+            ensure: 'file',
           )
           storm_be_isam = '/tmp/storm_be_ISAM.sql'
           is_expected.to contain_file(storm_be_isam).with(
-            ensure: 'present',
+            ensure: 'file',
           )
         end
 
@@ -290,7 +290,7 @@ describe 'storm::backend', type: 'class' do
 
           it 'check path-authz.db file' do
             is_expected.to contain_file('/etc/storm/backend-server/path-authz.db').with(
-              ensure: 'present',
+              ensure: 'file',
               owner: 'root',
               group: 'storm',
               mode: '0644',
