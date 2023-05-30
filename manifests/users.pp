@@ -40,7 +40,6 @@ class storm::users (
   Accounts::User::Hash $users,
 
 ) {
-
   create_resources('group', $groups)
   create_resources('accounts::user', $users)
 }

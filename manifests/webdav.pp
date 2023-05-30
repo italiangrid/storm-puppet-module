@@ -72,6 +72,9 @@
 # @param tpc_progress_report_thread_pool_size
 #   Sets STORM_WEBDAV_TPC_PROGRESS_REPORT_THREAD_POOL_SIZE environment variable.
 #
+# @param tpc_enable_expect_continue_threshold
+#   Sets STORM_WEBDAV_TPC_ENABLE_EXPECT_CONTINUE_THRESHOLD environment variable.
+#
 # @param jvm_opts
 #   Sets part of STORM_WEBDAV_JVM_OPTS environment variable.
 #
@@ -111,6 +114,8 @@
 # @param storm_limit_nofile
 #   Sets LimitNOFILE value.
 #
+# @param user
+#
 class storm::webdav (
 
   Boolean $ensure_empty_storage_area_dir,
@@ -134,6 +139,7 @@ class storm::webdav (
   Integer $tpc_report_delay_secs,
   Boolean $tpc_enable_tls_client_auth,
   Integer $tpc_progress_report_thread_pool_size,
+  Integer $tpc_enable_expect_continue_threshold,
   String $jvm_opts,
   Boolean $authz_server_enable,
   String $authz_server_issuer,
@@ -148,9 +154,9 @@ class storm::webdav (
   Boolean $debug_suspend,
 
   Integer $storm_limit_nofile,
+  String $user,
 
 ) {
-
   contain storm::webdav::install
   contain storm::webdav::config
   contain storm::webdav::service

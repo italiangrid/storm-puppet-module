@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.0.0]
+
+- Puppet version >= 6.1.0 is required
+- Added gridftp `data_interface` parameter in order to support a configuration behind a public IP
+- Removed `storm::webdav::ensure_empty_storage_area_dir`
+- Storage area directory is now purged by not managed properties files
+- Added `storm::webdav::tpc_enable_expect_continue_threshold` in order to set a threshold from which an header with `Expect: 100 continue` is added 
+- Within `update-site-report` script, JSON file is now moved and not copied to avoid the growth of useless files in `tmp` directory
+
 ## [3.4.0]
 
 - Removed useless storm::frontend parameters gridmap_dir and gridmap_file 
@@ -16,14 +25,17 @@ All notable changes to this project will be documented in this file.
 - Added missing Argus's resource-id parameter within Frontend's configuration.
 - Added support for using an external file for StoRM Frontend's configuration file.
 - Removed storm::frontend::security_enable_mapping parameter.
-- The storm::frontend::be_xmlrpc_host value is initialized with local FQDN.
+- The `storm::frontend::be_xmlrpc_host` value is initialized with local FQDN.
 
 ## [3.3.0]
 
 - Added missing StoRM WebDAV configuration parameters
 - StoRM WebDAV hostname list initialized with local FQDN
-- A cleanup of WebDAV storage area configuration directory can be enabled
 - Added storm::webdav::drop_in_file define in order to allow adding custom drop-in files to be stored in /etc/systemd/system/storm-webdav.service.d 
+- Added `storm::webdav::tpc_max_connections_per_route`, `storm::webdav::tpc_timeout_in_secs`, `storm::webdav::tpc_tls_protocol`, `storm::webdav::tpc_report_delay_secs`, `storm::webdav::tpc_enable_tls_client_auth`, `storm::webdav::tpc_progress_report_thread_pool_size` parameters.
+- Removed `storm::webdav::manage_storage_areas` parameter. The logic has been simplified to managing storage areas only if `storm::webdav::storage_areas` list is defined.
+- Added `storm::webdav::ensure_empty_storage_area_dir` parameter to ensure a cleaned storage area directory before adding the .properties files.
+- Increased StoRM WebDAV default heap size to 1024m and default timeout for TPC to 30 seconds
 
 ## [3.2.1]
 

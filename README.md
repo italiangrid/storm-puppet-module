@@ -66,10 +66,11 @@ Utility classes:
 
 The Backend class installs:
 
-- `storm-backend-mp` and all the releated packages;
+- `storm-backend-mp` and all its related packages, such as `storm-backend-server`,
+- `storm-native-libs-gpfs` in case GPFS is used as filesystem,
 - `storm-dynamic-info-provider`.
 
-Then, the Backend class configures `storm-backend-server` service by managing the following files:
+The Backend class configures `storm-backend-server` service by managing the following files:
 
 - `/etc/storm/backend-server/storm.properties`
 - `/etc/storm/backend-server/namespace.xml`
@@ -86,25 +87,32 @@ Example of StoRM Backend configuration:
 
 ```Puppet
 class { 'storm::backend':
-  hostname              => backend.test.example,
-  frontend_public_host  => frontend.test.example,
-  transfer_protocols    => ['file', 'gsiftp', 'webdav'],
-  xmlrpc_security_token => 'NS4kYAZuR65XJCq',
-  service_du_enabled    => true,
+  db_password           => 'secret-password',
+  transfer_protocols    => ['gsiftp', 'webdav'],
+  xmlrpc_security_token => 'secret-token',
   srm_pool_members      => [
     {
-      'hostname' => frontend.test.example,
+      'hostname' => 'frontend-public-host.example',
+    },
+    {
+      'hostname' => 'other-frontend-host.example',
     }
   ],
   gsiftp_pool_members   => [
     {
-      'hostname' => gridftp.test.example,
+      'hostname' => 'gridftp-01.example',
     },
+    {
+      'hostname' => 'gridftp-02.example',
+    }
   ],
   webdav_pool_members   => [
     {
-      'hostname' => webdav.test.example,
+      'hostname' => webdav-01.example,
     },
+    {
+      'hostname' => webdav-02.example,
+    }
   ],
   storage_areas         => [
     {
@@ -138,20 +146,6 @@ storm::backend::storage_site_report { 'storage-site-report':
   minute      => '*/20', # set cron's minute
 }
 ```
-
-#### Enable GPFS native libs on StoRM Backend
-
-If you're running StoRM Backend on GPFS file system and you need to install the GPFS native libs, enable the installation through the Puppet module as follows:
-
-```puppet
-class { 'storm::backend':
-  # ...
-  'install_native_libs_gpfs' => true,
-  # ...
-}
-```
-
-In this case the *storm-native-libs-gpfs* library is added to the installed packages.
 
 #### Enable HTTP as transfer protocol for SRM
 
@@ -211,7 +205,7 @@ class { 'storm::frontend':
   be_xmlrpc_token => 'NS4kYAZuR65XJCq',
   db_host         => 'backend.test.example',
   db_user         => 'storm',
-  db_passwd       => 'storm',
+  db_passwd       => 'secret-password',
 }
 ```
 

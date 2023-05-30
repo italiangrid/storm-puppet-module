@@ -282,12 +282,6 @@
 #
 # @param jmx_options
 #
-# @param debug
-#
-# @param debug_port
-#
-# @param debug_suspend
-#
 # @param lcmaps_db_file
 #
 # @param lcmaps_policy_name
@@ -430,11 +424,6 @@ class storm::backend (
   # JMX options
   Boolean $jmx,
   String $jmx_options,
-
-  # Debug options
-  Boolean $debug,
-  Integer $debug_port,
-  Boolean $debug_suspend,
 
   # LCMAPS
   String $lcmaps_db_file,

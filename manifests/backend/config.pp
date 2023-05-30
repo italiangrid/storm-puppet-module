@@ -100,10 +100,6 @@ class storm::backend::config (
   $jmx = $storm::backend::jmx,
   $jmx_options = $storm::backend::jmx_options,
 
-  $debug = $storm::backend::debug,
-  $debug_port = $storm::backend::debug_port,
-  $debug_suspend = $storm::backend::debug_suspend,
-
   $lcmaps_db_file = $storm::backend::lcmaps_db_file,
   $lcmaps_policy_name = $storm::backend::lcmaps_policy_name,
   $lcmaps_log_file = $storm::backend::lcmaps_log_file,
