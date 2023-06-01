@@ -18,7 +18,7 @@
 #   The source of file resource. It can be an absolute path or a Puppet module relative path.
 #
 define storm::webdav::application_file (
-  $source,
+  String $source,
 ) {
   file { "/etc/storm/webdav/config/${title}":
     ensure  => file,

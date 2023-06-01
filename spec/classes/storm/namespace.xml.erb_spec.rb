@@ -64,10 +64,18 @@ describe 'namespace.xml.erb' do
     expect(storage_areas.size).to eq(2)
   end
 
+  before(:each) do
+    scope.stub(:lookupvar).with('storm::backend::storage_areas').and_return(storage_areas)
+    scope.stub(:lookupvar).with('storm::backend::gsiftp_pool_members').and_return(gsiftp_pool_members)
+    scope.stub(:lookupvar).with('storm::backend::webdav_pool_members').and_return(webdav_pool_members)
+    scope.stub(:lookupvar).with('storm::backend::fs_type').and_return(nil)
+    scope.stub(:lookupvar).with('storm::backend::xroot_hostname').and_return('storm.example.org')
+    scope.stub(:lookupvar).with('storm::backend::xroot_port').and_return(1094)
+    scope.stub(:lookupvar).with('storm::backend::gsiftp_pool_balance_strategy').and_return('round-robin')
+    scope.stub(:lookupvar).with('storm::backend::webdav_pool_balance_strategy').and_return('round-robin')
+  end
+
   it 'render the same file each time' do
-    harness.set('@storage_areas', storage_areas)
-    harness.set('@gsiftp_pool_members', gsiftp_pool_members)
-    harness.set('@webdav_pool_members', webdav_pool_members)
 
     rendered = harness.run
 

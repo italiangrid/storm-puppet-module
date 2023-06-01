@@ -15,10 +15,10 @@
 #   The source of file resource. It can be an absolute path or a Puppet module relative path.
 #
 define storm::backend::service_conf_file (
-  $source,
+  String $source,
 ) {
   file { "/etc/systemd/system/storm-backend-server.service.d/${title}":
-    ensure  => present,
+    ensure  => file,
     source  => $source,
     owner   => 'root',
     group   => 'root',

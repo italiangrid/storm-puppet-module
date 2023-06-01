@@ -57,8 +57,6 @@ describe 'storm::webdav', type: 'class' do
             'authz_server_secret' => 'secret',
             'require_client_cert' => true,
             'storm_limit_nofile' => 1046,
-
-            'ensure_empty_storage_area_dir' => true,
           }
         end
 

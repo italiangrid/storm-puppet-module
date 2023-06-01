@@ -19,10 +19,10 @@
 #   The source of file resource. It can be an absolute path or a Puppet module relative path.
 #
 define storm::webdav::storage_area_file (
-  $source,
+  String $source,
 ) {
   file { "/etc/storm/webdav/sa.d/${title}":
-    ensure  => present,
+    ensure  => file,
     source  => $source,
     owner   => 'root',
     group   => 'storm',

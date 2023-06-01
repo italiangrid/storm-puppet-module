@@ -1,13 +1,13 @@
 [Service]
 # options for the JVM running the StoRM BE server
-<%- if @jmx -%><%- else -%># <%- end -%>Environment="STORM_BE_JMX_OPTS=<%=@jmx_options%>"
+<%- if scope.lookupvar('storm::backend::jmx') -%><%- else -%># <%- end -%>Environment="STORM_BE_JMX_OPTS=<%= scope.lookupvar('storm::backend::jmx_options') %>"
 # options for the JVM running the StoRM BE server
-Environment="STORM_BE_JVM_OPTS=<%=@jvm_options%>"
+Environment="STORM_BE_JVM_OPTS=<%= scope.lookupvar('storm::backend::jvm_options') %>"
 # LCMAPS config file
-Environment="LCMAPS_DB_FILE=<%=@lcmaps_db_file%>"
+Environment="LCMAPS_DB_FILE=<%= scope.lookupvar('storm::backend::lcmaps_db_file') %>"
 # LCMAPS user mapping policy (defined in $LCMAPS_DB_FILE)
-Environment="LCMAPS_POLICY_NAME=<%=@lcmaps_policy_name%>"
+Environment="LCMAPS_POLICY_NAME=<%= scope.lookupvar('storm::backend::lcmaps_policy_name') %>"
 # LCMAPS log file
-Environment="LCMAPS_LOG_FILE=<%=@lcmaps_log_file%>"
+Environment="LCMAPS_LOG_FILE=<%= scope.lookupvar('storm::backend::lcmaps_log_file') %>"
 # LCMAPS log verbosity: 0 minimum (default), 5 maximum
-Environment="LCMAPS_DEBUG_LEVEL=<%=@lcmaps_debug_level%>"
+Environment="LCMAPS_DEBUG_LEVEL=<%= scope.lookupvar('storm::backend::lcmaps_debug_level') %>"

@@ -115,10 +115,10 @@
 #   Sets LimitNOFILE value.
 #
 # @param user
+#   Sets Unix user which runs the service
 #
 class storm::webdav (
 
-  Boolean $ensure_empty_storage_area_dir,
   Array[Storm::Webdav::StorageArea] $storage_areas,
 
   Array[String] $hostnames,

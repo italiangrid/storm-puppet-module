@@ -1,5 +1,4 @@
 ---
-storm::webdav::ensure_empty_storage_area_dir: false
 storm::webdav::storage_areas: []
 storm::webdav::hostnames: ["%{facts.fqdn}"]
 storm::webdav::http_port: 8085

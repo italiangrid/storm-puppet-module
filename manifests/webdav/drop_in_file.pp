@@ -13,10 +13,10 @@
 #   The source of file resource. It can be an absolute path or a Puppet module relative path.
 #
 define storm::webdav::drop_in_file (
-  $source,
+  String $source,
 ) {
   file { "/etc/systemd/system/storm-webdav.service.d/${title}":
-    ensure  => present,
+    ensure  => file,
     source  => $source,
     owner   => 'root',
     group   => 'root',
