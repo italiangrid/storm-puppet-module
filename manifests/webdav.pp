@@ -12,9 +12,6 @@
 #      ],
 #    }
 #
-# @param ensure_empty_storage_area_dir
-#   Clean storage area's configuration directory from old .properties files before adding the new ones. Default value: false.
-#
 # @param storage_areas
 #   List of storage area's configuration. Default value: empty list.
 #
@@ -117,6 +114,9 @@
 # @param user
 #   Sets Unix user which runs the service
 #
+# @param tape_wellknown_source
+#   Sets the absolute path of the source file containing the tape REST API well-known endpoints
+#
 class storm::webdav (
 
   Array[Storm::Webdav::StorageArea] $storage_areas,
@@ -155,6 +155,8 @@ class storm::webdav (
 
   Integer $storm_limit_nofile,
   String $user,
+
+  String $tape_wellknown_source,
 
 ) {
   contain storm::webdav::install

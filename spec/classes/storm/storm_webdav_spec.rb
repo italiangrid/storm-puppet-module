@@ -57,6 +57,7 @@ describe 'storm::webdav', type: 'class' do
             'authz_server_secret' => 'secret',
             'require_client_cert' => true,
             'storm_limit_nofile' => 1046,
+            'tape_wellknown_source' => '/etc/storm/custom-file.json',
           }
         end
 
@@ -195,6 +196,7 @@ describe 'storm::webdav', type: 'class' do
           is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_USE_CONSCRYPT=false"})
           is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_TPC_USE_CONSCRYPT=false"})
           is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_ENABLE_HTTP2=false"})
+          is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_TAPE_WELLKNOWN_SOURCE=\/etc\/storm\/custom-file.json"})
         end
 
         it 'check storm-webdav.service.d/filelimit.conf exists' do

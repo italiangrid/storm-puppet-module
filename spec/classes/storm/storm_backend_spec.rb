@@ -15,7 +15,6 @@ describe 'storm::backend', type: 'class' do
       context 'with custom backend params' do
         let(:params) do
           super().merge(
-            'install_native_libs_gpfs' => true,
             'frontend_public_host' => 'frontend.example.org',
             'db_username' => 'test',
             'db_password' => 'secret',

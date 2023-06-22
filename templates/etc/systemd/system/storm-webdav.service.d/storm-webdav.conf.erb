@@ -140,3 +140,7 @@ Environment="STORM_WEBDAV_TPC_USE_CONSCRYPT=<%=scope.lookupvar('storm::webdav::t
 # Default: false
 # Set to 'true' if you want to enable HTTP/2 (and remember to enable conscrypt too!)
 Environment="STORM_WEBDAV_ENABLE_HTTP2=<%=scope.lookupvar('storm::webdav::enable_http2')%>"
+
+# Source file for the tape REST API well-known endpoint
+# Default: '/etc/storm/webdav/wlcg-tape-rest-api.json'
+Environment="STORM_WEBDAV_TAPE_WELLKNOWN_SOURCE=<%=scope.lookupvar('storm::webdav::tape_wellknown_source')%>"

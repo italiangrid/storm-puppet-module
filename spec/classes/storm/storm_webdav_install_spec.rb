@@ -8,7 +8,7 @@ describe 'storm::webdav::install' do
       end
 
       it 'check storm webdav rpm is installed' do
-        is_expected.to contain_package('storm-webdav').with(ensure: 'installed')
+        is_expected.to contain_package('storm-webdav')
       end
     end
   end

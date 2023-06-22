@@ -32,4 +32,5 @@ storm::webdav::debug: false
 storm::webdav::debug_port: 1044
 storm::webdav::debug_suspend: false
 storm::webdav::storm_limit_nofile: 65535
+storm::webdav::tape_wellknown_source: '/etc/storm/webdav/wlcg-tape-rest-api.json'
 storm::webdav::user: 'storm'

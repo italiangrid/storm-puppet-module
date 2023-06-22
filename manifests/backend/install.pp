@@ -4,32 +4,32 @@ class storm::backend::install (
 
 ) {
   ## StoRM Backend
-  package { 'storm-backend-mp':
-    ensure  => installed,
+  package { 'storm-backend-server':
+    ensure  => '>=1.11.22',
   }
 
-  if $storm::backend::install_native_libs_gpfs {
+  if $storm::backend::fs_type == 'gpfs' {
     ## Native libs GPFS
     package { 'storm-native-libs-gpfs' :
-      ensure  => installed,
-      require => [Package['storm-backend-mp']],
+      ensure  => '>1.0.7',
+      require => [Package['storm-backend-server']],
     }
   } else {
-    # fail in case native libs gfps are needed
-    if $storm::backend::fs_type == 'gpfs' {
-      fail("You have declared fs_type as 'gpfs' but 'install_native_libs_gpfs' is false. Check your configuration.")
-    } else {
-      $storm::backend::storage_areas.each | $sa | {
-        if $sa[fs_type] == 'gpfs' {
-          fail("Storage area ${sa[name]} is 'gpfs' but 'install_native_libs_gpfs' is false. Check your configuration.")
+    $storm::backend::storage_areas.each | $sa | {
+      if $sa['fs_type'] == 'gpfs' {
+        ## Native libs GPFS
+        package { 'storm-native-libs-gpfs' :
+          ensure  => '>1.0.7',
+          require => [Package['storm-backend-server']],
         }
+        break()
       }
     }
   }
 
   ## StoRM Info Provider
   package { 'storm-dynamic-info-provider':
-    ensure  => installed,
-    require => [Package['storm-backend-mp']],
+    ensure  => '>=1.8.3',
+    require => [Package['storm-backend-server']],
   }
 }

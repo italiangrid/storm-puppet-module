@@ -4,12 +4,18 @@ All notable changes to this project will be documented in this file.
 
 ## [4.0.0]
 
-- Puppet version >= 6.1.0 is required
-- Added gridftp `data_interface` parameter in order to support a configuration behind a public IP
-- Removed `storm::webdav::ensure_empty_storage_area_dir`
-- Storage area directory is now purged by not managed properties files
-- Added `storm::webdav::tpc_enable_expect_continue_threshold` in order to set a threshold from which an header with `Expect: 100 continue` is added 
+- Puppet version >= 7.0.0 is required
+- Added `storm::gridftp::data_interface` parameter in order to support a configuration behind a public IP
+- Added `storm::gridftp::log_level` parameter in order to allow logging level
+- Removed `storm::webdav::ensure_empty_storage_area_dir`: storage area directory is now automatically purged of not managed properties files
+- Added `storm::webdav::tpc_enable_expect_continue_threshold` in order to set a threshold from which an header with `Expect: 100 continue` is added
+- Added `storm::webdav::user` parameter in order to allow the setting of a custom user used to run the service
+- Added `storm::webdav::tape_wellknown_source` parameter in order to specify which JSON file has to be loaded as content of the well-known endpoint for WLCG Tape REST API implementation
 - Within `update-site-report` script, JSON file is now moved and not copied to avoid the growth of useless files in `tmp` directory
+- Removed `storm::backend::debug*` parameters
+- Removed `storm::backend::install_native_libs_gpfs` parameter because the installation of the GPFS libs is done if at least one storage area has `fs_type` GPFS.
+- Added a retry mechanism if StoRM Info Provider configure command fails
+- Removed the custom management of systemctl daemon reload because now it's supported by Puppet 7
 
 ## [3.4.0]
 
