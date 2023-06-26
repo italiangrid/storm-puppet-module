@@ -258,6 +258,9 @@
 # @param bol_requests_scheduler_queue_size
 #   BringOnline request queue maximum size. Default: 2000.
 #
+# @param info_config_file
+#   The key-value file used by StoRM Info Provider as its configuration file.
+#
 # @param info_sitename
 #   It’s the human-readable name of your site used to set the Glue-SiteName attribute.
 #

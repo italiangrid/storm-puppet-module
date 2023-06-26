@@ -10,15 +10,15 @@
   "dependencies": [
     {
       "name": "puppetlabs/accounts",
-      "version_requirement": ">= 6.1.0"
+      "version_requirement": ">= 6.4.0"
     },
     {
       "name": "puppetlabs/mysql",
-      "version_requirement": ">= 10.4.0"
+      "version_requirement": ">= 11.0.0"
     },
     {
       "name": "puppetlabs-stdlib",
-      "version_requirement": ">= 1.0.0"
+      "version_requirement": ">= 6.6.0"
     }
   ],
   "operatingsystem_support": [
