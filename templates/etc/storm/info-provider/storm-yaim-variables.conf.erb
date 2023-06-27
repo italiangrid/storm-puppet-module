@@ -1,17 +1,17 @@
-SITE_NAME=<%= @info_sitename %>
-STORM_BACKEND_HOST=<%= @hostname %>
-STORM_DEFAULT_ROOT=<%= @info_storage_default_root %>
+SITE_NAME=<%= scope.lookupvar('storm::backend::info_sitename') %>
+STORM_BACKEND_HOST=<%= scope.lookupvar('storm::backend::hostname') %>
+STORM_DEFAULT_ROOT=<%= scope.lookupvar('storm::backend::info_storage_default_root') %>
 STORM_FRONTEND_PATH=/srm/managerv2
-STORM_FRONTEND_PORT=<%= @frontend_port %>
-STORM_FRONTEND_PUBLIC_HOST=<%= @frontend_public_host %>
-STORM_BACKEND_REST_SERVICES_PORT=<%= @rest_services_port %>
-STORM_ENDPOINT_QUALITY_LEVEL=<%= @info_endpoint_quality_level %>
+STORM_FRONTEND_PORT=<%= scope.lookupvar('storm::backend::frontend_port') %>
+STORM_FRONTEND_PUBLIC_HOST=<%= scope.lookupvar('storm::backend::frontend_public_host') %>
+STORM_BACKEND_REST_SERVICES_PORT=<%= scope.lookupvar('storm::backend::rest_services_port') %>
+STORM_ENDPOINT_QUALITY_LEVEL=<%= scope.lookupvar('storm::backend::info_endpoint_quality_level') %>
 <%-
 @enabled_access_protocols=[]
-@transfer_protocols.each do | tp |
+scope.lookupvar('storm::backend::transfer_protocols').each do | tp |
   @enabled_access_protocols.push(tp)
 end
-@storage_areas.each do | sa |
+scope.lookupvar('storm::backend::storage_areas').each do | sa |
   @sa_transfer_protocols=sa['transfer_protocols'] ? sa['transfer_protocols'] : ['file', 'gsiftp']
   @sa_transfer_protocols.each do | ap |
     if !@enabled_access_protocols.include?(ap)
@@ -28,14 +28,14 @@ STORM_INFO_HTTPS_SUPPORT=<%= @enabled_access_protocols.include?('webdav') %>
 STORM_INFO_RFIO_SUPPORT=false
 <%-
 @frontend_host_list=[]
-@srm_pool_members.each do | e |
+scope.lookupvar('storm::backend::srm_pool_members').each do | e |
   @frontend_host_list.push(e['hostname'])
 end
 -%>
 STORM_FRONTEND_HOST_LIST=<%= @frontend_host_list.join(',') %>
 <%-
 @webdav_pool_list=[]
-@webdav_pool_members.each do | e |
+scope.lookupvar('storm::backend::webdav_pool_members').each do | e |
   @http_port=e['http_port'] != nil ? e['http_port'] : 8085
   @https_port=e['https_port'] != nil ? e['https_port'] : 8443
   @http_endpoint="http://#{e['hostname']}:#{@http_port}/"
@@ -48,7 +48,7 @@ STORM_WEBDAV_POOL_LIST=<%= @webdav_pool_list.join(',') %>
 <%-
 @sa_list=[]
 @vo_list=[]
-@storage_areas.each do | sa |
+scope.lookupvar('storm::backend::storage_areas').each do | sa |
   @sa_list.push(sa['name'])
   sa['vos'].each do | vo |
     if !@vo_list.include?(vo)
@@ -68,8 +68,8 @@ STORM_WEBDAV_POOL_LIST=<%= @webdav_pool_list.join(',') %>
   
   if sa['fs_type']
     @sa_fs=sa['fs_type']
-  elsif @fs_type
-    @sa_fs=@fs_type
+  elsif scope.lookupvar('storm::backend::fs_type')
+    @sa_fs=scope.lookupvar('storm::backend::fs_type')
   else
     @sa_fs='posixfs'
   end

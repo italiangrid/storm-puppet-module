@@ -47,6 +47,13 @@
 # @param load_storm_dsi_module
 #   Enable/Disable StoRM DSI module. Default: true (enabled)
 #
+# @param log_level
+#
+# @param data_interface
+#   (Optional) Hostname or IP address of the interface to use for data connections.
+#   Set this to your external IP address in case your public address is different from
+#   your local address (e.g. the floating IP address of a Virtual Machine).
+#
 class storm::gridftp (
 
   Integer $port,
@@ -64,8 +71,11 @@ class storm::gridftp (
 
   Boolean $load_storm_dsi_module,
 
-) {
+  String $log_level,
 
+  Optional[String] $data_interface,
+
+) {
   contain storm::gridftp::install
   contain storm::gridftp::config
   contain storm::gridftp::service

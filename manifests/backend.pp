@@ -37,9 +37,6 @@
 # @param hostname
 #   StoRM Backend Fully Qualified Domain Name
 #
-# @param install_native_libs_gpfs
-#   Set this if you need to install storm-native-libs-gpfs. Default: false.
-#
 # @param db_hostname
 #   Fully Qualified Domain Name of database hostname. Default value: `hostname`.
 #
@@ -261,6 +258,9 @@
 # @param bol_requests_scheduler_queue_size
 #   BringOnline request queue maximum size. Default: 2000.
 #
+# @param info_config_file
+#   The key-value file used by StoRM Info Provider as its configuration file.
+#
 # @param info_sitename
 #   It’s the human-readable name of your site used to set the Glue-SiteName attribute.
 #
@@ -282,12 +282,6 @@
 #
 # @param jmx_options
 #
-# @param debug
-#
-# @param debug_port
-#
-# @param debug_suspend
-#
 # @param lcmaps_db_file
 #
 # @param lcmaps_policy_name
@@ -308,9 +302,6 @@
 #   If manage_path_authz_db is true, set the content from this source path
 #
 class storm::backend (
-
-  # Install native libs gpfs
-  Boolean $install_native_libs_gpfs,
 
   # Db connection
   String $db_username,
@@ -431,11 +422,6 @@ class storm::backend (
   Boolean $jmx,
   String $jmx_options,
 
-  # Debug options
-  Boolean $debug,
-  Integer $debug_port,
-  Boolean $debug_suspend,
-
   # LCMAPS
   String $lcmaps_db_file,
   String $lcmaps_policy_name,
@@ -453,13 +439,12 @@ class storm::backend (
   String $path_authz_db_file,
 
   # hostnames
-  String $hostname = $::fqdn,
+  String $hostname = $fqdn,
   String $db_hostname = $hostname,
   String $xroot_hostname = $hostname,
   String $frontend_public_host = $hostname,
 
 ) {
-
   contain storm::backend::install
   contain storm::backend::configdb
   contain storm::backend::config

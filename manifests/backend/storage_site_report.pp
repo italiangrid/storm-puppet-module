@@ -22,14 +22,13 @@ define storm::backend::storage_site_report (
   String $report_path,
   String $minute = '*/30',
 ) {
-
   # Storage Site Report
   $report_script='/etc/storm/backend-server/update-site-report.sh'
   $report_command="/bin/bash ${report_script} ${report_path}"
 
   # script
   file { $report_script:
-    ensure => 'present',
+    ensure => file,
     source => 'puppet:///modules/storm/update-site-report.sh',
   }
 

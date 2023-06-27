@@ -2,8 +2,6 @@
 
 # globus-gridftp-server configuration file
 
-# this is a comment
-
 # option names beginning with '$' will be set as environment variables, e.g.
 # $GLOBUS_ERROR_VERBOSE 1
 # $GLOBUS_TCP_PORT_RANGE 50000,51000
@@ -11,42 +9,50 @@
 # Port on which a frontend will listen for client control channel connections, 
 # or on which a data node will listen for connections from a frontend. 
 # If not set a random port will be chosen and printed via the logging mechanism.
-port <%=@port%>
+port <%=scope.lookupvar('storm::gridftp::port')%>
 
 # Maximum concurrent connections allowed. 
 # Only applies when running in daemon mode. Unlimited if not set.
-connections_max <%=@connections_max%>
+connections_max <%=scope.lookupvar('storm::gridftp::connections_max')%>
 
 # Port range to use for incoming connections. The format is "startport,endport".
 # This, along with -data-interface, can be used to enable operation behind a 
 # firewall and/or when NAT is involved. This is the same as setting the environment 
 # variable GLOBUS_TCP_PORT_RANGE.
-port_range <%=@port_range%>
+port_range <%=scope.lookupvar('storm::gridftp::port_range')%>
 
 # Base path to use when config and log path options are not full paths.
 # By default this is the current directory when the process is started.
 config_base_path /
 
 # A comma separated list of levels from: ERROR, WARN, INFO, TRANSFER, DUMP, ALL. 
-# TRANSFER includes the same statistics that are sent to the separate transfer 
-# log when -log-transfer is used. Example: error,warn,info. 
-# You may also specify a numeric level of 1-255. The default level is ERROR.
-log_level ERROR,WARN,INFO
+# TRANSFER includes the same statistics that are sent to the separate transfer 
+# log when -log-transfer is used. Example: error,warn,info. 
+# You may also specify a numeric level of 1-255. The default level is ERROR.
+log_level <%=scope.lookupvar('storm::gridftp::log_level')%>
 
 # Path of a single file to log all activity to. If neither this option or 
-# log_unique is set, logs will be written to stderr unless the execution mode 
-# is detached or inetd, in which case logging will be disabled.
-log_single <%=@log_single%>
+# log_unique is set, logs will be written to stderr unless the execution mode 
+# is detached or inetd, in which case logging will be disabled.
+log_single <%=scope.lookupvar('storm::gridftp::log_single')%>
 
 # Log netlogger style info for each transfer into this file. 
 # You may also use the log-level of TRANSFER to include this info in the standard log.
-log_transfer <%=@log_transfer%>
+log_transfer <%=scope.lookupvar('storm::gridftp::log_transfer')%>
 
 # Load StoRM DSI module
-<%- if @load_storm_dsi_module -%>
+<%- if scope.lookupvar('storm::gridftp::load_storm_dsi_module') -%>
 load_dsi_module StoRM
 allowed_modules StoRM
 <%- else -%>
 # load_dsi_module StoRM
 # allowed_modules StoRM
+<%- end -%>
+
+# Hostname or IP address of the interface to use for data connections.
+# If not set will use the current control interface.
+<%- if scope.lookupvar('storm::gridftp::data_interface') -%>
+data_interface <%=scope.lookupvar('storm::gridftp::data_interface')%>
+<%- else -%>
+# data_interface <your-external-ip>
 <%- end -%>

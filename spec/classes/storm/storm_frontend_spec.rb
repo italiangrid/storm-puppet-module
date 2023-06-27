@@ -29,13 +29,13 @@ describe 'storm::frontend', type: 'class' do
             mode: '0755',
           )
           is_expected.to contain_file('/etc/grid-security/storm/hostcert.pem').with(
-            ensure: 'present',
+            ensure: 'file',
             owner: 'storm',
             group: 'storm',
             mode: '0644',
           )
           is_expected.to contain_file('/etc/grid-security/storm/hostkey.pem').with(
-            ensure: 'present',
+            ensure: 'file',
             owner: 'storm',
             group: 'storm',
             mode: '0400',
@@ -53,7 +53,7 @@ describe 'storm::frontend', type: 'class' do
         it 'check frontend conf file content' do
           title = '/etc/storm/frontend-server/storm-frontend-server.conf'
           is_expected.to contain_file(title).with(
-            ensure: 'present',
+            ensure: 'file',
             source: '/path/to/your/storm-frontend-server.conf',
           )
         end
@@ -88,7 +88,7 @@ describe 'storm::frontend', type: 'class' do
         it 'check frontend conf file content' do
           title = '/etc/storm/frontend-server/storm-frontend-server.conf'
           is_expected.to contain_file(title).with(
-            ensure: 'present',
+            ensure: 'file',
           )
           is_expected.to contain_file(title).with(content: %r{fe.port=8445})
           is_expected.to contain_file(title).with(content: %r{fe.threadpool.maxpending=300})
@@ -116,7 +116,7 @@ describe 'storm::frontend', type: 'class' do
         it 'check sysconfig file' do
           sysconfig_file = '/etc/sysconfig/storm-frontend-server'
           is_expected.to contain_file(sysconfig_file).with(
-            ensure: 'present',
+            ensure: 'file',
           )
           is_expected.to contain_file(sysconfig_file).that_notifies(['Service[storm-frontend-server]'])
           is_expected.to contain_file(sysconfig_file).with(content: %r{STORM_FE_USER=storm})
@@ -127,7 +127,7 @@ describe 'storm::frontend', type: 'class' do
         it 'check frontend conf file content' do
           title = '/etc/storm/frontend-server/storm-frontend-server.conf'
           is_expected.to contain_file(title).with(
-            ensure: 'present',
+            ensure: 'file',
           )
           is_expected.to contain_file(title).with(content: %r{fe.port=8444})
           is_expected.to contain_file(title).with(content: %r{fe.threadpool.maxpending=200})
@@ -155,7 +155,7 @@ describe 'storm::frontend', type: 'class' do
         it 'check sysconfig file' do
           sysconfig_file = '/etc/sysconfig/storm-frontend-server'
           is_expected.to contain_file(sysconfig_file).with(
-            ensure: 'present',
+            ensure: 'file',
           )
           is_expected.to contain_file(sysconfig_file).that_notifies(['Service[storm-frontend-server]'])
           is_expected.to contain_file(sysconfig_file).with(content: %r{STORM_FE_USER=storm})

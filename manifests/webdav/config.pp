@@ -3,7 +3,6 @@
 class storm::webdav::config (
 
 ) {
-
   file { '/var/lib/storm-webdav/work':
     ensure  => directory,
     owner   => 'storm',
@@ -22,7 +21,7 @@ class storm::webdav::config (
   }
   # Service's hostcert
   file { '/etc/grid-security/storm-webdav/hostcert.pem':
-    ensure  => present,
+    ensure  => file,
     mode    => '0644',
     owner   => 'storm',
     group   => 'storm',
@@ -31,7 +30,7 @@ class storm::webdav::config (
   }
   # Service's hostkey
   file { '/etc/grid-security/storm-webdav/hostkey.pem':
-    ensure  => present,
+    ensure  => file,
     mode    => '0400',
     owner   => 'storm',
     group   => 'storm',
@@ -39,16 +38,18 @@ class storm::webdav::config (
     require => File['/etc/grid-security/storm-webdav'],
   }
 
-  if $storm::webdav::ensure_empty_storage_area_dir {
-    notice('Clear all *.properties file from /etc/storm/webdav/sa.d')
-    tidy { '/etc/storm/webdav/sa.d':
-      matches => [ '*.properties' ],
-      recurse => true,
-    }
-    $sa_properties_require = [Tidy['/etc/storm/webdav/sa.d']]
-  } else {
-    $sa_properties_require = []
+  file { '/etc/storm/webdav/sa.d/README.md':
+    ensure => file,
   }
+  file { '/etc/storm/webdav/sa.d/sa.properties.template':
+    ensure => file,
+  }
+  file { '/etc/storm/webdav/sa.d':
+    ensure  => directory,
+    recurse => true,
+    purge   => true,
+  }
+
   if $storm::webdav::storage_areas {
     $sa_properties_template_file='storm/etc/storm/webdav/sa.d/sa.properties.erb'
     $storm::webdav::storage_areas.each | $sa | {
@@ -71,12 +72,11 @@ class storm::webdav::config (
       $fine_grained_authz_enabled = pick($sa[fine_grained_authz_enabled], false)
       # use template
       file { "/etc/storm/webdav/sa.d/${name}.properties":
-        ensure  => present,
+        ensure  => file,
         content => template($sa_properties_template_file),
         owner   => 'root',
         group   => 'storm',
         notify  => Service['storm-webdav'],
-        require => $sa_properties_require,
       }
     }
   } else {
@@ -90,7 +90,7 @@ class storm::webdav::config (
   $limit_file="${service_dir}/filelimit.conf"
   # configuration of filelimit.conf
   file { $limit_file:
-    ensure  => present,
+    ensure  => file,
     content => template($limit_template_file),
     owner   => 'root',
     group   => 'root',
@@ -101,7 +101,7 @@ class storm::webdav::config (
   $environment_file="${service_dir}/storm-webdav.conf"
   $environment_template_file='storm/etc/systemd/system/storm-webdav.service.d/storm-webdav.conf.erb'
   file { $environment_file:
-    ensure  => present,
+    ensure  => file,
     content => template($environment_template_file),
     notify  => [Service['storm-webdav']],
   }

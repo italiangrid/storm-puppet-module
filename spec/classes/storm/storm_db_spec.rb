@@ -57,7 +57,7 @@ describe 'storm::db', type: 'class' do
             mode: '0644',
           )
           is_expected.to contain_file(service_file).with(
-            ensure: 'present',
+            ensure: 'file',
             owner: 'root',
             group: 'root',
             mode: '0644',
@@ -115,10 +115,6 @@ describe 'storm::db', type: 'class' do
           is_expected.to contain_mysql_user('storm@storm')
           is_expected.to contain_mysql_user('storm@localhost')
           is_expected.to contain_mysql_user('storm@%')
-        end
-
-        it 'check exec reload' do
-          is_expected.to contain_exec('mariadb-daemon-reload')
         end
       end
     end

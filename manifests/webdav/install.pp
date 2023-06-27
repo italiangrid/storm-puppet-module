@@ -3,8 +3,7 @@
 class storm::webdav::install (
 
 ) {
-
   package { 'storm-webdav':
-    ensure  => installed,
+    ensure  => '>=1.4.2',
   }
 }

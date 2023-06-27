@@ -22,25 +22,27 @@ describe 'storm::gridftp', type: 'class' do
             'lcmaps_debug_level'    => 0,
             'lcas_debug_level'      => 0,
             'load_storm_dsi_module' => false,
+            'data_interface'        => '131.154.1.2',
           }
         end
 
         it 'check gridftp conf file content' do
           title = '/etc/grid-security/gridftp.conf'
           is_expected.to contain_file(title).with(
-            ensure: 'present',
+            ensure: 'file',
           )
           is_expected.to contain_file(title).with(content: %r{^port 2911})
           is_expected.to contain_file(title).with(content: %r{^port_range 30000,40000})
           is_expected.to contain_file(title).with(content: %r{^connections_max 4000})
           is_expected.to contain_file(title).with(content: %r{^# load_dsi_module StoRM})
           is_expected.to contain_file(title).with(content: %r{^# allowed_modules StoRM})
+          is_expected.to contain_file(title).with(content: %r{^data_interface 131.154.1.2})
         end
 
         it 'check gridftp sysconf file content' do
           title = '/etc/sysconfig/storm-globus-gridftp'
           is_expected.to contain_file(title).with(
-            ensure: 'present',
+            ensure: 'file',
           )
           is_expected.to contain_file(title).with(content: %r{LLGT_LOG_FILE=\/var\/log\/storm\/lcmaps.log})
           is_expected.to contain_file(title).with(content: %r{LCMAPS_DEBUG_LEVEL=0})
@@ -52,13 +54,14 @@ describe 'storm::gridftp', type: 'class' do
         it 'check gridftp conf file content' do
           title = '/etc/grid-security/gridftp.conf'
           is_expected.to contain_file(title).with(
-            ensure: 'present',
+            ensure: 'file',
           )
           is_expected.to contain_file(title).with(content: %r{port 2811})
           is_expected.to contain_file(title).with(content: %r{port_range 20000,25000})
           is_expected.to contain_file(title).with(content: %r{connections_max 2000})
           is_expected.to contain_file(title).with(content: %r{^load_dsi_module StoRM})
           is_expected.to contain_file(title).with(content: %r{^allowed_modules StoRM})
+          is_expected.not_to contain_file(title).with(content: %r{^data_interface})
         end
 
         it 'check previous gridftp conf file not exists' do
@@ -69,7 +72,7 @@ describe 'storm::gridftp', type: 'class' do
         it 'check gridftp sysconf file content' do
           title = '/etc/sysconfig/storm-globus-gridftp'
           is_expected.to contain_file(title).with(
-            ensure: 'present',
+            ensure: 'file',
           )
           is_expected.to contain_file(title).with(content: %r{#LLGT_LOG_FILE=\/var\/log\/storm\/storm-gridftp-lcmaps.log})
           is_expected.to contain_file(title).with(content: %r{LCMAPS_DEBUG_LEVEL=3})

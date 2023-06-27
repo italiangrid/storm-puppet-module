@@ -2,6 +2,7 @@
 storm::gridftp::port: 2811
 storm::gridftp::port_range: '20000,25000'
 storm::gridftp::connections_max: 2000
+storm::gridftp::data_interface: null
 storm::gridftp::log_single: '/var/log/storm/storm-gridftp-session.log'
 storm::gridftp::log_transfer: '/var/log/storm/storm-globus-gridftp.log'
 storm::gridftp::redirect_lcmaps_log: false
@@ -9,3 +10,4 @@ storm::gridftp::llgt_log_file: '/var/log/storm/storm-gridftp-lcmaps.log'
 storm::gridftp::lcmaps_debug_level: 3
 storm::gridftp::lcas_debug_level: 3
 storm::gridftp::load_storm_dsi_module: true
+storm::gridftp::log_level: 'ERROR,WARN,INFO'

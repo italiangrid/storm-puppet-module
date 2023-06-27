@@ -30,10 +30,9 @@ class storm::db (
   Data $override_options,
   Integer $limit_no_file,
 
-  String $fqdn_hostname = $::fqdn,
+  String $fqdn_hostname = $fqdn,
 
 ) {
-
   ## MySQL Client
   include 'mysql::client'
 
@@ -50,20 +49,12 @@ class storm::db (
   $service_template_file='storm/etc/systemd/system/mariadb.service.d/limits.conf.erb'
 
   file { $service_file:
-    ensure  => present,
+    ensure  => file,
     content => template($service_template_file),
     mode    => '0644',
     owner   => 'root',
     group   => 'root',
     require => [File[$service_dir]],
-  }
-
-  exec { 'mariadb-daemon-reload':
-    command     => '/usr/bin/systemctl daemon-reload',
-    refreshonly => true,
-    subscribe   => File['/etc/systemd/system/mariadb.service.d/limits.conf'],
-    require     => File[$service_file],
-    notify      => Service['mysqld'],
   }
 
   ## MySQL Server
@@ -84,7 +75,7 @@ class storm::db (
         collate => 'utf8_general_ci',
       },
     },
-    require            => [File[$service_file], Exec['mariadb-daemon-reload']],
+    require            => [File[$service_file]],
   }
 
   $short_hostname = regsubst($fqdn_hostname, '^([^.]*).*$', '\1')
@@ -161,6 +152,4 @@ class storm::db (
     privileges => 'ALL',
     require    => [Mysql_user["${storm_username}@localhost"]],
   }
-
-
 }

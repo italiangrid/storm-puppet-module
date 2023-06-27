@@ -9,39 +9,8 @@ describe 'storm::repo' do
 
       context 'check default configuration' do
         case facts[:operatingsystemmajrelease]
-        when '6'
-          it {
-            is_expected.to contain_yumrepo('storm-stable-centos6').with(
-              ensure: 'present',
-              baseurl: 'https://repo.cloud.cnaf.infn.it/repository/storm-rpm-stable/centos6/',
-              enabled: 1,
-              protect: 1,
-              gpgcheck: 0,
-              priority: 1,
-            )
-          }
-          it {
-            is_expected.to contain_yumrepo('storm-beta-centos6').with(
-              ensure: 'present',
-              baseurl: 'https://repo.cloud.cnaf.infn.it/repository/storm-rpm-beta/centos6/',
-              enabled: 0,
-              protect: 1,
-              gpgcheck: 0,
-              priority: 1,
-            )
-          }
-          it {
-            is_expected.to contain_yumrepo('storm-nightly-centos6').with(
-              ensure: 'present',
-              baseurl: 'https://repo.cloud.cnaf.infn.it/repository/storm-rpm-nightly/centos6/',
-              enabled: 0,
-              protect: 1,
-              gpgcheck: 0,
-              priority: 1,
-            )
-          }
         when '7'
-          it {
+          it 'storm-stable-centos7 is installed and enabled' do
             is_expected.to contain_yumrepo('storm-stable-centos7').with(
               ensure: 'present',
               baseurl: 'https://repo.cloud.cnaf.infn.it/repository/storm-rpm-stable/centos7/',
@@ -50,8 +19,8 @@ describe 'storm::repo' do
               gpgcheck: 0,
               priority: 1,
             )
-          }
-          it {
+          end
+          it 'storm-beta-centos7 is installed but disabled' do
             is_expected.to contain_yumrepo('storm-beta-centos7').with(
               ensure: 'present',
               baseurl: 'https://repo.cloud.cnaf.infn.it/repository/storm-rpm-beta/centos7/',
@@ -60,8 +29,8 @@ describe 'storm::repo' do
               gpgcheck: 0,
               priority: 1,
             )
-          }
-          it {
+          end
+          it 'storm-nightly-centos7 is installed but disabled' do
             is_expected.to contain_yumrepo('storm-nightly-centos7').with(
               ensure: 'present',
               baseurl: 'https://repo.cloud.cnaf.infn.it/repository/storm-rpm-nightly/centos7/',
@@ -70,7 +39,7 @@ describe 'storm::repo' do
               gpgcheck: 0,
               priority: 1,
             )
-          }
+          end
         end
       end
 
@@ -82,39 +51,8 @@ describe 'storm::repo' do
         end
 
         case facts[:operatingsystemmajrelease]
-        when '6'
-          it {
-            is_expected.to contain_yumrepo('storm-stable-centos6').with(
-              ensure: 'present',
-              baseurl: 'https://repo.cloud.cnaf.infn.it/repository/storm-rpm-stable/centos6/',
-              enabled: 0,
-              protect: 1,
-              gpgcheck: 0,
-              priority: 1,
-            )
-          }
-          it {
-            is_expected.to contain_yumrepo('storm-beta-centos6').with(
-              ensure: 'present',
-              baseurl: 'https://repo.cloud.cnaf.infn.it/repository/storm-rpm-beta/centos6/',
-              enabled: 1,
-              protect: 1,
-              gpgcheck: 0,
-              priority: 1,
-            )
-          }
-          it {
-            is_expected.to contain_yumrepo('storm-nightly-centos6').with(
-              ensure: 'present',
-              baseurl: 'https://repo.cloud.cnaf.infn.it/repository/storm-rpm-nightly/centos6/',
-              enabled: 1,
-              protect: 1,
-              gpgcheck: 0,
-              priority: 1,
-            )
-          }
         when '7'
-          it {
+          it 'storm-stable-centos7 is installed but disabled' do
             is_expected.to contain_yumrepo('storm-stable-centos7').with(
               ensure: 'present',
               baseurl: 'https://repo.cloud.cnaf.infn.it/repository/storm-rpm-stable/centos7/',
@@ -123,8 +61,8 @@ describe 'storm::repo' do
               gpgcheck: 0,
               priority: 1,
             )
-          }
-          it {
+          end
+          it 'storm-beta-centos7 is installed and enabled' do
             is_expected.to contain_yumrepo('storm-beta-centos7').with(
               ensure: 'present',
               baseurl: 'https://repo.cloud.cnaf.infn.it/repository/storm-rpm-beta/centos7/',
@@ -133,8 +71,8 @@ describe 'storm::repo' do
               gpgcheck: 0,
               priority: 1,
             )
-          }
-          it {
+          end
+          it 'storm-nightly-centos7 is installed and enabled' do
             is_expected.to contain_yumrepo('storm-nightly-centos7').with(
               ensure: 'present',
               baseurl: 'https://repo.cloud.cnaf.infn.it/repository/storm-rpm-nightly/centos7/',
@@ -143,7 +81,7 @@ describe 'storm::repo' do
               gpgcheck: 0,
               priority: 1,
             )
-          }
+          end
         end
       end
 
@@ -155,25 +93,8 @@ describe 'storm::repo' do
         end
 
         case facts[:operatingsystemmajrelease]
-        when '6'
-          it {
-            is_expected.to contain_yumrepo('storm-stable-centos6').with(
-              ensure: 'present',
-              baseurl: 'https://repo.cloud.cnaf.infn.it/repository/storm-rpm-stable/centos6/',
-              enabled: 1,
-              protect: 1,
-              gpgcheck: 0,
-              priority: 1,
-            )
-          }
-          it {
-            is_expected.not_to contain_yumrepo('storm-beta-centos6')
-          }
-          it {
-            is_expected.not_to contain_yumrepo('storm-nightly-centos6')
-          }
         when '7'
-          it {
+          it 'storm-stable-centos7 is installed and enabled' do
             is_expected.to contain_yumrepo('storm-stable-centos7').with(
               ensure: 'present',
               baseurl: 'https://repo.cloud.cnaf.infn.it/repository/storm-rpm-stable/centos7/',
@@ -182,13 +103,13 @@ describe 'storm::repo' do
               gpgcheck: 0,
               priority: 1,
             )
-          }
-          it {
+          end
+          it 'storm-beta-centos7 is not present' do
             is_expected.not_to contain_yumrepo('storm-beta-centos7')
-          }
-          it {
+          end
+          it 'storm-nightly-centos7 is not present' do
             is_expected.not_to contain_yumrepo('storm-nightly-centos7')
-          }
+          end
         end
       end
 

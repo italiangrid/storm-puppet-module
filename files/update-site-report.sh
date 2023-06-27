@@ -12,5 +12,5 @@ fi
 
 # copy report to storage area
 
-cp $TMP_REPORT_PATH $TARGET_REPORT_PATH
+mv $TMP_REPORT_PATH $TARGET_REPORT_PATH
 chown storm:storm $TARGET_REPORT_PATH

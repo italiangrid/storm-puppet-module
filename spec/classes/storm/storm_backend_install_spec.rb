@@ -16,17 +16,17 @@ describe 'storm::backend::install' do
         end
 
         it 'check storm backend metapackage is installed' do
-          is_expected.to contain_package('storm-backend-mp').with(ensure: 'installed')
+          is_expected.to contain_package('storm-backend-server')
         end
         it 'check storm native libs gpfs not installed' do
           is_expected.not_to contain_package('storm-native-libs-gpfs')
         end
         it 'check storm info provider is installed' do
-          is_expected.to contain_package('storm-dynamic-info-provider').with(ensure: 'installed')
+          is_expected.to contain_package('storm-dynamic-info-provider')
         end
       end
 
-      context 'test fs_type = gpfs with install_native_libs_gpfs = false' do
+      context 'test cofngiruation fs_type = gpfs' do
         let(:pre_condition) do
           <<-EOF
             class { 'storm::backend':
@@ -39,12 +39,12 @@ describe 'storm::backend::install' do
           facts
         end
 
-        it 'check failure' do
-          is_expected.to compile.and_raise_error(%r{You have declared fs_type as 'gpfs' but 'install_native_libs_gpfs' is false. Check your configuration.})
+        it 'check storm native libs gpfs are installed' do
+          is_expected.to contain_package('storm-native-libs-gpfs')
         end
       end
 
-      context 'test storage area has fs_type = gpfs with install_native_libs_gpfs = false' do
+      context 'test storage area configuration has fs_type = gpfs' do
         let(:pre_condition) do
           <<-EOF
             class { 'storm::backend':
@@ -59,67 +59,11 @@ describe 'storm::backend::install' do
                   online_size => 4,
                   nearline_size => 10,
                   fs_type => 'gpfs',
-                  transfer_protocols => ['file','gsiftp','webdav','xroot'],
-                },
-              ],
-            }
-          EOF
-        end
-        let(:facts) do
-          facts
-        end
-
-        it 'check failure' do
-          is_expected.to compile.and_raise_error(%r{Storage area test.vo is 'gpfs' but 'install_native_libs_gpfs' is false. Check your configuration.})
-        end
-      end
-
-      context 'test fs_type = gpfs with install_native_libs_gpfs = true' do
-        let(:pre_condition) do
-          <<-EOF
-            class { 'storm::backend':
-              hostname => 'storm.example.org',
-              install_native_libs_gpfs => true,
-              fs_type => 'gpfs',
-            }
-          EOF
-        end
-        let(:facts) do
-          facts
-        end
-
-        it 'check storm backend metapackage is installed' do
-          is_expected.to contain_package('storm-backend-mp').with(ensure: 'installed')
-        end
-        it 'check storm native libs gpfs is installed' do
-          is_expected.to contain_package('storm-native-libs-gpfs').with(ensure: 'installed')
-        end
-        it 'check storm info provider is installed' do
-          is_expected.to contain_package('storm-dynamic-info-provider').with(ensure: 'installed')
-        end
-      end
-
-      context 'test storage area has fs_type = gpfs with install_native_libs_gpfs = true' do
-        let(:pre_condition) do
-          <<-EOF
-            class { 'storm::backend':
-              hostname => 'storm.example.org',
-              install_native_libs_gpfs => true,
-              storage_areas => [
-                {
-                  name => 'test.vo',
-                  root_path => '/storage/test.vo',
-                  access_points => ['/test.vo'],
-                  vos => ['test.vo'],
-                  storage_class => 'T0D1',
-                  online_size => 4,
-                  nearline_size => 10,
-                  fs_type => 'gpfs',
                 },
               ],
               gsiftp_pool_members => [
                 {
-                  hostname => 'gridftp-0.example.org',
+                  hostname => 'storm.example.org',
                 },
               ],
             }
@@ -129,16 +73,11 @@ describe 'storm::backend::install' do
           facts
         end
 
-        it 'check storm backend metapackage is installed' do
-          is_expected.to contain_package('storm-backend-mp').with(ensure: 'installed')
-        end
-        it 'check storm native libs gpfs is installed' do
-          is_expected.to contain_package('storm-native-libs-gpfs').with(ensure: 'installed')
-        end
-        it 'check storm info provider is installed' do
-          is_expected.to contain_package('storm-dynamic-info-provider').with(ensure: 'installed')
+        it 'check storm native libs gpfs are installed' do
+          is_expected.to contain_package('storm-native-libs-gpfs')
         end
       end
+
     end
   end
 end

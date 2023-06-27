@@ -1,5 +1,4 @@
 ---
-storm::webdav::ensure_empty_storage_area_dir: false
 storm::webdav::storage_areas: []
 storm::webdav::hostnames: ["%{facts.fqdn}"]
 storm::webdav::http_port: 8085
@@ -18,6 +17,7 @@ storm::webdav::tpc_tls_protocol: 'TLSv1.2'
 storm::webdav::tpc_report_delay_secs: 5
 storm::webdav::tpc_enable_tls_client_auth: false
 storm::webdav::tpc_progress_report_thread_pool_size: 4
+storm::webdav::tpc_enable_expect_continue_threshold: 1048576
 storm::webdav::tpc_verify_checksum: false
 storm::webdav::jvm_opts: '-Xms1024m -Xmx1024m'
 storm::webdav::authz_server_enable: false
@@ -32,3 +32,5 @@ storm::webdav::debug: false
 storm::webdav::debug_port: 1044
 storm::webdav::debug_suspend: false
 storm::webdav::storm_limit_nofile: 65535
+storm::webdav::tape_wellknown_source: '/etc/storm/webdav/wlcg-tape-rest-api.json'
+storm::webdav::user: 'storm'
