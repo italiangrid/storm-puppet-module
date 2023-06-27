@@ -6,7 +6,7 @@
 <title>
   Puppet Class: storm::frontend
   
-    &mdash; Documentation by YARD 0.9.26
+    &mdash; Documentation by YARD 0.9.34
   
 </title>
 
@@ -127,7 +127,7 @@
         <span class='type'>(<tt>String</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>$::fqdn</tt>)</em>
+        <em class="default">(defaults to: <tt>$fqdn</tt>)</em>
       
       
         &mdash;
@@ -443,38 +443,6 @@
       
     </li>
   
-    <li>
-      
-        <span class='name'>gridmap_dir</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>Gridmap directory path. Defailt value: &#39;/etc/grid-security/gridmapdir&#39;.</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>gridmap_file</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>Gridmap file path. Defailt value: &#39;/etc/grid-security/grid-mapfile&#39;.</p>
-</div>
-      
-    </li>
-  
 </ul>
 
 
@@ -486,6 +454,12 @@
         <pre class="lines">
 
 
+81
+82
+83
+84
+85
+86
 87
 88
 89
@@ -520,20 +494,10 @@
 118
 119
 120
-121
-122
-123
-124
-125
-126
-127
-128
-129
-130
-131</pre>
+121</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/frontend.pp', line 87</span>
+        <pre class="code"><span class="info file"># File 'manifests/frontend.pp', line 81</span>
 
 class storm::frontend (
 
@@ -564,14 +528,10 @@ class storm::frontend (
 
   String $log_debuglevel,
 
-  String $gridmap_dir,
-  String $gridmap_file,
-
-  String $be_xmlrpc_host = $::fqdn,
+  String $be_xmlrpc_host = $fqdn,
   String $db_host = $be_xmlrpc_host,
 
 ) {
-
   contain storm::frontend::install
   contain storm::frontend::config
   contain storm::frontend::service

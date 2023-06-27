@@ -6,7 +6,7 @@
 <title>
   Puppet Class: storm::backend::install
   
-    &mdash; Documentation by YARD 0.9.26
+    &mdash; Documentation by YARD 0.9.34
   
 </title>
 
@@ -125,11 +125,7 @@
 32
 33
 34
-35
-36
-37
-38
-39</pre>
+35</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/backend/install.pp', line 3</span>
@@ -137,38 +133,34 @@
 class storm::backend::install (
 
 ) {
-
   ## StoRM Backend
-  package { &#39;storm-backend-mp&#39;:
-    ensure  =&gt; installed,
+  package { &#39;storm-backend-server&#39;:
+    ensure  =&gt; &#39;&gt;=1.11.22&#39;,
   }
 
-  if $storm::backend::install_native_libs_gpfs {
-
+  if $storm::backend::fs_type == &#39;gpfs&#39; {
     ## Native libs GPFS
     package { &#39;storm-native-libs-gpfs&#39; :
-      ensure  =&gt; installed,
-      require =&gt; [Package[&#39;storm-backend-mp&#39;]],
+      ensure  =&gt; &#39;&gt;1.0.7&#39;,
+      require =&gt; [Package[&#39;storm-backend-server&#39;]],
     }
-
   } else {
-
-    # fail in case native libs gfps are needed
-    if $storm::backend::fs_type == &#39;gpfs&#39; {
-      fail(&quot;You have declared fs_type as &#39;gpfs&#39; but &#39;install_native_libs_gpfs&#39; is false. Check your configuration.&quot;)
-    } else {
-      $storm::backend::storage_areas.each | $sa | {
-        if $sa[fs_type] == &#39;gpfs&#39; {
-          fail(&quot;Storage area ${sa[name]} is &#39;gpfs&#39; but &#39;install_native_libs_gpfs&#39; is false. Check your configuration.&quot;)
+    $storm::backend::storage_areas.each | $sa | {
+      if $sa[&#39;fs_type&#39;] == &#39;gpfs&#39; {
+        ## Native libs GPFS
+        package { &#39;storm-native-libs-gpfs&#39; :
+          ensure  =&gt; &#39;&gt;1.0.7&#39;,
+          require =&gt; [Package[&#39;storm-backend-server&#39;]],
         }
+        break()
       }
     }
   }
 
   ## StoRM Info Provider
   package { &#39;storm-dynamic-info-provider&#39;:
-    ensure  =&gt; installed,
-    require =&gt; [Package[&#39;storm-backend-mp&#39;]],
+    ensure  =&gt; &#39;&gt;=1.8.3&#39;,
+    require =&gt; [Package[&#39;storm-backend-server&#39;]],
   }
 }</pre>
       </td>

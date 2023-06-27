@@ -6,7 +6,7 @@
 <title>
   Puppet Class: storm::webdav::config
   
-    &mdash; Documentation by YARD 0.9.26
+    &mdash; Documentation by YARD 0.9.34
   
 </title>
 
@@ -206,7 +206,6 @@
 class storm::webdav::config (
 
 ) {
-
   file { &#39;/var/lib/storm-webdav/work&#39;:
     ensure  =&gt; directory,
     owner   =&gt; &#39;storm&#39;,
@@ -225,7 +224,7 @@ class storm::webdav::config (
   }
   # Service&#39;s hostcert
   file { &#39;/etc/grid-security/storm-webdav/hostcert.pem&#39;:
-    ensure  =&gt; present,
+    ensure  =&gt; file,
     mode    =&gt; &#39;0644&#39;,
     owner   =&gt; &#39;storm&#39;,
     group   =&gt; &#39;storm&#39;,
@@ -234,7 +233,7 @@ class storm::webdav::config (
   }
   # Service&#39;s hostkey
   file { &#39;/etc/grid-security/storm-webdav/hostkey.pem&#39;:
-    ensure  =&gt; present,
+    ensure  =&gt; file,
     mode    =&gt; &#39;0400&#39;,
     owner   =&gt; &#39;storm&#39;,
     group   =&gt; &#39;storm&#39;,
@@ -242,16 +241,18 @@ class storm::webdav::config (
     require =&gt; File[&#39;/etc/grid-security/storm-webdav&#39;],
   }
 
-  if $storm::webdav::ensure_empty_storage_area_dir {
-    notice(&#39;Clear all *.properties file from /etc/storm/webdav/sa.d&#39;)
-    tidy { &#39;/etc/storm/webdav/sa.d&#39;:
-      matches =&gt; [ &#39;*.properties&#39; ],
-      recurse =&gt; true,
-    }
-    $sa_properties_require = [Tidy[&#39;/etc/storm/webdav/sa.d&#39;]]
-  } else {
-    $sa_properties_require = []
+  file { &#39;/etc/storm/webdav/sa.d/README.md&#39;:
+    ensure =&gt; file,
   }
+  file { &#39;/etc/storm/webdav/sa.d/sa.properties.template&#39;:
+    ensure =&gt; file,
+  }
+  file { &#39;/etc/storm/webdav/sa.d&#39;:
+    ensure  =&gt; directory,
+    recurse =&gt; true,
+    purge   =&gt; true,
+  }
+
   if $storm::webdav::storage_areas {
     $sa_properties_template_file=&#39;storm/etc/storm/webdav/sa.d/sa.properties.erb&#39;
     $storm::webdav::storage_areas.each | $sa | {
@@ -262,7 +263,7 @@ class storm::webdav::config (
       # optional fileds
       $fs_type = pick($sa[filesystem_type], &#39;posix&#39;)
       $access_points = pick($sa[access_points], [&quot;/${name}&quot;])
-      $vos = pick($sa[vos], [$name])
+      $vos = pick($sa[vos], [])
       $orgs = pick($sa[orgs], [])
       $authenticated_read_enabled = pick($sa[authenticated_read_enabled], false)
       $anonymous_read_enabled = pick($sa[anonymous_read_enabled], false)
@@ -274,12 +275,11 @@ class storm::webdav::config (
       $fine_grained_authz_enabled = pick($sa[fine_grained_authz_enabled], false)
       # use template
       file { &quot;/etc/storm/webdav/sa.d/${name}.properties&quot;:
-        ensure  =&gt; present,
+        ensure  =&gt; file,
         content =&gt; template($sa_properties_template_file),
         owner   =&gt; &#39;root&#39;,
         group   =&gt; &#39;storm&#39;,
         notify  =&gt; Service[&#39;storm-webdav&#39;],
-        require =&gt; $sa_properties_require,
       }
     }
   } else {
@@ -293,7 +293,7 @@ class storm::webdav::config (
   $limit_file=&quot;${service_dir}/filelimit.conf&quot;
   # configuration of filelimit.conf
   file { $limit_file:
-    ensure  =&gt; present,
+    ensure  =&gt; file,
     content =&gt; template($limit_template_file),
     owner   =&gt; &#39;root&#39;,
     group   =&gt; &#39;root&#39;,
@@ -304,7 +304,7 @@ class storm::webdav::config (
   $environment_file=&quot;${service_dir}/storm-webdav.conf&quot;
   $environment_template_file=&#39;storm/etc/systemd/system/storm-webdav.service.d/storm-webdav.conf.erb&#39;
   file { $environment_file:
-    ensure  =&gt; present,
+    ensure  =&gt; file,
     content =&gt; template($environment_template_file),
     notify  =&gt; [Service[&#39;storm-webdav&#39;]],
   }

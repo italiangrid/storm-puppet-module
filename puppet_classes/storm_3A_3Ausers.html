@@ -6,7 +6,7 @@
 <title>
   Puppet Class: storm::users
   
-    &mdash; Documentation by YARD 0.9.26
+    &mdash; Documentation by YARD 0.9.34
   
 </title>
 
@@ -163,8 +163,7 @@
 42
 43
 44
-45
-46</pre>
+45</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/users.pp', line 37</span>
@@ -175,7 +174,6 @@ class storm::users (
   Accounts::User::Hash $users,
 
 ) {
-
   create_resources(&#39;group&#39;, $groups)
   create_resources(&#39;accounts::user&#39;, $users)
 }</pre>

@@ -6,7 +6,7 @@
 <title>
   Defined Type: storm::backend::service_conf_file
   
-    &mdash; Documentation by YARD 0.9.26
+    &mdash; Documentation by YARD 0.9.34
   
 </title>
 
@@ -105,7 +105,7 @@ storm::backend::service_conf_file { &#39;override.conf&#39;:
         <span class='name'>source</span>
       
       
-        <span class='type'>(<tt>Any</tt>)</span>
+        <span class='type'>(<tt>String</tt>)</span>
       
       
       
@@ -145,10 +145,10 @@ storm::backend::service_conf_file { &#39;override.conf&#39;:
         <pre class="code"><span class="info file"># File 'manifests/backend/service_conf_file.pp', line 17</span>
 
 define storm::backend::service_conf_file (
-  $source,
+  String $source,
 ) {
   file { &quot;/etc/systemd/system/storm-backend-server.service.d/${title}&quot;:
-    ensure  =&gt; present,
+    ensure  =&gt; file,
     source  =&gt; $source,
     owner   =&gt; &#39;root&#39;,
     group   =&gt; &#39;root&#39;,

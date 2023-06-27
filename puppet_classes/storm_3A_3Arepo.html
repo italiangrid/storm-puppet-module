@@ -6,7 +6,7 @@
 <title>
   Puppet Class: storm::repo
   
-    &mdash; Documentation by YARD 0.9.26
+    &mdash; Documentation by YARD 0.9.34
   
 </title>
 
@@ -200,11 +200,7 @@
 54
 55
 56
-57
-58
-59
-60
-61</pre>
+57</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/repo.pp', line 16</span>
@@ -217,12 +213,10 @@ class storm::repo (
   Array[Storm::CustomRepo] $extra,
 
 ) {
-
   $base = &#39;https://repo.cloud.cnaf.infn.it/repository&#39;
-  $el = $::operatingsystemmajrelease
+  $el = $facts[&#39;os&#39;][&#39;distro&#39;][&#39;release&#39;][&#39;major&#39;]
 
   $installed.each | $repo | {
-
     $enabled = $repo in $enabled ? { true =&gt; 1, default =&gt; 0 }
     $name = &quot;storm-${repo}-centos${el}&quot;
     $baseurl = &quot;${base}/storm-rpm-${repo}/centos${el}/&quot;
@@ -239,7 +233,6 @@ class storm::repo (
   }
 
   $extra.each | $repo | {
-
     $name = $repo[name]
     $baseurl = $repo[baseurl]
 
@@ -253,7 +246,6 @@ class storm::repo (
       gpgcheck =&gt; 0,
     }
   }
-
 }</pre>
       </td>
     </tr>

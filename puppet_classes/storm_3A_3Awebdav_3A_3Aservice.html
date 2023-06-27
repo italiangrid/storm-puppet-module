@@ -6,7 +6,7 @@
 <title>
   Puppet Class: storm::webdav::service
   
-    &mdash; Documentation by YARD 0.9.26
+    &mdash; Documentation by YARD 0.9.34
   
 </title>
 
@@ -98,21 +98,15 @@
 5
 6
 7
-8
-9
-10
-11</pre>
+8</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/webdav/service.pp', line 3</span>
 
 class storm::webdav::service {
-
   service { &#39;storm-webdav&#39;:
-    ensure  =&gt; running,
-    enable  =&gt; true,
-    start   =&gt; &#39;/usr/bin/systemctl daemon-reload; /usr/bin/systemctl start storm-webdav&#39;,
-    restart =&gt; &#39;/usr/bin/systemctl daemon-reload; /usr/bin/systemctl restart storm-webdav&#39;,
+    ensure =&gt; running,
+    enable =&gt; true,
   }
 }</pre>
       </td>

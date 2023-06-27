@@ -6,7 +6,7 @@
 <title>
   Puppet Class: storm::db
   
-    &mdash; Documentation by YARD 0.9.26
+    &mdash; Documentation by YARD 0.9.34
   
 </title>
 
@@ -107,7 +107,7 @@ add storm user and all the necessary grants.
         <span class='type'>(<tt>String</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>$::fqdn</tt>)</em>
+        <em class="default">(defaults to: <tt>$fqdn</tt>)</em>
       
       
         &mdash;
@@ -338,18 +338,7 @@ add storm user and all the necessary grants.
 152
 153
 154
-155
-156
-157
-158
-159
-160
-161
-162
-163
-164
-165
-166</pre>
+155</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/db.pp', line 25</span>
@@ -362,10 +351,9 @@ class storm::db (
   Data $override_options,
   Integer $limit_no_file,
 
-  String $fqdn_hostname = $::fqdn,
+  String $fqdn_hostname = $fqdn,
 
 ) {
-
   ## MySQL Client
   include &#39;mysql::client&#39;
 
@@ -382,20 +370,12 @@ class storm::db (
   $service_template_file=&#39;storm/etc/systemd/system/mariadb.service.d/limits.conf.erb&#39;
 
   file { $service_file:
-    ensure  =&gt; present,
+    ensure  =&gt; file,
     content =&gt; template($service_template_file),
     mode    =&gt; &#39;0644&#39;,
     owner   =&gt; &#39;root&#39;,
     group   =&gt; &#39;root&#39;,
     require =&gt; [File[$service_dir]],
-  }
-
-  exec { &#39;mariadb-daemon-reload&#39;:
-    command     =&gt; &#39;/usr/bin/systemctl daemon-reload&#39;,
-    refreshonly =&gt; true,
-    subscribe   =&gt; File[&#39;/etc/systemd/system/mariadb.service.d/limits.conf&#39;],
-    require     =&gt; File[$service_file],
-    notify      =&gt; Service[&#39;mysqld&#39;],
   }
 
   ## MySQL Server
@@ -416,7 +396,7 @@ class storm::db (
         collate =&gt; &#39;utf8_general_ci&#39;,
       },
     },
-    require            =&gt; [File[$service_file], Exec[&#39;mariadb-daemon-reload&#39;]],
+    require            =&gt; [File[$service_file]],
   }
 
   $short_hostname = regsubst($fqdn_hostname, &#39;^([^.]*).*$&#39;, &#39;\1&#39;)
@@ -493,8 +473,6 @@ class storm::db (
     privileges =&gt; &#39;ALL&#39;,
     require    =&gt; [Mysql_user[&quot;${storm_username}@localhost&quot;]],
   }
-
-
 }</pre>
       </td>
     </tr>

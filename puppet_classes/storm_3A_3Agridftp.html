@@ -6,7 +6,7 @@
 <title>
   Puppet Class: storm::gridftp
   
-    &mdash; Documentation by YARD 0.9.26
+    &mdash; Documentation by YARD 0.9.34
   
 </title>
 
@@ -273,6 +273,33 @@
       
     </li>
   
+    <li>
+      
+        <span class='name'>log_level</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>data_interface</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>(Optional) Hostname or IP address of the interface to use for data connections. Set this to your external IP address in case your public address is different from your local address (e.g. the floating IP address of a Virtual Machine).</p>
+</div>
+      
+    </li>
+  
 </ul>
 
 
@@ -284,13 +311,6 @@
         <pre class="lines">
 
 
-50
-51
-52
-53
-54
-55
-56
 57
 58
 59
@@ -310,10 +330,20 @@
 73
 74
 75
-76</pre>
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/gridftp.pp', line 50</span>
+        <pre class="code"><span class="info file"># File 'manifests/gridftp.pp', line 57</span>
 
 class storm::gridftp (
 
@@ -332,8 +362,11 @@ class storm::gridftp (
 
   Boolean $load_storm_dsi_module,
 
-) {
+  String $log_level,
 
+  Optional[String] $data_interface,
+
+) {
   contain storm::gridftp::install
   contain storm::gridftp::config
   contain storm::gridftp::service

@@ -6,7 +6,7 @@
 <title>
   Puppet Class: storm::backend
   
-    &mdash; Documentation by YARD 0.9.26
+    &mdash; Documentation by YARD 0.9.34
   
 </title>
 
@@ -136,28 +136,12 @@
         <span class='type'>(<tt>String</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>$::fqdn</tt>)</em>
+        <em class="default">(defaults to: <tt>$fqdn</tt>)</em>
       
       
         &mdash;
         <div class='inline'>
 <p>StoRM Backend Fully Qualified Domain Name</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>install_native_libs_gpfs</span>
-      
-      
-        <span class='type'>(<tt>Boolean</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>Set this if you need to install storm-native-libs-gpfs. Default: false.</p>
 </div>
       
     </li>
@@ -274,6 +258,22 @@
         &mdash;
         <div class='inline'>
 <p>Array of <a href="#stormbackendgsiftppoolmember">Storm::Backend::GsiftpPoolMember</a>. GridFTP servers pool list (default value for all Storage Areas). Note: you may change the settings for each SA acting on its configuration.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>webdav_pool_balance_strategy</span>
+      
+      
+        <span class='type'>(<tt>Storm::Backend::BalanceStrategy</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Load balancing strategy for WebDAV server pools (default value for all Storage Areas). Note: you may change the settings for each SA acting on its configuration. Available values: round-robin, smart-rr, random, weight. Default value: round-robin. See <a href="#stormbackendbalancestrategy">Storm::Backend::BalanceStrategy</a>.</p>
 </div>
       
     </li>
@@ -1194,6 +1194,22 @@
   
     <li>
       
+        <span class='name'>info_config_file</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The key-value file used by StoRM Info Provider as its configuration file.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
         <span class='name'>info_sitename</span>
       
       
@@ -1307,39 +1323,6 @@
   
     <li>
       
-        <span class='name'>debug</span>
-      
-      
-        <span class='type'>(<tt>Boolean</tt>)</span>
-      
-      
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>debug_port</span>
-      
-      
-        <span class='type'>(<tt>Integer</tt>)</span>
-      
-      
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>debug_suspend</span>
-      
-      
-        <span class='type'>(<tt>Boolean</tt>)</span>
-      
-      
-      
-    </li>
-  
-    <li>
-      
         <span class='name'>lcmaps_db_file</span>
       
       
@@ -1438,17 +1421,6 @@
         <div class='inline'>
 <p>If manage_path_authz_db is true, set the content from this source path</p>
 </div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>info_config_file</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
       
     </li>
   
@@ -1616,23 +1588,12 @@
 454
 455
 456
-457
-458
-459
-460
-461
-462
-463
-464
-465</pre>
+457</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/backend.pp', line 304</span>
 
 class storm::backend (
-
-  # Install native libs gpfs
-  Boolean $install_native_libs_gpfs,
 
   # Db connection
   String $db_username,
@@ -1645,6 +1606,7 @@ class storm::backend (
   Storm::Backend::BalanceStrategy $gsiftp_pool_balance_strategy,
   Array[Storm::Backend::GsiftpPoolMember] $gsiftp_pool_members,
   # 3. webdav pool
+  Storm::Backend::BalanceStrategy $webdav_pool_balance_strategy,
   Array[Storm::Backend::WebdavPoolMember] $webdav_pool_members,
   # 4. frontend pool
   Array[Storm::Backend::SrmPoolMember] $srm_pool_members,
@@ -1752,11 +1714,6 @@ class storm::backend (
   Boolean $jmx,
   String $jmx_options,
 
-  # Debug options
-  Boolean $debug,
-  Integer $debug_port,
-  Boolean $debug_suspend,
-
   # LCMAPS
   String $lcmaps_db_file,
   String $lcmaps_policy_name,
@@ -1774,13 +1731,12 @@ class storm::backend (
   String $path_authz_db_file,
 
   # hostnames
-  String $hostname = $::fqdn,
+  String $hostname = $fqdn,
   String $db_hostname = $hostname,
   String $xroot_hostname = $hostname,
   String $frontend_public_host = $hostname,
 
 ) {
-
   contain storm::backend::install
   contain storm::backend::configdb
   contain storm::backend::config

@@ -6,7 +6,7 @@
 <title>
   Puppet Class: storm::backend::service
   
-    &mdash; Documentation by YARD 0.9.26
+    &mdash; Documentation by YARD 0.9.34
   
 </title>
 
@@ -110,15 +110,12 @@
 17
 18
 19
-20
-21
-22</pre>
+20</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/backend/service.pp', line 3</span>
 
 class storm::backend::service {
-
   if defined(Service[&#39;mysqld&#39;]) {
     $subscribed_to = [Service[&#39;mysqld&#39;]]
   } else {
@@ -127,14 +124,13 @@ class storm::backend::service {
   service { &#39;storm-backend-server&#39;:
     ensure    =&gt; running,
     enable    =&gt; true,
-    start     =&gt; &#39;/usr/bin/systemctl daemon-reload; /usr/bin/systemctl start storm-backend-server&#39;,
-    restart   =&gt; &#39;/usr/bin/systemctl daemon-reload; /usr/bin/systemctl restart storm-backend-server&#39;,
     subscribe =&gt; $subscribed_to,
   }
   exec { &#39;configure-info-provider&#39;:
-    command     =&gt; &#39;/usr/libexec/storm-info-provider configure&#39;,
-    refreshonly =&gt; true,
-    require     =&gt; [Service[&#39;storm-backend-server&#39;]],
+    command   =&gt; &#39;/usr/libexec/storm-info-provider configure&#39;,
+    tries     =&gt; 5,
+    try_sleep =&gt; 2,
+    require   =&gt; [Service[&#39;storm-backend-server&#39;]],
   }
 }</pre>
       </td>

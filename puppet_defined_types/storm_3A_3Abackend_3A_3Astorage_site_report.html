@@ -6,7 +6,7 @@
 <title>
   Defined Type: storm::backend::storage_site_report
   
-    &mdash; Documentation by YARD 0.9.26
+    &mdash; Documentation by YARD 0.9.34
   
 </title>
 
@@ -176,8 +176,7 @@ storm::backend::storage_site_report { &#39;storage-site-report&#39;:
 47
 48
 49
-50
-51</pre>
+50</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/backend/storage_site_report.pp', line 21</span>
@@ -186,14 +185,13 @@ define storm::backend::storage_site_report (
   String $report_path,
   String $minute = &#39;*/30&#39;,
 ) {
-
   # Storage Site Report
   $report_script=&#39;/etc/storm/backend-server/update-site-report.sh&#39;
   $report_command=&quot;/bin/bash ${report_script} ${report_path}&quot;
 
   # script
   file { $report_script:
-    ensure =&gt; &#39;present&#39;,
+    ensure =&gt; file,
     source =&gt; &#39;puppet:///modules/storm/update-site-report.sh&#39;,
   }
 

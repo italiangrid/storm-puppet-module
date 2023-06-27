@@ -6,7 +6,7 @@
 <title>
   Puppet Class: storm::backend::configdb
   
-    &mdash; Documentation by YARD 0.9.26
+    &mdash; Documentation by YARD 0.9.34
   
 </title>
 
@@ -83,50 +83,7 @@
 
 
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
-<ul class="param">
   
-    <li>
-      
-        <span class='name'>db_hostname</span>
-      
-      
-        <span class='type'>(<tt>Any</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>$storm::backend::db_hostname</tt>)</em>
-      
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>db_username</span>
-      
-      
-        <span class='type'>(<tt>Any</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>$storm::backend::db_username</tt>)</em>
-      
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>db_password</span>
-      
-      
-        <span class='type'>(<tt>Any</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>$storm::backend::db_password</tt>)</em>
-      
-      
-    </li>
-  
-</ul>
-
 
 
 </div><div class="method_details_list">
@@ -176,34 +133,32 @@
 40
 41
 42
-43
-44</pre>
+43</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/backend/configdb.pp', line 3</span>
 
 class storm::backend::configdb (
 
-  $db_hostname = $storm::backend::db_hostname,
-  $db_username = $storm::backend::db_username,
-  $db_password = $storm::backend::db_password,
-
 ) {
+  $db_hostname = $storm::backend::db_hostname
+  $db_username = $storm::backend::db_username
+  $db_password = $storm::backend::db_password
 
   file { &#39;/tmp/storm_db.sql&#39;:
-    ensure =&gt; present,
+    ensure =&gt; file,
     source =&gt; &#39;puppet:///modules/storm/storm_db.sql&#39;,
   }
 
   file { &#39;/tmp/storm_be_ISAM.sql&#39;:
-    ensure =&gt; present,
+    ensure =&gt; file,
     source =&gt; &#39;puppet:///modules/storm/storm_be_ISAM.sql&#39;,
   }
 
   $paths = [&#39;/bin&#39;, &#39;/usr/bin&#39;, &#39;/sbin&#39;, &#39;/usr/sbin&#39;, &#39;/usr/local/bin&#39;]
   $storm_db_query = &#39;use storm_db;select major from db_version;&#39;
   $check_storm_db = &quot;! mysql -h ${db_hostname} -u${db_username} -p${db_password} -e \&quot;${storm_db_query}\&quot;&quot;
-  exec{ &#39;storm_db-import&#39;:
+  exec { &#39;storm_db-import&#39;:
     command     =&gt; &#39;mysql storm_db &lt; /tmp/storm_db.sql&#39;,
     onlyif      =&gt; $check_storm_db,
     logoutput   =&gt; true,
@@ -214,7 +169,7 @@ class storm::backend::configdb (
   }
   $storm_be_isam_query = &#39;use storm_be_ISAM;select major from db_version;&#39;
   $check_storm_be_isam = &quot;! mysql -h ${db_hostname} -u${db_username} -p${db_password} -e \&quot;${storm_be_isam_query}\&quot;&quot;
-  exec{ &#39;storm_be_ISAM-import&#39;:
+  exec { &#39;storm_be_ISAM-import&#39;:
     command     =&gt; &#39;mysql storm_be_ISAM &lt; /tmp/storm_be_ISAM.sql&#39;,
     onlyif      =&gt; $check_storm_be_isam,
     logoutput   =&gt; true,

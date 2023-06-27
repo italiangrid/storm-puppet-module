@@ -6,7 +6,7 @@
 <title>
   Puppet Class: storm::webdav
   
-    &mdash; Documentation by YARD 0.9.26
+    &mdash; Documentation by YARD 0.9.34
   
 </title>
 
@@ -105,22 +105,6 @@ class { &#39;storm::webdav&#39;:
   </div>
 <p class="tag_title">Parameters:</p>
 <ul class="param">
-  
-    <li>
-      
-        <span class='name'>ensure_empty_storage_area_dir</span>
-      
-      
-        <span class='type'>(<tt>Boolean</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>Clean storage area&#39;s configuration directory from old .properties files before adding the new ones. Default value: false.</p>
-</div>
-      
-    </li>
   
     <li>
       
@@ -428,6 +412,22 @@ class { &#39;storm::webdav&#39;:
   
     <li>
       
+        <span class='name'>tpc_enable_expect_continue_threshold</span>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Sets STORM_WEBDAV_TPC_ENABLE_EXPECT_CONTINUE_THRESHOLD environment variable.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
         <span class='name'>jvm_opts</span>
       
       
@@ -634,6 +634,38 @@ class { &#39;storm::webdav&#39;:
       
     </li>
   
+    <li>
+      
+        <span class='name'>user</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Sets Unix user which runs the service</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>tape_wellknown_source</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Sets the absolute path of the source file containing the tape REST API well-known endpoints</p>
+</div>
+      
+    </li>
+  
 </ul>
 
 
@@ -645,12 +677,6 @@ class { &#39;storm::webdav&#39;:
         <pre class="lines">
 
 
-114
-115
-116
-117
-118
-119
 120
 121
 122
@@ -692,14 +718,21 @@ class { &#39;storm::webdav&#39;:
 158
 159
 160
-161</pre>
+161
+162
+163
+164
+165
+166
+167
+168
+169</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/webdav.pp', line 114</span>
+        <pre class="code"><span class="info file"># File 'manifests/webdav.pp', line 120</span>
 
 class storm::webdav (
 
-  Boolean $ensure_empty_storage_area_dir,
   Array[Storm::Webdav::StorageArea] $storage_areas,
 
   Array[String] $hostnames,
@@ -720,6 +753,7 @@ class storm::webdav (
   Integer $tpc_report_delay_secs,
   Boolean $tpc_enable_tls_client_auth,
   Integer $tpc_progress_report_thread_pool_size,
+  Integer $tpc_enable_expect_continue_threshold,
   String $jvm_opts,
   Boolean $authz_server_enable,
   String $authz_server_issuer,
@@ -734,9 +768,11 @@ class storm::webdav (
   Boolean $debug_suspend,
 
   Integer $storm_limit_nofile,
+  String $user,
+
+  String $tape_wellknown_source,
 
 ) {
-
   contain storm::webdav::install
   contain storm::webdav::config
   contain storm::webdav::service

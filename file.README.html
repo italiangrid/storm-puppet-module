@@ -6,7 +6,7 @@
 <title>
   File: README
   
-    &mdash; Documentation by YARD 0.9.26
+    &mdash; Documentation by YARD 0.9.34
   
 </title>
 
@@ -147,12 +147,14 @@ puppet module install ./pkg/cnafsd-storm-*.tar.gz
 
 <p>The Backend class installs:</p>
 <ul><li>
-<p><code>storm-backend-mp</code> and all the releated packages;</p>
+<p><code>storm-backend-mp</code> and all its related packages, such as <code>storm-backend-server</code>,</p>
+</li><li>
+<p><code>storm-native-libs-gpfs</code> in case GPFS is used as filesystem,</p>
 </li><li>
 <p><code>storm-dynamic-info-provider</code>.</p>
 </li></ul>
 
-<p>Then, the Backend class configures <code>storm-backend-server</code> service by managing the following files:</p>
+<p>The Backend class configures <code>storm-backend-server</code> service by managing the following files:</p>
 <ul><li>
 <p><code>/etc/storm/backend-server/storm.properties</code></p>
 </li><li>
@@ -173,25 +175,32 @@ puppet module install ./pkg/cnafsd-storm-*.tar.gz
 <p>Example of StoRM Backend configuration:</p>
 
 <pre class="code ruby"><code class="ruby">class { &#39;storm::backend&#39;:
-  hostname              =&gt; backend.test.example,
-  frontend_public_host  =&gt; frontend.test.example,
-  transfer_protocols    =&gt; [&#39;file&#39;, &#39;gsiftp&#39;, &#39;webdav&#39;],
-  xmlrpc_security_token =&gt; &#39;NS4kYAZuR65XJCq&#39;,
-  service_du_enabled    =&gt; true,
+  db_password           =&gt; &#39;secret-password&#39;,
+  transfer_protocols    =&gt; [&#39;gsiftp&#39;, &#39;webdav&#39;],
+  xmlrpc_security_token =&gt; &#39;secret-token&#39;,
   srm_pool_members      =&gt; [
     {
-      &#39;hostname&#39; =&gt; frontend.test.example,
+      &#39;hostname&#39; =&gt; &#39;frontend-public-host.example&#39;,
+    },
+    {
+      &#39;hostname&#39; =&gt; &#39;other-frontend-host.example&#39;,
     }
   ],
   gsiftp_pool_members   =&gt; [
     {
-      &#39;hostname&#39; =&gt; gridftp.test.example,
+      &#39;hostname&#39; =&gt; &#39;gridftp-01.example&#39;,
     },
+    {
+      &#39;hostname&#39; =&gt; &#39;gridftp-02.example&#39;,
+    }
   ],
   webdav_pool_members   =&gt; [
     {
-      &#39;hostname&#39; =&gt; webdav.test.example,
+      &#39;hostname&#39; =&gt; webdav-01.example,
     },
+    {
+      &#39;hostname&#39; =&gt; webdav-02.example,
+    }
   ],
   storage_areas         =&gt; [
     {
@@ -222,19 +231,6 @@ puppet module install ./pkg/cnafsd-storm-*.tar.gz
   minute      =&gt; &#39;*/20&#39;, # set cron&#39;s minute
 }
 </code></pre>
-
-<h4 id="label-Enable+GPFS+native+libs+on+StoRM+Backend">Enable GPFS native libs on StoRM Backend</h4>
-
-<p>If you&#39;re running StoRM Backend on GPFS file system and you need to install the GPFS native libs, enable the installation through the Puppet module as follows:</p>
-
-<pre class="code ruby"><code class="ruby">class { &#39;storm::backend&#39;:
-  # ...
-  &#39;install_native_libs_gpfs&#39; =&gt; true,
-  # ...
-}
-</code></pre>
-
-<p>In this case the <em>storm-native-libs-gpfs</em> library is added to the installed packages.</p>
 
 <h4 id="label-Enable+HTTP+as+transfer+protocol+for+SRM">Enable HTTP as transfer protocol for SRM</h4>
 
@@ -292,7 +288,7 @@ puppet module install ./pkg/cnafsd-storm-*.tar.gz
   be_xmlrpc_token =&gt; &#39;NS4kYAZuR65XJCq&#39;,
   db_host         =&gt; &#39;backend.test.example&#39;,
   db_user         =&gt; &#39;storm&#39;,
-  db_passwd       =&gt; &#39;storm&#39;,
+  db_passwd       =&gt; &#39;secret-password&#39;,
 }
 </code></pre>
 
