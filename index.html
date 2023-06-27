@@ -60,7 +60,7 @@
       <div id="content"><div id='filecontents'>
 <h1 id="label-StoRM+puppet+module">StoRM puppet module</h1>
 
-<h4 id="label-Table+of+Contents">Table of Contents</h4>
+<p>Table of Contents:</p>
 <ul><li>
 <p><a href="#description">Description</a></p>
 </li><li>
@@ -145,14 +145,7 @@ puppet module install ./pkg/cnafsd-storm-*.tar.gz
 <p><strong>Prerequisites</strong>: A MySQL or MariaDB server with StoRM databases must exist. Databases can be empty. If you want to use this module to install MySQL client and server and init databases, please read about <a href="#storm-database-class">StoRM database utility class</a>.</p>
 </blockquote>
 
-<p>The Backend class installs:</p>
-<ul><li>
-<p><code>storm-backend-mp</code> and all its related packages, such as <code>storm-backend-server</code>,</p>
-</li><li>
-<p><code>storm-native-libs-gpfs</code> in case GPFS is used as filesystem,</p>
-</li><li>
-<p><code>storm-dynamic-info-provider</code>.</p>
-</li></ul>
+<p>The Backend class installs <code>storm-backend-server</code> and all its related packages, such as <code>storm-native-libs</code>, <code>storm-native-libs-gpfs</code> in case GPFS is used as filesystem and <code>storm-dynamic-info-provider</code>.</p>
 
 <p>The Backend class configures <code>storm-backend-server</code> service by managing the following files:</p>
 <ul><li>
@@ -176,7 +169,7 @@ puppet module install ./pkg/cnafsd-storm-*.tar.gz
 
 <pre class="code ruby"><code class="ruby">class { &#39;storm::backend&#39;:
   db_password           =&gt; &#39;secret-password&#39;,
-  transfer_protocols    =&gt; [&#39;gsiftp&#39;, &#39;webdav&#39;],
+  transfer_protocols    =&gt; [&#39;file&#39;, &#39;gsiftp&#39;, &#39;webdav&#39;],
   xmlrpc_security_token =&gt; &#39;secret-token&#39;,
   srm_pool_members      =&gt; [
     {
@@ -345,15 +338,15 @@ storm::webdav::storage_area_file { &#39;test.vo.2.properties&#39;:
 <p>Starting from Puppet module v2.0.0, the management of application.yml file has been removed from storm::webdav class. Site administrators can edit their own configuration files or use a defined type <code>storm::webdav::application_file</code> to inject also one or more YAML files into the proper directory. For example:</p>
 
 <pre class="code ruby"><code class="ruby">class { &#39;storm::webdav&#39;:
-  hostnames =&gt; [&#39;storm-webdav.test.example&#39;, &#39;alias-for-storm-webdav.test.example&#39;],
+  jvm_opts =&gt; &#39;-Xms1024m -Xmx1024m -Dspring.profiles.active=extra&#39;,
 }
 
 storm::webdav::application_file { &#39;application.yml&#39;:
   source =&gt; &#39;/path/to/my/application.yml&#39;,
 }
 
-storm::webdav::application_file { &#39;application-wlcg.yml&#39;:
-  source =&gt; &#39;/path/to/my/application-wlcg.yml&#39;,
+storm::webdav::application_file { &#39;application-extra.yml&#39;:
+  source =&gt; &#39;/path/to/my/application-extra.yml&#39;,
 }
 </code></pre>
 
