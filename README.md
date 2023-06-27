@@ -1,6 +1,6 @@
 # StoRM puppet module
 
-#### Table of Contents
+Table of Contents:
 
 * [Description](#description)
 * [Setup](#setup)
@@ -64,11 +64,7 @@ Utility classes:
 
 > **Prerequisites**: A MySQL or MariaDB server with StoRM databases must exist. Databases can be empty. If you want to use this module to install MySQL client and server and init databases, please read about [StoRM database utility class](#storm-database-class).
 
-The Backend class installs:
-
-- `storm-backend-mp` and all its related packages, such as `storm-backend-server`,
-- `storm-native-libs-gpfs` in case GPFS is used as filesystem,
-- `storm-dynamic-info-provider`.
+The Backend class installs `storm-backend-server` and all its related packages, such as `storm-native-libs`, `storm-native-libs-gpfs` in case GPFS is used as filesystem and `storm-dynamic-info-provider`.
 
 The Backend class configures `storm-backend-server` service by managing the following files:
 
@@ -88,7 +84,7 @@ Example of StoRM Backend configuration:
 ```Puppet
 class { 'storm::backend':
   db_password           => 'secret-password',
-  transfer_protocols    => ['gsiftp', 'webdav'],
+  transfer_protocols    => ['file', 'gsiftp', 'webdav'],
   xmlrpc_security_token => 'secret-token',
   srm_pool_members      => [
     {
@@ -187,7 +183,6 @@ class { 'storm::backend':
 The *manifest.pp* showed above includes the HTTP transfer protocol for all the storage area defined.
 By default, *storm::backend::transfer_protocols* includes only `file` and `gsiftp`.
 
-
 ### StoRM Frontend class
 
 The StoRM Frontend class installs `storm-frontend-mp` and all the releated packages and configures `storm-frontend-server` service by managing the following files:
@@ -265,18 +260,17 @@ For example:
 
 ```Puppet
 class { 'storm::webdav':
-  hostnames => ['storm-webdav.test.example', 'alias-for-storm-webdav.test.example'],
+  jvm_opts => '-Xms1024m -Xmx1024m -Dspring.profiles.active=extra',
 }
 
 storm::webdav::application_file { 'application.yml':
   source => '/path/to/my/application.yml',
 }
 
-storm::webdav::application_file { 'application-wlcg.yml':
-  source => '/path/to/my/application-wlcg.yml',
+storm::webdav::application_file { 'application-extra.yml':
+  source => '/path/to/my/application-extra.yml',
 }
 ```
-
 
 ### StoRM GridFTP class
 
