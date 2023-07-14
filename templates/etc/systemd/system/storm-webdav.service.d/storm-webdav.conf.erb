@@ -144,3 +144,36 @@ Environment="STORM_WEBDAV_ENABLE_HTTP2=<%=scope.lookupvar('storm::webdav::enable
 # Source file for the tape REST API well-known endpoint
 # Default: '/etc/storm/webdav/wlcg-tape-rest-api.json'
 Environment="STORM_WEBDAV_TAPE_WELLKNOWN_SOURCE=<%=scope.lookupvar('storm::webdav::tape_wellknown_source')%>"
+
+# Buffer size for both internal and third-party copy requests.
+# This adds more efficiency than to write the whole data. Valid values are numbers greater/equals than 4096.
+# Default: 1048576
+Environment="STORM_WEBDAV_BUFFER_FILE_BUFFER_SIZE_BYTES=<%=scope.lookupvar('storm::webdav::file_buffer_size')%>"
+
+# Enable checksum filter which adds checksum as an header following RFC 3230.
+# Default: true
+Environment="STORM_WEBDAV_CHECKSUM_FILTER_ENABLED=<%=scope.lookupvar('storm::webdav::checksum_filter_enabled')%>"
+
+# Enable Macaroon filter to process Macaroon tokens. Requires authz server enabled.
+# Default: true
+Environment="STORM_WEBDAV_MACAROON_FILTER_ENABLED=<%=scope.lookupvar('storm::webdav::macaroon_filter_enabled')%>"
+
+# TLS protocol for non-TPC requests
+# Default: TLS
+Environment="STORM_WEBDAV_TLS_PROTOCOL=<%=scope.lookupvar('storm::webdav::tls_protocol')%>"
+
+# VOMS Trust Store directory
+# Default: /etc/grid-security/vomsdir
+Environment="STORM_WEBDAV_VOMS_TRUST_STORE_DIR=<%=scope.lookupvar('storm::webdav::voms_trust_store_dir')%>"
+
+# VOMS Trust Store refresh interval
+# Default: 43200
+Environment="STORM_WEBDAV_VOMS_TRUST_STORE_REFRESH_INTERVAL_SEC=<%=scope.lookupvar('storm::webdav::voms_trust_store_refresh_interval_sec')%>"
+
+# Enable caching for VOMS certificate validation
+# Default: true
+Environment="STORM_WEBDAV_VOMS_CACHE_ENABLE=<%=scope.lookupvar('storm::webdav::voms_cache_enabled')%>"
+
+# Cache entries lifetime, used if caching for VOMS certificate validation is enabled
+# Default: 300
+Environment="STORM_WEBDAV_VOMS_CACHE_ENTRY_LIFETIME_SEC=<%=scope.lookupvar('storm::webdav::voms_cache_entry_lifetime_sec')%>"

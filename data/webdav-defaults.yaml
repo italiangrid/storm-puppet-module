@@ -34,3 +34,11 @@ storm::webdav::debug_suspend: false
 storm::webdav::storm_limit_nofile: 65535
 storm::webdav::tape_wellknown_source: '/etc/storm/webdav/wlcg-tape-rest-api.json'
 storm::webdav::user: 'storm'
+storm::webdav::tls_protocol: 'TLS'
+storm::webdav::checksum_filter_enabled: true
+storm::webdav::macaroon_filter_enabled: true
+storm::webdav::file_buffer_size: 1048576
+storm::webdav::voms_trust_store_dir: '/etc/grid-security/vomsdir'
+storm::webdav::voms_trust_store_refresh_interval_sec: 43200
+storm::webdav::voms_cache_enabled: true
+storm::webdav::voms_cache_entry_lifetime_sec: 300

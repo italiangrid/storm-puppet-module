@@ -58,6 +58,16 @@ describe 'storm::webdav', type: 'class' do
             'require_client_cert' => true,
             'storm_limit_nofile' => 1046,
             'tape_wellknown_source' => '/etc/storm/custom-file.json',
+
+            'tls_protocol' => 'TLSv1.2',
+            'checksum_filter_enabled' => false,
+            'macaroon_filter_enabled' => false,
+            'file_buffer_size' => 1048577,
+
+            'voms_trust_store_dir' => '/vomsdir',
+            'voms_trust_store_refresh_interval_sec' => 43201,
+            'voms_cache_enabled' => false,
+            'voms_cache_entry_lifetime_sec' => 301,
           }
         end
 
@@ -197,6 +207,15 @@ describe 'storm::webdav', type: 'class' do
           is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_TPC_USE_CONSCRYPT=false"})
           is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_ENABLE_HTTP2=false"})
           is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_TAPE_WELLKNOWN_SOURCE=\/etc\/storm\/custom-file.json"})
+
+          is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_TLS_PROTOCOL=TLSv1.2"})
+          is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_BUFFER_FILE_BUFFER_SIZE_BYTES=1048577"})
+          is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_CHECKSUM_FILTER_ENABLED=false"})
+          is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_MACAROON_FILTER_ENABLED=false"})
+          is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_VOMS_TRUST_STORE_DIR=/vomsdir"})
+          is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_VOMS_TRUST_STORE_REFRESH_INTERVAL_SEC=43201"})
+          is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_VOMS_CACHE_ENABLE=false"})
+          is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_VOMS_CACHE_ENTRY_LIFETIME_SEC=301"})
         end
 
         it 'check storm-webdav.service.d/filelimit.conf exists' do

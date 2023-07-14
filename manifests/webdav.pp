@@ -117,6 +117,30 @@
 # @param tape_wellknown_source
 #   Sets the absolute path of the source file containing the tape REST API well-known endpoints
 #
+# @param tls_protocol
+#   Sets TLS protocol for non-TPC requests
+#
+# @param checksum_filter_enabled
+#   Enable checksum filter which adds checksum as an header following RFC 3230.
+#
+# @param macaroon_filter_enabled
+#   Enable Macaroon filter to process Macaroon tokens. Requires authz server enabled.
+#
+# @param file_buffer_size
+#   Buffer size for both internal and third-party copy requests. Valid values are numbers greater/equals than 4096.
+#
+# @param voms_trust_store_dir
+#   VOMS Trust Store directory
+#
+# @param voms_trust_store_refresh_interval_sec
+#   VOMS Trust Store refresh interval
+#
+# @param voms_cache_enabled
+#   Enable caching for VOMS certificate validation
+#
+# @param voms_cache_entry_lifetime_sec
+#   Cache entries lifetime, used if caching for VOMS certificate validation is enabled
+#
 class storm::webdav (
 
   Array[Storm::Webdav::StorageArea] $storage_areas,
@@ -155,6 +179,17 @@ class storm::webdav (
 
   Integer $storm_limit_nofile,
   String $user,
+
+  String $tls_protocol,
+
+  Boolean $checksum_filter_enabled,
+  Boolean $macaroon_filter_enabled,
+  Integer $file_buffer_size,
+
+  String $voms_trust_store_dir,
+  Integer $voms_trust_store_refresh_interval_sec,
+  Boolean $voms_cache_enabled,
+  Integer $voms_cache_entry_lifetime_sec,
 
   String $tape_wellknown_source,
 

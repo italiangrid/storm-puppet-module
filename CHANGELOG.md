@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.0.1]
+
+- Added new StoRM WebDAV parameters for the related environment variables:
+  - `storm::webdav::tls_protocol`
+  - `storm::webdav::checksum_filter_enabled` 
+  - `storm::webdav::macaroon_filter_enabled`
+  - `storm::webdav::file_buffer_size`
+  - `storm::webdav::voms_trust_store_dir`
+  - `storm::webdav::voms_trust_store_refresh_interval_sec`
+  - `storm::webdav::voms_cache_enabled`
+  - `storm::webdav::voms_cache_entry_lifetime_sec`
+
 ## [4.0.0]
 
 - Puppet version >= 7.0.0 is required

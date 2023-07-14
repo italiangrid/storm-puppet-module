@@ -1286,6 +1286,14 @@ The following parameters are available in the `storm::webdav` class:
 * [`storm_limit_nofile`](#-storm--webdav--storm_limit_nofile)
 * [`user`](#-storm--webdav--user)
 * [`tape_wellknown_source`](#-storm--webdav--tape_wellknown_source)
+* [`tls_protocol`](#-storm--webdav--tls_protocol)
+* [`checksum_filter_enabled`](#-storm--webdav--checksum_filter_enabled)
+* [`macaroon_filter_enabled`](#-storm--webdav--macaroon_filter_enabled)
+* [`file_buffer_size`](#-storm--webdav--file_buffer_size)
+* [`voms_trust_store_dir`](#-storm--webdav--voms_trust_store_dir)
+* [`voms_trust_store_refresh_interval_sec`](#-storm--webdav--voms_trust_store_refresh_interval_sec)
+* [`voms_cache_enabled`](#-storm--webdav--voms_cache_enabled)
+* [`voms_cache_entry_lifetime_sec`](#-storm--webdav--voms_cache_entry_lifetime_sec)
 
 ##### <a name="-storm--webdav--storage_areas"></a>`storage_areas`
 
@@ -1496,6 +1504,54 @@ Sets Unix user which runs the service
 Data type: `String`
 
 Sets the absolute path of the source file containing the tape REST API well-known endpoints
+
+##### <a name="-storm--webdav--tls_protocol"></a>`tls_protocol`
+
+Data type: `String`
+
+Sets TLS protocol for non-TPC requests
+
+##### <a name="-storm--webdav--checksum_filter_enabled"></a>`checksum_filter_enabled`
+
+Data type: `Boolean`
+
+Enable checksum filter which adds checksum as an header following RFC 3230.
+
+##### <a name="-storm--webdav--macaroon_filter_enabled"></a>`macaroon_filter_enabled`
+
+Data type: `Boolean`
+
+Enable Macaroon filter to process Macaroon tokens. Requires authz server enabled.
+
+##### <a name="-storm--webdav--file_buffer_size"></a>`file_buffer_size`
+
+Data type: `Integer`
+
+Buffer size for both internal and third-party copy requests. Valid values are numbers greater/equals than 4096.
+
+##### <a name="-storm--webdav--voms_trust_store_dir"></a>`voms_trust_store_dir`
+
+Data type: `String`
+
+VOMS Trust Store directory
+
+##### <a name="-storm--webdav--voms_trust_store_refresh_interval_sec"></a>`voms_trust_store_refresh_interval_sec`
+
+Data type: `Integer`
+
+VOMS Trust Store refresh interval
+
+##### <a name="-storm--webdav--voms_cache_enabled"></a>`voms_cache_enabled`
+
+Data type: `Boolean`
+
+Enable caching for VOMS certificate validation
+
+##### <a name="-storm--webdav--voms_cache_entry_lifetime_sec"></a>`voms_cache_entry_lifetime_sec`
+
+Data type: `Integer`
+
+Cache entries lifetime, used if caching for VOMS certificate validation is enabled
 
 ### <a name="storm--webdav--config"></a>`storm::webdav::config`
 
