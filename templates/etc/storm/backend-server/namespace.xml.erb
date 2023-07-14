@@ -216,6 +216,8 @@
             <%- end -%>
             <%- @ids_http=[] -%>
             <%- @ids_https=[] -%>
+            <%- @ids_dav=[] -%>
+            <%- @ids_davs=[] -%>
             <%- @sa_webdav_members.each do | member | -%>
           <prot name="https">
             <id><%= @protocol_id %></id>
@@ -240,6 +242,30 @@
             <%- end -%>
           </prot>
               <%- @ids_http.push(@protocol_id) -%>
+              <%- @protocol_id+=1 -%>
+          <prot name="davs">
+            <id><%= @protocol_id %></id>
+            <schema>davs</schema>
+            <host><%= member['hostname'] %></host>
+            <%- if member['https_port'] != nil -%>
+            <port><%= member['https_port'] %></port>
+            <%- else -%>
+            <port>8443</port>
+            <%- end -%>
+          </prot>
+              <%- @ids_davs.push(@protocol_id) -%>
+              <%- @protocol_id+=1 -%>
+          <prot name="dav">
+            <id><%= @protocol_id %></id>
+            <schema>dav</schema>
+            <host><%= member['hostname'] %></host>
+            <%- if member['http_port'] != nil -%>
+            <port><%= member['http_port'] %></port>
+            <%- else -%>
+            <port>8085</port>
+            <%- end -%>
+          </prot>
+              <%- @ids_dav.push(@protocol_id) -%>
               <%- @protocol_id+=1 -%>
             <%- end -%>
           <%- end -%>
@@ -280,6 +306,34 @@
           <members>
             <%- @sa_webdav_members.each_with_index do | member, i | -%>
               <%- @id=@ids_http[i] -%>
+            <member member-id="<%= @id %>">
+              <%- if @sa_webdav_balance_strategy == "weight" -%>
+                <%- @weight=member['weight'].nil? ? 100 : member['weight'] -%>
+                <weight><%= @weight %></weight>
+              <%- end -%>
+            </member>
+            <%- end -%>
+          </members>
+        </pool>
+        <pool>
+          <balance-strategy><%= @sa_webdav_balance_strategy %></balance-strategy>
+          <members>
+            <%- @sa_webdav_members.each_with_index do | member, i | -%>
+              <%- @id=@ids_davs[i] -%>
+            <member member-id="<%= @id %>">
+              <%- if @sa_webdav_balance_strategy == "weight" -%>
+                <%- @weight=member['weight'].nil? ? 100 : member['weight'] -%>
+                <weight><%= @weight %></weight>
+              <%- end -%>
+            </member>
+            <%- end -%>
+          </members>
+        </pool>
+        <pool>
+          <balance-strategy><%= @sa_webdav_balance_strategy %></balance-strategy>
+          <members>
+            <%- @sa_webdav_members.each_with_index do | member, i | -%>
+              <%- @id=@ids_dav[i] -%>
             <member member-id="<%= @id %>">
               <%- if @sa_webdav_balance_strategy == "weight" -%>
                 <%- @weight=member['weight'].nil? ? 100 : member['weight'] -%>

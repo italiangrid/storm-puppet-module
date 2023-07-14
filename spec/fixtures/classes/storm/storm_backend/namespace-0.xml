@@ -64,15 +64,39 @@
             <host>webdav-0.example.org</host>
             <port>8085</port>
           </prot>
-          <prot name="https">
+          <prot name="davs">
             <id>5</id>
+            <schema>davs</schema>
+            <host>webdav-0.example.org</host>
+            <port>8443</port>
+          </prot>
+          <prot name="dav">
+            <id>6</id>
+            <schema>dav</schema>
+            <host>webdav-0.example.org</host>
+            <port>8085</port>
+          </prot>
+          <prot name="https">
+            <id>7</id>
             <schema>https</schema>
             <host>webdav-1.example.org</host>
             <port>8443</port>
           </prot>
           <prot name="http">
-            <id>6</id>
+            <id>8</id>
             <schema>http</schema>
+            <host>webdav-1.example.org</host>
+            <port>8085</port>
+          </prot>
+          <prot name="davs">
+            <id>9</id>
+            <schema>davs</schema>
+            <host>webdav-1.example.org</host>
+            <port>8443</port>
+          </prot>
+          <prot name="dav">
+            <id>10</id>
+            <schema>dav</schema>
             <host>webdav-1.example.org</host>
             <port>8085</port>
           </prot>
@@ -91,7 +115,7 @@
           <members>
             <member member-id="3">
             </member>
-            <member member-id="5">
+            <member member-id="7">
             </member>
           </members>
         </pool>
@@ -100,7 +124,25 @@
           <members>
             <member member-id="4">
             </member>
+            <member member-id="8">
+            </member>
+          </members>
+        </pool>
+        <pool>
+          <balance-strategy>round-robin</balance-strategy>
+          <members>
+            <member member-id="5">
+            </member>
+            <member member-id="9">
+            </member>
+          </members>
+        </pool>
+        <pool>
+          <balance-strategy>round-robin</balance-strategy>
+          <members>
             <member member-id="6">
+            </member>
+            <member member-id="10">
             </member>
           </members>
         </pool>
@@ -162,15 +204,39 @@
             <host>webdav-0.example.org</host>
             <port>8085</port>
           </prot>
-          <prot name="https">
+          <prot name="davs">
             <id>4</id>
+            <schema>davs</schema>
+            <host>webdav-0.example.org</host>
+            <port>8443</port>
+          </prot>
+          <prot name="dav">
+            <id>5</id>
+            <schema>dav</schema>
+            <host>webdav-0.example.org</host>
+            <port>8085</port>
+          </prot>
+          <prot name="https">
+            <id>6</id>
             <schema>https</schema>
             <host>webdav-1.example.org</host>
             <port>8443</port>
           </prot>
           <prot name="http">
-            <id>5</id>
+            <id>7</id>
             <schema>http</schema>
+            <host>webdav-1.example.org</host>
+            <port>8085</port>
+          </prot>
+          <prot name="davs">
+            <id>8</id>
+            <schema>davs</schema>
+            <host>webdav-1.example.org</host>
+            <port>8443</port>
+          </prot>
+          <prot name="dav">
+            <id>9</id>
+            <schema>dav</schema>
             <host>webdav-1.example.org</host>
             <port>8085</port>
           </prot>
@@ -191,7 +257,7 @@
           <members>
             <member member-id="2">
             </member>
-            <member member-id="4">
+            <member member-id="6">
             </member>
           </members>
         </pool>
@@ -200,7 +266,25 @@
           <members>
             <member member-id="3">
             </member>
+            <member member-id="7">
+            </member>
+          </members>
+        </pool>
+        <pool>
+          <balance-strategy>round-robin</balance-strategy>
+          <members>
+            <member member-id="4">
+            </member>
+            <member member-id="8">
+            </member>
+          </members>
+        </pool>
+        <pool>
+          <balance-strategy>round-robin</balance-strategy>
+          <members>
             <member member-id="5">
+            </member>
+            <member member-id="9">
             </member>
           </members>
         </pool>
@@ -252,15 +336,39 @@
             <host>webdav-0.example.org</host>
             <port>8085</port>
           </prot>
-          <prot name="https">
+          <prot name="davs">
             <id>4</id>
+            <schema>davs</schema>
+            <host>webdav-0.example.org</host>
+            <port>8443</port>
+          </prot>
+          <prot name="dav">
+            <id>5</id>
+            <schema>dav</schema>
+            <host>webdav-0.example.org</host>
+            <port>8085</port>
+          </prot>
+          <prot name="https">
+            <id>6</id>
             <schema>https</schema>
             <host>webdav-1.example.org</host>
             <port>8443</port>
           </prot>
           <prot name="http">
-            <id>5</id>
+            <id>7</id>
             <schema>http</schema>
+            <host>webdav-1.example.org</host>
+            <port>8085</port>
+          </prot>
+          <prot name="davs">
+            <id>8</id>
+            <schema>davs</schema>
+            <host>webdav-1.example.org</host>
+            <port>8443</port>
+          </prot>
+          <prot name="dav">
+            <id>9</id>
+            <schema>dav</schema>
             <host>webdav-1.example.org</host>
             <port>8085</port>
           </prot>
@@ -279,7 +387,7 @@
           <members>
             <member member-id="2">
             </member>
-            <member member-id="4">
+            <member member-id="6">
             </member>
           </members>
         </pool>
@@ -288,7 +396,25 @@
           <members>
             <member member-id="3">
             </member>
+            <member member-id="7">
+            </member>
+          </members>
+        </pool>
+        <pool>
+          <balance-strategy>round-robin</balance-strategy>
+          <members>
+            <member member-id="4">
+            </member>
+            <member member-id="8">
+            </member>
+          </members>
+        </pool>
+        <pool>
+          <balance-strategy>round-robin</balance-strategy>
+          <members>
             <member member-id="5">
+            </member>
+            <member member-id="9">
             </member>
           </members>
         </pool>

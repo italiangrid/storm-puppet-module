@@ -151,9 +151,10 @@
 					<xs:enumeration value="rfio"/>
 					<xs:enumeration value="root"/>
 					<xs:enumeration value="xroot"/>
-					<!--// TODO HTTPS TURL-->
 					<xs:enumeration value="http"/>
 					<xs:enumeration value="https"/>
+					<xs:enumeration value="dav"/>
+					<xs:enumeration value="davs"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
@@ -167,9 +168,10 @@
 				<xs:enumeration value="rfio"/>
 				<xs:enumeration value="root"/>
 				<xs:enumeration value="xroot"/>
-				<!--// TODO HTTPS TURL-->
 				<xs:enumeration value="http"/>
 				<xs:enumeration value="https"/>
+				<xs:enumeration value="dav"/>
+				<xs:enumeration value="davs"/>
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
