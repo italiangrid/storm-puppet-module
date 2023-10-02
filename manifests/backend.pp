@@ -301,6 +301,12 @@
 # @param path_authz_db_file
 #   If manage_path_authz_db is true, set the content from this source path
 #
+# @param manage_storm_properties
+#   If true, allows to set content of storm.properties file wuth the file pointed by path_storm_properties.
+#
+# @param path_storm_properties
+#   If manage_storm_properties is true, set the content of storm.properties from this source path
+#
 class storm::backend (
 
   # Db connection
@@ -437,6 +443,10 @@ class storm::backend (
   # manage path-authz.db
   Boolean $manage_path_authz_db,
   String $path_authz_db_file,
+
+  # manage storm.properties
+  Boolean $manage_storm_properties,
+  String $path_storm_properties,
 
   # hostnames
   String $hostname = $fqdn,

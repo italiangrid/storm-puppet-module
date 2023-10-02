@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.1.0]
+- Added the opportunity to specify an external source for Backend's storm.properties file. Use `storm::backend::manage_storm_properties` and `storm::backend::path_storm_properties`.
+
 ## [4.0.1]
 
 - Added new StoRM WebDAV parameters for the related environment variables:

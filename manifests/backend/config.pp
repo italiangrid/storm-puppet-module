@@ -33,7 +33,6 @@ class storm::backend::config (
   }
 
   $namespace_file='/etc/storm/backend-server/namespace.xml'
-  $properties_file='/etc/storm/backend-server/storm.properties'
 
   $namespace_template_file='storm/etc/storm/backend-server/namespace.xml.erb'
 
@@ -45,14 +44,24 @@ class storm::backend::config (
     notify  => [Service['storm-backend-server']],
   }
 
-  $properties_template_file='storm/etc/storm/backend-server/storm.properties.erb'
-
-  file { $properties_file:
-    ensure  => file,
-    content => template($properties_template_file),
-    owner   => 'root',
-    group   => 'storm',
-    notify  => [Service['storm-backend-server']],
+  $properties_file='/etc/storm/backend-server/storm.properties'
+  if $storm::backend::manage_storm_properties {
+    file { $properties_file:
+      ensure => file,
+      source => $storm::backend::path_storm_properties,
+      owner  => 'root',
+      group  => 'storm',
+      notify => [Service['storm-backend-server']],
+    }
+  } else {
+    $properties_template_file='storm/etc/storm/backend-server/storm.properties.erb'
+    file { $properties_file:
+      ensure  => file,
+      content => template($properties_template_file),
+      owner   => 'root',
+      group   => 'storm',
+      notify  => [Service['storm-backend-server']],
+    }
   }
 
   # Directory '/etc/systemd/system/storm-backend-server.service.d' is created by rpm

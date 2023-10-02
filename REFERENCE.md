@@ -6,44 +6,44 @@
 
 ### Classes
 
-* [`storm::backend`](#storm--backend): StoRM Backend puppet module
-* [`storm::backend::config`](#storm--backend--config): StoRM Backend config class
-* [`storm::backend::configdb`](#storm--backend--configdb): StoRM Backend DB config class
-* [`storm::backend::install`](#storm--backend--install): StoRM Backend install class
-* [`storm::backend::service`](#storm--backend--service): StoRM Backend service class
-* [`storm::db`](#storm--db): Install MariaDB server and client, create empty databases 'storm_db' and 'storm_be_ISAM',
+* [`storm::backend`](#stormbackend): StoRM Backend puppet module
+* [`storm::backend::config`](#stormbackendconfig): StoRM Backend config class
+* [`storm::backend::configdb`](#stormbackendconfigdb): StoRM Backend DB config class
+* [`storm::backend::install`](#stormbackendinstall): StoRM Backend install class
+* [`storm::backend::service`](#stormbackendservice): StoRM Backend service class
+* [`storm::db`](#stormdb): Install MariaDB server and client, create empty databases 'storm_db' and 'storm_be_ISAM',
 add storm user and all the necessary grants.
-* [`storm::frontend`](#storm--frontend): StoRM Frontend puppet module
-* [`storm::frontend::config`](#storm--frontend--config): StoRM Frontend config class
-* [`storm::frontend::install`](#storm--frontend--install): StoRM Frontend install class
-* [`storm::frontend::service`](#storm--frontend--service): StoRM Frontend service class
-* [`storm::gridftp`](#storm--gridftp): StoRM GridFTP puppet module
-* [`storm::gridftp::config`](#storm--gridftp--config): StoRM GridFTP config class
-* [`storm::gridftp::install`](#storm--gridftp--install): StoRM GridFTP install class
-* [`storm::gridftp::service`](#storm--gridftp--service): StoRM GridFTP service class
-* [`storm::repo`](#storm--repo): Choose which StoRM repository you want to intall and enable. Also a custom list of repository URL can be specified.
-* [`storm::users`](#storm--users): StoRM accounts configuration
-* [`storm::webdav`](#storm--webdav): StoRM WebDAV puppet module
-* [`storm::webdav::config`](#storm--webdav--config): StoRM WebDAV config class
-* [`storm::webdav::install`](#storm--webdav--install): StoRM WebDAV install class
-* [`storm::webdav::service`](#storm--webdav--service): StoRM WebDAV service class
+* [`storm::frontend`](#stormfrontend): StoRM Frontend puppet module
+* [`storm::frontend::config`](#stormfrontendconfig): StoRM Frontend config class
+* [`storm::frontend::install`](#stormfrontendinstall): StoRM Frontend install class
+* [`storm::frontend::service`](#stormfrontendservice): StoRM Frontend service class
+* [`storm::gridftp`](#stormgridftp): StoRM GridFTP puppet module
+* [`storm::gridftp::config`](#stormgridftpconfig): StoRM GridFTP config class
+* [`storm::gridftp::install`](#stormgridftpinstall): StoRM GridFTP install class
+* [`storm::gridftp::service`](#stormgridftpservice): StoRM GridFTP service class
+* [`storm::repo`](#stormrepo): Choose which StoRM repository you want to intall and enable. Also a custom list of repository URL can be specified.
+* [`storm::users`](#stormusers): StoRM accounts configuration
+* [`storm::webdav`](#stormwebdav): StoRM WebDAV puppet module
+* [`storm::webdav::config`](#stormwebdavconfig): StoRM WebDAV config class
+* [`storm::webdav::install`](#stormwebdavinstall): StoRM WebDAV install class
+* [`storm::webdav::service`](#stormwebdavservice): StoRM WebDAV service class
 
 ### Defined types
 
-* [`storm::backend::service_conf_file`](#storm--backend--service_conf_file): Starting from Puppet module v2.0.0, site administrators can inject
+* [`storm::backend::service_conf_file`](#stormbackendservice_conf_file): Starting from Puppet module v2.0.0, site administrators can inject
 one or more .conf files into `/etc/systemd/system/storm-backend-server.service.d`
 directory.
-* [`storm::backend::storage_site_report`](#storm--backend--storage_site_report): Starting from Puppet module v2.0.0, the management of Storage Site Report has been improved.
+* [`storm::backend::storage_site_report`](#stormbackendstorage_site_report): Starting from Puppet module v2.0.0, the management of Storage Site Report has been improved.
 Site administrators can add script and cron described in the [how-to](http://italiangrid.github.io/storm/documentation/how-to/how-to-publish-json-report/)
-* [`storm::rootdir`](#storm--rootdir): StoRM main storage area root directory defined resource
-* [`storm::sarootdir`](#storm--sarootdir): StoRM Storage Area root directory defined resource
-* [`storm::webdav::application_file`](#storm--webdav--application_file): Starting from Puppet module v2.0.0, the management of application.yml
+* [`storm::rootdir`](#stormrootdir): StoRM main storage area root directory defined resource
+* [`storm::sarootdir`](#stormsarootdir): StoRM Storage Area root directory defined resource
+* [`storm::webdav::application_file`](#stormwebdavapplication_file): Starting from Puppet module v2.0.0, the management of application.yml
 file has been removed from storm::webdav class. Site administrators can edit
 their own configuration files or use this defined type to inject one or more YAML
 files into the proper directory.
-* [`storm::webdav::drop_in_file`](#storm--webdav--drop_in_file): Use this define to inject one or more .conf files
+* [`storm::webdav::drop_in_file`](#stormwebdavdrop_in_file): Use this define to inject one or more .conf files
 into `/etc/systemd/system/storm-webdav.service.d` directory.
-* [`storm::webdav::storage_area_file`](#storm--webdav--storage_area_file): Storage Areas can be configured singularly by using this defined type.
+* [`storm::webdav::storage_area_file`](#stormwebdavstorage_area_file): Storage Areas can be configured singularly by using this defined type.
 This strategy allows site administrators to keep their manifests unaware of
 the improvements on StoRM WebDAV code. For example, if a new property is added
 into Storage Area configuration files, you haven't to update your Puppet module
@@ -51,31 +51,31 @@ and all the service configuration will continue working.
 
 ### Data types
 
-* [`Storm::Backend::Acl`](#Storm--Backend--Acl): The ACL type for storm-backend-server
-* [`Storm::Backend::AclMode`](#Storm--Backend--AclMode): The AclMode type for storm-backend-server
-* [`Storm::Backend::BalanceStrategy`](#Storm--Backend--BalanceStrategy): The BalanceStrategy type for storm-backend-server
-* [`Storm::Backend::Endpoint`](#Storm--Backend--Endpoint): The Endpoint type for storm-backend-server
-* [`Storm::Backend::FileSystem`](#Storm--Backend--FileSystem): The FileSystem type for storm-backend-server
-* [`Storm::Backend::FsDriver`](#Storm--Backend--FsDriver): The FsDriver type for storm-backend-server
-* [`Storm::Backend::FsType`](#Storm--Backend--FsType): The FsType type for storm-backend-server
-* [`Storm::Backend::Gsiftp`](#Storm--Backend--Gsiftp): The Gsiftp type for storm-backend-server
-* [`Storm::Backend::GsiftpPoolMember`](#Storm--Backend--GsiftpPoolMember): The GsiftpPoolMember type for storm-backend-server
-* [`Storm::Backend::Pool`](#Storm--Backend--Pool): The Pool type for storm-backend-server
-* [`Storm::Backend::Quota`](#Storm--Backend--Quota): The Quota type for storm-backend-server
-* [`Storm::Backend::Rfio`](#Storm--Backend--Rfio): The Rfio type for storm-backend-server
-* [`Storm::Backend::SrmPoolMember`](#Storm--Backend--SrmPoolMember): The SrmPoolMember type for storm-backend-server
-* [`Storm::Backend::StorageArea`](#Storm--Backend--StorageArea): The storage area type for storm-backend-server
-* [`Storm::Backend::StorageClass`](#Storm--Backend--StorageClass): The StorageClass type for storm-backend-server
-* [`Storm::Backend::TransferProtocol`](#Storm--Backend--TransferProtocol): The TransferProtocol type for storm-backend-server
-* [`Storm::Backend::Webdav`](#Storm--Backend--Webdav): The WebDAV type for storm-backend-server
-* [`Storm::Backend::WebdavPoolMember`](#Storm--Backend--WebdavPoolMember): The WebdavPoolMember type for storm-backend-server
-* [`Storm::Backend::Xroot`](#Storm--Backend--Xroot): The Xroot type for storm-backend-server
-* [`Storm::CustomRepo`](#Storm--CustomRepo): The storage area type for storm-webdav
-* [`Storm::Webdav::StorageArea`](#Storm--Webdav--StorageArea): The storage area type for storm-webdav.
+* [`Storm::Backend::Acl`](#stormbackendacl): The ACL type for storm-backend-server
+* [`Storm::Backend::AclMode`](#stormbackendaclmode): The AclMode type for storm-backend-server
+* [`Storm::Backend::BalanceStrategy`](#stormbackendbalancestrategy): The BalanceStrategy type for storm-backend-server
+* [`Storm::Backend::Endpoint`](#stormbackendendpoint): The Endpoint type for storm-backend-server
+* [`Storm::Backend::FileSystem`](#stormbackendfilesystem): The FileSystem type for storm-backend-server
+* [`Storm::Backend::FsDriver`](#stormbackendfsdriver): The FsDriver type for storm-backend-server
+* [`Storm::Backend::FsType`](#stormbackendfstype): The FsType type for storm-backend-server
+* [`Storm::Backend::Gsiftp`](#stormbackendgsiftp): The Gsiftp type for storm-backend-server
+* [`Storm::Backend::GsiftpPoolMember`](#stormbackendgsiftppoolmember): The GsiftpPoolMember type for storm-backend-server
+* [`Storm::Backend::Pool`](#stormbackendpool): The Pool type for storm-backend-server
+* [`Storm::Backend::Quota`](#stormbackendquota): The Quota type for storm-backend-server
+* [`Storm::Backend::Rfio`](#stormbackendrfio): The Rfio type for storm-backend-server
+* [`Storm::Backend::SrmPoolMember`](#stormbackendsrmpoolmember): The SrmPoolMember type for storm-backend-server
+* [`Storm::Backend::StorageArea`](#stormbackendstoragearea): The storage area type for storm-backend-server
+* [`Storm::Backend::StorageClass`](#stormbackendstorageclass): The StorageClass type for storm-backend-server
+* [`Storm::Backend::TransferProtocol`](#stormbackendtransferprotocol): The TransferProtocol type for storm-backend-server
+* [`Storm::Backend::Webdav`](#stormbackendwebdav): The WebDAV type for storm-backend-server
+* [`Storm::Backend::WebdavPoolMember`](#stormbackendwebdavpoolmember): The WebdavPoolMember type for storm-backend-server
+* [`Storm::Backend::Xroot`](#stormbackendxroot): The Xroot type for storm-backend-server
+* [`Storm::CustomRepo`](#stormcustomrepo): The storage area type for storm-webdav
+* [`Storm::Webdav::StorageArea`](#stormwebdavstoragearea): The storage area type for storm-webdav.
 
 ## Classes
 
-### <a name="storm--backend"></a>`storm::backend`
+### <a name="stormbackend"></a>`storm::backend`
 
 StoRM Backend puppet module
 
@@ -121,91 +121,93 @@ class { 'storm::backend':
 
 The following parameters are available in the `storm::backend` class:
 
-* [`hostname`](#-storm--backend--hostname)
-* [`db_hostname`](#-storm--backend--db_hostname)
-* [`db_username`](#-storm--backend--db_username)
-* [`db_password`](#-storm--backend--db_password)
-* [`xroot_hostname`](#-storm--backend--xroot_hostname)
-* [`xroot_port`](#-storm--backend--xroot_port)
-* [`gsiftp_pool_balance_strategy`](#-storm--backend--gsiftp_pool_balance_strategy)
-* [`gsiftp_pool_members`](#-storm--backend--gsiftp_pool_members)
-* [`webdav_pool_balance_strategy`](#-storm--backend--webdav_pool_balance_strategy)
-* [`webdav_pool_members`](#-storm--backend--webdav_pool_members)
-* [`srm_pool_members`](#-storm--backend--srm_pool_members)
-* [`transfer_protocols`](#-storm--backend--transfer_protocols)
-* [`fs_type`](#-storm--backend--fs_type)
-* [`storage_areas`](#-storm--backend--storage_areas)
-* [`frontend_public_host`](#-storm--backend--frontend_public_host)
-* [`frontend_port`](#-storm--backend--frontend_port)
-* [`directory_automatic_creation`](#-storm--backend--directory_automatic_creation)
-* [`directory_writeperm`](#-storm--backend--directory_writeperm)
-* [`rest_services_port`](#-storm--backend--rest_services_port)
-* [`rest_services_max_threads`](#-storm--backend--rest_services_max_threads)
-* [`rest_services_max_queue_size`](#-storm--backend--rest_services_max_queue_size)
-* [`xmlrpc_unsecure_server_port`](#-storm--backend--xmlrpc_unsecure_server_port)
-* [`xmlrpc_maxthread`](#-storm--backend--xmlrpc_maxthread)
-* [`xmlrpc_max_queue_size`](#-storm--backend--xmlrpc_max_queue_size)
-* [`xmlrpc_security_enabled`](#-storm--backend--xmlrpc_security_enabled)
-* [`xmlrpc_security_token`](#-storm--backend--xmlrpc_security_token)
-* [`ptg_skip_acl_setup`](#-storm--backend--ptg_skip_acl_setup)
-* [`pinlifetime_default`](#-storm--backend--pinlifetime_default)
-* [`pinlifetime_maximum`](#-storm--backend--pinlifetime_maximum)
-* [`sanity_check_enabled`](#-storm--backend--sanity_check_enabled)
-* [`service_du_enabled`](#-storm--backend--service_du_enabled)
-* [`service_du_delay`](#-storm--backend--service_du_delay)
-* [`service_du_interval`](#-storm--backend--service_du_interval)
-* [`max_ls_entries`](#-storm--backend--max_ls_entries)
-* [`gc_pinnedfiles_cleaning_delay`](#-storm--backend--gc_pinnedfiles_cleaning_delay)
-* [`gc_pinnedfiles_cleaning_interval`](#-storm--backend--gc_pinnedfiles_cleaning_interval)
-* [`gc_purge_enabled`](#-storm--backend--gc_purge_enabled)
-* [`gc_purge_interval`](#-storm--backend--gc_purge_interval)
-* [`gc_purge_size`](#-storm--backend--gc_purge_size)
-* [`gc_expired_request_time`](#-storm--backend--gc_expired_request_time)
-* [`gc_expired_inprogress_time`](#-storm--backend--gc_expired_inprogress_time)
-* [`gc_ptp_transit_interval`](#-storm--backend--gc_ptp_transit_interval)
-* [`gc_ptp_transit_start_delay`](#-storm--backend--gc_ptp_transit_start_delay)
-* [`extraslashes_file`](#-storm--backend--extraslashes_file)
-* [`extraslashes_root`](#-storm--backend--extraslashes_root)
-* [`extraslashes_gsiftp`](#-storm--backend--extraslashes_gsiftp)
-* [`db_connection_pool_enabled`](#-storm--backend--db_connection_pool_enabled)
-* [`db_connection_pool_max_active`](#-storm--backend--db_connection_pool_max_active)
-* [`db_connection_pool_max_wait`](#-storm--backend--db_connection_pool_max_wait)
-* [`asynch_db_reconnect_period`](#-storm--backend--asynch_db_reconnect_period)
-* [`asynch_db_delay_period`](#-storm--backend--asynch_db_delay_period)
-* [`asynch_picking_initial_delay`](#-storm--backend--asynch_picking_initial_delay)
-* [`asynch_picking_time_interval`](#-storm--backend--asynch_picking_time_interval)
-* [`asynch_picking_max_batch_size`](#-storm--backend--asynch_picking_max_batch_size)
-* [`requests_scheduler_core_size`](#-storm--backend--requests_scheduler_core_size)
-* [`requests_scheduler_max_size`](#-storm--backend--requests_scheduler_max_size)
-* [`requests_scheduler_queue_size`](#-storm--backend--requests_scheduler_queue_size)
-* [`ptp_requests_scheduler_core_size`](#-storm--backend--ptp_requests_scheduler_core_size)
-* [`ptp_requests_scheduler_max_size`](#-storm--backend--ptp_requests_scheduler_max_size)
-* [`ptp_requests_scheduler_queue_size`](#-storm--backend--ptp_requests_scheduler_queue_size)
-* [`ptg_requests_scheduler_core_size`](#-storm--backend--ptg_requests_scheduler_core_size)
-* [`ptg_requests_scheduler_max_size`](#-storm--backend--ptg_requests_scheduler_max_size)
-* [`ptg_requests_scheduler_queue_size`](#-storm--backend--ptg_requests_scheduler_queue_size)
-* [`bol_requests_scheduler_core_size`](#-storm--backend--bol_requests_scheduler_core_size)
-* [`bol_requests_scheduler_max_size`](#-storm--backend--bol_requests_scheduler_max_size)
-* [`bol_requests_scheduler_queue_size`](#-storm--backend--bol_requests_scheduler_queue_size)
-* [`info_config_file`](#-storm--backend--info_config_file)
-* [`info_sitename`](#-storm--backend--info_sitename)
-* [`info_storage_default_root`](#-storm--backend--info_storage_default_root)
-* [`info_endpoint_quality_level`](#-storm--backend--info_endpoint_quality_level)
-* [`info_webdav_pool_list`](#-storm--backend--info_webdav_pool_list)
-* [`info_frontend_host_list`](#-storm--backend--info_frontend_host_list)
-* [`jvm_options`](#-storm--backend--jvm_options)
-* [`jmx`](#-storm--backend--jmx)
-* [`jmx_options`](#-storm--backend--jmx_options)
-* [`lcmaps_db_file`](#-storm--backend--lcmaps_db_file)
-* [`lcmaps_policy_name`](#-storm--backend--lcmaps_policy_name)
-* [`lcmaps_log_file`](#-storm--backend--lcmaps_log_file)
-* [`lcmaps_debug_level`](#-storm--backend--lcmaps_debug_level)
-* [`http_turl_prefix`](#-storm--backend--http_turl_prefix)
-* [`storm_limit_nofile`](#-storm--backend--storm_limit_nofile)
-* [`manage_path_authz_db`](#-storm--backend--manage_path_authz_db)
-* [`path_authz_db_file`](#-storm--backend--path_authz_db_file)
+* [`hostname`](#hostname)
+* [`db_hostname`](#db_hostname)
+* [`db_username`](#db_username)
+* [`db_password`](#db_password)
+* [`xroot_hostname`](#xroot_hostname)
+* [`xroot_port`](#xroot_port)
+* [`gsiftp_pool_balance_strategy`](#gsiftp_pool_balance_strategy)
+* [`gsiftp_pool_members`](#gsiftp_pool_members)
+* [`webdav_pool_balance_strategy`](#webdav_pool_balance_strategy)
+* [`webdav_pool_members`](#webdav_pool_members)
+* [`srm_pool_members`](#srm_pool_members)
+* [`transfer_protocols`](#transfer_protocols)
+* [`fs_type`](#fs_type)
+* [`storage_areas`](#storage_areas)
+* [`frontend_public_host`](#frontend_public_host)
+* [`frontend_port`](#frontend_port)
+* [`directory_automatic_creation`](#directory_automatic_creation)
+* [`directory_writeperm`](#directory_writeperm)
+* [`rest_services_port`](#rest_services_port)
+* [`rest_services_max_threads`](#rest_services_max_threads)
+* [`rest_services_max_queue_size`](#rest_services_max_queue_size)
+* [`xmlrpc_unsecure_server_port`](#xmlrpc_unsecure_server_port)
+* [`xmlrpc_maxthread`](#xmlrpc_maxthread)
+* [`xmlrpc_max_queue_size`](#xmlrpc_max_queue_size)
+* [`xmlrpc_security_enabled`](#xmlrpc_security_enabled)
+* [`xmlrpc_security_token`](#xmlrpc_security_token)
+* [`ptg_skip_acl_setup`](#ptg_skip_acl_setup)
+* [`pinlifetime_default`](#pinlifetime_default)
+* [`pinlifetime_maximum`](#pinlifetime_maximum)
+* [`sanity_check_enabled`](#sanity_check_enabled)
+* [`service_du_enabled`](#service_du_enabled)
+* [`service_du_delay`](#service_du_delay)
+* [`service_du_interval`](#service_du_interval)
+* [`max_ls_entries`](#max_ls_entries)
+* [`gc_pinnedfiles_cleaning_delay`](#gc_pinnedfiles_cleaning_delay)
+* [`gc_pinnedfiles_cleaning_interval`](#gc_pinnedfiles_cleaning_interval)
+* [`gc_purge_enabled`](#gc_purge_enabled)
+* [`gc_purge_interval`](#gc_purge_interval)
+* [`gc_purge_size`](#gc_purge_size)
+* [`gc_expired_request_time`](#gc_expired_request_time)
+* [`gc_expired_inprogress_time`](#gc_expired_inprogress_time)
+* [`gc_ptp_transit_interval`](#gc_ptp_transit_interval)
+* [`gc_ptp_transit_start_delay`](#gc_ptp_transit_start_delay)
+* [`extraslashes_file`](#extraslashes_file)
+* [`extraslashes_root`](#extraslashes_root)
+* [`extraslashes_gsiftp`](#extraslashes_gsiftp)
+* [`db_connection_pool_enabled`](#db_connection_pool_enabled)
+* [`db_connection_pool_max_active`](#db_connection_pool_max_active)
+* [`db_connection_pool_max_wait`](#db_connection_pool_max_wait)
+* [`asynch_db_reconnect_period`](#asynch_db_reconnect_period)
+* [`asynch_db_delay_period`](#asynch_db_delay_period)
+* [`asynch_picking_initial_delay`](#asynch_picking_initial_delay)
+* [`asynch_picking_time_interval`](#asynch_picking_time_interval)
+* [`asynch_picking_max_batch_size`](#asynch_picking_max_batch_size)
+* [`requests_scheduler_core_size`](#requests_scheduler_core_size)
+* [`requests_scheduler_max_size`](#requests_scheduler_max_size)
+* [`requests_scheduler_queue_size`](#requests_scheduler_queue_size)
+* [`ptp_requests_scheduler_core_size`](#ptp_requests_scheduler_core_size)
+* [`ptp_requests_scheduler_max_size`](#ptp_requests_scheduler_max_size)
+* [`ptp_requests_scheduler_queue_size`](#ptp_requests_scheduler_queue_size)
+* [`ptg_requests_scheduler_core_size`](#ptg_requests_scheduler_core_size)
+* [`ptg_requests_scheduler_max_size`](#ptg_requests_scheduler_max_size)
+* [`ptg_requests_scheduler_queue_size`](#ptg_requests_scheduler_queue_size)
+* [`bol_requests_scheduler_core_size`](#bol_requests_scheduler_core_size)
+* [`bol_requests_scheduler_max_size`](#bol_requests_scheduler_max_size)
+* [`bol_requests_scheduler_queue_size`](#bol_requests_scheduler_queue_size)
+* [`info_config_file`](#info_config_file)
+* [`info_sitename`](#info_sitename)
+* [`info_storage_default_root`](#info_storage_default_root)
+* [`info_endpoint_quality_level`](#info_endpoint_quality_level)
+* [`info_webdav_pool_list`](#info_webdav_pool_list)
+* [`info_frontend_host_list`](#info_frontend_host_list)
+* [`jvm_options`](#jvm_options)
+* [`jmx`](#jmx)
+* [`jmx_options`](#jmx_options)
+* [`lcmaps_db_file`](#lcmaps_db_file)
+* [`lcmaps_policy_name`](#lcmaps_policy_name)
+* [`lcmaps_log_file`](#lcmaps_log_file)
+* [`lcmaps_debug_level`](#lcmaps_debug_level)
+* [`http_turl_prefix`](#http_turl_prefix)
+* [`storm_limit_nofile`](#storm_limit_nofile)
+* [`manage_path_authz_db`](#manage_path_authz_db)
+* [`path_authz_db_file`](#path_authz_db_file)
+* [`manage_storm_properties`](#manage_storm_properties)
+* [`path_storm_properties`](#path_storm_properties)
 
-##### <a name="-storm--backend--hostname"></a>`hostname`
+##### <a name="hostname"></a>`hostname`
 
 Data type: `String`
 
@@ -213,7 +215,7 @@ StoRM Backend Fully Qualified Domain Name
 
 Default value: `$fqdn`
 
-##### <a name="-storm--backend--db_hostname"></a>`db_hostname`
+##### <a name="db_hostname"></a>`db_hostname`
 
 Data type: `String`
 
@@ -221,19 +223,19 @@ Fully Qualified Domain Name of database hostname. Default value: `hostname`.
 
 Default value: `$hostname`
 
-##### <a name="-storm--backend--db_username"></a>`db_username`
+##### <a name="db_username"></a>`db_username`
 
 Data type: `String`
 
 The name of user used to connect to local database. Default: storm
 
-##### <a name="-storm--backend--db_password"></a>`db_password`
+##### <a name="db_password"></a>`db_password`
 
 Data type: `String`
 
 Password for the user in `db_storm_username`. Default: bluemoon
 
-##### <a name="-storm--backend--xroot_hostname"></a>`xroot_hostname`
+##### <a name="xroot_hostname"></a>`xroot_hostname`
 
 Data type: `String`
 
@@ -242,13 +244,13 @@ Note: you may change the settings for each SA acting on its configuration.
 
 Default value: `$hostname`
 
-##### <a name="-storm--backend--xroot_port"></a>`xroot_port`
+##### <a name="xroot_port"></a>`xroot_port`
 
 Data type: `Integer`
 
 Root server port (default value for all Storage Areas).
 
-##### <a name="-storm--backend--gsiftp_pool_balance_strategy"></a>`gsiftp_pool_balance_strategy`
+##### <a name="gsiftp_pool_balance_strategy"></a>`gsiftp_pool_balance_strategy`
 
 Data type: `Storm::Backend::BalanceStrategy`
 
@@ -257,7 +259,7 @@ Note: you may change the settings for each SA acting on its configuration.
 Available values: round-robin, smart-rr, random, weight. Default value: round-robin.
 See [Storm::Backend::BalanceStrategy](#stormbackendbalancestrategy).
 
-##### <a name="-storm--backend--gsiftp_pool_members"></a>`gsiftp_pool_members`
+##### <a name="gsiftp_pool_members"></a>`gsiftp_pool_members`
 
 Data type: `Array[Storm::Backend::GsiftpPoolMember]`
 
@@ -265,7 +267,7 @@ Array of [Storm::Backend::GsiftpPoolMember](#stormbackendgsiftppoolmember).
 GridFTP servers pool list (default value for all Storage Areas).
 Note: you may change the settings for each SA acting on its configuration.
 
-##### <a name="-storm--backend--webdav_pool_balance_strategy"></a>`webdav_pool_balance_strategy`
+##### <a name="webdav_pool_balance_strategy"></a>`webdav_pool_balance_strategy`
 
 Data type: `Storm::Backend::BalanceStrategy`
 
@@ -274,7 +276,7 @@ Note: you may change the settings for each SA acting on its configuration.
 Available values: round-robin, smart-rr, random, weight. Default value: round-robin.
 See [Storm::Backend::BalanceStrategy](#stormbackendbalancestrategy).
 
-##### <a name="-storm--backend--webdav_pool_members"></a>`webdav_pool_members`
+##### <a name="webdav_pool_members"></a>`webdav_pool_members`
 
 Data type: `Array[Storm::Backend::WebdavPoolMember]`
 
@@ -282,7 +284,7 @@ Array of [Storm::Backend::WebdavPoolMember](#stormbackendwebdavpoolmember).
 WebDAV endpoints pool list (default value for all Storage Areas).
 Note: you may change the settings for each SA acting on its configuration.
 
-##### <a name="-storm--backend--srm_pool_members"></a>`srm_pool_members`
+##### <a name="srm_pool_members"></a>`srm_pool_members`
 
 Data type: `Array[Storm::Backend::SrmPoolMember]`
 
@@ -290,14 +292,14 @@ Array of [Storm::Backend::SrmPoolMember](#stormbackendsrmpoolmember).
 Frontend endpoints pool list (default value for all Storage Areas).
 Note: you may change the settings for each SA acting on its configuration.
 
-##### <a name="-storm--backend--transfer_protocols"></a>`transfer_protocols`
+##### <a name="transfer_protocols"></a>`transfer_protocols`
 
 Data type: `Array[Storm::Backend::TransferProtocol]`
 
 List of supported (and published) transfer protocols (default value for all Storage Areas).
 Note: you may change the settings for each SA acting on its configuration.
 
-##### <a name="-storm--backend--fs_type"></a>`fs_type`
+##### <a name="fs_type"></a>`fs_type`
 
 Data type: `Storm::Backend::FsType`
 
@@ -306,14 +308,14 @@ Note: you may change the settings for each SA acting on its configuration.
 Available values: posixfs, gpfs and test. Default value: posixfs
 See [Storm::Backend::FsType](#stormbackendfstype).
 
-##### <a name="-storm--backend--storage_areas"></a>`storage_areas`
+##### <a name="storage_areas"></a>`storage_areas`
 
 Data type: `Array[Storm::Backend::StorageArea]`
 
 List of supported Storage Areas.
 Array of [Storm::Backend::StorageArea](#stormbackendstoragearea).
 
-##### <a name="-storm--backend--frontend_public_host"></a>`frontend_public_host`
+##### <a name="frontend_public_host"></a>`frontend_public_host`
 
 Data type: `String`
 
@@ -322,49 +324,49 @@ Default value: `hostname`
 
 Default value: `$hostname`
 
-##### <a name="-storm--backend--frontend_port"></a>`frontend_port`
+##### <a name="frontend_port"></a>`frontend_port`
 
 Data type: `Integer`
 
 StoRM Frontend service port. Default value: 8444
 
-##### <a name="-storm--backend--directory_automatic_creation"></a>`directory_automatic_creation`
+##### <a name="directory_automatic_creation"></a>`directory_automatic_creation`
 
 Data type: `Boolean`
 
 Flag to enable automatic missing directory creation upon srmPrepareToPut requests. Default: false.
 
-##### <a name="-storm--backend--directory_writeperm"></a>`directory_writeperm`
+##### <a name="directory_writeperm"></a>`directory_writeperm`
 
 Data type: `Boolean`
 
 Flag to enable directory write permission setting upon srmMkDir requests on created directories. Default: false.
 
-##### <a name="-storm--backend--rest_services_port"></a>`rest_services_port`
+##### <a name="rest_services_port"></a>`rest_services_port`
 
 Data type: `Integer`
 
 REST services port. Default value: 9998
 
-##### <a name="-storm--backend--rest_services_max_threads"></a>`rest_services_max_threads`
+##### <a name="rest_services_max_threads"></a>`rest_services_max_threads`
 
 Data type: `Integer`
 
 REST services max active requests. Default: 100
 
-##### <a name="-storm--backend--rest_services_max_queue_size"></a>`rest_services_max_queue_size`
+##### <a name="rest_services_max_queue_size"></a>`rest_services_max_queue_size`
 
 Data type: `Integer`
 
 REST services max queue size of accepted requests. Default: 1000
 
-##### <a name="-storm--backend--xmlrpc_unsecure_server_port"></a>`xmlrpc_unsecure_server_port`
+##### <a name="xmlrpc_unsecure_server_port"></a>`xmlrpc_unsecure_server_port`
 
 Data type: `Integer`
 
 Port to listen on for incoming XML-RPC connections from Frontends(s). Default: 8080
 
-##### <a name="-storm--backend--xmlrpc_maxthread"></a>`xmlrpc_maxthread`
+##### <a name="xmlrpc_maxthread"></a>`xmlrpc_maxthread`
 
 Data type: `Integer`
 
@@ -372,388 +374,400 @@ Number of threads managing XML-RPC connection from Frontends(s).
 A well sized value for this parameter have to be at least equal to the sum of the number of working threads in all Frontends.
 Default: 100.
 
-##### <a name="-storm--backend--xmlrpc_max_queue_size"></a>`xmlrpc_max_queue_size`
+##### <a name="xmlrpc_max_queue_size"></a>`xmlrpc_max_queue_size`
 
 Data type: `Integer`
 
 Max number of accepted and queued XML-RPC connection from Frontends(s). Default: **1000**
 
-##### <a name="-storm--backend--xmlrpc_security_enabled"></a>`xmlrpc_security_enabled`
+##### <a name="xmlrpc_security_enabled"></a>`xmlrpc_security_enabled`
 
 Data type: `Boolean`
 
 Whether the backend will require a token to be present for accepting XML-RPC requests. Default: true.
 
-##### <a name="-storm--backend--xmlrpc_security_token"></a>`xmlrpc_security_token`
+##### <a name="xmlrpc_security_token"></a>`xmlrpc_security_token`
 
 Data type: `String`
 
 The token that the backend will require to be present for accepting XML-RPC requests.
 Mandatory if xmlrpc_security_enabled is true.
 
-##### <a name="-storm--backend--ptg_skip_acl_setup"></a>`ptg_skip_acl_setup`
+##### <a name="ptg_skip_acl_setup"></a>`ptg_skip_acl_setup`
 
 Data type: `Boolean`
 
 Skip ACL setup for PtG requests. Default: false.
 
-##### <a name="-storm--backend--pinlifetime_default"></a>`pinlifetime_default`
+##### <a name="pinlifetime_default"></a>`pinlifetime_default`
 
 Data type: `Integer`
 
 Default PinLifetime in seconds used for pinning files in case of srmPrepareToPut or srmPrepareToGet operation
 without any pinLifetime specified. Default: 259200.
 
-##### <a name="-storm--backend--pinlifetime_maximum"></a>`pinlifetime_maximum`
+##### <a name="pinlifetime_maximum"></a>`pinlifetime_maximum`
 
 Data type: `Integer`
 
 Maximum PinLifetime allowed in seconds. Default: 1814400.
 
-##### <a name="-storm--backend--sanity_check_enabled"></a>`sanity_check_enabled`
+##### <a name="sanity_check_enabled"></a>`sanity_check_enabled`
 
 Data type: `Boolean`
 
 Enable/disable sanity checks during bootstrap phase. Default: true.
 
-##### <a name="-storm--backend--service_du_enabled"></a>`service_du_enabled`
+##### <a name="service_du_enabled"></a>`service_du_enabled`
 
 Data type: `Boolean`
 
 Flag to enable disk usage service. Default: false.
 
-##### <a name="-storm--backend--service_du_delay"></a>`service_du_delay`
+##### <a name="service_du_delay"></a>`service_du_delay`
 
 Data type: `Integer`
 
 The initial delay before the service is started (seconds). Default: 60.
 
-##### <a name="-storm--backend--service_du_interval"></a>`service_du_interval`
+##### <a name="service_du_interval"></a>`service_du_interval`
 
 Data type: `Integer`
 
 The interval in seconds between successive run. Default: 360.
 
-##### <a name="-storm--backend--max_ls_entries"></a>`max_ls_entries`
+##### <a name="max_ls_entries"></a>`max_ls_entries`
 
 Data type: `Integer`
 
 Maximum number of entries returned by an srmLs call.
 Since in case of recursive srmLs results can be in order of million, this prevent a server overload. Default: 500.
 
-##### <a name="-storm--backend--gc_pinnedfiles_cleaning_delay"></a>`gc_pinnedfiles_cleaning_delay`
+##### <a name="gc_pinnedfiles_cleaning_delay"></a>`gc_pinnedfiles_cleaning_delay`
 
 Data type: `Integer`
 
 Initial delay before starting the reserved space, JIT ACLs and pinned files garbage collection process, in seconds. Default: 10.
 
-##### <a name="-storm--backend--gc_pinnedfiles_cleaning_interval"></a>`gc_pinnedfiles_cleaning_interval`
+##### <a name="gc_pinnedfiles_cleaning_interval"></a>`gc_pinnedfiles_cleaning_interval`
 
 Data type: `Integer`
 
 Time interval in seconds between successive purging run. Default: 300.
 
-##### <a name="-storm--backend--gc_purge_enabled"></a>`gc_purge_enabled`
+##### <a name="gc_purge_enabled"></a>`gc_purge_enabled`
 
 Data type: `Boolean`
 
 Enable the request garbage collector. Default: true.
 
-##### <a name="-storm--backend--gc_purge_interval"></a>`gc_purge_interval`
+##### <a name="gc_purge_interval"></a>`gc_purge_interval`
 
 Data type: `Integer`
 
 Time interval in seconds between successive purging run. Default: 600.
 
-##### <a name="-storm--backend--gc_purge_size"></a>`gc_purge_size`
+##### <a name="gc_purge_size"></a>`gc_purge_size`
 
 Data type: `Integer`
 
 Number of requests picked up for cleaning from the requests garbage collector at each run.
 This value is use also by Tape Recall Garbage Collector. Default: 800
 
-##### <a name="-storm--backend--gc_expired_request_time"></a>`gc_expired_request_time`
+##### <a name="gc_expired_request_time"></a>`gc_expired_request_time`
 
 Data type: `Integer`
 
 Time in seconds to consider a request expired after its submission. Default: 604800 seconds (1 week).
 From StoRM 1.11.13 it is used also to identify how much time is needed to consider a completed recall task as cleanable.
 
-##### <a name="-storm--backend--gc_expired_inprogress_time"></a>`gc_expired_inprogress_time`
+##### <a name="gc_expired_inprogress_time"></a>`gc_expired_inprogress_time`
 
 Data type: `Integer`
 
 Time in seconds to consider an in-progress ptp request as expired. Default: 2592000 seconds (1 month).
 
-##### <a name="-storm--backend--gc_ptp_transit_interval"></a>`gc_ptp_transit_interval`
+##### <a name="gc_ptp_transit_interval"></a>`gc_ptp_transit_interval`
 
 Data type: `Integer`
 
 Time interval in seconds between successive expired put requests agent run. Default: 3000.
 
-##### <a name="-storm--backend--gc_ptp_transit_start_delay"></a>`gc_ptp_transit_start_delay`
+##### <a name="gc_ptp_transit_start_delay"></a>`gc_ptp_transit_start_delay`
 
 Data type: `Integer`
 
 Initial delay before starting the expired put requests agent process, in seconds. Default: 60
 
-##### <a name="-storm--backend--extraslashes_file"></a>`extraslashes_file`
+##### <a name="extraslashes_file"></a>`extraslashes_file`
 
 Data type: `String`
 
 Add extra slashes after the “authority” part of a TURL for file protocol. Defaul: ''
 
-##### <a name="-storm--backend--extraslashes_root"></a>`extraslashes_root`
+##### <a name="extraslashes_root"></a>`extraslashes_root`
 
 Data type: `String`
 
 Add extra slashes after the “authority” part of a TURL for xroot protocol. Default: '/'
 
-##### <a name="-storm--backend--extraslashes_gsiftp"></a>`extraslashes_gsiftp`
+##### <a name="extraslashes_gsiftp"></a>`extraslashes_gsiftp`
 
 Data type: `String`
 
 Add extra slashes after the “authority” part of a TURL for gsiftp protocol. Default: '/'
 
-##### <a name="-storm--backend--db_connection_pool_enabled"></a>`db_connection_pool_enabled`
+##### <a name="db_connection_pool_enabled"></a>`db_connection_pool_enabled`
 
 Data type: `Boolean`
 
 Enable the database connection pool. Default: true
 
-##### <a name="-storm--backend--db_connection_pool_max_active"></a>`db_connection_pool_max_active`
+##### <a name="db_connection_pool_max_active"></a>`db_connection_pool_max_active`
 
 Data type: `Integer`
 
 Database connection pool max active connections. Default: 10
 
-##### <a name="-storm--backend--db_connection_pool_max_wait"></a>`db_connection_pool_max_wait`
+##### <a name="db_connection_pool_max_wait"></a>`db_connection_pool_max_wait`
 
 Data type: `Integer`
 
 Database connection pool max wait time to provide a connection. Default: 50
 
-##### <a name="-storm--backend--asynch_db_reconnect_period"></a>`asynch_db_reconnect_period`
+##### <a name="asynch_db_reconnect_period"></a>`asynch_db_reconnect_period`
 
 Data type: `Integer`
 
 Database connection refresh time intervall in seconds. Default: 18000
 
-##### <a name="-storm--backend--asynch_db_delay_period"></a>`asynch_db_delay_period`
+##### <a name="asynch_db_delay_period"></a>`asynch_db_delay_period`
 
 Data type: `Integer`
 
 Database connection refresh initial delay in seconds. Default: 30.
 
-##### <a name="-storm--backend--asynch_picking_initial_delay"></a>`asynch_picking_initial_delay`
+##### <a name="asynch_picking_initial_delay"></a>`asynch_picking_initial_delay`
 
 Data type: `Integer`
 
 Initial delay before starting to pick requests from the DB, in seconds. Default: 1.
 
-##### <a name="-storm--backend--asynch_picking_time_interval"></a>`asynch_picking_time_interval`
+##### <a name="asynch_picking_time_interval"></a>`asynch_picking_time_interval`
 
 Data type: `Integer`
 
 Polling interval in seconds to pick up new SRM requests. Default: 2.
 
-##### <a name="-storm--backend--asynch_picking_max_batch_size"></a>`asynch_picking_max_batch_size`
+##### <a name="asynch_picking_max_batch_size"></a>`asynch_picking_max_batch_size`
 
 Data type: `Integer`
 
 Maximum number of requests picked up at each polling time. Default: 100.
 
-##### <a name="-storm--backend--requests_scheduler_core_size"></a>`requests_scheduler_core_size`
+##### <a name="requests_scheduler_core_size"></a>`requests_scheduler_core_size`
 
 Data type: `Integer`
 
 Crusher Scheduler worker pool base size. Default: 50.
 
-##### <a name="-storm--backend--requests_scheduler_max_size"></a>`requests_scheduler_max_size`
+##### <a name="requests_scheduler_max_size"></a>`requests_scheduler_max_size`
 
 Data type: `Integer`
 
 Crusher Schedule worker pool max size. Default: 200.
 
-##### <a name="-storm--backend--requests_scheduler_queue_size"></a>`requests_scheduler_queue_size`
+##### <a name="requests_scheduler_queue_size"></a>`requests_scheduler_queue_size`
 
 Data type: `Integer`
 
 Request queue maximum size. Default: 2000.
 
-##### <a name="-storm--backend--ptp_requests_scheduler_core_size"></a>`ptp_requests_scheduler_core_size`
+##### <a name="ptp_requests_scheduler_core_size"></a>`ptp_requests_scheduler_core_size`
 
 Data type: `Integer`
 
 PrepareToPut worker pool base size. Default: 50.
 
-##### <a name="-storm--backend--ptp_requests_scheduler_max_size"></a>`ptp_requests_scheduler_max_size`
+##### <a name="ptp_requests_scheduler_max_size"></a>`ptp_requests_scheduler_max_size`
 
 Data type: `Integer`
 
 PrepareToPut worker pool max size. Default: 200.
 
-##### <a name="-storm--backend--ptp_requests_scheduler_queue_size"></a>`ptp_requests_scheduler_queue_size`
+##### <a name="ptp_requests_scheduler_queue_size"></a>`ptp_requests_scheduler_queue_size`
 
 Data type: `Integer`
 
 PrepareToPut request queue maximum size. Default: 1000.
 
-##### <a name="-storm--backend--ptg_requests_scheduler_core_size"></a>`ptg_requests_scheduler_core_size`
+##### <a name="ptg_requests_scheduler_core_size"></a>`ptg_requests_scheduler_core_size`
 
 Data type: `Integer`
 
 PrepareToGet worker pool base size. Default: 50.
 
-##### <a name="-storm--backend--ptg_requests_scheduler_max_size"></a>`ptg_requests_scheduler_max_size`
+##### <a name="ptg_requests_scheduler_max_size"></a>`ptg_requests_scheduler_max_size`
 
 Data type: `Integer`
 
 PrepareToGet worker pool max size. Default: 200.
 
-##### <a name="-storm--backend--ptg_requests_scheduler_queue_size"></a>`ptg_requests_scheduler_queue_size`
+##### <a name="ptg_requests_scheduler_queue_size"></a>`ptg_requests_scheduler_queue_size`
 
 Data type: `Integer`
 
 PrepareToGet request queue maximum size. Default: 2000.
 
-##### <a name="-storm--backend--bol_requests_scheduler_core_size"></a>`bol_requests_scheduler_core_size`
+##### <a name="bol_requests_scheduler_core_size"></a>`bol_requests_scheduler_core_size`
 
 Data type: `Integer`
 
 BringOnline worker pool base size. Default: 50.
 
-##### <a name="-storm--backend--bol_requests_scheduler_max_size"></a>`bol_requests_scheduler_max_size`
+##### <a name="bol_requests_scheduler_max_size"></a>`bol_requests_scheduler_max_size`
 
 Data type: `Integer`
 
 BringOnline Worker pool max size. Default: 200.
 
-##### <a name="-storm--backend--bol_requests_scheduler_queue_size"></a>`bol_requests_scheduler_queue_size`
+##### <a name="bol_requests_scheduler_queue_size"></a>`bol_requests_scheduler_queue_size`
 
 Data type: `Integer`
 
 BringOnline request queue maximum size. Default: 2000.
 
-##### <a name="-storm--backend--info_config_file"></a>`info_config_file`
+##### <a name="info_config_file"></a>`info_config_file`
 
 Data type: `String`
 
 The key-value file used by StoRM Info Provider as its configuration file.
 
-##### <a name="-storm--backend--info_sitename"></a>`info_sitename`
+##### <a name="info_sitename"></a>`info_sitename`
 
 Data type: `String`
 
 It’s the human-readable name of your site used to set the Glue-SiteName attribute.
 
-##### <a name="-storm--backend--info_storage_default_root"></a>`info_storage_default_root`
+##### <a name="info_storage_default_root"></a>`info_storage_default_root`
 
 Data type: `String`
 
 Default directory for Storage Areas.
 
-##### <a name="-storm--backend--info_endpoint_quality_level"></a>`info_endpoint_quality_level`
+##### <a name="info_endpoint_quality_level"></a>`info_endpoint_quality_level`
 
 Data type: `Integer`
 
 Endpoint maturity level to be published by the StoRM info provider. Default value: 2.
 
-##### <a name="-storm--backend--info_webdav_pool_list"></a>`info_webdav_pool_list`
+##### <a name="info_webdav_pool_list"></a>`info_webdav_pool_list`
 
 Data type: `Array[Storm::Backend::WebdavPoolMember]`
 
 List of published webdav endpoints.
 
-##### <a name="-storm--backend--info_frontend_host_list"></a>`info_frontend_host_list`
+##### <a name="info_frontend_host_list"></a>`info_frontend_host_list`
 
 Data type: `Array[Storm::Backend::SrmPoolMember]`
 
 List of published srm endpoints.
 
-##### <a name="-storm--backend--jvm_options"></a>`jvm_options`
+##### <a name="jvm_options"></a>`jvm_options`
 
 Data type: `String`
 
 
 
-##### <a name="-storm--backend--jmx"></a>`jmx`
+##### <a name="jmx"></a>`jmx`
 
 Data type: `Boolean`
 
 
 
-##### <a name="-storm--backend--jmx_options"></a>`jmx_options`
+##### <a name="jmx_options"></a>`jmx_options`
 
 Data type: `String`
 
 
 
-##### <a name="-storm--backend--lcmaps_db_file"></a>`lcmaps_db_file`
+##### <a name="lcmaps_db_file"></a>`lcmaps_db_file`
 
 Data type: `String`
 
 
 
-##### <a name="-storm--backend--lcmaps_policy_name"></a>`lcmaps_policy_name`
+##### <a name="lcmaps_policy_name"></a>`lcmaps_policy_name`
 
 Data type: `String`
 
 
 
-##### <a name="-storm--backend--lcmaps_log_file"></a>`lcmaps_log_file`
+##### <a name="lcmaps_log_file"></a>`lcmaps_log_file`
 
 Data type: `String`
 
 
 
-##### <a name="-storm--backend--lcmaps_debug_level"></a>`lcmaps_debug_level`
+##### <a name="lcmaps_debug_level"></a>`lcmaps_debug_level`
 
 Data type: `Integer`
 
 
 
-##### <a name="-storm--backend--http_turl_prefix"></a>`http_turl_prefix`
+##### <a name="http_turl_prefix"></a>`http_turl_prefix`
 
 Data type: `String`
 
 
 
-##### <a name="-storm--backend--storm_limit_nofile"></a>`storm_limit_nofile`
+##### <a name="storm_limit_nofile"></a>`storm_limit_nofile`
 
 Data type: `Integer`
 
 Sets LimitNOFILE value.
 
-##### <a name="-storm--backend--manage_path_authz_db"></a>`manage_path_authz_db`
+##### <a name="manage_path_authz_db"></a>`manage_path_authz_db`
 
 Data type: `Boolean`
 
 If true, allows to set content of path-authz.db file.
 
-##### <a name="-storm--backend--path_authz_db_file"></a>`path_authz_db_file`
+##### <a name="path_authz_db_file"></a>`path_authz_db_file`
 
 Data type: `String`
 
 If manage_path_authz_db is true, set the content from this source path
 
-### <a name="storm--backend--config"></a>`storm::backend::config`
+##### <a name="manage_storm_properties"></a>`manage_storm_properties`
+
+Data type: `Boolean`
+
+If true, allows to set content of storm.properties file wuth the file pointed by path_storm_properties.
+
+##### <a name="path_storm_properties"></a>`path_storm_properties`
+
+Data type: `String`
+
+If manage_storm_properties is true, set the content of storm.properties from this source path
+
+### <a name="stormbackendconfig"></a>`storm::backend::config`
 
 StoRM Backend config class
 
-### <a name="storm--backend--configdb"></a>`storm::backend::configdb`
+### <a name="stormbackendconfigdb"></a>`storm::backend::configdb`
 
 StoRM Backend DB config class
 
-### <a name="storm--backend--install"></a>`storm::backend::install`
+### <a name="stormbackendinstall"></a>`storm::backend::install`
 
 StoRM Backend install class
 
-### <a name="storm--backend--service"></a>`storm::backend::service`
+### <a name="stormbackendservice"></a>`storm::backend::service`
 
 StoRM Backend service class
 
-### <a name="storm--db"></a>`storm::db`
+### <a name="stormdb"></a>`storm::db`
 
 Install MariaDB server and client, create empty databases 'storm_db' and 'storm_be_ISAM',
 add storm user and all the necessary grants.
@@ -770,14 +784,14 @@ include storm::db
 
 The following parameters are available in the `storm::db` class:
 
-* [`fqdn_hostname`](#-storm--db--fqdn_hostname)
-* [`root_password`](#-storm--db--root_password)
-* [`storm_username`](#-storm--db--storm_username)
-* [`storm_password`](#-storm--db--storm_password)
-* [`override_options`](#-storm--db--override_options)
-* [`limit_no_file`](#-storm--db--limit_no_file)
+* [`fqdn_hostname`](#fqdn_hostname)
+* [`root_password`](#root_password)
+* [`storm_username`](#storm_username)
+* [`storm_password`](#storm_password)
+* [`override_options`](#override_options)
+* [`limit_no_file`](#limit_no_file)
 
-##### <a name="-storm--db--fqdn_hostname"></a>`fqdn_hostname`
+##### <a name="fqdn_hostname"></a>`fqdn_hostname`
 
 Data type: `String`
 
@@ -785,37 +799,37 @@ The Fully Qualified Domain Name of the host. Default value got from Puppet fact 
 
 Default value: `$fqdn`
 
-##### <a name="-storm--db--root_password"></a>`root_password`
+##### <a name="root_password"></a>`root_password`
 
 Data type: `String`
 
 MySQL root password. Default: 'storm'.
 
-##### <a name="-storm--db--storm_username"></a>`storm_username`
+##### <a name="storm_username"></a>`storm_username`
 
 Data type: `String`
 
 The username of the user used by storm services to query the databases. Default 'storm'.
 
-##### <a name="-storm--db--storm_password"></a>`storm_password`
+##### <a name="storm_password"></a>`storm_password`
 
 Data type: `String`
 
 The password of 'storm' username used by storm services to access the databases. Default: 'storm'.
 
-##### <a name="-storm--db--override_options"></a>`override_options`
+##### <a name="override_options"></a>`override_options`
 
 Data type: `Data`
 
 MySQL server override options. Read more about this at https://forge.puppet.com/puppetlabs/mysql/reference#override_options.
 
-##### <a name="-storm--db--limit_no_file"></a>`limit_no_file`
+##### <a name="limit_no_file"></a>`limit_no_file`
 
 Data type: `Integer`
 
 MariaDB setting for limitNoFile
 
-### <a name="storm--frontend"></a>`storm::frontend`
+### <a name="stormfrontend"></a>`storm::frontend`
 
 StoRM Frontend puppet module
 
@@ -836,29 +850,29 @@ class { 'storm::frontend':
 
 The following parameters are available in the `storm::frontend` class:
 
-* [`storm_frontend_server_conf_file`](#-storm--frontend--storm_frontend_server_conf_file)
-* [`be_xmlrpc_host`](#-storm--frontend--be_xmlrpc_host)
-* [`be_xmlrpc_port`](#-storm--frontend--be_xmlrpc_port)
-* [`be_xmlrpc_token`](#-storm--frontend--be_xmlrpc_token)
-* [`be_xmlrpc_path`](#-storm--frontend--be_xmlrpc_path)
-* [`be_recalltable_port`](#-storm--frontend--be_recalltable_port)
-* [`db_host`](#-storm--frontend--db_host)
-* [`db_user`](#-storm--frontend--db_user)
-* [`db_passwd`](#-storm--frontend--db_passwd)
-* [`port`](#-storm--frontend--port)
-* [`threadpool_maxpending`](#-storm--frontend--threadpool_maxpending)
-* [`threadpool_threads_number`](#-storm--frontend--threadpool_threads_number)
-* [`gsoap_maxpending`](#-storm--frontend--gsoap_maxpending)
-* [`check_user_blacklisting`](#-storm--frontend--check_user_blacklisting)
-* [`argus_pepd_endpoint`](#-storm--frontend--argus_pepd_endpoint)
-* [`argus_resource_id`](#-storm--frontend--argus_resource_id)
-* [`monitoring_enabled`](#-storm--frontend--monitoring_enabled)
-* [`monitoring_time_interval`](#-storm--frontend--monitoring_time_interval)
-* [`monitoring_detailed`](#-storm--frontend--monitoring_detailed)
-* [`security_enable_vomscheck`](#-storm--frontend--security_enable_vomscheck)
-* [`log_debuglevel`](#-storm--frontend--log_debuglevel)
+* [`storm_frontend_server_conf_file`](#storm_frontend_server_conf_file)
+* [`be_xmlrpc_host`](#be_xmlrpc_host)
+* [`be_xmlrpc_port`](#be_xmlrpc_port)
+* [`be_xmlrpc_token`](#be_xmlrpc_token)
+* [`be_xmlrpc_path`](#be_xmlrpc_path)
+* [`be_recalltable_port`](#be_recalltable_port)
+* [`db_host`](#db_host)
+* [`db_user`](#db_user)
+* [`db_passwd`](#db_passwd)
+* [`port`](#port)
+* [`threadpool_maxpending`](#threadpool_maxpending)
+* [`threadpool_threads_number`](#threadpool_threads_number)
+* [`gsoap_maxpending`](#gsoap_maxpending)
+* [`check_user_blacklisting`](#check_user_blacklisting)
+* [`argus_pepd_endpoint`](#argus_pepd_endpoint)
+* [`argus_resource_id`](#argus_resource_id)
+* [`monitoring_enabled`](#monitoring_enabled)
+* [`monitoring_time_interval`](#monitoring_time_interval)
+* [`monitoring_detailed`](#monitoring_detailed)
+* [`security_enable_vomscheck`](#security_enable_vomscheck)
+* [`log_debuglevel`](#log_debuglevel)
 
-##### <a name="-storm--frontend--storm_frontend_server_conf_file"></a>`storm_frontend_server_conf_file`
+##### <a name="storm_frontend_server_conf_file"></a>`storm_frontend_server_conf_file`
 
 Data type: `String`
 
@@ -868,7 +882,7 @@ to configure an old StoRM deployment. This parameter is used only when it has
 a non-empty value and it overwrites several other module parameters.
 Default value: empty string (that means not used).
 
-##### <a name="-storm--frontend--be_xmlrpc_host"></a>`be_xmlrpc_host`
+##### <a name="be_xmlrpc_host"></a>`be_xmlrpc_host`
 
 Data type: `String`
 
@@ -876,31 +890,31 @@ StoRM Backend hostname.
 
 Default value: `$fqdn`
 
-##### <a name="-storm--frontend--be_xmlrpc_port"></a>`be_xmlrpc_port`
+##### <a name="be_xmlrpc_port"></a>`be_xmlrpc_port`
 
 Data type: `Integer`
 
 StoRM Backend XML-RPC server port. Default value: 8080.
 
-##### <a name="-storm--frontend--be_xmlrpc_token"></a>`be_xmlrpc_token`
+##### <a name="be_xmlrpc_token"></a>`be_xmlrpc_token`
 
 Data type: `String`
 
 Security token used for communicating with StoRM Backend. Mandatory.
 
-##### <a name="-storm--frontend--be_xmlrpc_path"></a>`be_xmlrpc_path`
+##### <a name="be_xmlrpc_path"></a>`be_xmlrpc_path`
 
 Data type: `String`
 
 StoRM Backend XML-RPC server path. Default value: '/RPC2'.
 
-##### <a name="-storm--frontend--be_recalltable_port"></a>`be_recalltable_port`
+##### <a name="be_recalltable_port"></a>`be_recalltable_port`
 
 Data type: `Integer`
 
 StoRM Backend REST server port running on the Backend machine. Default value: 9998.
 
-##### <a name="-storm--frontend--db_host"></a>`db_host`
+##### <a name="db_host"></a>`db_host`
 
 Data type: `String`
 
@@ -908,105 +922,105 @@ Host for database connection.
 
 Default value: `$be_xmlrpc_host`
 
-##### <a name="-storm--frontend--db_user"></a>`db_user`
+##### <a name="db_user"></a>`db_user`
 
 Data type: `String`
 
 User for database connection. Default value: 'storm'.
 
-##### <a name="-storm--frontend--db_passwd"></a>`db_passwd`
+##### <a name="db_passwd"></a>`db_passwd`
 
 Data type: `String`
 
 Password for database connection. Default value: 'storm'.
 
-##### <a name="-storm--frontend--port"></a>`port`
+##### <a name="port"></a>`port`
 
 Data type: `Integer`
 
 Frontend service port. Default value: 8444.
 
-##### <a name="-storm--frontend--threadpool_maxpending"></a>`threadpool_maxpending`
+##### <a name="threadpool_maxpending"></a>`threadpool_maxpending`
 
 Data type: `Integer`
 
 Size of the internal queue used to maintain SRM tasks in case there are no free worker threads.
 Default value: 200.
 
-##### <a name="-storm--frontend--threadpool_threads_number"></a>`threadpool_threads_number`
+##### <a name="threadpool_threads_number"></a>`threadpool_threads_number`
 
 Data type: `Integer`
 
 Size of the worker thread pool. Default value: 50.
 
-##### <a name="-storm--frontend--gsoap_maxpending"></a>`gsoap_maxpending`
+##### <a name="gsoap_maxpending"></a>`gsoap_maxpending`
 
 Data type: `Integer`
 
 Size of the GSOAP queue used to maintain pending SRM requests. Default value: 1000.
 
-##### <a name="-storm--frontend--check_user_blacklisting"></a>`check_user_blacklisting`
+##### <a name="check_user_blacklisting"></a>`check_user_blacklisting`
 
 Data type: `Boolean`
 
 Enable/disable user blacklisting. Default value: false.
 
-##### <a name="-storm--frontend--argus_pepd_endpoint"></a>`argus_pepd_endpoint`
+##### <a name="argus_pepd_endpoint"></a>`argus_pepd_endpoint`
 
 Data type: `String`
 
 The complete service endpoint of Argus PEP server. Mandatory if `check_user_blacklisting` is true.
 
-##### <a name="-storm--frontend--argus_resource_id"></a>`argus_resource_id`
+##### <a name="argus_resource_id"></a>`argus_resource_id`
 
 Data type: `String`
 
 The resource id is used to target a resource (or set of resources, if wildcards are used) under the control of Argus authorization.
 Mandatory if `check_user_blacklisting` is true.
 
-##### <a name="-storm--frontend--monitoring_enabled"></a>`monitoring_enabled`
+##### <a name="monitoring_enabled"></a>`monitoring_enabled`
 
 Data type: `Boolean`
 
 Enable/disable monitoring. Default value: true.
 
-##### <a name="-storm--frontend--monitoring_time_interval"></a>`monitoring_time_interval`
+##### <a name="monitoring_time_interval"></a>`monitoring_time_interval`
 
 Data type: `Integer`
 
 Time interval in seconds between each monitoring round. Default value: 60.
 
-##### <a name="-storm--frontend--monitoring_detailed"></a>`monitoring_detailed`
+##### <a name="monitoring_detailed"></a>`monitoring_detailed`
 
 Data type: `Boolean`
 
 Enable/disable detailed monitoring. Default value: false.
 
-##### <a name="-storm--frontend--security_enable_vomscheck"></a>`security_enable_vomscheck`
+##### <a name="security_enable_vomscheck"></a>`security_enable_vomscheck`
 
 Data type: `Boolean`
 
 Flag to enable/disable checking proxy VOMS credentials. Default value: true.
 
-##### <a name="-storm--frontend--log_debuglevel"></a>`log_debuglevel`
+##### <a name="log_debuglevel"></a>`log_debuglevel`
 
 Data type: `String`
 
 Logging level. Possible values are: ERROR, WARN, INFO, DEBUG, DEBUG2. Default value: INFO.
 
-### <a name="storm--frontend--config"></a>`storm::frontend::config`
+### <a name="stormfrontendconfig"></a>`storm::frontend::config`
 
 StoRM Frontend config class
 
-### <a name="storm--frontend--install"></a>`storm::frontend::install`
+### <a name="stormfrontendinstall"></a>`storm::frontend::install`
 
 StoRM Frontend install class
 
-### <a name="storm--frontend--service"></a>`storm::frontend::service`
+### <a name="stormfrontendservice"></a>`storm::frontend::service`
 
 StoRM Frontend service class
 
-### <a name="storm--gridftp"></a>`storm::gridftp`
+### <a name="stormgridftp"></a>`storm::gridftp`
 
 Parameters
 ----------
@@ -1033,86 +1047,86 @@ class { 'storm::gridftp':
 
 The following parameters are available in the `storm::gridftp` class:
 
-* [`port`](#-storm--gridftp--port)
-* [`port_range`](#-storm--gridftp--port_range)
-* [`connections_max`](#-storm--gridftp--connections_max)
-* [`log_single`](#-storm--gridftp--log_single)
-* [`log_transfer`](#-storm--gridftp--log_transfer)
-* [`redirect_lcmaps_log`](#-storm--gridftp--redirect_lcmaps_log)
-* [`llgt_log_file`](#-storm--gridftp--llgt_log_file)
-* [`lcmaps_debug_level`](#-storm--gridftp--lcmaps_debug_level)
-* [`lcas_debug_level`](#-storm--gridftp--lcas_debug_level)
-* [`load_storm_dsi_module`](#-storm--gridftp--load_storm_dsi_module)
-* [`log_level`](#-storm--gridftp--log_level)
-* [`data_interface`](#-storm--gridftp--data_interface)
+* [`port`](#port)
+* [`port_range`](#port_range)
+* [`connections_max`](#connections_max)
+* [`log_single`](#log_single)
+* [`log_transfer`](#log_transfer)
+* [`redirect_lcmaps_log`](#redirect_lcmaps_log)
+* [`llgt_log_file`](#llgt_log_file)
+* [`lcmaps_debug_level`](#lcmaps_debug_level)
+* [`lcas_debug_level`](#lcas_debug_level)
+* [`load_storm_dsi_module`](#load_storm_dsi_module)
+* [`log_level`](#log_level)
+* [`data_interface`](#data_interface)
 
-##### <a name="-storm--gridftp--port"></a>`port`
+##### <a name="port"></a>`port`
 
 Data type: `Integer`
 
 The port used by GridFTP server service.
 
-##### <a name="-storm--gridftp--port_range"></a>`port_range`
+##### <a name="port_range"></a>`port_range`
 
 Data type: `String`
 
 The range of ports used by transfer sockets; format is 'MIN,MAX'.
 
-##### <a name="-storm--gridftp--connections_max"></a>`connections_max`
+##### <a name="connections_max"></a>`connections_max`
 
 Data type: `Integer`
 
 The number of max allowed connections to server.
 
-##### <a name="-storm--gridftp--log_single"></a>`log_single`
+##### <a name="log_single"></a>`log_single`
 
 Data type: `String`
 
 Session log file path. Default is: /var/log/storm/storm-gridftp-session.log
 
-##### <a name="-storm--gridftp--log_transfer"></a>`log_transfer`
+##### <a name="log_transfer"></a>`log_transfer`
 
 Data type: `String`
 
 Transfer log file path. Default is: /var/log/storm/storm-globus-gridftp.log
 
-##### <a name="-storm--gridftp--redirect_lcmaps_log"></a>`redirect_lcmaps_log`
+##### <a name="redirect_lcmaps_log"></a>`redirect_lcmaps_log`
 
 Data type: `Boolean`
 
 If true, redirect the LCMAPS log to the file specified by 'llgt_log_file'.
 
-##### <a name="-storm--gridftp--llgt_log_file"></a>`llgt_log_file`
+##### <a name="llgt_log_file"></a>`llgt_log_file`
 
 Data type: `String`
 
 The LCMAPS log file used if 'redirect_lcmaps_log' is true.
 
-##### <a name="-storm--gridftp--lcmaps_debug_level"></a>`lcmaps_debug_level`
+##### <a name="lcmaps_debug_level"></a>`lcmaps_debug_level`
 
 Data type: `Integer`
 
 The LCMAPS logging level. Values from 0 (ERROR) to 5 (DEBUG). Default: 3 (INFO)
 
-##### <a name="-storm--gridftp--lcas_debug_level"></a>`lcas_debug_level`
+##### <a name="lcas_debug_level"></a>`lcas_debug_level`
 
 Data type: `Integer`
 
 The LCAS logging level. Values from 0 (ERROR) to 5 (DEBUG). Default: 3 (INFO)
 
-##### <a name="-storm--gridftp--load_storm_dsi_module"></a>`load_storm_dsi_module`
+##### <a name="load_storm_dsi_module"></a>`load_storm_dsi_module`
 
 Data type: `Boolean`
 
 Enable/Disable StoRM DSI module. Default: true (enabled)
 
-##### <a name="-storm--gridftp--log_level"></a>`log_level`
+##### <a name="log_level"></a>`log_level`
 
 Data type: `String`
 
 
 
-##### <a name="-storm--gridftp--data_interface"></a>`data_interface`
+##### <a name="data_interface"></a>`data_interface`
 
 Data type: `Optional[String]`
 
@@ -1120,19 +1134,19 @@ Data type: `Optional[String]`
 Set this to your external IP address in case your public address is different from
 your local address (e.g. the floating IP address of a Virtual Machine).
 
-### <a name="storm--gridftp--config"></a>`storm::gridftp::config`
+### <a name="stormgridftpconfig"></a>`storm::gridftp::config`
 
 StoRM GridFTP config class
 
-### <a name="storm--gridftp--install"></a>`storm::gridftp::install`
+### <a name="stormgridftpinstall"></a>`storm::gridftp::install`
 
 StoRM GridFTP install class
 
-### <a name="storm--gridftp--service"></a>`storm::gridftp::service`
+### <a name="stormgridftpservice"></a>`storm::gridftp::service`
 
 StoRM GridFTP service class
 
-### <a name="storm--repo"></a>`storm::repo`
+### <a name="stormrepo"></a>`storm::repo`
 
 Choose which StoRM repository you want to intall and enable. Also a custom list of repository URL can be specified.
 
@@ -1150,29 +1164,29 @@ class { 'storm::repo':
 
 The following parameters are available in the `storm::repo` class:
 
-* [`installed`](#-storm--repo--installed)
-* [`enabled`](#-storm--repo--enabled)
-* [`extra`](#-storm--repo--extra)
+* [`installed`](#installed)
+* [`enabled`](#enabled)
+* [`extra`](#extra)
 
-##### <a name="-storm--repo--installed"></a>`installed`
+##### <a name="installed"></a>`installed`
 
 Data type: `Array[Enum['stable', 'beta', 'nightly']]`
 
 The list of repositories that have to be installed. Allowed values are `stable`, `beta` and `nightly`. Optional.
 
-##### <a name="-storm--repo--enabled"></a>`enabled`
+##### <a name="enabled"></a>`enabled`
 
 Data type: `Array[Enum['stable', 'beta', 'nightly']]`
 
 The list of repositories that have to be enabled. Allowed values are `stable`, `beta` and `nightly`. Optional.
 
-##### <a name="-storm--repo--extra"></a>`extra`
+##### <a name="extra"></a>`extra`
 
 Data type: `Array[Storm::CustomRepo]`
 
 A list of repository that have to be created. Optional.
 
-### <a name="storm--users"></a>`storm::users`
+### <a name="stormusers"></a>`storm::users`
 
 Parameters
 ----------
@@ -1212,22 +1226,22 @@ class { 'storm::users':
 
 The following parameters are available in the `storm::users` class:
 
-* [`groups`](#-storm--users--groups)
-* [`users`](#-storm--users--users)
+* [`groups`](#groups)
+* [`users`](#users)
 
-##### <a name="-storm--users--groups"></a>`groups`
+##### <a name="groups"></a>`groups`
 
 Data type: `Accounts::Group::Hash`
 
 
 
-##### <a name="-storm--users--users"></a>`users`
+##### <a name="users"></a>`users`
 
 Data type: `Accounts::User::Hash`
 
 
 
-### <a name="storm--webdav"></a>`storm::webdav`
+### <a name="stormwebdav"></a>`storm::webdav`
 
 StoRM WebDAV puppet module
 
@@ -1251,323 +1265,323 @@ class { 'storm::webdav':
 
 The following parameters are available in the `storm::webdav` class:
 
-* [`storage_areas`](#-storm--webdav--storage_areas)
-* [`hostnames`](#-storm--webdav--hostnames)
-* [`http_port`](#-storm--webdav--http_port)
-* [`https_port`](#-storm--webdav--https_port)
-* [`trust_anchors_refresh_interval`](#-storm--webdav--trust_anchors_refresh_interval)
-* [`max_concurrent_connections`](#-storm--webdav--max_concurrent_connections)
-* [`max_queue_size`](#-storm--webdav--max_queue_size)
-* [`connector_max_idle_time`](#-storm--webdav--connector_max_idle_time)
-* [`vo_map_files_enable`](#-storm--webdav--vo_map_files_enable)
-* [`vo_map_files_config_dir`](#-storm--webdav--vo_map_files_config_dir)
-* [`vo_map_files_refresh_interval`](#-storm--webdav--vo_map_files_refresh_interval)
-* [`tpc_max_connections`](#-storm--webdav--tpc_max_connections)
-* [`tpc_max_connections_per_route`](#-storm--webdav--tpc_max_connections_per_route)
-* [`tpc_verify_checksum`](#-storm--webdav--tpc_verify_checksum)
-* [`tpc_timeout_in_secs`](#-storm--webdav--tpc_timeout_in_secs)
-* [`tpc_tls_protocol`](#-storm--webdav--tpc_tls_protocol)
-* [`tpc_report_delay_secs`](#-storm--webdav--tpc_report_delay_secs)
-* [`tpc_enable_tls_client_auth`](#-storm--webdav--tpc_enable_tls_client_auth)
-* [`tpc_progress_report_thread_pool_size`](#-storm--webdav--tpc_progress_report_thread_pool_size)
-* [`tpc_enable_expect_continue_threshold`](#-storm--webdav--tpc_enable_expect_continue_threshold)
-* [`jvm_opts`](#-storm--webdav--jvm_opts)
-* [`authz_server_enable`](#-storm--webdav--authz_server_enable)
-* [`authz_server_issuer`](#-storm--webdav--authz_server_issuer)
-* [`authz_server_max_token_lifetime_sec`](#-storm--webdav--authz_server_max_token_lifetime_sec)
-* [`authz_server_secret`](#-storm--webdav--authz_server_secret)
-* [`require_client_cert`](#-storm--webdav--require_client_cert)
-* [`use_conscrypt`](#-storm--webdav--use_conscrypt)
-* [`tpc_use_conscrypt`](#-storm--webdav--tpc_use_conscrypt)
-* [`enable_http2`](#-storm--webdav--enable_http2)
-* [`debug`](#-storm--webdav--debug)
-* [`debug_port`](#-storm--webdav--debug_port)
-* [`debug_suspend`](#-storm--webdav--debug_suspend)
-* [`storm_limit_nofile`](#-storm--webdav--storm_limit_nofile)
-* [`user`](#-storm--webdav--user)
-* [`tape_wellknown_source`](#-storm--webdav--tape_wellknown_source)
-* [`tls_protocol`](#-storm--webdav--tls_protocol)
-* [`checksum_filter_enabled`](#-storm--webdav--checksum_filter_enabled)
-* [`macaroon_filter_enabled`](#-storm--webdav--macaroon_filter_enabled)
-* [`file_buffer_size`](#-storm--webdav--file_buffer_size)
-* [`voms_trust_store_dir`](#-storm--webdav--voms_trust_store_dir)
-* [`voms_trust_store_refresh_interval_sec`](#-storm--webdav--voms_trust_store_refresh_interval_sec)
-* [`voms_cache_enabled`](#-storm--webdav--voms_cache_enabled)
-* [`voms_cache_entry_lifetime_sec`](#-storm--webdav--voms_cache_entry_lifetime_sec)
+* [`storage_areas`](#storage_areas)
+* [`hostnames`](#hostnames)
+* [`http_port`](#http_port)
+* [`https_port`](#https_port)
+* [`trust_anchors_refresh_interval`](#trust_anchors_refresh_interval)
+* [`max_concurrent_connections`](#max_concurrent_connections)
+* [`max_queue_size`](#max_queue_size)
+* [`connector_max_idle_time`](#connector_max_idle_time)
+* [`vo_map_files_enable`](#vo_map_files_enable)
+* [`vo_map_files_config_dir`](#vo_map_files_config_dir)
+* [`vo_map_files_refresh_interval`](#vo_map_files_refresh_interval)
+* [`tpc_max_connections`](#tpc_max_connections)
+* [`tpc_max_connections_per_route`](#tpc_max_connections_per_route)
+* [`tpc_verify_checksum`](#tpc_verify_checksum)
+* [`tpc_timeout_in_secs`](#tpc_timeout_in_secs)
+* [`tpc_tls_protocol`](#tpc_tls_protocol)
+* [`tpc_report_delay_secs`](#tpc_report_delay_secs)
+* [`tpc_enable_tls_client_auth`](#tpc_enable_tls_client_auth)
+* [`tpc_progress_report_thread_pool_size`](#tpc_progress_report_thread_pool_size)
+* [`tpc_enable_expect_continue_threshold`](#tpc_enable_expect_continue_threshold)
+* [`jvm_opts`](#jvm_opts)
+* [`authz_server_enable`](#authz_server_enable)
+* [`authz_server_issuer`](#authz_server_issuer)
+* [`authz_server_max_token_lifetime_sec`](#authz_server_max_token_lifetime_sec)
+* [`authz_server_secret`](#authz_server_secret)
+* [`require_client_cert`](#require_client_cert)
+* [`use_conscrypt`](#use_conscrypt)
+* [`tpc_use_conscrypt`](#tpc_use_conscrypt)
+* [`enable_http2`](#enable_http2)
+* [`debug`](#debug)
+* [`debug_port`](#debug_port)
+* [`debug_suspend`](#debug_suspend)
+* [`storm_limit_nofile`](#storm_limit_nofile)
+* [`user`](#user)
+* [`tape_wellknown_source`](#tape_wellknown_source)
+* [`tls_protocol`](#tls_protocol)
+* [`checksum_filter_enabled`](#checksum_filter_enabled)
+* [`macaroon_filter_enabled`](#macaroon_filter_enabled)
+* [`file_buffer_size`](#file_buffer_size)
+* [`voms_trust_store_dir`](#voms_trust_store_dir)
+* [`voms_trust_store_refresh_interval_sec`](#voms_trust_store_refresh_interval_sec)
+* [`voms_cache_enabled`](#voms_cache_enabled)
+* [`voms_cache_entry_lifetime_sec`](#voms_cache_entry_lifetime_sec)
 
-##### <a name="-storm--webdav--storage_areas"></a>`storage_areas`
+##### <a name="storage_areas"></a>`storage_areas`
 
 Data type: `Array[Storm::Webdav::StorageArea]`
 
 List of storage area's configuration. Default value: empty list.
 
-##### <a name="-storm--webdav--hostnames"></a>`hostnames`
+##### <a name="hostnames"></a>`hostnames`
 
 Data type: `Array[String]`
 
 Sets STORM_WEBDAV_HOSTNAME_(N) environment variables.
 
-##### <a name="-storm--webdav--http_port"></a>`http_port`
+##### <a name="http_port"></a>`http_port`
 
 Data type: `Integer`
 
 Sets STORM_WEBDAV_HTTP_PORT environment variable.
 
-##### <a name="-storm--webdav--https_port"></a>`https_port`
+##### <a name="https_port"></a>`https_port`
 
 Data type: `Integer`
 
 Sets STORM_WEBDAV_HTTPS_PORT environment variable.
 
-##### <a name="-storm--webdav--trust_anchors_refresh_interval"></a>`trust_anchors_refresh_interval`
+##### <a name="trust_anchors_refresh_interval"></a>`trust_anchors_refresh_interval`
 
 Data type: `Integer`
 
 Sets STORM_WEBDAV_TRUST_ANCHORS_REFRESH_INTERVAL environment variable.
 
-##### <a name="-storm--webdav--max_concurrent_connections"></a>`max_concurrent_connections`
+##### <a name="max_concurrent_connections"></a>`max_concurrent_connections`
 
 Data type: `Integer`
 
 Sets STORM_WEBDAV_MAX_CONNECTIONS environment variable.
 
-##### <a name="-storm--webdav--max_queue_size"></a>`max_queue_size`
+##### <a name="max_queue_size"></a>`max_queue_size`
 
 Data type: `Integer`
 
 Sets STORM_WEBDAV_MAX_QUEUE_SIZE environment variable.
 
-##### <a name="-storm--webdav--connector_max_idle_time"></a>`connector_max_idle_time`
+##### <a name="connector_max_idle_time"></a>`connector_max_idle_time`
 
 Data type: `Integer`
 
 Sets STORM_WEBDAV_CONNECTOR_MAX_IDLE_TIME environment variable.
 
-##### <a name="-storm--webdav--vo_map_files_enable"></a>`vo_map_files_enable`
+##### <a name="vo_map_files_enable"></a>`vo_map_files_enable`
 
 Data type: `Boolean`
 
 Sets STORM_WEBDAV_VO_MAP_FILES_ENABLE environment variable.
 
-##### <a name="-storm--webdav--vo_map_files_config_dir"></a>`vo_map_files_config_dir`
+##### <a name="vo_map_files_config_dir"></a>`vo_map_files_config_dir`
 
 Data type: `String`
 
 Sets STORM_WEBDAV_VO_MAP_FILES_CONFIG_DIR environment variable.
 
-##### <a name="-storm--webdav--vo_map_files_refresh_interval"></a>`vo_map_files_refresh_interval`
+##### <a name="vo_map_files_refresh_interval"></a>`vo_map_files_refresh_interval`
 
 Data type: `Integer`
 
 Sets STORM_WEBDAV_VO_MAP_FILES_REFRESH_INTERVAL environment variable.
 
-##### <a name="-storm--webdav--tpc_max_connections"></a>`tpc_max_connections`
+##### <a name="tpc_max_connections"></a>`tpc_max_connections`
 
 Data type: `Integer`
 
 Sets STORM_WEBDAV_TPC_MAX_CONNECTIONS environment variable.
 
-##### <a name="-storm--webdav--tpc_max_connections_per_route"></a>`tpc_max_connections_per_route`
+##### <a name="tpc_max_connections_per_route"></a>`tpc_max_connections_per_route`
 
 Data type: `Integer`
 
 Sets STORM_WEBDAV_TPC_MAX_CONNECTIONS_PER_ROUTE environment variable.
 
-##### <a name="-storm--webdav--tpc_verify_checksum"></a>`tpc_verify_checksum`
+##### <a name="tpc_verify_checksum"></a>`tpc_verify_checksum`
 
 Data type: `Boolean`
 
 Sets STORM_WEBDAV_TPC_VERIFY_CHECKSUM environment variable.
 
-##### <a name="-storm--webdav--tpc_timeout_in_secs"></a>`tpc_timeout_in_secs`
+##### <a name="tpc_timeout_in_secs"></a>`tpc_timeout_in_secs`
 
 Data type: `Integer`
 
 Sets STORM_WEBDAV_TPC_TIMEOUT_IN_SECS environment variable.
 
-##### <a name="-storm--webdav--tpc_tls_protocol"></a>`tpc_tls_protocol`
+##### <a name="tpc_tls_protocol"></a>`tpc_tls_protocol`
 
 Data type: `String`
 
 Sets STORM_WEBDAV_TPC_TLS_PROTOCOL environment variable.
 
-##### <a name="-storm--webdav--tpc_report_delay_secs"></a>`tpc_report_delay_secs`
+##### <a name="tpc_report_delay_secs"></a>`tpc_report_delay_secs`
 
 Data type: `Integer`
 
 Sets STORM_WEBDAV_TPC_REPORT_DELAY_SECS environment variable.
 
-##### <a name="-storm--webdav--tpc_enable_tls_client_auth"></a>`tpc_enable_tls_client_auth`
+##### <a name="tpc_enable_tls_client_auth"></a>`tpc_enable_tls_client_auth`
 
 Data type: `Boolean`
 
 Sets STORM_WEBDAV_TPC_ENABLE_TLS_CLIENT_AUTH environment variable.
 
-##### <a name="-storm--webdav--tpc_progress_report_thread_pool_size"></a>`tpc_progress_report_thread_pool_size`
+##### <a name="tpc_progress_report_thread_pool_size"></a>`tpc_progress_report_thread_pool_size`
 
 Data type: `Integer`
 
 Sets STORM_WEBDAV_TPC_PROGRESS_REPORT_THREAD_POOL_SIZE environment variable.
 
-##### <a name="-storm--webdav--tpc_enable_expect_continue_threshold"></a>`tpc_enable_expect_continue_threshold`
+##### <a name="tpc_enable_expect_continue_threshold"></a>`tpc_enable_expect_continue_threshold`
 
 Data type: `Integer`
 
 Sets STORM_WEBDAV_TPC_ENABLE_EXPECT_CONTINUE_THRESHOLD environment variable.
 
-##### <a name="-storm--webdav--jvm_opts"></a>`jvm_opts`
+##### <a name="jvm_opts"></a>`jvm_opts`
 
 Data type: `String`
 
 Sets part of STORM_WEBDAV_JVM_OPTS environment variable.
 
-##### <a name="-storm--webdav--authz_server_enable"></a>`authz_server_enable`
+##### <a name="authz_server_enable"></a>`authz_server_enable`
 
 Data type: `Boolean`
 
 Sets STORM_WEBDAV_AUTHZ_SERVER_ENABLE environment variable.
 
-##### <a name="-storm--webdav--authz_server_issuer"></a>`authz_server_issuer`
+##### <a name="authz_server_issuer"></a>`authz_server_issuer`
 
 Data type: `String`
 
 Sets STORM_WEBDAV_AUTHZ_SERVER_ISSUER environment variable if authz_server_enable is true.
 
-##### <a name="-storm--webdav--authz_server_max_token_lifetime_sec"></a>`authz_server_max_token_lifetime_sec`
+##### <a name="authz_server_max_token_lifetime_sec"></a>`authz_server_max_token_lifetime_sec`
 
 Data type: `Integer`
 
 Sets STORM_WEBDAV_AUTHZ_SERVER_MAX_TOKEN_LIFETIME_SEC environment variable if authz_server_enable is true.
 
-##### <a name="-storm--webdav--authz_server_secret"></a>`authz_server_secret`
+##### <a name="authz_server_secret"></a>`authz_server_secret`
 
 Data type: `String`
 
 Sets STORM_WEBDAV_AUTHZ_SERVER_SECRET environment variable if authz_server_enable is true.
 
-##### <a name="-storm--webdav--require_client_cert"></a>`require_client_cert`
+##### <a name="require_client_cert"></a>`require_client_cert`
 
 Data type: `Boolean`
 
 Sets STORM_WEBDAV_REQUIRE_CLIENT_CERT environment variable.
 
-##### <a name="-storm--webdav--use_conscrypt"></a>`use_conscrypt`
+##### <a name="use_conscrypt"></a>`use_conscrypt`
 
 Data type: `Boolean`
 
 Sets STORM_WEBDAV_USE_CONSCRYPT environment variable.
 
-##### <a name="-storm--webdav--tpc_use_conscrypt"></a>`tpc_use_conscrypt`
+##### <a name="tpc_use_conscrypt"></a>`tpc_use_conscrypt`
 
 Data type: `Boolean`
 
 Sets STORM_WEBDAV_TPC_USE_CONSCRYPT environment variable.
 
-##### <a name="-storm--webdav--enable_http2"></a>`enable_http2`
+##### <a name="enable_http2"></a>`enable_http2`
 
 Data type: `Boolean`
 
 Sets STORM_WEBDAV_ENABLE_HTTP2 environment variable.
 
-##### <a name="-storm--webdav--debug"></a>`debug`
+##### <a name="debug"></a>`debug`
 
 Data type: `Boolean`
 
 Sets part of STORM_WEBDAV_JVM_OPTS environment variable. It enables remote debug.
 
-##### <a name="-storm--webdav--debug_port"></a>`debug_port`
+##### <a name="debug_port"></a>`debug_port`
 
 Data type: `Integer`
 
 Sets part of STORM_WEBDAV_JVM_OPTS environment variable. It sets the remote debug port if remote debug is enabled.
 
-##### <a name="-storm--webdav--debug_suspend"></a>`debug_suspend`
+##### <a name="debug_suspend"></a>`debug_suspend`
 
 Data type: `Boolean`
 
 Sets part of STORM_WEBDAV_JVM_OPTS environment variable. It sets debug suspend value in case remote debug is enabled.
 
-##### <a name="-storm--webdav--storm_limit_nofile"></a>`storm_limit_nofile`
+##### <a name="storm_limit_nofile"></a>`storm_limit_nofile`
 
 Data type: `Integer`
 
 Sets LimitNOFILE value.
 
-##### <a name="-storm--webdav--user"></a>`user`
+##### <a name="user"></a>`user`
 
 Data type: `String`
 
 Sets Unix user which runs the service
 
-##### <a name="-storm--webdav--tape_wellknown_source"></a>`tape_wellknown_source`
+##### <a name="tape_wellknown_source"></a>`tape_wellknown_source`
 
 Data type: `String`
 
 Sets the absolute path of the source file containing the tape REST API well-known endpoints
 
-##### <a name="-storm--webdav--tls_protocol"></a>`tls_protocol`
+##### <a name="tls_protocol"></a>`tls_protocol`
 
 Data type: `String`
 
 Sets TLS protocol for non-TPC requests
 
-##### <a name="-storm--webdav--checksum_filter_enabled"></a>`checksum_filter_enabled`
+##### <a name="checksum_filter_enabled"></a>`checksum_filter_enabled`
 
 Data type: `Boolean`
 
 Enable checksum filter which adds checksum as an header following RFC 3230.
 
-##### <a name="-storm--webdav--macaroon_filter_enabled"></a>`macaroon_filter_enabled`
+##### <a name="macaroon_filter_enabled"></a>`macaroon_filter_enabled`
 
 Data type: `Boolean`
 
 Enable Macaroon filter to process Macaroon tokens. Requires authz server enabled.
 
-##### <a name="-storm--webdav--file_buffer_size"></a>`file_buffer_size`
+##### <a name="file_buffer_size"></a>`file_buffer_size`
 
 Data type: `Integer`
 
 Buffer size for both internal and third-party copy requests. Valid values are numbers greater/equals than 4096.
 
-##### <a name="-storm--webdav--voms_trust_store_dir"></a>`voms_trust_store_dir`
+##### <a name="voms_trust_store_dir"></a>`voms_trust_store_dir`
 
 Data type: `String`
 
 VOMS Trust Store directory
 
-##### <a name="-storm--webdav--voms_trust_store_refresh_interval_sec"></a>`voms_trust_store_refresh_interval_sec`
+##### <a name="voms_trust_store_refresh_interval_sec"></a>`voms_trust_store_refresh_interval_sec`
 
 Data type: `Integer`
 
 VOMS Trust Store refresh interval
 
-##### <a name="-storm--webdav--voms_cache_enabled"></a>`voms_cache_enabled`
+##### <a name="voms_cache_enabled"></a>`voms_cache_enabled`
 
 Data type: `Boolean`
 
 Enable caching for VOMS certificate validation
 
-##### <a name="-storm--webdav--voms_cache_entry_lifetime_sec"></a>`voms_cache_entry_lifetime_sec`
+##### <a name="voms_cache_entry_lifetime_sec"></a>`voms_cache_entry_lifetime_sec`
 
 Data type: `Integer`
 
 Cache entries lifetime, used if caching for VOMS certificate validation is enabled
 
-### <a name="storm--webdav--config"></a>`storm::webdav::config`
+### <a name="stormwebdavconfig"></a>`storm::webdav::config`
 
 StoRM WebDAV config class
 
-### <a name="storm--webdav--install"></a>`storm::webdav::install`
+### <a name="stormwebdavinstall"></a>`storm::webdav::install`
 
 StoRM WebDAV install class
 
-### <a name="storm--webdav--service"></a>`storm::webdav::service`
+### <a name="stormwebdavservice"></a>`storm::webdav::service`
 
 StoRM WebDAV service class
 
 ## Defined types
 
-### <a name="storm--backend--service_conf_file"></a>`storm::backend::service_conf_file`
+### <a name="stormbackendservice_conf_file"></a>`storm::backend::service_conf_file`
 
 Starting from Puppet module v2.0.0, site administrators can inject
 one or more .conf files into `/etc/systemd/system/storm-backend-server.service.d`
@@ -1591,15 +1605,15 @@ storm::backend::service_conf_file { 'override.conf':
 
 The following parameters are available in the `storm::backend::service_conf_file` defined type:
 
-* [`source`](#-storm--backend--service_conf_file--source)
+* [`source`](#source)
 
-##### <a name="-storm--backend--service_conf_file--source"></a>`source`
+##### <a name="source"></a>`source`
 
 Data type: `String`
 
 The source of file resource. It can be an absolute path or a Puppet module relative path.
 
-### <a name="storm--backend--storage_site_report"></a>`storm::backend::storage_site_report`
+### <a name="stormbackendstorage_site_report"></a>`storm::backend::storage_site_report`
 
   by using this defined type.
 
@@ -1622,16 +1636,16 @@ storm::backend::storage_site_report { 'storage-site-report':
 
 The following parameters are available in the `storm::backend::storage_site_report` defined type:
 
-* [`report_path`](#-storm--backend--storage_site_report--report_path)
-* [`minute`](#-storm--backend--storage_site_report--minute)
+* [`report_path`](#report_path)
+* [`minute`](#minute)
 
-##### <a name="-storm--backend--storage_site_report--report_path"></a>`report_path`
+##### <a name="report_path"></a>`report_path`
 
 Data type: `String`
 
 The full path of the generated report. Usually it points to a "info" storage area.
 
-##### <a name="-storm--backend--storage_site_report--minute"></a>`minute`
+##### <a name="minute"></a>`minute`
 
 Data type: `String`
 
@@ -1639,7 +1653,7 @@ The cron job's minute parameter. Refer to [Resource Type cron](https://puppet.co
 
 Default value: `'*/30'`
 
-### <a name="storm--rootdir"></a>`storm::rootdir`
+### <a name="stormrootdir"></a>`storm::rootdir`
 
 StoRM main storage area root directory defined resource
 
@@ -1647,9 +1661,9 @@ StoRM main storage area root directory defined resource
 
 The following parameters are available in the `storm::rootdir` defined type:
 
-* [`mode`](#-storm--rootdir--mode)
+* [`mode`](#mode)
 
-##### <a name="-storm--rootdir--mode"></a>`mode`
+##### <a name="mode"></a>`mode`
 
 Data type: `String`
 
@@ -1657,7 +1671,7 @@ Data type: `String`
 
 Default value: `'0755'`
 
-### <a name="storm--sarootdir"></a>`storm::sarootdir`
+### <a name="stormsarootdir"></a>`storm::sarootdir`
 
 StoRM Storage Area root directory defined resource
 
@@ -1665,9 +1679,9 @@ StoRM Storage Area root directory defined resource
 
 The following parameters are available in the `storm::sarootdir` defined type:
 
-* [`mode`](#-storm--sarootdir--mode)
+* [`mode`](#mode)
 
-##### <a name="-storm--sarootdir--mode"></a>`mode`
+##### <a name="mode"></a>`mode`
 
 Data type: `String`
 
@@ -1675,7 +1689,7 @@ Data type: `String`
 
 Default value: `'0750'`
 
-### <a name="storm--webdav--application_file"></a>`storm::webdav::application_file`
+### <a name="stormwebdavapplication_file"></a>`storm::webdav::application_file`
 
 Starting from Puppet module v2.0.0, the management of application.yml
 file has been removed from storm::webdav class. Site administrators can edit
@@ -1702,15 +1716,15 @@ storm::webdav::application_file { 'application-wlcg.yml':
 
 The following parameters are available in the `storm::webdav::application_file` defined type:
 
-* [`source`](#-storm--webdav--application_file--source)
+* [`source`](#source)
 
-##### <a name="-storm--webdav--application_file--source"></a>`source`
+##### <a name="source"></a>`source`
 
 Data type: `String`
 
 The source of file resource. It can be an absolute path or a Puppet module relative path.
 
-### <a name="storm--webdav--drop_in_file"></a>`storm::webdav::drop_in_file`
+### <a name="stormwebdavdrop_in_file"></a>`storm::webdav::drop_in_file`
 
 Use this define to inject one or more .conf files
 into `/etc/systemd/system/storm-webdav.service.d` directory.
@@ -1732,15 +1746,15 @@ storm::webdav::drop_in_file { 'override.conf':
 
 The following parameters are available in the `storm::webdav::drop_in_file` defined type:
 
-* [`source`](#-storm--webdav--drop_in_file--source)
+* [`source`](#source)
 
-##### <a name="-storm--webdav--drop_in_file--source"></a>`source`
+##### <a name="source"></a>`source`
 
 Data type: `String`
 
 The source of file resource. It can be an absolute path or a Puppet module relative path.
 
-### <a name="storm--webdav--storage_area_file"></a>`storm::webdav::storage_area_file`
+### <a name="stormwebdavstorage_area_file"></a>`storm::webdav::storage_area_file`
 
 Storage Areas can be configured singularly by using this defined type.
 This strategy allows site administrators to keep their manifests unaware of
@@ -1768,9 +1782,9 @@ storm::webdav::storage_area_file { 'test.vo.2.properties':
 
 The following parameters are available in the `storm::webdav::storage_area_file` defined type:
 
-* [`source`](#-storm--webdav--storage_area_file--source)
+* [`source`](#source)
 
-##### <a name="-storm--webdav--storage_area_file--source"></a>`source`
+##### <a name="source"></a>`source`
 
 Data type: `String`
 
@@ -1778,7 +1792,7 @@ The source of file resource. It can be an absolute path or a Puppet module relat
 
 ## Data types
 
-### <a name="Storm--Backend--Acl"></a>`Storm::Backend::Acl`
+### <a name="stormbackendacl"></a>`Storm::Backend::Acl`
 
 The ACL type for storm-backend-server
 
@@ -1791,19 +1805,27 @@ Struct[{
 }]
 ```
 
-### <a name="Storm--Backend--AclMode"></a>`Storm::Backend::AclMode`
+### <a name="stormbackendaclmode"></a>`Storm::Backend::AclMode`
 
 The AclMode type for storm-backend-server
 
-Alias of `Enum['AoT', 'JiT']`
+Alias of
 
-### <a name="Storm--Backend--BalanceStrategy"></a>`Storm::Backend::BalanceStrategy`
+```puppet
+Enum['AoT', 'JiT']
+```
+
+### <a name="stormbackendbalancestrategy"></a>`Storm::Backend::BalanceStrategy`
 
 The BalanceStrategy type for storm-backend-server
 
-Alias of `Enum['round-robin', 'smart-rr', 'random', 'weight']`
+Alias of
 
-### <a name="Storm--Backend--Endpoint"></a>`Storm::Backend::Endpoint`
+```puppet
+Enum['round-robin', 'smart-rr', 'random', 'weight']
+```
+
+### <a name="stormbackendendpoint"></a>`Storm::Backend::Endpoint`
 
 The Endpoint type for storm-backend-server
 
@@ -1818,7 +1840,7 @@ Struct[{
 }]
 ```
 
-### <a name="Storm--Backend--FileSystem"></a>`Storm::Backend::FileSystem`
+### <a name="stormbackendfilesystem"></a>`Storm::Backend::FileSystem`
 
 The FileSystem type for storm-backend-server
 
@@ -1832,19 +1854,27 @@ Struct[{
 }]
 ```
 
-### <a name="Storm--Backend--FsDriver"></a>`Storm::Backend::FsDriver`
+### <a name="stormbackendfsdriver"></a>`Storm::Backend::FsDriver`
 
 The FsDriver type for storm-backend-server
 
-Alias of `Enum['posixfs', 'gpfs', 'test']`
+Alias of
 
-### <a name="Storm--Backend--FsType"></a>`Storm::Backend::FsType`
+```puppet
+Enum['posixfs', 'gpfs', 'test']
+```
+
+### <a name="stormbackendfstype"></a>`Storm::Backend::FsType`
 
 The FsType type for storm-backend-server
 
-Alias of `Enum['posixfs', 'gpfs', 'test']`
+Alias of
 
-### <a name="Storm--Backend--Gsiftp"></a>`Storm::Backend::Gsiftp`
+```puppet
+Enum['posixfs', 'gpfs', 'test']
+```
+
+### <a name="stormbackendgsiftp"></a>`Storm::Backend::Gsiftp`
 
 The Gsiftp type for storm-backend-server
 
@@ -1856,7 +1886,7 @@ Struct[{
 }]
 ```
 
-### <a name="Storm--Backend--GsiftpPoolMember"></a>`Storm::Backend::GsiftpPoolMember`
+### <a name="stormbackendgsiftppoolmember"></a>`Storm::Backend::GsiftpPoolMember`
 
 The GsiftpPoolMember type for storm-backend-server
 
@@ -1870,7 +1900,7 @@ Struct[{
 }]
 ```
 
-### <a name="Storm--Backend--Pool"></a>`Storm::Backend::Pool`
+### <a name="stormbackendpool"></a>`Storm::Backend::Pool`
 
 The Pool type for storm-backend-server
 
@@ -1887,7 +1917,7 @@ Struct[{
 }]
 ```
 
-### <a name="Storm--Backend--Quota"></a>`Storm::Backend::Quota`
+### <a name="stormbackendquota"></a>`Storm::Backend::Quota`
 
 The Quota type for storm-backend-server
 
@@ -1901,7 +1931,7 @@ Struct[{
 }]
 ```
 
-### <a name="Storm--Backend--Rfio"></a>`Storm::Backend::Rfio`
+### <a name="stormbackendrfio"></a>`Storm::Backend::Rfio`
 
 The Rfio type for storm-backend-server
 
@@ -1914,7 +1944,7 @@ Struct[{
 }]
 ```
 
-### <a name="Storm--Backend--SrmPoolMember"></a>`Storm::Backend::SrmPoolMember`
+### <a name="stormbackendsrmpoolmember"></a>`Storm::Backend::SrmPoolMember`
 
 The SrmPoolMember type for storm-backend-server
 
@@ -1927,7 +1957,7 @@ Struct[{
 }]
 ```
 
-### <a name="Storm--Backend--StorageArea"></a>`Storm::Backend::StorageArea`
+### <a name="stormbackendstoragearea"></a>`Storm::Backend::StorageArea`
 
 The storage area type for storm-backend-server
 
@@ -1962,19 +1992,27 @@ Struct[{
 }]
 ```
 
-### <a name="Storm--Backend--StorageClass"></a>`Storm::Backend::StorageClass`
+### <a name="stormbackendstorageclass"></a>`Storm::Backend::StorageClass`
 
 The StorageClass type for storm-backend-server
 
-Alias of `Enum['T0D1', 'T1D0', 'T1D1']`
+Alias of
 
-### <a name="Storm--Backend--TransferProtocol"></a>`Storm::Backend::TransferProtocol`
+```puppet
+Enum['T0D1', 'T1D0', 'T1D1']
+```
+
+### <a name="stormbackendtransferprotocol"></a>`Storm::Backend::TransferProtocol`
 
 The TransferProtocol type for storm-backend-server
 
-Alias of `Enum['file', 'gsiftp', 'xroot', 'webdav']`
+Alias of
 
-### <a name="Storm--Backend--Webdav"></a>`Storm::Backend::Webdav`
+```puppet
+Enum['file', 'gsiftp', 'xroot', 'webdav']
+```
+
+### <a name="stormbackendwebdav"></a>`Storm::Backend::Webdav`
 
 The WebDAV type for storm-backend-server
 
@@ -1989,7 +2027,7 @@ Struct[{
 }]
 ```
 
-### <a name="Storm--Backend--WebdavPoolMember"></a>`Storm::Backend::WebdavPoolMember`
+### <a name="stormbackendwebdavpoolmember"></a>`Storm::Backend::WebdavPoolMember`
 
 The WebdavPoolMember type for storm-backend-server
 
@@ -2003,7 +2041,7 @@ Struct[{
 }]
 ```
 
-### <a name="Storm--Backend--Xroot"></a>`Storm::Backend::Xroot`
+### <a name="stormbackendxroot"></a>`Storm::Backend::Xroot`
 
 The Xroot type for storm-backend-server
 
@@ -2016,7 +2054,7 @@ Struct[{
 }]
 ```
 
-### <a name="Storm--CustomRepo"></a>`Storm::CustomRepo`
+### <a name="stormcustomrepo"></a>`Storm::CustomRepo`
 
 The storage area type for storm-webdav
 
@@ -2029,7 +2067,7 @@ Struct[{
 }]
 ```
 
-### <a name="Storm--Webdav--StorageArea"></a>`Storm::Webdav::StorageArea`
+### <a name="stormwebdavstoragearea"></a>`Storm::Webdav::StorageArea`
 
 The storage area type for storm-webdav.
 

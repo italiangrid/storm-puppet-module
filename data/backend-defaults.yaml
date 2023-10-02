@@ -140,3 +140,7 @@ storm::backend::storm_limit_nofile: 65535
 # manage path-authz.db
 storm::backend::manage_path_authz_db: false
 storm::backend::path_authz_db_file: 'puppet:///modules/storm/etc/storm/backend/path-authz.db'
+
+# manage storm.properties
+storm::backend::manage_storm_properties: false
+storm::backend::path_storm_properties: 'puppet:///modules/storm/etc/storm/backend/storm.properties'
