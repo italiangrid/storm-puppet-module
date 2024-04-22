@@ -65,14 +65,14 @@ describe 'namespace.xml.erb' do
   end
 
   before(:each) do
-    scope.stub(:lookupvar).with('storm::backend::storage_areas').and_return(storage_areas)
-    scope.stub(:lookupvar).with('storm::backend::gsiftp_pool_members').and_return(gsiftp_pool_members)
-    scope.stub(:lookupvar).with('storm::backend::webdav_pool_members').and_return(webdav_pool_members)
-    scope.stub(:lookupvar).with('storm::backend::fs_type').and_return(nil)
-    scope.stub(:lookupvar).with('storm::backend::xroot_hostname').and_return('storm.example.org')
-    scope.stub(:lookupvar).with('storm::backend::xroot_port').and_return(1094)
-    scope.stub(:lookupvar).with('storm::backend::gsiftp_pool_balance_strategy').and_return('round-robin')
-    scope.stub(:lookupvar).with('storm::backend::webdav_pool_balance_strategy').and_return('round-robin')
+    allow(scope).to receive(:lookupvar).with('storm::backend::storage_areas').and_return(storage_areas)
+    allow(scope).to receive(:lookupvar).with('storm::backend::gsiftp_pool_members').and_return(gsiftp_pool_members)
+    allow(scope).to receive(:lookupvar).with('storm::backend::webdav_pool_members').and_return(webdav_pool_members)
+    allow(scope).to receive(:lookupvar).with('storm::backend::fs_type').and_return(nil)
+    allow(scope).to receive(:lookupvar).with('storm::backend::xroot_hostname').and_return('storm.example.org')
+    allow(scope).to receive(:lookupvar).with('storm::backend::xroot_port').and_return(1094)
+    allow(scope).to receive(:lookupvar).with('storm::backend::gsiftp_pool_balance_strategy').and_return('round-robin')
+    allow(scope).to receive(:lookupvar).with('storm::backend::webdav_pool_balance_strategy').and_return('round-robin')
   end
 
   it 'render the same file each time' do
