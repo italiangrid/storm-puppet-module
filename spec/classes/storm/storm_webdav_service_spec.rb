@@ -5,6 +5,11 @@ describe 'storm::webdav::service' do
     context "on #{os}" do
       let(:pre_condition) do
         'include storm::webdav::install'
+        <<-EOF
+          class { 'storm::webdav':
+            nginx_reverse_proxy => false,
+          }
+        EOF
       end
 
       let(:facts) do

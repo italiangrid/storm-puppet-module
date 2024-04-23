@@ -68,6 +68,8 @@ describe 'storm::webdav', type: 'class' do
             'voms_trust_store_refresh_interval_sec' => 43201,
             'voms_cache_enabled' => false,
             'voms_cache_entry_lifetime_sec' => 301,
+
+            'nginx_reverse_proxy' => false,
           }
         end
 
@@ -300,6 +302,72 @@ describe 'storm::webdav', type: 'class' do
           is_expected.to contain_file(service_file).with(
             content: %r{^Environment="STORM_WEBDAV_JVM_OPTS=-Xms1024m -Xmx1024m -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=1044,suspend=y"},
           )
+        end
+      end
+
+      context 'Check deployment behind nginx reverse proxy' do
+        let(:params) do
+          {
+            'http_port' => 8080,
+            'nginx_reverse_proxy' => true,
+          }
+        end
+
+        case facts[:operatingsystemmajrelease]
+        when '7'
+          it 'nginx-stable-repo is installed and enabled' do
+            is_expected.to contain_yumrepo('nginx-stable-repo').with(
+              ensure: 'present',
+              baseurl: 'http://nginx.org/packages/centos/7/x86_64/',
+              enabled: 1,
+              gpgcheck: 1,
+            )
+          end
+          it 'voms is installed and enabled' do
+            is_expected.to contain_yumrepo('voms').with(
+              ensure: 'present',
+              baseurl: 'https://repo.cloud.cnaf.infn.it/repository/voms-rpm-stable/centos7/',
+              enabled: 1,
+              gpgcheck: 0,
+            )
+          end
+          it 'storage-generic is installed and enabled' do
+            is_expected.to contain_yumrepo('storage-generic').with(
+              ensure: 'present',
+              baseurl: 'http://os-server.cnaf.infn.it/distro/Storage/generic/',
+              enabled: 1,
+              gpgcheck: 0,
+            )
+          end
+        end
+        it 'check sysconfig file' do
+          service_file = '/etc/systemd/system/storm-webdav.service.d/storm-webdav.conf'
+          is_expected.to contain_file(service_file).with(
+            ensure: 'file',
+          )
+          is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_NGINX_REVERSE_PROXY=true"})
+        end
+        it 'check nginx configuration files' do
+          nginx_conf_file = '/etc/nginx/nginx.conf'
+          is_expected.to contain_file(nginx_conf_file).with(
+            ensure: 'file',
+          )
+          nginx_storm_location_file = '/etc/nginx/conf.d/storm.location'
+          is_expected.to contain_file(nginx_storm_location_file).with(
+            ensure: 'file',
+          )
+          is_expected.to contain_file(nginx_storm_location_file).with(content: %r{location /internal-get})
+        end
+        it 'check nginx rpm is installed' do
+          is_expected.to contain_package('nginx')
+        end
+        it 'check nginx-module-http-voms rpm is installed' do
+          is_expected.to contain_package('nginx-module-http-voms')
+        end
+        it { is_expected.to contain_service('nginx').with(ensure: 'running') }
+        it 'check environment file' do
+          service_file = '/etc/systemd/system/storm-webdav.service.d/storm-webdav.conf'
+          is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_HTTP_PORT=8081"})
         end
       end
     end

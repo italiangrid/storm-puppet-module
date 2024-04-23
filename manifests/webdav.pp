@@ -193,6 +193,8 @@ class storm::webdav (
 
   String $tape_wellknown_source,
 
+  Boolean $nginx_reverse_proxy,
+
 ) {
   contain storm::webdav::install
   contain storm::webdav::config

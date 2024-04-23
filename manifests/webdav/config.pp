@@ -83,6 +83,23 @@ class storm::webdav::config (
     notice('Empty storage area list. No storage area has been defined and initialized.')
   }
 
+  if $storm::webdav::nginx_reverse_proxy {
+    file { '/etc/nginx/nginx.conf' :
+      ensure   => file,
+      owner    => 'storm',
+      group    => 'storm',
+      mode     => '0644',
+      source   => "puppet:///modules/storm/etc/storm/nginx/nginx.conf",
+    }
+    file { '/etc/nginx/conf.d/storm.location' :
+      ensure   => file,
+      content  => template('storm/etc/nginx/storm.location.erb'),
+      owner    => 'storm',
+      group    => 'storm',
+      mode     => '0644',
+    }
+  }
+
   # Directory '/etc/systemd/system/storm-webdav.service.d' is created by rpm
   $service_dir='/etc/systemd/system/storm-webdav.service.d'
 

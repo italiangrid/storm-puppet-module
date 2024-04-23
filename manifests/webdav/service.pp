@@ -5,4 +5,10 @@ class storm::webdav::service {
     ensure => running,
     enable => true,
   }
+  if $storm::webdav::nginx_reverse_proxy {
+    service { 'nginx':
+      ensure => running,
+      enable => true,
+    }
+  }
 }
