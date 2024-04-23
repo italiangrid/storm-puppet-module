@@ -8,6 +8,7 @@ describe 'storm::webdav::service' do
         <<-EOF
           class { 'storm::webdav':
             scitag_enabled => false,
+            nginx_reverse_proxy => false,
           }
         EOF
       end

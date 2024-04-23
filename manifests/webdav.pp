@@ -195,6 +195,8 @@ class storm::webdav (
 
   Boolean $scitag_enabled,
 
+  Boolean $nginx_reverse_proxy,
+
 ) {
   contain storm::webdav::install
   contain storm::webdav::config

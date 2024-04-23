@@ -92,6 +92,22 @@ class storm::webdav::config (
       source   => "puppet:///modules/storm/etc/storm/flowd.cfg",
     }
   }
+  if $storm::webdav::nginx_reverse_proxy {
+    file { '/etc/nginx/nginx.conf' :
+      ensure   => file,
+      owner    => 'storm',
+      group    => 'storm',
+      mode     => '0644',
+      source   => "puppet:///modules/storm/etc/storm/nginx/nginx.conf",
+    }
+    file { '/etc/nginx/conf.d/storm.conf' :
+      ensure   => file,
+      content  => template('storm/etc/nginx/storm.conf.erb'),
+      owner    => 'storm',
+      group    => 'storm',
+      mode     => '0644',
+    }
+  }
 
   # Directory '/etc/systemd/system/storm-webdav.service.d' is created by rpm
   $service_dir='/etc/systemd/system/storm-webdav.service.d'
