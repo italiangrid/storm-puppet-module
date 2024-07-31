@@ -22,11 +22,11 @@ class storm::repo (
 
 ) {
   $base = 'https://repo.cloud.cnaf.infn.it/repository'
-  $el = $facts['os']['distro']['release']['major']
+  $el = $facts['os']['release']['major']
 
   case $facts['os']['name'] {
     'RedHat', 'AlmaLinux': { $dist = 'redhat' }
-    'CentOS':  { $dist = 'centos' }
+    'CentOS', 'Scientific':  { $dist = 'centos' }
     default: { $dist = 'redhat' }
   }
 
