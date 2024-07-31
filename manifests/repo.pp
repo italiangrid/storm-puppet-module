@@ -22,12 +22,18 @@ class storm::repo (
 
 ) {
   $base = 'https://repo.cloud.cnaf.infn.it/repository'
-  $el = $facts['os']['distro']['release']['major']
+  $el = $facts['os']['release']['major']
+
+  case $facts['os']['name'] {
+    'RedHat', 'AlmaLinux': { $dist = 'redhat' }
+    'CentOS', 'Scientific':  { $dist = 'centos' }
+    default: { $dist = 'redhat' }
+  }
 
   $installed.each | $repo | {
     $enabled = $repo in $enabled ? { true => 1, default => 0 }
-    $name = "storm-${repo}-centos${el}"
-    $baseurl = "${base}/storm-rpm-${repo}/centos${el}/"
+    $name = "storm-${repo}-${dist}${el}"
+    $baseurl = "${base}/storm-rpm-${repo}/${dist}${el}/"
 
     yumrepo { $name:
       ensure   => present,
