@@ -3,7 +3,8 @@
 class storm::frontend::install (
 
 ) {
-  package { 'storm-frontend-mp':
-    ensure  => installed,
+  ## StoRM Frontend
+  package { 'storm-frontend-server':
+    ensure  => '>=1.8.16',
   }
 }

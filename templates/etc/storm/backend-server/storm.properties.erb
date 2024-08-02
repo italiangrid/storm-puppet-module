@@ -53,18 +53,19 @@ storm.service.SURL.default-ports=<%= @srm_ports.join(',') %>
 # ============================
 #
 # Parameters to connect to the DB used as channel for the requests. 
-storm.service.request-db.host=<%= scope.lookupvar('storm::backend::db_hostname') %>
-storm.service.request-db.username=<%= scope.lookupvar('storm::backend::db_username') %>
-storm.service.request-db.passwd=<%= scope.lookupvar('storm::backend::db_password') %>
+storm.service.db.host=<%= scope.lookupvar('storm::backend::db_hostname') %>
+storm.service.db.username=<%= scope.lookupvar('storm::backend::db_username') %>
+storm.service.db.password=<%= scope.lookupvar('storm::backend::db_password') %>
+storm.service.db.port=<%= scope.lookupvar('storm::backend::db_port') %>
+storm.service.db.properties=<%= scope.lookupvar('storm::backend::db_properties') %>
+storm.service.db.pool.maxWaitMillis=<%= scope.lookupvar('storm::backend::db_pool_max_wait_millis') %>
+storm.service.db.pool.testOnBorrow=<%= scope.lookupvar('storm::backend::db_pool_test_on_borrow') %>
+storm.service.db.pool.testWhileIdle=<%= scope.lookupvar('storm::backend::db_pool_test_while_idle') %>
+storm.service.db.pool.stormdb.maxTotal=<%= scope.lookupvar('storm::backend::db_pool_stormdb_max_total') %>
+storm.service.db.pool.stormdb.minIdle=<%= scope.lookupvar('storm::backend::db_pool_stormdb_min_idle') %>
+storm.service.db.pool.stormbeisam.maxTotal=<%= scope.lookupvar('storm::backend::db_pool_stormbeisam_max_total') %>
+storm.service.db.pool.stormbeisam.minIdle=<%= scope.lookupvar('storm::backend::db_pool_stormbeisam_min_idle') %>
 
-#############################################
-############  PROFILE PARAMETERS ############
-#############################################
-##
-## NOTE: 
-##  The PROFILE PARAMETERS are not managed by YAIM in any case, 
-##  so any change must be managed by directly editing this file.
-##
 
 # ============================
 # StoRM Service Generic Behavior
@@ -103,24 +104,6 @@ fileLifetime.default=259200
 default.overwrite=A
 # Possible values are  V (Volatile), P (Permanent) and  D (Durable)      
 default.storagetype=P
-
-
-#############################################
-############  TUNING PARAMETERS #############
-#############################################
-##
-## NOTE: 
-##  The TUNING PARAMETERS are not managed by YAIM in any case, 
-##  so any change must be managed by directly editing this file.
-##
-
-
-# ============================
-# BE-private RDBMS
-# ============================
-persistence.internal-db.connection-pool=<%= scope.lookupvar('storm::backend::db_connection_pool_enabled') %>
-persistence.internal-db.connection-pool.maxActive=<%= scope.lookupvar('storm::backend::db_connection_pool_max_active') %>
-persistence.internal-db.connection-pool.maxWait=<%= scope.lookupvar('storm::backend::db_connection_pool_max_wait') %>
 
 
 # ============================
@@ -209,9 +192,13 @@ purge.size=<%= scope.lookupvar('storm::backend::gc_purge_size')  %>
 # Default: 21600s (6h)
 expired.request.time=<%= scope.lookupvar('storm::backend::gc_expired_request_time')  %>
 #
+# Time after that the GC consider an _in-progress_ bol request as garbage
+# Default: 2592000 (1 month)
+expired.inprogress.bol.time=<%= scope.lookupvar('storm::backend::gc_expired_inprogress_bol_time')  %>
+#
 # Time after that the GC consider an _in-progress_ ptp request as garbage
 # Default: 2592000 (1 month)
-expired.inprogress.time=<%= scope.lookupvar('storm::backend::gc_expired_inprogress_time')  %>
+expired.inprogress.ptp.time=<%= scope.lookupvar('storm::backend::gc_expired_inprogress_ptp_time')  %>
 
 
 # ==========================================================
