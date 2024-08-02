@@ -46,6 +46,41 @@
 # @param db_password
 #   Password for the user in `db_storm_username`. Default: bluemoon
 #
+# @param db_port
+#   Port used to connect StoRM Backend to the database. Default: 3306
+#
+# @param db_properties
+#   String of properties appended to the database connection URL. Default: 'useLegacyDatetimeCode=false'
+#
+# @param db_pool_max_wait_millis
+#   The maximum number of milliseconds that the pool will wait (when there are no available connections)
+#   for a connection to be returned before throwing an exception, or -1 to wait indefinitely. Default: -1
+#
+# @param db_pool_test_on_borrow
+#   The indication of whether objects will be validated before being borrowed from the pool. 
+#   If the object fails to validate, it will be dropped from the pool, and we will attempt to borrow another.
+#   Default: true
+#
+# @param db_pool_test_while_idle
+#   The indication of whether objects will be validated by the idle object evictor (if any).
+#   If an object fails to validate, it will be dropped from the pool. Default: true
+#
+# @param db_pool_stormdb_max_total
+#   The maximum number of active connections that can be allocated from this pool at the same time,
+#   or negative for no limit. Default: 500
+#
+# @param db_pool_stormdb_min_idle
+#   The minimum number of connections that can remain idle in the pool, without extra ones being created,
+#   or zero to create none. Default: 50
+#
+# @param db_pool_stormbeisam_max_total
+#   The maximum number of active connections that can be allocated from this pool at the same time,
+#   or negative for no limit. Default: 200
+#
+# @param db_pool_stormbeisam_min_idle
+#   The minimum number of connections that can remain idle in the pool, without extra ones being created,
+#   or zero to create none. Default: 10
+#
 # @param xroot_hostname
 #   Root server (default value for all Storage Areas).
 #   Note: you may change the settings for each SA acting on its configuration.
@@ -180,7 +215,10 @@
 #   Time in seconds to consider a request expired after its submission. Default: 604800 seconds (1 week).
 #   From StoRM 1.11.13 it is used also to identify how much time is needed to consider a completed recall task as cleanable.
 #
-# @param gc_expired_inprogress_time
+# @param gc_expired_inprogress_bol_time
+#   Time in seconds to consider an in-progress bol request as expired. Default: 2592000 seconds (1 month).
+#
+# @param gc_expired_inprogress_ptp_time
 #   Time in seconds to consider an in-progress ptp request as expired. Default: 2592000 seconds (1 month).
 #
 # @param gc_ptp_transit_interval
@@ -312,6 +350,15 @@ class storm::backend (
   # Db connection
   String $db_username,
   String $db_password,
+  Integer $db_port,
+  String $db_properties,
+  Integer $db_pool_max_wait_millis,
+  Boolean $db_pool_test_on_borrow,
+  Boolean $db_pool_test_while_idle,
+  Integer $db_pool_stormdb_max_total,
+  Integer $db_pool_stormdb_min_idle,
+  Integer $db_pool_stormbeisam_max_total,
+  Integer $db_pool_stormbeisam_min_idle,
 
   ### Default values for Storage Areas
   # 1. xroot
@@ -378,7 +425,8 @@ class storm::backend (
   Integer $gc_purge_interval,
   Integer $gc_purge_size,
   Integer $gc_expired_request_time,
-  Integer $gc_expired_inprogress_time,
+  Integer $gc_expired_inprogress_bol_time,
+  Integer $gc_expired_inprogress_ptp_time,
   Integer $gc_ptp_transit_interval,
   Integer $gc_ptp_transit_start_delay,
 

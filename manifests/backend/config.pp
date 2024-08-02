@@ -46,6 +46,7 @@ class storm::backend::config (
 
   $properties_file='/etc/storm/backend-server/storm.properties'
   if $storm::backend::manage_storm_properties {
+    notice("File ${properties_file} is initialized from ${storm::backend::path_storm_properties} ...")
     file { $properties_file:
       ensure => file,
       source => $storm::backend::path_storm_properties,
@@ -54,6 +55,7 @@ class storm::backend::config (
       notify => [Service['storm-backend-server']],
     }
   } else {
+    notice("File ${properties_file} is initialized from a template using class parameters ...")
     $properties_template_file='storm/etc/storm/backend-server/storm.properties.erb'
     file { $properties_file:
       ensure  => file,

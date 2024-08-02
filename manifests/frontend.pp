@@ -53,16 +53,6 @@
 # @param gsoap_maxpending [Integer]
 #  Size of the GSOAP queue used to maintain pending SRM requests. Default value: 1000.
 #
-# @param check_user_blacklisting [Boolean]
-#  Enable/disable user blacklisting. Default value: false.
-#
-# @param argus_pepd_endpoint [String]
-#  The complete service endpoint of Argus PEP server. Mandatory if `check_user_blacklisting` is true.
-#
-# @param argus_resource_id
-#  The resource id is used to target a resource (or set of resources, if wildcards are used) under the control of Argus authorization.
-#  Mandatory if `check_user_blacklisting` is true.
-#
 # @param monitoring_enabled [Boolean]
 #  Enable/disable monitoring. Default value: true.
 #
@@ -94,10 +84,6 @@ class storm::frontend (
   Integer $threadpool_threads_number,
   Integer $threadpool_maxpending,
   Integer $gsoap_maxpending,
-
-  Boolean $check_user_blacklisting,
-  String $argus_pepd_endpoint,
-  String $argus_resource_id,
 
   Boolean $monitoring_enabled,
   Integer $monitoring_time_interval,
