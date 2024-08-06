@@ -68,6 +68,9 @@
 # @param log_debuglevel [String]
 #  Logging level. Possible values are: ERROR, WARN, INFO, DEBUG, DEBUG2. Default value: INFO.
 #
+# @param cgsi_trace [Boolean]
+#  Enable CGSI trace on '/tmp/tracefile'. Default: false
+#
 class storm::frontend (
 
   String $storm_frontend_server_conf_file,
@@ -93,9 +96,10 @@ class storm::frontend (
 
   String $log_debuglevel,
 
+  Boolean $cgsi_trace,
+
   String $be_xmlrpc_host = $fqdn,
   String $db_host = $be_xmlrpc_host,
-
 ) {
   contain storm::frontend::install
   contain storm::frontend::config
