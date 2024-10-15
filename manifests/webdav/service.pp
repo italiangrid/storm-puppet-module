@@ -5,4 +5,10 @@ class storm::webdav::service {
     ensure => running,
     enable => true,
   }
+  if $storm::webdav::scitag {
+    service { 'flowd':
+      ensure => running,
+      enable => true,
+    }
+  }
 }

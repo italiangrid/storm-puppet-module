@@ -83,6 +83,16 @@ class storm::webdav::config (
     notice('Empty storage area list. No storage area has been defined and initialized.')
   }
 
+  if $storm::webdav::scitag {
+    file { '/etc/flowd/flowd.cfg' :
+      ensure   => file,
+      owner    => 'root',
+      group    => 'root',
+      mode     => '0644',
+      source   => "puppet:///modules/storm/etc/storm/flowd.cfg",
+    }
+  }
+
   # Directory '/etc/systemd/system/storm-webdav.service.d' is created by rpm
   $service_dir='/etc/systemd/system/storm-webdav.service.d'
 

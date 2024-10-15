@@ -177,3 +177,7 @@ Environment="STORM_WEBDAV_VOMS_CACHE_ENABLE=<%=scope.lookupvar('storm::webdav::v
 # Cache entries lifetime, used if caching for VOMS certificate validation is enabled
 # Default: 300
 Environment="STORM_WEBDAV_VOMS_CACHE_ENTRY_LIFETIME_SEC=<%=scope.lookupvar('storm::webdav::voms_cache_entry_lifetime_sec')%>"
+
+# Enable SciTags support
+# Default: false
+Environment="STORM_WEBDAV_SCITAG_ENABLED=<%=scope.lookupvar('storm::webdav::scitag')%>"

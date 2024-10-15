@@ -68,6 +68,8 @@ describe 'storm::webdav', type: 'class' do
             'voms_trust_store_refresh_interval_sec' => 43201,
             'voms_cache_enabled' => false,
             'voms_cache_entry_lifetime_sec' => 301,
+
+            'scitag' => false,
           }
         end
 
@@ -301,6 +303,43 @@ describe 'storm::webdav', type: 'class' do
             content: %r{^Environment="STORM_WEBDAV_JVM_OPTS=-Xms1024m -Xmx1024m -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=1044,suspend=y"},
           )
         end
+      end
+
+      context 'Check deployment with SciTag support' do
+        let(:params) do
+          {
+            'scitag' => true,
+          }
+        end
+
+        case facts[:operatingsystemmajrelease]
+        when '9'
+          it 'scitags-repo is installed and enabled' do
+            is_expected.to contain_yumrepo('scitags-repo').with(
+              ensure: 'present',
+              baseurl: 'https://linuxsoft.cern.ch/repos/scitags9al-stable/x86_64/os/',
+              enabled: 1,
+              gpgcheck: 0,
+            )
+          end
+        end
+        it 'check sysconfig file' do
+          service_file = '/etc/systemd/system/storm-webdav.service.d/storm-webdav.conf'
+          is_expected.to contain_file(service_file).with(
+            ensure: 'file',
+          )
+          is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_SCITAG_ENABLED=true"})
+        end
+        it 'check flowd configuration files' do
+          flowd_cfg_file = '/etc/flowd/flowd.cfg'
+          is_expected.to contain_file(flowd_cfg_file).with(
+            ensure: 'file',
+          )
+        end
+        it 'check flowd rpm is installed' do
+          is_expected.to contain_package('python3-scitags')
+        end
+        it { is_expected.to contain_service('flowd').with(ensure: 'running') }
       end
     end
   end
