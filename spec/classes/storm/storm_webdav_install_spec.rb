@@ -3,6 +3,13 @@ require 'spec_helper'
 describe 'storm::webdav::install' do
   on_supported_os.each do |os, facts|
     context "on #{os}" do
+      let(:pre_condition) do
+        <<-EOF
+          class { 'storm::webdav':
+            scitag => false,
+          }
+        EOF
+      end
       let(:facts) do
         facts
       end
