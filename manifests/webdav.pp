@@ -193,7 +193,7 @@ class storm::webdav (
 
   String $tape_wellknown_source,
 
-  Boolean $scitag,
+  Boolean $scitag_enabled,
 
 ) {
   contain storm::webdav::install

@@ -6,7 +6,7 @@ describe 'storm::webdav::install' do
       let(:pre_condition) do
         <<-EOF
           class { 'storm::webdav':
-            scitag => false,
+            scitag_enabled => false,
           }
         EOF
       end

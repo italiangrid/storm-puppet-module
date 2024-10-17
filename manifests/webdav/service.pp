@@ -5,7 +5,7 @@ class storm::webdav::service {
     ensure => running,
     enable => true,
   }
-  if $storm::webdav::scitag {
+  if $storm::webdav::scitag_enabled {
     service { 'flowd':
       ensure => running,
       enable => true,

@@ -83,7 +83,7 @@ class storm::webdav::config (
     notice('Empty storage area list. No storage area has been defined and initialized.')
   }
 
-  if $storm::webdav::scitag {
+  if $storm::webdav::scitag_enabled {
     file { '/etc/flowd/flowd.cfg' :
       ensure   => file,
       owner    => 'root',

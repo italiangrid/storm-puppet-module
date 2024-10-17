@@ -69,7 +69,7 @@ describe 'storm::webdav', type: 'class' do
             'voms_cache_enabled' => false,
             'voms_cache_entry_lifetime_sec' => 301,
 
-            'scitag' => false,
+            'scitag_enabled' => false,
           }
         end
 
@@ -308,7 +308,7 @@ describe 'storm::webdav', type: 'class' do
       context 'Check deployment with SciTag support' do
         let(:params) do
           {
-            'scitag' => true,
+            'scitag_enabled' => true,
           }
         end
 
