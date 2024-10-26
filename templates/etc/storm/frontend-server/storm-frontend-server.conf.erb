@@ -31,16 +31,6 @@ db.host=<%=scope.lookupvar('storm::frontend::db_host')%>
 db.user=<%=scope.lookupvar('storm::frontend::db_user')%>
 db.passwd=<%=scope.lookupvar('storm::frontend::db_passwd')%>
 
-# Argus Blacklisting
-check.user.blacklisting=<%=scope.lookupvar('storm::frontend::check_user_blacklisting')%>
-<% if scope.lookupvar('storm::frontend::check_user_blacklisting') %>
-argus-pepd-endpoint=<%=scope.lookupvar('storm::frontend::argus_pepd_endpoint')%>
-argus.resource-id=<%=scope.lookupvar('storm::frontend::argus_resource_id')%>
-<% else %>
-#argus-pepd-endpoint=
-#argus.resource-id=
-<% end %>
-
 # Monitoring
 monitoring.enabled=<%=scope.lookupvar('storm::frontend::monitoring_enabled')%>
 <% if scope.lookupvar('storm::frontend::monitoring_enabled') %>

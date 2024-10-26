@@ -1,5 +1,6 @@
 ---
 storm::frontend::storm_frontend_server_conf_file: ''
+storm::frontend::cgsi_trace: false
 storm::frontend::db_user: 'storm'
 storm::frontend::db_passwd: 'storm'
 storm::frontend::port: 8444
