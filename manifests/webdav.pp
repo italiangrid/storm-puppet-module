@@ -15,6 +15,9 @@
 # @param storage_areas
 #   List of storage area's configuration. Default value: empty list.
 #
+# @param storage_areas_source_directory
+#
+#
 # @param hostnames
 #   Sets STORM_WEBDAV_HOSTNAME_(N) environment variables.
 #
@@ -141,9 +144,12 @@
 # @param voms_cache_entry_lifetime_sec
 #   Cache entries lifetime, used if caching for VOMS certificate validation is enabled
 #
+# @param scitag_enabled
+#
 class storm::webdav (
 
   Array[Storm::Webdav::StorageArea] $storage_areas,
+  Optional[String] $storage_areas_source_directory,
 
   Array[String] $hostnames,
   Integer $http_port,

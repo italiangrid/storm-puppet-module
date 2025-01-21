@@ -1,5 +1,6 @@
 ---
 storm::webdav::storage_areas: []
+storm::webdav::storage_areas_source_directory:
 storm::webdav::hostnames: ["%{facts.fqdn}"]
 storm::webdav::http_port: 8085
 storm::webdav::https_port: 8443

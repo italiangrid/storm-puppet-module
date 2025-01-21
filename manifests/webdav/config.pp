@@ -44,13 +44,20 @@ class storm::webdav::config (
   file { '/etc/storm/webdav/sa.d/sa.properties.template':
     ensure => file,
   }
-  file { '/etc/storm/webdav/sa.d':
-    ensure  => directory,
-    recurse => true,
-    purge   => true,
-  }
 
-  if $storm::webdav::storage_areas {
+  if $storm::webdav::storage_areas_source_directory {
+    file { '/etc/storm/webdav/sa.d':
+      ensure  => directory,
+      source  => $storm::webdav::storage_areas_source_directory,
+      recurse => true,
+      purge   => true,
+    }
+  } elsif $storm::webdav::storage_areas {
+    file { '/etc/storm/webdav/sa.d':
+      ensure  => directory,
+      recurse => true,
+      purge   => true,
+    }
     $sa_properties_template_file='storm/etc/storm/webdav/sa.d/sa.properties.erb'
     $storm::webdav::storage_areas.each | $sa | {
       # define template variables
@@ -85,11 +92,11 @@ class storm::webdav::config (
 
   if $storm::webdav::scitag_enabled {
     file { '/etc/flowd/flowd.cfg' :
-      ensure   => file,
-      owner    => 'root',
-      group    => 'root',
-      mode     => '0644',
-      source   => "puppet:///modules/storm/etc/storm/flowd.cfg",
+      ensure => file,
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0644',
+      source => 'puppet:///modules/storm/etc/storm/flowd.cfg',
     }
   }
 
