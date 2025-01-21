@@ -7,7 +7,7 @@ describe 'storm::webdav::service' do
         'include storm::webdav::install'
         <<-EOF
           class { 'storm::webdav':
-            scitag_enabled => false,
+            scitags_enabled => false,
           }
         EOF
       end

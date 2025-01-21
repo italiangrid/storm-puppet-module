@@ -43,4 +43,4 @@ storm::webdav::voms_trust_store_dir: '/etc/grid-security/vomsdir'
 storm::webdav::voms_trust_store_refresh_interval_sec: 43200
 storm::webdav::voms_cache_enabled: true
 storm::webdav::voms_cache_entry_lifetime_sec: 300
-storm::webdav::scitag_enabled: false
+storm::webdav::scitags_enabled: false

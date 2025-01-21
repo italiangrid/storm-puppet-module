@@ -144,7 +144,7 @@
 # @param voms_cache_entry_lifetime_sec
 #   Cache entries lifetime, used if caching for VOMS certificate validation is enabled
 #
-# @param scitag_enabled
+# @param scitags_enabled
 #
 class storm::webdav (
 
@@ -199,7 +199,7 @@ class storm::webdav (
 
   String $tape_wellknown_source,
 
-  Boolean $scitag_enabled,
+  Boolean $scitags_enabled,
 
 ) {
   contain storm::webdav::install

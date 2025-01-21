@@ -69,7 +69,7 @@ describe 'storm::webdav', type: 'class' do
             'voms_cache_enabled' => false,
             'voms_cache_entry_lifetime_sec' => 301,
 
-            'scitag_enabled' => false,
+            'scitags_enabled' => false,
           }
         end
 
@@ -308,7 +308,7 @@ describe 'storm::webdav', type: 'class' do
       context 'Check deployment with SciTag support' do
         let(:params) do
           {
-            'scitag_enabled' => true,
+            'scitags_enabled' => true,
           }
         end
 
@@ -328,7 +328,7 @@ describe 'storm::webdav', type: 'class' do
           is_expected.to contain_file(service_file).with(
             ensure: 'file',
           )
-          is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_SCITAG_ENABLED=true"})
+          is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_SCITAGS_ENABLED=true"})
         end
         it 'check flowd configuration files' do
           flowd_cfg_file = '/etc/flowd/flowd.cfg'

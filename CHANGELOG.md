@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.2.0]
+- Added the opportunity to specify an external source for WebDAV storage area directory. Use `storm::webdav::storage_areas_source_directory`. This parameter, if set, overrides `storm::webdav::storage_areas`.
+- Enable SciTags support with `storm::webdav::scitags_enabled`.
+
 ## [4.1.0]
 - Added the opportunity to specify an external source for Backend's storm.properties file. Use `storm::backend::manage_storm_properties` and `storm::backend::path_storm_properties`.
 

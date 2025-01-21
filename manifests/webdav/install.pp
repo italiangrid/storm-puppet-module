@@ -6,7 +6,7 @@ class storm::webdav::install (
   package { 'storm-webdav':
     ensure  => '>=1.4.2',
   }
-  if $storm::webdav::scitag_enabled {
+  if $storm::webdav::scitags_enabled {
     $el = $facts['os']['distro']['release']['major']
     yumrepo { 'scitags-repo':
       ensure   => present,
