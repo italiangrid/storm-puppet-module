@@ -5,6 +5,15 @@ storm::backend::install_native_libs_gpfs: false
 # Db connection
 storm::backend::db_username: 'storm'
 storm::backend::db_password: 'storm'
+storm::backend::db_port: 3306
+storm::backend::db_properties: 'useLegacyDatetimeCode=false&serverTimezone=UTC'
+storm::backend::db_pool_max_wait_millis: -1
+storm::backend::db_pool_test_on_borrow: true
+storm::backend::db_pool_test_while_idle: true
+storm::backend::db_pool_stormdb_max_total: 500
+storm::backend::db_pool_stormdb_min_idle: 50
+storm::backend::db_pool_stormbeisam_max_total: 200
+storm::backend::db_pool_stormbeisam_min_idle: 10
 
 ### Default values for Storage Areas
 # 1. xroot
@@ -73,7 +82,8 @@ storm::backend::gc_purge_enabled: true
 storm::backend::gc_purge_interval: 600
 storm::backend::gc_purge_size: 800
 storm::backend::gc_expired_request_time: 21600
-storm::backend::gc_expired_inprogress_time: 2592000
+storm::backend::gc_expired_inprogress_bol_time: 2592000
+storm::backend::gc_expired_inprogress_ptp_time: 2592000
 # Expired-Put-Requests-Agent parameters
 storm::backend::gc_ptp_transit_interval: 300
 storm::backend::gc_ptp_transit_start_delay: 10

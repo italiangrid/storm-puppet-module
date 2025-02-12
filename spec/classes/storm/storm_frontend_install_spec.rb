@@ -8,7 +8,7 @@ describe 'storm::frontend::install' do
       end
 
       it 'check storm frontend metapackage is installed' do
-        is_expected.to contain_package('storm-frontend-mp').with(ensure: 'installed')
+        is_expected.to contain_package('storm-frontend-server').with(ensure: '>=1.8.16')
       end
     end
   end
