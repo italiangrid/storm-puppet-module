@@ -57,6 +57,7 @@ storm::backend::xmlrpc_security_token: 'secret'
 
 # Skip ACL setup for PTG requests
 storm::backend::ptg_skip_acl_setup: false
+storm::backend::ptp_skip_acl_setup: false
 
 # pin lifetime
 storm::backend::pinlifetime_default: 259200

@@ -37,7 +37,7 @@
 # @param hostname
 #   StoRM Backend Fully Qualified Domain Name
 #
-# @param db_hostname
+# @param db_host
 #   Fully Qualified Domain Name of database hostname. Default value: `hostname`.
 #
 # @param db_username
@@ -171,6 +171,9 @@
 #
 # @param ptg_skip_acl_setup
 #   Skip ACL setup for PtG requests. Default: false.
+#
+# @param ptp_skip_acl_setup
+#   Skip ACL setup for PtP requests. This means also the creation of an empty file used by GridFTP. Default: false.
 #
 # @param pinlifetime_default
 #   Default PinLifetime in seconds used for pinning files in case of srmPrepareToPut or srmPrepareToGet operation
@@ -398,8 +401,9 @@ class storm::backend (
   Boolean $xmlrpc_security_enabled,
   String $xmlrpc_security_token,
 
-  # Skip ACL setup for PTG requests
+  # Skip ACL setup for PtG/PtP requests
   Boolean $ptg_skip_acl_setup,
+  Boolean $ptp_skip_acl_setup,
 
   # Pin lifetime
   Integer $pinlifetime_default,
@@ -498,7 +502,7 @@ class storm::backend (
 
   # hostnames
   String $hostname = $fqdn,
-  String $db_hostname = $hostname,
+  String $db_host = $hostname,
   String $xroot_hostname = $hostname,
   String $frontend_public_host = $hostname,
 

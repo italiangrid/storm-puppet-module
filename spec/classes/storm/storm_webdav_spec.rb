@@ -62,10 +62,10 @@ describe 'storm::webdav', type: 'class' do
             'tls_protocol' => 'TLSv1.2',
             'checksum_filter_enabled' => false,
             'macaroon_filter_enabled' => false,
-            'file_buffer_size' => 1048577,
+            'file_buffer_size' => 1_048_577,
 
             'voms_trust_store_dir' => '/vomsdir',
-            'voms_trust_store_refresh_interval_sec' => 43201,
+            'voms_trust_store_refresh_interval_sec' => 43_201,
             'voms_cache_enabled' => false,
             'voms_cache_entry_lifetime_sec' => 301,
 

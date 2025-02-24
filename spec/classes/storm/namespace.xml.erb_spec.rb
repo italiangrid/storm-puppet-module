@@ -76,7 +76,6 @@ describe 'namespace.xml.erb' do
   end
 
   it 'render the same file each time' do
-
     rendered = harness.run
 
     xml_doc = Nokogiri::XML(rendered)

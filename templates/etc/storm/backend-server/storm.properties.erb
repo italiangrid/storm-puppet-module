@@ -53,7 +53,7 @@ storm.service.SURL.default-ports=<%= @srm_ports.join(',') %>
 # ============================
 #
 # Parameters to connect to the DB used as channel for the requests. 
-storm.service.db.host=<%= scope.lookupvar('storm::backend::db_hostname') %>
+storm.service.db.host=<%= scope.lookupvar('storm::backend::db_host') %>
 storm.service.db.username=<%= scope.lookupvar('storm::backend::db_username') %>
 storm.service.db.password=<%= scope.lookupvar('storm::backend::db_password') %>
 storm.service.db.port=<%= scope.lookupvar('storm::backend::db_port') %>
@@ -215,8 +215,9 @@ transit.interval=<%= scope.lookupvar('storm::backend::gc_ptp_transit_interval') 
 transit.delay=<%= scope.lookupvar('storm::backend::gc_ptp_transit_start_delay')  %>
 
 
-# Skip ACL setup for PtG requests
+# Skip ACL setup for PtG/PtP requests
 ptg.skip-acl-setup=<%= scope.lookupvar('storm::backend::ptg_skip_acl_setup')  %>
+ptp.skip-acl-setup=<%= scope.lookupvar('storm::backend::ptp_skip_acl_setup')  %>
 
 # The caching policy for successful name lookups from the name service.
 # The value is specified as integer to indicate the number of seconds to cache the successful lookup.
