@@ -92,11 +92,11 @@ class storm::webdav::config (
 
   if $storm::webdav::scitags_enabled {
     file { '/etc/flowd/flowd.cfg' :
-      ensure => file,
-      owner  => 'root',
-      group  => 'root',
-      mode   => '0644',
-      source => 'puppet:///modules/storm/etc/storm/flowd.cfg',
+      ensure  => file,
+      content => template('storm/etc/flowd/flowd.cfg.erb'),
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
     }
   }
 

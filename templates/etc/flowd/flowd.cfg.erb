@@ -1,0 +1,7 @@
+PLUGIN='np_api'
+BACKEND='udp_firefly'
+FLOW_MAP_API='https://www.scitags.org/api.json'
+IP_DISCOVERY_ENABLED=True
+<% if scope.lookupvar('storm::webdav::scitags_collector') -%>
+UDP_FIREFLY_DST='<%=scope.lookupvar('storm::webdav::scitags_collector')%>'
+<% end -%>

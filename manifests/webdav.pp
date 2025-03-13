@@ -200,6 +200,7 @@ class storm::webdav (
   String $tape_wellknown_source,
 
   Boolean $scitags_enabled,
+  Optional[String] $scitags_collector,
 
 ) {
   contain storm::webdav::install

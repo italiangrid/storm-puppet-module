@@ -341,6 +341,25 @@ describe 'storm::webdav', type: 'class' do
         end
         it { is_expected.to contain_service('flowd').with(ensure: 'running') }
       end
+
+      context 'Test flowd configuration with a SciTag collector' do
+        let(:params) do
+          {
+            'scitags_enabled' => true,
+            'scitags_collector' => 'eu.scitags.org',
+          }
+        end
+
+        it 'check flowd configuration contains the collector' do
+          flowd_cfg_file = '/etc/flowd/flowd.cfg'
+          is_expected.to contain_file(flowd_cfg_file).with(
+            ensure: 'file',
+          )
+          is_expected.to contain_file(flowd_cfg_file).with(
+            content: %r{UDP_FIREFLY_DST='eu.scitags.org'},
+          )
+        end
+      end
     end
   end
 end
