@@ -77,7 +77,6 @@ describe 'storm::backend::install' do
           is_expected.to contain_package('storm-native-libs-gpfs')
         end
       end
-
     end
   end
 end

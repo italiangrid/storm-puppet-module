@@ -4,7 +4,7 @@ class storm::webdav::install (
 
 ) {
   package { 'storm-webdav':
-    ensure  => '>=1.4.2',
+    ensure  => '>=1.4.3',
   }
   if $storm::webdav::scitags_enabled {
     $el = $facts['os']['distro']['release']['major']

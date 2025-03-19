@@ -1,6 +1,6 @@
 {
   "name": "cnafsd-storm",
-  "version": "4.3.0",
+  "version": "5.0.0",
   "author": "storm",
   "summary": "StoRM Puppet module",
   "license": "Apache-2.0",
@@ -23,12 +23,6 @@
   ],
   "operatingsystem_support": [
     {
-      "operatingsystem": "CentOS",
-      "operatingsystemrelease": [
-        "7"
-      ]
-    },
-    {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
         "9"
@@ -39,12 +33,6 @@
       "operatingsystemrelease": [
         "9"
       ]
-    },
-    {
-      "operatingsystem": "Scientific",
-      "operatingsystemrelease": [
-        "7"
-      ]
     }
   ],
   "requirements": [
@@ -53,7 +41,7 @@
       "version_requirement": ">= 7.0.0 < 8.0.0"
     }
   ],
-  "pdk-version": "3.0.0",
-  "template-url": "pdk-default#3.0.0",
-  "template-ref": "tags/3.0.0-0-g056e50d"
+  "pdk-version": "3.4.0",
+  "template-url": "pdk-default#3.4.0",
+  "template-ref": "tags/3.4.0-0-gd3cc13f"
 }

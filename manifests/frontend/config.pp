@@ -34,12 +34,11 @@ class storm::frontend::config (
   $conf_file='/etc/storm/frontend-server/storm-frontend-server.conf'
   if (!empty($storm::frontend::storm_frontend_server_conf_file)) {
     file { $conf_file:
-      ensure  => file,
-      owner   => 'root',
-      group   => 'storm',
-      source  => $storm::frontend::storm_frontend_server_conf_file,
-      notify  => Service['storm-frontend-server'],
-      require => Package['storm-frontend-mp'],
+      ensure => file,
+      owner  => 'root',
+      group  => 'storm',
+      source => $storm::frontend::storm_frontend_server_conf_file,
+      notify => Service['storm-frontend-server'],
     }
   } else {
     $conf_template_file='storm/etc/storm/frontend-server/storm-frontend-server.conf.erb'
@@ -49,7 +48,6 @@ class storm::frontend::config (
       group   => 'storm',
       content => template($conf_template_file),
       notify  => Service['storm-frontend-server'],
-      require => Package['storm-frontend-mp'],
     }
   }
 
@@ -64,6 +62,5 @@ class storm::frontend::config (
     ensure  => file,
     content => template($sysconfig_template_file),
     notify  => Service['storm-frontend-server'],
-    require => Package['storm-frontend-mp'],
   }
 }

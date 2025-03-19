@@ -76,9 +76,6 @@ describe 'storm::frontend', type: 'class' do
             'db_host'                   => 'storm.example.org',
             'db_user'                   => 'test',
             'db_passwd'                 => 'password',
-            'check_user_blacklisting'   => true,
-            'argus_pepd_endpoint'       => 'storm.example.org',
-            'argus_resource_id'         => 'storm',
             'monitoring_enabled'        => false,
             'monitoring_time_interval'  => 50,
             'monitoring_detailed'       => true,
@@ -105,9 +102,6 @@ describe 'storm::frontend', type: 'class' do
           is_expected.to contain_file(title).with(content: %r{db.host=storm.example.org})
           is_expected.to contain_file(title).with(content: %r{db.user=test})
           is_expected.to contain_file(title).with(content: %r{db.passwd=password})
-          is_expected.to contain_file(title).with(content: %r{check.user.blacklisting=true})
-          is_expected.to contain_file(title).with(content: %r{argus-pepd-endpoint=storm.example.org})
-          is_expected.to contain_file(title).with(content: %r{argus.resource-id=storm})
           is_expected.to contain_file(title).with(content: %r{monitoring.enabled=false})
           is_expected.to contain_file(title).with(content: %r{#monitoring.timeInterval=60})
           is_expected.to contain_file(title).with(content: %r{#monitoring.detailed=false})
@@ -144,9 +138,6 @@ describe 'storm::frontend', type: 'class' do
           is_expected.to contain_file(title).with(content: %r{db.host=storm.example.org})
           is_expected.to contain_file(title).with(content: %r{db.user=storm})
           is_expected.to contain_file(title).with(content: %r{db.passwd=storm})
-          is_expected.to contain_file(title).with(content: %r{check.user.blacklisting=false})
-          is_expected.to contain_file(title).with(content: %r{#argus-pepd-endpoint=})
-          is_expected.to contain_file(title).with(content: %r{#argus.resource-id=})
           is_expected.to contain_file(title).with(content: %r{monitoring.enabled=true})
           is_expected.to contain_file(title).with(content: %r{monitoring.timeInterval=60})
           is_expected.to contain_file(title).with(content: %r{monitoring.detailed=false})

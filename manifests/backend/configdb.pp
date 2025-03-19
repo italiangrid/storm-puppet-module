@@ -3,7 +3,7 @@
 class storm::backend::configdb (
 
 ) {
-  $db_hostname = $storm::backend::db_hostname
+  $db_hostname = $storm::backend::db_host
   $db_username = $storm::backend::db_username
   $db_password = $storm::backend::db_password
 
@@ -24,7 +24,7 @@ class storm::backend::configdb (
     command     => 'mysql storm_db < /tmp/storm_db.sql',
     onlyif      => $check_storm_db,
     logoutput   => true,
-    environment => "HOME=${::root_home}",
+    environment => "HOME=${facts['root_home']}",
     path        => $paths,
     provider    => 'shell',
     require     => [File['/tmp/storm_db.sql']],
@@ -35,7 +35,7 @@ class storm::backend::configdb (
     command     => 'mysql storm_be_ISAM < /tmp/storm_be_ISAM.sql',
     onlyif      => $check_storm_be_isam,
     logoutput   => true,
-    environment => "HOME=${::root_home}",
+    environment => "HOME=${facts['root_home']}",
     path        => $paths,
     provider    => 'shell',
     require     => [File['/tmp/storm_be_ISAM.sql']],
