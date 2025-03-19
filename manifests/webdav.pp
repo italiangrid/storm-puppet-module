@@ -16,7 +16,7 @@
 #   List of storage area's configuration. Default value: empty list.
 #
 # @param storage_areas_source_directory
-#
+#   Source directory from where all properties files are copied into WebDAV sa.d folder. Optional.
 #
 # @param hostnames
 #   Sets STORM_WEBDAV_HOSTNAME_(N) environment variables.
@@ -145,6 +145,10 @@
 #   Cache entries lifetime, used if caching for VOMS certificate validation is enabled
 #
 # @param scitags_enabled
+#   Enable SciTags flow marking
+#
+# @param scitags_collector
+#   Remote address of SciTags collector. Optional.
 #
 class storm::webdav (
 

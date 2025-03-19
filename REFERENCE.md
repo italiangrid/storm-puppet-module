@@ -1322,7 +1322,7 @@ List of storage area's configuration. Default value: empty list.
 
 Data type: `Optional[String]`
 
-
+Source directory from where all properties files are copied into WebDAV sa.d folder. Optional.
 
 ##### <a name="-storm--webdav--hostnames"></a>`hostnames`
 
@@ -1580,13 +1580,13 @@ Cache entries lifetime, used if caching for VOMS certificate validation is enabl
 
 Data type: `Boolean`
 
-
+Enable SciTags flow marking
 
 ##### <a name="-storm--webdav--scitags_collector"></a>`scitags_collector`
 
 Data type: `Optional[String]`
 
-
+Remote address of SciTags collector. Optional.
 
 ### <a name="storm--webdav--config"></a>`storm::webdav::config`
 
