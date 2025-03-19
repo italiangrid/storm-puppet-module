@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.3.0]
+
+- Add SciTags collector parameter `storm::webdav::scitags_collector`
+- Update SciTags flow registry URL
+
 ## [4.2.0]
 - Added the opportunity to specify an external source for WebDAV storage area directory. Use `storm::webdav::storage_areas_source_directory`. This parameter, if set, overrides `storm::webdav::storage_areas`.
 - Enable SciTags support with `storm::webdav::scitags_enabled`.
