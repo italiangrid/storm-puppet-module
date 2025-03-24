@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.3.1]
+
+- Add notify on storage area source directory (StoRM WebDAV)
+
 ## [4.3.0]
 
 - Add SciTags collector parameter `storm::webdav::scitags_collector`
