@@ -51,6 +51,7 @@ class storm::webdav::config (
       source  => $storm::webdav::storage_areas_source_directory,
       recurse => true,
       purge   => true,
+      notify  => Service['storm-webdav'],
     }
   } elsif $storm::webdav::storage_areas {
     file { '/etc/storm/webdav/sa.d':
