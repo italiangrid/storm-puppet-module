@@ -1311,6 +1311,7 @@ The following parameters are available in the `storm::webdav` class:
 * [`voms_cache_entry_lifetime_sec`](#-storm--webdav--voms_cache_entry_lifetime_sec)
 * [`scitags_enabled`](#-storm--webdav--scitags_enabled)
 * [`scitags_collector`](#-storm--webdav--scitags_collector)
+* [`nginx_enabled`](#-storm--webdav--nginx_enabled)
 
 ##### <a name="-storm--webdav--storage_areas"></a>`storage_areas`
 
@@ -1587,6 +1588,12 @@ Enable SciTags flow marking
 Data type: `Optional[String]`
 
 Remote address of SciTags collector. Optional.
+
+##### <a name="-storm--webdav--nginx_enabled"></a>`nginx_enabled`
+
+Data type: `Boolean`
+
+Enable nginx support
 
 ### <a name="storm--webdav--config"></a>`storm::webdav::config`
 

@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.4.0]
+
+- Add `storm::webdav::nginx_enabled` parameter to WebDAV that enables the forwarding of GET requests to an external NGINX 
+
 ## [4.3.1]
 
 - Add notify on storage area source directory (StoRM WebDAV)

@@ -16,7 +16,7 @@ Table of Contents:
 
 ## Description
 
-StoRM Puppet module allows administrators to configure StoRM services deployed on CentOS 7.
+StoRM Puppet module allows administrators to configure StoRM services deployed on CentOS 7 and AlmaLinux/RedHat 9.
 
 The supported services are:
 
@@ -44,7 +44,7 @@ puppet module install ./pkg/cnafsd-storm-*.tar.gz
 
 ## Usage
 
-This Puppet module allows site administrators to properly configure StoRM services on CentOS 7 platform. This module provides some classes related to the main components and also 
+This Puppet module allows site administrators to properly configure StoRM services. This module provides some classes related to the main components and also 
 some utility classes those can be used to configure StoRM repositories, StoRM users, VO pool accounts, LCMAPS and storage directories.
 
 Component classes:
@@ -387,6 +387,14 @@ Run tests with:
 pdk test unit
 ```
 
+or 
+
+```
+bundle update
+bundle install
+bundle exec rake spec
+```
+
 Validate code with:
 
 ```
@@ -395,4 +403,4 @@ pdk validate
 
 ## Limitations
 
-It works only on RedHat CentOS 7 distribution.
+It works only on RedHat CentOS 7 distribution or AlmaLinux/RedHat 9.
