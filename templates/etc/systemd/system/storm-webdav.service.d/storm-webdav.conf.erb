@@ -181,3 +181,7 @@ Environment="STORM_WEBDAV_VOMS_CACHE_ENTRY_LIFETIME_SEC=<%=scope.lookupvar('stor
 # Enable SciTags support
 # Default: false
 Environment="STORM_WEBDAV_SCITAGS_ENABLED=<%=scope.lookupvar('storm::webdav::scitags_enabled')%>"
+
+# Enable nginx support
+# Default: false
+Environment="STORM_WEBDAV_NGINX_ENABLED=<%=scope.lookupvar('storm::webdav::nginx_enabled')%>"

@@ -70,6 +70,8 @@ describe 'storm::webdav', type: 'class' do
             'voms_cache_entry_lifetime_sec' => 301,
 
             'scitags_enabled' => false,
+
+            'nginx_enabled' => true,
           }
         end
 
@@ -218,6 +220,7 @@ describe 'storm::webdav', type: 'class' do
           is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_VOMS_TRUST_STORE_REFRESH_INTERVAL_SEC=43201"})
           is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_VOMS_CACHE_ENABLE=false"})
           is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_VOMS_CACHE_ENTRY_LIFETIME_SEC=301"})
+          is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_NGINX_ENABLED=true"})
         end
 
         it 'check storm-webdav.service.d/filelimit.conf exists' do

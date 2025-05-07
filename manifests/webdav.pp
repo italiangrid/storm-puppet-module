@@ -150,6 +150,9 @@
 # @param scitags_collector
 #   Remote address of SciTags collector. Optional.
 #
+# @param nginx_enabled
+#   Enable nginx support
+#
 class storm::webdav (
 
   Array[Storm::Webdav::StorageArea] $storage_areas,
@@ -205,6 +208,8 @@ class storm::webdav (
 
   Boolean $scitags_enabled,
   Optional[String] $scitags_collector,
+
+  Boolean $nginx_enabled,
 
 ) {
   contain storm::webdav::install

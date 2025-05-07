@@ -45,3 +45,4 @@ storm::webdav::voms_cache_enabled: true
 storm::webdav::voms_cache_entry_lifetime_sec: 300
 storm::webdav::scitags_enabled: false
 storm::webdav::scitags_collector:
+storm::webdav::nginx_enabled: false
