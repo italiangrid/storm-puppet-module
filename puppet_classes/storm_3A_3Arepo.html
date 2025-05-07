@@ -6,7 +6,7 @@
 <title>
   Puppet Class: storm::repo
   
-    &mdash; Documentation by YARD 0.9.34
+    &mdash; Documentation by YARD 0.9.36
   
 </title>
 
@@ -80,6 +80,7 @@
     
   </div>
 </div>
+
 
 
 <div class="tags">
@@ -200,7 +201,13 @@
 54
 55
 56
-57</pre>
+57
+58
+59
+60
+61
+62
+63</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/repo.pp', line 16</span>
@@ -214,12 +221,18 @@ class storm::repo (
 
 ) {
   $base = &#39;https://repo.cloud.cnaf.infn.it/repository&#39;
-  $el = $facts[&#39;os&#39;][&#39;distro&#39;][&#39;release&#39;][&#39;major&#39;]
+  $el = $facts[&#39;os&#39;][&#39;release&#39;][&#39;major&#39;]
+
+  case $facts[&#39;os&#39;][&#39;name&#39;] {
+    &#39;RedHat&#39;, &#39;AlmaLinux&#39;: { $dist = &#39;redhat&#39; }
+    &#39;CentOS&#39;, &#39;Scientific&#39;:  { $dist = &#39;centos&#39; }
+    default: { $dist = &#39;redhat&#39; }
+  }
 
   $installed.each | $repo | {
     $enabled = $repo in $enabled ? { true =&gt; 1, default =&gt; 0 }
-    $name = &quot;storm-${repo}-centos${el}&quot;
-    $baseurl = &quot;${base}/storm-rpm-${repo}/centos${el}/&quot;
+    $name = &quot;storm-${repo}-${dist}${el}&quot;
+    $baseurl = &quot;${base}/storm-rpm-${repo}/${dist}${el}/&quot;
 
     yumrepo { $name:
       ensure   =&gt; present,

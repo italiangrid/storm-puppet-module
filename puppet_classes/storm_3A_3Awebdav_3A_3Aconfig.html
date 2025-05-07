@@ -6,7 +6,7 @@
 <title>
   Puppet Class: storm::webdav::config
   
-    &mdash; Documentation by YARD 0.9.34
+    &mdash; Documentation by YARD 0.9.36
   
 </title>
 
@@ -80,6 +80,7 @@
     
   </div>
 </div>
+
 
 
 <div class="tags">
@@ -198,7 +199,25 @@
 105
 106
 107
-108</pre>
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/webdav/config.pp', line 3</span>
@@ -247,13 +266,21 @@ class storm::webdav::config (
   file { &#39;/etc/storm/webdav/sa.d/sa.properties.template&#39;:
     ensure =&gt; file,
   }
-  file { &#39;/etc/storm/webdav/sa.d&#39;:
-    ensure  =&gt; directory,
-    recurse =&gt; true,
-    purge   =&gt; true,
-  }
 
-  if $storm::webdav::storage_areas {
+  if $storm::webdav::storage_areas_source_directory {
+    file { &#39;/etc/storm/webdav/sa.d&#39;:
+      ensure  =&gt; directory,
+      source  =&gt; $storm::webdav::storage_areas_source_directory,
+      recurse =&gt; true,
+      purge   =&gt; true,
+      notify  =&gt; Service[&#39;storm-webdav&#39;],
+    }
+  } elsif $storm::webdav::storage_areas {
+    file { &#39;/etc/storm/webdav/sa.d&#39;:
+      ensure  =&gt; directory,
+      recurse =&gt; true,
+      purge   =&gt; true,
+    }
     $sa_properties_template_file=&#39;storm/etc/storm/webdav/sa.d/sa.properties.erb&#39;
     $storm::webdav::storage_areas.each | $sa | {
       # define template variables
@@ -284,6 +311,16 @@ class storm::webdav::config (
     }
   } else {
     notice(&#39;Empty storage area list. No storage area has been defined and initialized.&#39;)
+  }
+
+  if $storm::webdav::scitags_enabled {
+    file { &#39;/etc/flowd/flowd.cfg&#39; :
+      ensure  =&gt; file,
+      content =&gt; template(&#39;storm/etc/flowd/flowd.cfg.erb&#39;),
+      owner   =&gt; &#39;root&#39;,
+      group   =&gt; &#39;root&#39;,
+      mode    =&gt; &#39;0644&#39;,
+    }
   }
 
   # Directory &#39;/etc/systemd/system/storm-webdav.service.d&#39; is created by rpm
