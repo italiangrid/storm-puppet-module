@@ -843,6 +843,22 @@ class { &#39;storm::webdav&#39;:
       
     </li>
   
+    <li>
+      
+        <span class='name'>nginx_enabled</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Enable nginx support</p>
+</div>
+      
+    </li>
+  
 </ul>
 
 
@@ -854,9 +870,6 @@ class { &#39;storm::webdav&#39;:
         <pre class="lines">
 
 
-153
-154
-155
 156
 157
 158
@@ -918,10 +931,15 @@ class { &#39;storm::webdav&#39;:
 214
 215
 216
-217</pre>
+217
+218
+219
+220
+221
+222</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/webdav.pp', line 153</span>
+        <pre class="code"><span class="info file"># File 'manifests/webdav.pp', line 156</span>
 
 class storm::webdav (
 
@@ -978,6 +996,8 @@ class storm::webdav (
 
   Boolean $scitags_enabled,
   Optional[String] $scitags_collector,
+
+  Boolean $nginx_enabled,
 
 ) {
   contain storm::webdav::install
