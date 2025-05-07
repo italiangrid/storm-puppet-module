@@ -2,27 +2,44 @@
 
 All notable changes to this project will be documented in this file.
 
-## [4.4.0]
+## 4.4.0 (2025-05-07)
+
+### Added
 
 - Add `storm::webdav::nginx_enabled` parameter to WebDAV that enables the forwarding of GET requests to an external NGINX 
 
-## [4.3.1]
+## 4.3.1 (2025-03-24)
+
+### Fixed
 
 - Add notify on storage area source directory (StoRM WebDAV)
 
-## [4.3.0]
+## 4.3.0 (2025-03-19)
+
+### Added
 
 - Add SciTags collector parameter `storm::webdav::scitags_collector`
+
+### Changed
+
 - Update SciTags flow registry URL
 
-## [4.2.0]
+## 4.2.0 (2025-01-21)
+
+### Added
+
 - Added the opportunity to specify an external source for WebDAV storage area directory. Use `storm::webdav::storage_areas_source_directory`. This parameter, if set, overrides `storm::webdav::storage_areas`.
 - Enable SciTags support with `storm::webdav::scitags_enabled`.
 
-## [4.1.0]
+## 4.1.0 (2023-10-02)
+
+### Added
+
 - Added the opportunity to specify an external source for Backend's storm.properties file. Use `storm::backend::manage_storm_properties` and `storm::backend::path_storm_properties`.
 
-## [4.0.1]
+## 4.0.1 (2023-07-14)
+
+### Added
 
 - Added new StoRM WebDAV parameters for the related environment variables:
   - `storm::webdav::tls_protocol`
@@ -34,38 +51,48 @@ All notable changes to this project will be documented in this file.
   - `storm::webdav::voms_cache_enabled`
   - `storm::webdav::voms_cache_entry_lifetime_sec`
 
-## [4.0.0]
+## 4.0.0 (2023-06-27)
 
-- Puppet version >= 7.0.0 is required
+### Added
+
 - Added `storm::gridftp::data_interface` parameter in order to support a configuration behind a public IP
 - Added `storm::gridftp::log_level` parameter in order to allow logging level
-- Removed `storm::webdav::ensure_empty_storage_area_dir`: storage area directory is now automatically purged of not managed properties files
 - Added `storm::webdav::tpc_enable_expect_continue_threshold` in order to set a threshold from which an header with `Expect: 100 continue` is added
 - Added `storm::webdav::user` parameter in order to allow the setting of a custom user used to run the service
 - Added `storm::webdav::tape_wellknown_source` parameter in order to specify which JSON file has to be loaded as content of the well-known endpoint for WLCG Tape REST API implementation
+- Added a retry mechanism if StoRM Info Provider configure command fails
+
+### Changed
+
+- Puppet version >= 7.0.0 is required
 - Within `update-site-report` script, JSON file is now moved and not copied to avoid the growth of useless files in `tmp` directory
+
+### Removed
+
+- Removed `storm::webdav::ensure_empty_storage_area_dir`: storage area directory is now automatically purged of not managed properties files
 - Removed `storm::backend::debug*` parameters
 - Removed `storm::backend::install_native_libs_gpfs` parameter because the installation of the GPFS libs is done if at least one storage area has `fs_type` GPFS.
-- Added a retry mechanism if StoRM Info Provider configure command fails
 - Removed the custom management of systemctl daemon reload because now it's supported by Puppet 7
 
-## [3.4.0]
+## 3.4.0 (2022-04-11)
+
+### Removed
 
 - Removed useless storm::frontend parameters gridmap_dir and gridmap_file 
 
-## [3.3.2]
+## 3.3.2 (2022-04-04)
 
 - Changed default value to an empty array for vos field of Storm::Webdav::StorageArea
 - Added pool of webdav endpoints into backend's namespace.xml
 
-## [3.3.1]
+## 3.3.1 (2021-11-24)
 
 - Added missing Argus's resource-id parameter within Frontend's configuration.
 - Added support for using an external file for StoRM Frontend's configuration file.
 - Removed storm::frontend::security_enable_mapping parameter.
 - The `storm::frontend::be_xmlrpc_host` value is initialized with local FQDN.
 
-## [3.3.0]
+## 3.3.0 (2021-11-24)
 
 - Added missing StoRM WebDAV configuration parameters
 - StoRM WebDAV hostname list initialized with local FQDN
@@ -75,24 +102,24 @@ All notable changes to this project will be documented in this file.
 - Added `storm::webdav::ensure_empty_storage_area_dir` parameter to ensure a cleaned storage area directory before adding the .properties files.
 - Increased StoRM WebDAV default heap size to 1024m and default timeout for TPC to 30 seconds
 
-## [3.2.1]
+## 3.2.1 (2020-12-15)
 
 - Fixed permissions on info-provider configuration file
 
-## [3.2.0]
+## 3.2.0 (2020-12-11)
 
 - Added daemon reload on backend and webdav restart command
 
-## [3.1.1]
+## 3.1.1 (2020-11-23)
 
 - Improved README. No changes on module.
 
-## [3.1.0]
+## 3.1.0 (2020-11-21)
 
 - Added mode parameter to storm::rootdir and storm::sarootdir defined types
 - Increased default value for wait_timeout in storm::db::override_options
 
-## [3.0.0]
+## 3.0.0 (2020-11-14)
 
 - Converted to pdk project
 - Removed storm::storage class
@@ -100,26 +127,26 @@ All notable changes to this project will be documented in this file.
 - Use hiera YAML files for all default parameters
 - Removed all params.pp files
 
-## [2.2.1] - 2020-11-09
+## 2.2.1 (2020-11-09)
 
 - Fixed type into data file
 
-## [2.2.0] - 2020-11-09
+## 2.2.0 (2020-11-09)
 
 - Moved default parameters into YAML data files
 - Deleted params.pp files
 - Added hiera.yaml
 
-## [2.1.0] - 2020-10-29
+## 2.1.0 (2020-10-29)
 
 - Moved gridftp.conf into /etc/grid-security directory
 
-## [2.0.1] - 2020-10-19
+## 2.0.1 (2020-10-19)
 
 - Fixed CHANGELOG
 - Improved documentation.
 
-## [2.0.0] - 2020-10-19
+## 2.0.0 (2020-10-19)
 
 - Added defined types for application-*.yml and storage area files used by WebDAV class.
 - Removed direct support for application.yml template file.
@@ -128,19 +155,19 @@ All notable changes to this project will be documented in this file.
 - Added tests.
 - Removed docker deploy image.
 
-## [1.1.1] - 2020-10-06
+## 1.1.1 (2020-10-06)
 
 - Removed log directory management
 
-## [1.1.0] - 2020-10-05
+## 1.1.0 (2020-10-05)
 
 - Removed storm::mapping class
 
-## [1.0.5] - 2020-10-02
+## 1.0.5 (2020-10-02)
 
 - Added path-authz.db support to StoRM Backend
 
-## [1.0.0] - 2020-09-25
+## 1.0.0 (2020-09-25)
 
 - Moved database creation and MySQL/MariaDB installation on a separated class storm::db
 - Backend class only import SQL script of databases, only if database or table version not exists
@@ -150,19 +177,19 @@ All notable changes to this project will be documented in this file.
 - Removed epel and umd repo from repo class
 - Removed testca and testvos classes
 
-## [0.2.3] - 2020-05-25
+## 0.2.3 (2020-05-25)
 
 ### Changed
 
 - Allow enable/disable StoRM DSI module for gridftp
 
-## [0.2.1] - 2020-05-25
+## 0.2.1 (2020-05-25)
 
 ### Changed
 
 - Updated README.md
 
-## [0.2.0] - 2020-05-15
+## 0.2.0 (2020-05-15)
 
 ### Added
 
@@ -174,9 +201,10 @@ All notable changes to this project will be documented in this file.
 - Allow redirection of LCMAPS logging to a particular file
 - Fixed conflict on storm user/group creation when the same node install WebDAV and Frontend services
 
-## [0.1.0] - 2019-10-09
+## 0.1.0 (2019-10-09)
 
 ### Added
+
 - Support for StoRM WebDAV service configuration
 - Support for StoRM GridFTP server configuration
 - Documentation at REFERENCE.md
