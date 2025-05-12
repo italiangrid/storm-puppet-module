@@ -1,0 +1,46 @@
+name: Module Release
+on:
+  push:
+    tags: v[0-9]+.[0-9]+.[0-9]+
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Check version
+        run: |
+          VERSION_METADATA=$(jq -r '.version' metadata.json)
+          if [[ ${GITHUB_REF_NAME:1} != ${VERSION_METADATA} ]]; then
+            echo "Version mismatch between tag (${GITHUB_REF_NAME:1}) and metadata file (${VERSION_METADATA})"
+            exit 1
+          fi
+      - name: PDK build
+        uses: docker://puppet/pdk
+        with:
+          args: 'build'
+      - name: Create release
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          # Get from the changelog file only the part related to the tagged release, in particular:
+          # - Delete lines up to the one beginning with "## <x>.<y>.<z>" (inclusive)
+          # - Delete lines from the next one beginning with "## " until the end of the file
+          # - Change all the "### " to "## " to use heading level 2 instead of level 3
+          sed -e "1,/^## ${GITHUB_REF_NAME:1}/d;/^## /,\$d;s/^### /## /g" CHANGELOG.md > RELEASE-CHANGELOG.md
+          gh release create ${GITHUB_REF_NAME} --title "StoRM Puppet Module ${GITHUB_REF_NAME:1}" --notes-file RELEASE-CHANGELOG.md
+      - name: Publish module
+        uses: docker://puppet/pdk
+        with:
+          args: 'release publish --forge-token ${{ secrets.FORGE_API_KEY }} --force'
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Update GitHub Pages
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
+          bundle exec rake strings:gh_pages:update
