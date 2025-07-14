@@ -12,9 +12,10 @@ class storm::backend::service {
     subscribe => $subscribed_to,
   }
   exec { 'configure-info-provider':
-    command   => '/usr/libexec/storm-info-provider configure',
-    tries     => 5,
-    try_sleep => 2,
-    require   => [Service['storm-backend-server']],
+    command     => '/usr/libexec/storm-info-provider configure',
+    tries       => 5,
+    try_sleep   => 2,
+    require     => [Service['storm-backend-server']],
+    refreshonly => true,
   }
 }

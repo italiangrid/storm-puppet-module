@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 4.4.1 (2025-07-14)
+
+- Run info provider `configure` only in case there are changes to the info provider configuration file
+
 ## 4.4.0 (2025-05-07)
 
 ### Added
