@@ -363,6 +363,64 @@ describe 'storm::webdav', type: 'class' do
           )
         end
       end
+
+      context 'Check deployment with SciTag support using flowd-go' do
+        let(:params) do
+          {
+            'scitags_enabled' => true,
+            'scitags_daemon' => 'flowd-go',
+          }
+        end
+
+        case facts[:operatingsystemmajrelease]
+        when '9'
+          it 'scitags-repo is installed and enabled' do
+            is_expected.to contain_yumrepo('scitags-repo').with(
+              ensure: 'present',
+              baseurl: 'https://linuxsoft.cern.ch/repos/scitags9al-stable/x86_64/os/',
+              enabled: 1,
+              gpgcheck: 0,
+            )
+          end
+        end
+        it 'check sysconfig file' do
+          service_file = '/etc/systemd/system/storm-webdav.service.d/storm-webdav.conf'
+          is_expected.to contain_file(service_file).with(
+            ensure: 'file',
+          )
+          is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_SCITAGS_ENABLED=true"})
+        end
+        it 'check flowd-go configuration files' do
+          flowd_cfg_file = '/etc/flowd-go/conf.json'
+          is_expected.to contain_file(flowd_cfg_file).with(
+            ensure: 'file',
+          )
+        end
+        it 'check flowd-go rpm is installed' do
+          is_expected.to contain_package('flowd-go')
+        end
+        it { is_expected.to contain_service('flowd-go').with(ensure: 'running') }
+      end
+
+      context 'Test flowd-go configuration with a SciTag collector' do
+        let(:params) do
+          {
+            'scitags_enabled' => true,
+            'scitags_daemon' => 'flowd-go',
+            'scitags_collector' => 'eu.scitags.org',
+          }
+        end
+
+        it 'check flowd configuration contains the collector' do
+          flowd_cfg_file = '/etc/flowd-go/conf.json'
+          is_expected.to contain_file(flowd_cfg_file).with(
+            ensure: 'file',
+          )
+          is_expected.to contain_file(flowd_cfg_file).with(
+            content: %r{"collectorAddress": "eu.scitags.org"},
+          )
+        end
+      end
     end
   end
 end

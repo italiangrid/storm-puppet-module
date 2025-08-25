@@ -207,6 +207,7 @@ class storm::webdav (
   String $tape_wellknown_source,
 
   Boolean $scitags_enabled,
+  String $scitags_daemon,
   Optional[String] $scitags_collector,
 
   Boolean $nginx_enabled,

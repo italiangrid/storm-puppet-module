@@ -15,9 +15,19 @@ class storm::webdav::install (
       gpgcheck => 0,
       baseurl  => "https://linuxsoft.cern.ch/repos/scitags${el}al-stable/x86_64/os/",
     }
-    package { 'python3-scitags':
-      ensure  => 'installed',
-      require => Yumrepo['scitags-repo'],
+    case $storm::webdav::scitags_daemon {
+      'flowd': {
+        package { 'python3-scitags':
+          ensure  => 'installed',
+          require => Yumrepo['scitags-repo'],
+        }
+      }
+      'flowd-go': {
+        package { 'flowd-go':
+          ensure  => 'installed',
+          require => Yumrepo['scitags-repo'],
+        }
+      }
     }
   }
 }

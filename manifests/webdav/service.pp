@@ -6,9 +6,19 @@ class storm::webdav::service {
     enable => true,
   }
   if $storm::webdav::scitags_enabled {
-    service { 'flowd':
-      ensure => running,
-      enable => true,
+    case $storm::webdav::scitags_daemon {
+      'flowd': {
+        service { 'flowd':
+          ensure => running,
+          enable => true,
+        }
+      }
+      'flowd-go': {
+        service { 'flowd-go':
+          ensure => running,
+          enable => true,
+        }
+      }
     }
   }
 }

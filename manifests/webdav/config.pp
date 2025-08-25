@@ -92,12 +92,25 @@ class storm::webdav::config (
   }
 
   if $storm::webdav::scitags_enabled {
-    file { '/etc/flowd/flowd.cfg' :
-      ensure  => file,
-      content => template('storm/etc/flowd/flowd.cfg.erb'),
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0644',
+    case $storm::webdav::scitags_daemon {
+      'flowd': {
+        file { '/etc/flowd/flowd.cfg' :
+          ensure  => file,
+          content => template('storm/etc/flowd/flowd.cfg.erb'),
+          owner   => 'root',
+          group   => 'root',
+          mode    => '0644',
+        }
+      }
+      'flowd-go': {
+        file { '/etc/flowd-go/conf.json' :
+          ensure  => file,
+          content => template('storm/etc/flowd-go/conf.json.erb'),
+          owner   => 'root',
+          group   => 'root',
+          mode    => '0644',
+        }
+      }
     }
   }
 
