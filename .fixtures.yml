@@ -7,7 +7,9 @@ fixtures:
   repositories:
     stdlib: "https://github.com/puppetlabs/puppetlabs-stdlib"
     accounts: "https://github.com/puppetlabs/puppetlabs-accounts.git"
-    mysql: "https://github.com/puppetlabs/puppetlabs-mysql.git"
+    mysql:
+      repo: "https://github.com/puppetlabs/puppetlabs-mysql.git"
+      ref: "v16.2.0"
     firewall: "https://github.com/puppetlabs/puppetlabs-firewall.git"
     bdii: "https://github.com/italiangrid/puppet-bdii.git"
     yumrepo: "https://github.com/puppetlabs/puppetlabs-yumrepo_core.git"
