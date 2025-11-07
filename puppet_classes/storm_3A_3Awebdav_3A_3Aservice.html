@@ -105,7 +105,17 @@
 11
 12
 13
-14</pre>
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/webdav/service.pp', line 3</span>
@@ -116,9 +126,19 @@ class storm::webdav::service {
     enable =&gt; true,
   }
   if $storm::webdav::scitags_enabled {
-    service { &#39;flowd&#39;:
-      ensure =&gt; running,
-      enable =&gt; true,
+    case $storm::webdav::scitags_daemon {
+      &#39;flowd&#39;: {
+        service { &#39;flowd&#39;:
+          ensure =&gt; running,
+          enable =&gt; true,
+        }
+      }
+      &#39;flowd-go&#39;: {
+        service { &#39;flowd-go&#39;:
+          ensure =&gt; running,
+          enable =&gt; true,
+        }
+      }
     }
   }
 }</pre>

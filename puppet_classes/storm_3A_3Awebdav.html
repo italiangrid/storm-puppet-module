@@ -118,7 +118,7 @@ class { &#39;storm::webdav&#39;:
       
         &mdash;
         <div class='inline'>
-<p>List of storage area’s configuration. Default value: empty list.</p>
+<p>List of storage area&#39;s configuration. Default value: empty list.</p>
 </div>
       
     </li>
@@ -829,6 +829,22 @@ class { &#39;storm::webdav&#39;:
   
     <li>
       
+        <span class='name'>scitags_daemon</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The daemon to use for SciTags (e.g. &#39;flowd&#39; or &#39;flowd-go&#39;). Optional.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
         <span class='name'>scitags_collector</span>
       
       
@@ -870,9 +886,6 @@ class { &#39;storm::webdav&#39;:
         <pre class="lines">
 
 
-156
-157
-158
 159
 160
 161
@@ -936,10 +949,14 @@ class { &#39;storm::webdav&#39;:
 219
 220
 221
-222</pre>
+222
+223
+224
+225
+226</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/webdav.pp', line 156</span>
+        <pre class="code"><span class="info file"># File 'manifests/webdav.pp', line 159</span>
 
 class storm::webdav (
 
@@ -995,6 +1012,7 @@ class storm::webdav (
   String $tape_wellknown_source,
 
   Boolean $scitags_enabled,
+  String $scitags_daemon,
   Optional[String] $scitags_collector,
 
   Boolean $nginx_enabled,
