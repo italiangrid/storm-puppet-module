@@ -1310,6 +1310,7 @@ The following parameters are available in the `storm::webdav` class:
 * [`voms_cache_enabled`](#-storm--webdav--voms_cache_enabled)
 * [`voms_cache_entry_lifetime_sec`](#-storm--webdav--voms_cache_entry_lifetime_sec)
 * [`scitags_enabled`](#-storm--webdav--scitags_enabled)
+* [`scitags_daemon`](#-storm--webdav--scitags_daemon)
 * [`scitags_collector`](#-storm--webdav--scitags_collector)
 * [`nginx_enabled`](#-storm--webdav--nginx_enabled)
 
@@ -1582,6 +1583,12 @@ Cache entries lifetime, used if caching for VOMS certificate validation is enabl
 Data type: `Boolean`
 
 Enable SciTags flow marking
+
+##### <a name="-storm--webdav--scitags_daemon"></a>`scitags_daemon`
+
+Data type: `String`
+
+The daemon to use for SciTags (e.g. 'flowd' or 'flowd-go'). Optional.
 
 ##### <a name="-storm--webdav--scitags_collector"></a>`scitags_collector`
 

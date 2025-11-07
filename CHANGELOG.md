@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## 4.5.0 (2025-11-07)
+
+### Added
+
+- Add `storm::webdav::scitags_daemon` parameter to WebDAV to select which daemon to use for SciTags
+
+### Fixed
+
+- Fix MySQL module version to the last one that works
+
+### Removed
+
+- Remove two unused Environment variables in StoRM WebDAV systemd unit (`STORM_WEBDAV_OUT` and `STORM_WEBDAV_ERR`)
+
 ## 4.4.0 (2025-05-07)
 
 ### Added

@@ -147,6 +147,9 @@
 # @param scitags_enabled
 #   Enable SciTags flow marking
 #
+# @param scitags_daemon
+#   The daemon to use for SciTags (e.g. 'flowd' or 'flowd-go'). Optional.
+#
 # @param scitags_collector
 #   Remote address of SciTags collector. Optional.
 #
