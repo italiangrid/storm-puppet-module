@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## 4.6.0 (2025-12-05)
+
+### Changed
+
+- Use flowd-go YAML configuration (requires flowd-go v2.3.0)
+
 ## 4.5.0 (2025-11-07)
 
 ### Added
