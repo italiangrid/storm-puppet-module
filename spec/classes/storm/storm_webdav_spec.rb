@@ -391,7 +391,7 @@ describe 'storm::webdav', type: 'class' do
           is_expected.to contain_file(service_file).with(content: %r{Environment="STORM_WEBDAV_SCITAGS_ENABLED=true"})
         end
         it 'check flowd-go configuration files' do
-          flowd_cfg_file = '/etc/flowd-go/conf.json'
+          flowd_cfg_file = '/etc/flowd-go/conf.yaml'
           is_expected.to contain_file(flowd_cfg_file).with(
             ensure: 'file',
           )
@@ -412,12 +412,12 @@ describe 'storm::webdav', type: 'class' do
         end
 
         it 'check flowd configuration contains the collector' do
-          flowd_cfg_file = '/etc/flowd-go/conf.json'
+          flowd_cfg_file = '/etc/flowd-go/conf.yaml'
           is_expected.to contain_file(flowd_cfg_file).with(
             ensure: 'file',
           )
           is_expected.to contain_file(flowd_cfg_file).with(
-            content: %r{"collectorAddress": "eu.scitags.org"},
+            content: %r{collectorAddress: "eu.scitags.org"},
           )
         end
       end

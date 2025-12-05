@@ -103,9 +103,9 @@ class storm::webdav::config (
         }
       }
       'flowd-go': {
-        file { '/etc/flowd-go/conf.json' :
+        file { '/etc/flowd-go/conf.yaml' :
           ensure  => file,
-          content => template('storm/etc/flowd-go/conf.json.erb'),
+          content => template('storm/etc/flowd-go/conf.yaml.erb'),
           owner   => 'root',
           group   => 'root',
           mode    => '0644',
