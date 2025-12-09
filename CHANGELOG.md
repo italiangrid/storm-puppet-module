@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## 4.7.0 (2025-12-09)
+
+### Changed
+
+- Enable public IP discovery for flowd-go and use more default config values (requires flowd-go v2.4.0)
+
 ## 4.6.0 (2025-12-05)
 
 ### Changed
