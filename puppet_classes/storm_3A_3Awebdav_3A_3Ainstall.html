@@ -153,7 +153,7 @@ class storm::webdav::install (
       }
       &#39;flowd-go&#39;: {
         package { &#39;flowd-go&#39;:
-          ensure  =&gt; &#39;installed&#39;,
+          ensure  =&gt; &#39;&gt;=2.4.0&#39;,
           require =&gt; Yumrepo[&#39;scitags-repo&#39;],
         }
       }
